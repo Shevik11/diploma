@@ -19,7 +19,7 @@ A web application to compare container vs VM deployment performance for Small La
 
 ## Prerequisites
 
-- **Python 3.10+** for the backend
+- **Python 3.11+** for the backend
 - **Node.js 18+** for the frontend
 - **Docker** (optional, for container deployment features)
 
