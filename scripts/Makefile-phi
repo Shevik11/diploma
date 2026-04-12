@@ -1,0 +1,137 @@
+.PHONY: help start stop restart test pull logs clean status shell test-quick test-full
+
+# Preconfigured for Phi
+CONTAINER_NAME ?= ollama-phi
+MODEL_NAME := phi
+PORT ?= 11437
+IMAGE ?= ollama/ollama
+
+# Colours for output
+CYAN := \033[36m
+GREEN := \033[32m
+YELLOW := \033[33m
+RED := \033[31m
+RESET := \033[0m
+
+help: ## Show this help message
+	@echo "$(CYAN)=== Phi 2.7B - Makefile ===$(RESET)"
+	@echo ""
+	@echo "$(YELLOW)Available commands:$(RESET)"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
+		awk 'BEGIN {FS = ":.*?## "}; {printf "  $(GREEN)%-15s$(RESET) %s\n", $$1, $$2}'
+	@echo ""
+	@echo "$(YELLOW)Configuration:$(RESET)"
+	@echo "  Model: $(MODEL_NAME)"
+	@echo "  Container: $(CONTAINER_NAME)"
+	@echo "  Port: $(PORT)"
+	@echo ""
+	@echo "$(YELLOW)Examples:$(RESET)"
+	@echo "  make start"
+	@echo "  make test"
+	@echo "  make test-quick"
+
+start: ## Start Phi container
+	@echo "$(CYAN)[1/3] Starting Phi container...$(RESET)"
+	@if docker ps -a --filter "name=$(CONTAINER_NAME)" --format "{{.Names}}" | grep -q "$(CONTAINER_NAME)"; then \
+		echo "$(YELLOW)Container already exists, restarting...$(RESET)"; \
+		docker start $(CONTAINER_NAME); \
+	else \
+		docker run -d \
+			--name $(CONTAINER_NAME) \
+			-p $(PORT):11434 \
+			-v ollama-data:/root/.ollama \
+			$(IMAGE); \
+	fi
+	@echo "$(GREEN)[OK] Container started$(RESET)"
+	@echo "$(CYAN)[2/3] Waiting for service...$(RESET)"
+	@sleep 10
+	@echo "$(GREEN)[OK] Service ready$(RESET)"
+
+stop: ## Stop container
+	@echo "$(CYAN)Stopping container $(CONTAINER_NAME)...$(RESET)"
+	@docker stop $(CONTAINER_NAME) 2>/dev/null || echo "$(YELLOW)Container already stopped$(RESET)"
+	@echo "$(GREEN)[OK] Container stopped$(RESET)"
+
+restart: stop start ## Restart container
+
+pull: start ## Pull Phi model
+	@echo "$(CYAN)Pulling Phi model...$(RESET)"
+	@echo "$(YELLOW)This may take several minutes...$(RESET)"
+	@docker exec $(CONTAINER_NAME) ollama pull $(MODEL_NAME)
+	@echo "$(GREEN)[OK] Phi ready$(RESET)"
+
+test-quick: ## Quick test (simple request)
+	@echo "$(CYAN)Running quick test with Phi...$(RESET)"
+	@echo "$(YELLOW)Prompt: What is 2+2?$(RESET)"
+	@curl -s -X POST "http://localhost:$(PORT)/api/generate" \
+		-H "Content-Type: application/json" \
+		-d '{"model": "$(MODEL_NAME)", "prompt": "What is 2+2? Answer briefly.", "stream": false}' | \
+		jq -r '.response' | head -n 10
+	@echo ""
+	@echo "$(GREEN)[OK] Test completed$(RESET)"
+
+test: start pull ## Full test (with model pulling)
+	@echo "$(CYAN)Running test with Phi...$(RESET)"
+	@echo "$(YELLOW)Model: $(MODEL_NAME)$(RESET)"
+	@echo "$(YELLOW)Prompt: Hello! What is 2+2?$(RESET)"
+	@RESPONSE=$$(curl -s -X POST "http://localhost:$(PORT)/api/generate" \
+		-H "Content-Type: application/json" \
+		-d '{"model": "$(MODEL_NAME)", "prompt": "Hello! What is 2+2?", "stream": false}'); \
+	echo "";		echo "$(CYAN)Response:$(RESET)"; \
+	echo "---"; \
+	echo "$$RESPONSE" | jq -r '.response'; \
+	echo "---"; \
+	echo ""; \
+	echo "$(CYAN)Statistics:$(RESET)"; \
+	TOTAL_DUR=$$(echo "$$RESPONSE" | jq -r '.total_duration // 0'); \
+	EVAL_COUNT=$$(echo "$$RESPONSE" | jq -r '.eval_count // 0'); \
+	EVAL_DUR=$$(echo "$$RESPONSE" | jq -r '.eval_duration // 1'); \
+	if [ "$$TOTAL_DUR" != "0" ]; then \
+		TOTAL_SEC=$$(echo "scale=2; $$TOTAL_DUR / 1000000000" | bc -l); \
+		echo "  - Generation time: $${TOTAL_SEC} sec"; \
+	fi; \
+	echo "  - Tokens generated: $$EVAL_COUNT"; \
+	if [ "$$EVAL_COUNT" != "0" ] && [ "$$EVAL_DUR" != "0" ]; then \
+		TOKENS_SEC=$$(echo "scale=2; $$EVAL_COUNT / ($$EVAL_DUR / 1000000000)" | bc -l); \
+		echo "  - Speed: $${TOKENS_SEC} tokens/sec"; \
+	fi
+	@echo ""
+	@echo "$(GREEN)[OK] Test completed successfully!$(RESET)"
+
+test-full: clean start pull test-quick ## Full test from scratch (clean + start + test)
+
+logs: ## Show container logs
+	@docker logs -f $(CONTAINER_NAME)
+
+logs-tail: ## Show last 50 lines of logs
+	@docker logs --tail 50 $(CONTAINER_NAME)
+
+status: ## Show container status
+	@echo "$(CYAN)Container status:$(RESET)"
+	@if docker ps --filter "name=$(CONTAINER_NAME)" --format "{{.Names}}" | grep -q "$(CONTAINER_NAME)"; then \
+		echo "$(GREEN)[OK] Container $(CONTAINER_NAME) is running$(RESET)"; \
+		docker ps --filter "name=$(CONTAINER_NAME)" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"; \
+	else \
+		echo "$(RED)[X] Container $(CONTAINER_NAME) is not running$(RESET)"; \
+	fi
+
+shell: ## Open shell in container
+	@docker exec -it $(CONTAINER_NAME) /bin/bash
+
+clean: stop ## Stop and remove container
+	@echo "$(CYAN)Removing container $(CONTAINER_NAME)...$(RESET)"
+	@docker rm $(CONTAINER_NAME) 2>/dev/null || echo "$(YELLOW)Container already removed$(RESET)"
+	@echo "$(GREEN)[OK] Container removed$(RESET)"
+
+clean-all: clean ## Remove container and data (volume)
+	@echo "$(CYAN)Removing volume ollama-data...$(RESET)"
+	@docker volume rm ollama-data 2>/dev/null || echo "$(YELLOW)Volume not found$(RESET)"
+	@echo "$(GREEN)[OK] All data removed$(RESET)"
+
+list-models: ## Show available models in container
+	@echo "$(CYAN)Available models:$(RESET)"
+	@docker exec $(CONTAINER_NAME) ollama list
+
+ps: ## Show running Ollama containers
+	@echo "$(CYAN)Ollama containers:$(RESET)"
+	@docker ps -a --filter "ancestor=$(IMAGE)" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
