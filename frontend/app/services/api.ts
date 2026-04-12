@@ -284,12 +284,22 @@ class ApiService {
     };
 
     // Send heartbeat to trigger metrics updates
+    let heartbeatInterval: ReturnType<typeof setInterval> | undefined;
+
     ws.onopen = () => {
-      setInterval(() => {
+      heartbeatInterval = setInterval(() => {
         if (ws.readyState === WebSocket.OPEN) {
           ws.send('ping');
         }
       }, 2000);
+    };
+
+    ws.onclose = () => {
+      clearInterval(heartbeatInterval);
+    };
+
+    ws.onerror = () => {
+      clearInterval(heartbeatInterval);
     };
 
     return ws;
