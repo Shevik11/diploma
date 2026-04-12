@@ -251,7 +251,7 @@ def test_humaneval(model_name, port=11434):
             passed, error = safe_exec_test(code, tc["test_code"])
 
             score = points if passed else 0
-            status = "вњ“" if passed else "вњ—"
+            status = "[SUCCESS]" if passed else "[ERROR]"
 
             if passed:
                 results["pass_count"] += 1
@@ -273,7 +273,7 @@ def test_humaneval(model_name, port=11434):
                 print(f"  [{status}] {error}  ({elapsed:.1f}s)")
 
         except requests.exceptions.RequestException as e:
-            print(f"  [вњ—] Error: {e}")
+            print(f"  [ERROR] Error: {e}")
             results["tests"].append({
                 "category": category,
                 "error": str(e),

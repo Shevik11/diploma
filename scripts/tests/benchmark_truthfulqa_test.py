@@ -202,11 +202,11 @@ def test_truthfulqa(model_name, port=11434):
             })
             results["total_score"] += score
 
-            status = "вњ“" if score == points else ("~" if score > 0 else "вњ—")
+            status = "[SUCCESS]" if score == points else ("[PARTIAL]" if score > 0 else "[ERROR]")
             print(f"  [{status}] {reasons[0]}  ({elapsed:.1f}s)")
 
         except requests.exceptions.RequestException as e:
-            print(f"  [вњ—] Error: {e}")
+            print(f"  [ERROR] Error: {e}")
             results["tests"].append({
                 "category": category,
                 "error": str(e),

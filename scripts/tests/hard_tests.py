@@ -631,7 +631,7 @@ def run_hard_tests(model_name: str, port: int = 11434) -> int:
         grp["score"] += score
         grp["max"] += pts
 
-        status = "✓" if score == pts else ("~" if score > 0 else "✗")
+        status = "[SUCCESS]" if score == pts else ("[PARTIAL]" if score > 0 else "[ERROR]")
         print(f"  [{status}] Score: {score}/{pts}  ({elapsed:.1f}s)  — {', '.join(reasons[:2])}")
         if len(response) < 200 and not response.startswith("__"):
             print(f"  Response: {response[:120]}")

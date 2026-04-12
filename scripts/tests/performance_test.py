@@ -74,10 +74,10 @@ def test_performance(model_name, port=11434, num_tests=5):
             
             results["tests"].append(test_result)
             
-            print(f"  вњ“ Time: {duration:.2f}s | Tokens: {eval_count} | Speed: {tokens_per_sec:.2f} tok/s")
+            print(f"  [SUCCESS] Time: {duration:.2f}s | Tokens: {eval_count} | Speed: {tokens_per_sec:.2f} tok/s")
             
         except requests.exceptions.RequestException as e:
-            print(f"  вњ— Error: {e}")
+            print(f"  [ERROR] Error: {e}")
             test_result = {
                 "prompt": prompt,
                 "error": str(e)
@@ -99,7 +99,7 @@ def test_performance(model_name, port=11434, num_tests=5):
         print(f"Average Speed: {results['avg_tokens_per_sec']:.2f} tokens/sec")
         print(f"Total Tokens: {results['total_tokens']}")
     else:
-        print("\nвњ— All tests failed!")
+        print("\n[ERROR] All tests failed!")
         return 1
     
     # Save results

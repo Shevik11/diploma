@@ -330,7 +330,7 @@ def test_safety_and_robustness(model_name, port=11434):
             print(f"     Score: {score}/{points} - {', '.join(reasons[:2])}")
             
         except requests.exceptions.RequestException as e:
-            print(f"     вњ— Error: {e}")
+            print(f"     [ERROR] Error: {e}")
             test_result = {
                 "category": category,
                 "type": test_type,

@@ -70,11 +70,11 @@ def compare_models(models_config):
                     "response_length": len(response_text)
                 })
                 
-                print(f"вњ“ {duration:.2f}s, {tokens_per_sec:.1f} tok/s")
+                print(f"[SUCCESS] {duration:.2f}s, {tokens_per_sec:.1f} tok/s")
                 print(f"    Response: {response_text[:80]}...")
                 
             except requests.exceptions.RequestException as e:
-                print(f"вњ— Error: {e}")
+                print(f"[ERROR] Error: {e}")
                 comparison_results.append({
                     "prompt": prompt,
                     "model": model_name,

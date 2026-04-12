@@ -287,7 +287,7 @@ def test_advanced_quality(model_name, port=11434):
             print(f"     Score: {score}/{points} - {', '.join(reasons[:2])}")
             
         except requests.exceptions.RequestException as e:
-            print(f"     вњ— Error: {e}")
+            print(f"     [ERROR] Error: {e}")
             test_result = {
                 "category": category,
                 "tier": tier,
