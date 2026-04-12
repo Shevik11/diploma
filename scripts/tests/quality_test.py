@@ -8,6 +8,7 @@ import sys
 import time
 import os
 from pathlib import Path
+from pathlib import Path
 
 RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
