@@ -18,6 +18,10 @@ import sys
 import time
 import re
 import os
+from pathlib import Path
+
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -682,7 +686,7 @@ def run_hard_tests(model_name: str, port: int = 11434) -> int:
         "breakdown_by_group": breakdown,
         "tests": results,
     }
-    out_file = f"results/hard_tests_{model_name.replace(':', '_')}_{int(time.time())}.json"
+    out_file = RESULTS_DIR / f"hard_tests_{model_name.replace(':', '_')}_{int(time.time())}.json"
     try:
         os.makedirs("results", exist_ok=True)
         with open(out_file, "w") as f:

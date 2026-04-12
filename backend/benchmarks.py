@@ -1,10 +1,8 @@
-import asyncio
 import time
 import json
 import os
 import httpx
 import psutil
-import docker
 from datetime import datetime
 from typing import Optional
 from dataclasses import dataclass, asdict
@@ -114,7 +112,6 @@ class OllamaBenchmark:
         peak_memory = resources_before.memory_used_mb
 
         start_time = time.perf_counter()
-        first_token_time = None
 
         try:
             response = await self.client.post(

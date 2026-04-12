@@ -1,5 +1,5 @@
-"""
-Reasoning & Commonsense Benchmark — ARC + HellaSwag + Winogrande style
+﻿"""
+Reasoning & Commonsense Benchmark вЂ” ARC + HellaSwag + Winogrande style
 Based on real benchmarks used to evaluate SLMs in the Open LLM Leaderboard.
 
 - ARC (AI2 Reasoning Challenge): Grade-school science multiple-choice
@@ -17,7 +17,10 @@ import sys
 import os
 import time
 import re
+from pathlib import Path
 
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 def test_reasoning_benchmarks(model_name, port=11434):
     """Run ARC + HellaSwag + Winogrande style reasoning tests"""
@@ -25,9 +28,9 @@ def test_reasoning_benchmarks(model_name, port=11434):
     url = f"http://{host}:{port}/api/generate"
 
     test_cases = [
-        # ── ARC-style (grade-school science reasoning) ───────────────────────
+        # в”Ђв”Ђ ARC-style (grade-school science reasoning) в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
         {
-            "category": "ARC — Earth Science",
+            "category": "ARC вЂ” Earth Science",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "Which layer of Earth's atmosphere contains the ozone layer that "
@@ -42,7 +45,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
             "benchmark": "ARC",
         },
         {
-            "category": "ARC — Physical Science",
+            "category": "ARC вЂ” Physical Science",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "A student pushes a box across the floor. The box moves at a constant speed. "
@@ -57,7 +60,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
             "benchmark": "ARC",
         },
         {
-            "category": "ARC — Life Science",
+            "category": "ARC вЂ” Life Science",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "Which process allows plants to convert carbon dioxide and water "
@@ -72,7 +75,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
             "benchmark": "ARC",
         },
         {
-            "category": "ARC — Space Science",
+            "category": "ARC вЂ” Space Science",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "What causes the phases of the Moon?\n"
@@ -86,7 +89,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
             "benchmark": "ARC",
         },
         {
-            "category": "ARC — Chemistry",
+            "category": "ARC вЂ” Chemistry",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "When iron is left outside in the rain, it rusts. This is an example of:\n"
@@ -100,9 +103,9 @@ def test_reasoning_benchmarks(model_name, port=11434):
             "benchmark": "ARC",
         },
 
-        # ── HellaSwag-style (commonsense completion) ─────────────────────────
+        # в”Ђв”Ђ HellaSwag-style (commonsense completion) в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
         {
-            "category": "HellaSwag — Daily Activity",
+            "category": "HellaSwag вЂ” Daily Activity",
             "prompt": (
                 "Choose the most plausible continuation. Answer with ONLY the letter.\n\n"
                 "A person walks into a kitchen and opens the refrigerator. They take out "
@@ -117,7 +120,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
             "benchmark": "HellaSwag",
         },
         {
-            "category": "HellaSwag — Social Situation",
+            "category": "HellaSwag вЂ” Social Situation",
             "prompt": (
                 "Choose the most plausible continuation. Answer with ONLY the letter.\n\n"
                 "Two friends meet at a coffee shop. One of them looks upset and says "
@@ -132,7 +135,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
             "benchmark": "HellaSwag",
         },
         {
-            "category": "HellaSwag — Physical World",
+            "category": "HellaSwag вЂ” Physical World",
             "prompt": (
                 "Choose the most plausible continuation. Answer with ONLY the letter.\n\n"
                 "A glass is placed on the edge of a table. A cat jumps onto the table "
@@ -147,7 +150,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
             "benchmark": "HellaSwag",
         },
         {
-            "category": "HellaSwag — Work Context",
+            "category": "HellaSwag вЂ” Work Context",
             "prompt": (
                 "Choose the most plausible continuation. Answer with ONLY the letter.\n\n"
                 "An employee finishes writing a report and clicks 'Send' to email it "
@@ -162,7 +165,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
             "benchmark": "HellaSwag",
         },
         {
-            "category": "HellaSwag — Cause and Effect",
+            "category": "HellaSwag вЂ” Cause and Effect",
             "prompt": (
                 "Choose the most plausible continuation. Answer with ONLY the letter.\n\n"
                 "Heavy rain has been falling for three days straight in a low-lying area "
@@ -178,9 +181,9 @@ def test_reasoning_benchmarks(model_name, port=11434):
             "benchmark": "HellaSwag",
         },
 
-        # ── Winogrande-style (pronoun resolution / world knowledge) ──────────
+        # в”Ђв”Ђ Winogrande-style (pronoun resolution / world knowledge) в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
         {
-            "category": "Winogrande — Pronoun Resolution 1",
+            "category": "Winogrande вЂ” Pronoun Resolution 1",
             "prompt": (
                 "Answer with ONLY the letter (A or B).\n\n"
                 "The trophy doesn't fit in the suitcase because it is too big. "
@@ -193,7 +196,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
             "benchmark": "Winogrande",
         },
         {
-            "category": "Winogrande — Pronoun Resolution 2",
+            "category": "Winogrande вЂ” Pronoun Resolution 2",
             "prompt": (
                 "Answer with ONLY the letter (A or B).\n\n"
                 "The trophy doesn't fit in the suitcase because it is too small. "
@@ -206,7 +209,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
             "benchmark": "Winogrande",
         },
         {
-            "category": "Winogrande — Pronoun Resolution 3",
+            "category": "Winogrande вЂ” Pronoun Resolution 3",
             "prompt": (
                 "Answer with ONLY the letter (A or B).\n\n"
                 "The city council refused the demonstrators a permit because they "
@@ -219,7 +222,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
             "benchmark": "Winogrande",
         },
         {
-            "category": "Winogrande — Pronoun Resolution 4",
+            "category": "Winogrande вЂ” Pronoun Resolution 4",
             "prompt": (
                 "Answer with ONLY the letter (A or B).\n\n"
                 "The doctor told the nurse that she had been overworking herself. "
@@ -232,7 +235,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
             "benchmark": "Winogrande",
         },
         {
-            "category": "Winogrande — Pronoun Resolution 5",
+            "category": "Winogrande вЂ” Pronoun Resolution 5",
             "prompt": (
                 "Answer with ONLY the letter (A or B).\n\n"
                 "Sam broke the window because he was careless. "
@@ -258,7 +261,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
     }
 
     print(f"\n{'='*70}")
-    print(f"REASONING BENCHMARK (ARC + HellaSwag + Winogrande) — {model_name}")
+    print(f"REASONING BENCHMARK (ARC + HellaSwag + Winogrande) вЂ” {model_name}")
     print(f"Tests: {len(test_cases)}  Max score: {results['max_score']}")
     print(f"{'='*70}\n")
 
@@ -292,7 +295,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
                 chosen = match.group(1)
 
             score = points if chosen == correct else 0
-            status = "✓" if score > 0 else "✗"
+            status = "вњ“" if score > 0 else "вњ—"
 
             grp = results["breakdown"].setdefault(bench, {"correct": 0, "total": 0})
             grp["total"] += 1
@@ -314,7 +317,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
             print(f"  [{status}] Model: {chosen}  Correct: {correct}  ({elapsed:.1f}s)")
 
         except requests.exceptions.RequestException as e:
-            print(f"  [✗] Error: {e}")
+            print(f"  [вњ—] Error: {e}")
             results["tests"].append({
                 "category": category,
                 "error": str(e),
@@ -327,7 +330,7 @@ def test_reasoning_benchmarks(model_name, port=11434):
     results["percentage"] = round(pct, 1)
 
     print(f"\n{'='*70}")
-    print(f"REASONING BENCHMARK RESULTS — {model_name}")
+    print(f"REASONING BENCHMARK RESULTS вЂ” {model_name}")
     print(f"{'='*70}")
     print(f"Score: {results['total_score']}/{results['max_score']} ({pct:.1f}%)\n")
 
@@ -349,9 +352,9 @@ def test_reasoning_benchmarks(model_name, port=11434):
     print(f"\nRating: {rating}")
     print(f"{'='*70}\n")
 
-    output_file = f"results/reasoning_{model_name.replace(':', '_')}_{int(time.time())}.json"
+    output_file = RESULTS_DIR / f"reasoning_{model_name.replace(':', '_')}_{int(time.time())}.json"
     try:
-        with open(output_file, "w") as f:
+        with output_file.open('w', encoding='utf-8') as f:
             json.dump(results, f, indent=2)
         print(f"Results saved to: {output_file}\n")
     except Exception as e:

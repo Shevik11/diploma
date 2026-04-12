@@ -1,4 +1,4 @@
-"""
+﻿"""
 Multilingual capability assessment for SLM models
 Tests: translation, language detection, cross-lingual understanding, code-switching
 """
@@ -7,6 +7,10 @@ import json
 import sys
 import os
 import time
+from pathlib import Path
+
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def test_multilingual(model_name, port=11434):
@@ -25,13 +29,13 @@ def test_multilingual(model_name, port=11434):
         {
             "category": "English to Spanish Translation",
             "prompt": "Translate to Spanish: 'Good morning, how are you today?'",
-            "expected_keywords": ["buenos", "días", "cómo", "estás", "hoy"],
+            "expected_keywords": ["buenos", "dГ­as", "cГіmo", "estГЎs", "hoy"],
             "points": 15
         },
         {
             "category": "English to German Translation",
             "prompt": "Translate to German: 'I would like a glass of water, please.'",
-            "expected_keywords": ["glas", "wasser", "bitte", "möchte", "ich"],
+            "expected_keywords": ["glas", "wasser", "bitte", "mГ¶chte", "ich"],
             "points": 15
         },
         {
@@ -44,33 +48,33 @@ def test_multilingual(model_name, port=11434):
         # === LANGUAGE DETECTION ===
         {
             "category": "Language Detection - Japanese",
-            "prompt": "What language is this written in? 'こんにちは世界' Answer with just the language name.",
-            "expected_keywords": ["japanese", "日本語"],
+            "prompt": "What language is this written in? 'гЃ“г‚“гЃ«гЃЎгЃЇдё–з•Њ' Answer with just the language name.",
+            "expected_keywords": ["japanese", "ж—Ґжњ¬иЄћ"],
             "points": 10
         },
         {
             "category": "Language Detection - Ukrainian",
-            "prompt": "What language is this written in? 'Доброго ранку, як справи?' Answer with just the language name.",
-            "expected_keywords": ["ukrainian", "українська"],
+            "prompt": "What language is this written in? 'Р”РѕР±СЂРѕРіРѕ СЂР°РЅРєСѓ, СЏРє СЃРїСЂР°РІРё?' Answer with just the language name.",
+            "expected_keywords": ["ukrainian", "СѓРєСЂР°С—РЅСЃСЊРєР°"],
             "points": 10
         },
         {
             "category": "Language Detection - Portuguese",
-            "prompt": "What language is this written in? 'Bom dia, como você está?' Answer with just the language name.",
-            "expected_keywords": ["portuguese", "português"],
+            "prompt": "What language is this written in? 'Bom dia, como vocГЄ estГЎ?' Answer with just the language name.",
+            "expected_keywords": ["portuguese", "portuguГЄs"],
             "points": 10
         },
 
         # === CROSS-LINGUAL UNDERSTANDING ===
         {
             "category": "Cross-lingual Math",
-            "prompt": "Responde en español: What is 15 multiplied by 4?",
+            "prompt": "Responde en espaГ±ol: What is 15 multiplied by 4?",
             "expected_keywords": ["60", "sesenta"],
             "points": 15
         },
         {
             "category": "Cross-lingual Knowledge",
-            "prompt": "Répondez en français: What is the capital of Japan?",
+            "prompt": "RГ©pondez en franГ§ais: What is the capital of Japan?",
             "expected_keywords": ["tokyo", "tokio"],
             "points": 15
         },
@@ -85,20 +89,20 @@ def test_multilingual(model_name, port=11434):
         {
             "category": "Multilingual Instruction Following",
             "prompt": "List 3 fruits. Write the first in English, the second in Spanish, and the third in French.",
-            "check_format": lambda text: len(text) > 10 and any(w in text.lower() for w in ["manzana", "naranja", "plátano", "uva", "fresa", "pomme", "orange", "banane", "raisin", "fraise"]),
+            "check_format": lambda text: len(text) > 10 and any(w in text.lower() for w in ["manzana", "naranja", "plГЎtano", "uva", "fresa", "pomme", "orange", "banane", "raisin", "fraise"]),
             "points": 15
         },
 
         # === CULTURAL CONTEXT ===
         {
             "category": "Cultural Knowledge",
-            "prompt": "What is 'Día de los Muertos' and in which country is it primarily celebrated?",
+            "prompt": "What is 'DГ­a de los Muertos' and in which country is it primarily celebrated?",
             "expected_keywords": ["mexico", "dead", "november", "celebration", "tradition"],
             "points": 15
         },
         {
             "category": "Script Recognition",
-            "prompt": "Identify the writing scripts used in these words: 'Hello', 'Привіт', '你好', 'مرحبا'. Name each script.",
+            "prompt": "Identify the writing scripts used in these words: 'Hello', 'РџСЂРёРІС–С‚', 'дЅ еҐЅ', 'Щ…Ш±Ш­ШЁШ§'. Name each script.",
             "expected_keywords": ["latin", "cyrillic", "chinese", "arabic"],
             "points": 15
         },
@@ -190,7 +194,7 @@ def test_multilingual(model_name, port=11434):
             print(f"     Score: {score}/{points} - {', '.join(reasons[:2])}")
 
         except requests.exceptions.RequestException as e:
-            print(f"     ✗ Error: {e}")
+            print(f"     вњ— Error: {e}")
             results["tests"].append({
                 "category": category,
                 "error": str(e),
@@ -221,9 +225,9 @@ def test_multilingual(model_name, port=11434):
     print(f"Rating: {rating}")
     print(f"{'='*60}\n")
 
-    output_file = f"results/multilingual_{model_name.replace(':', '_')}_{int(time.time())}.json"
+    output_file = RESULTS_DIR / f"multilingual_{model_name.replace(':', '_')}_{int(time.time())}.json"
     try:
-        with open(output_file, 'w') as f:
+        with output_file.open('w', encoding='utf-8') as f:
             json.dump(results, f, indent=2)
         print(f"Results saved to: {output_file}\n")
     except Exception as e:

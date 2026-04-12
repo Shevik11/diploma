@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Play, CheckCircle, XCircle, Loader2, Download, RefreshCw } from 'lucide-react';
 import { Progress } from '@/app/components/ui/progress';
 import { Checkbox } from '@/app/components/ui/checkbox';
@@ -27,12 +27,42 @@ export function BenchmarkRunner() {
   const [currentResult, setCurrentResult] = useState<BenchmarkSummary | null>(null);
   const [, setIsLoading] = useState(false);
 
+  const checkOllamaStatus = useCallback(async () => {
+    try {
+      const status = await api.getOllamaStatus();
+      setOllamaStatus(status);
+      if (status.models.length > 0) {
+        setSelectedModel((prev) => prev || status.models[0]);
+      }
+    } catch {
+      setOllamaStatus({ connected: false, models: [] });
+    }
+  }, []);
+
+  const fetchCategories = useCallback(async () => {
+    try {
+      const cats = await api.getBenchmarkCategories();
+      setCategories(cats);
+    } catch {
+      // Categories unavailable
+    }
+  }, []);
+
+  const fetchResults = useCallback(async () => {
+    try {
+      const res = await api.getBenchmarkResults();
+      setResults(res);
+    } catch {
+      // Results unavailable
+    }
+  }, []);
+
   // Fetch initial data
   useEffect(() => {
     checkOllamaStatus();
     fetchCategories();
     fetchResults();
-  }, []);
+  }, [checkOllamaStatus, fetchCategories, fetchResults]);
 
   // Poll benchmark status when running
   useEffect(() => {
@@ -49,37 +79,7 @@ export function BenchmarkRunner() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [benchmarkStatus.running]);
-
-  const checkOllamaStatus = async () => {
-    try {
-      const status = await api.getOllamaStatus();
-      setOllamaStatus(status);
-      if (status.models.length > 0 && !selectedModel) {
-        setSelectedModel(status.models[0]);
-      }
-    } catch {
-      setOllamaStatus({ connected: false, models: [] });
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const cats = await api.getBenchmarkCategories();
-      setCategories(cats);
-    } catch {
-      // Categories unavailable
-    }
-  };
-
-  const fetchResults = async () => {
-    try {
-      const res = await api.getBenchmarkResults();
-      setResults(res);
-    } catch {
-      // Results unavailable
-    }
-  };
+  }, [benchmarkStatus.running, fetchResults]);
 
   const toggleCategory = (value: string) => {
     setSelectedCategories((prev) =>

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Quality assessment for LLM responses
 Tests: factual accuracy, coherence, instruction following
 """
@@ -6,8 +6,10 @@ import requests
 import json
 import sys
 import time
-import os
+import osfrom pathlib import Path
 
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 def test_quality(model_name, port=11434):
     """Run quality assessment tests"""
     host = os.environ.get("SLM_TEST_HOST", "localhost")
@@ -135,7 +137,7 @@ def test_quality(model_name, port=11434):
             print(f"  Score: {score}/{points} - {', '.join(reasons)}")
             
         except requests.exceptions.RequestException as e:
-            print(f"  ✗ Error: {e}")
+            print(f"  вњ— Error: {e}")
             test_result = {
                 "category": category,
                 "error": str(e),
@@ -165,9 +167,9 @@ def test_quality(model_name, port=11434):
     print(f"Rating: {rating}")
     
     # Save results
-    output_file = f"results/quality_{model_name.replace(':', '_')}_{int(time.time())}.json"
+    output_file = RESULTS_DIR / f"quality_{model_name.replace(':', '_')}_{int(time.time())}.json"
     try:
-        with open(output_file, 'w') as f:
+        with output_file.open('w', encoding='utf-8') as f:
             json.dump(results, f, indent=2)
         print(f"\nResults saved to: {output_file}")
     except Exception as e:
