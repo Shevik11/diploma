@@ -21,8 +21,9 @@ export function MetricsSection({ metricsData, platform }: MetricsSectionProps) {
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
+    const timestamp = new Date().toISOString().replace(/:/g, '-');
     a.href = url;
-    a.download = `metrics-${platform}-${new Date().toISOString()}.csv`;
+    a.download = `metrics-${platform}-${timestamp}.csv`;
     a.click();
     window.URL.revokeObjectURL(url);
   };
