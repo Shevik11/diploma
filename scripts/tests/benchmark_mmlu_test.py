@@ -278,7 +278,7 @@ def test_mmlu(model_name, port=11434):
                 chosen = match.group(1)
 
             score = points if chosen == correct else 0
-            status = "вњ“" if score > 0 else "вњ—"
+            status = "[SUCCESS]" if score > 0 else "[ERROR]"
 
             grp = results["breakdown"].setdefault(domain, {"correct": 0, "total": 0})
             grp["total"] += 1
@@ -300,7 +300,7 @@ def test_mmlu(model_name, port=11434):
             print(f"  [{status}] Model: {chosen}  Correct: {correct}  ({elapsed:.1f}s)")
 
         except requests.exceptions.RequestException as e:
-            print(f"  [вњ—] Error: {e}")
+            print(f"  [ERROR] Error: {e}")
             results["tests"].append({
                 "category": category,
                 "error": str(e),

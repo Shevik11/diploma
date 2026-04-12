@@ -246,7 +246,7 @@ def test_stress(model_name, port=11434, num_concurrent=5):
             results["requests"].append(result)
             results["success_count"] += 1
             
-            print(f"вњ“ {duration:.2f}s")
+            print(f"[SUCCESS] {duration:.2f}s")
             
         except requests.exceptions.RequestException as e:
             result = {
@@ -257,7 +257,7 @@ def test_stress(model_name, port=11434, num_concurrent=5):
             results["requests"].append(result)
             results["failure_count"] += 1
             
-            print(f"вњ— {str(e)[:40]}")
+            print(f"[ERROR] {str(e)[:40]}")
     
     test_end = time.time()
     results["total_time"] = test_end - test_start

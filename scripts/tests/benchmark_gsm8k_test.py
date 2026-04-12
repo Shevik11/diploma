@@ -217,7 +217,7 @@ def test_gsm8k(model_name, port=11434):
             model_answer = extract_final_number(response_text)
             is_correct = model_answer == correct
             score = points if is_correct else 0
-            status = "вњ“" if is_correct else "вњ—"
+            status = "[SUCCESS]" if is_correct else "[ERROR]"
 
             if is_correct:
                 results["correct_count"] += 1
@@ -236,7 +236,7 @@ def test_gsm8k(model_name, port=11434):
             print(f"  [{status}] Model: {model_answer}  Correct: {correct}  ({elapsed:.1f}s)")
 
         except requests.exceptions.RequestException as e:
-            print(f"  [вњ—] Error: {e}")
+            print(f"  [ERROR] Error: {e}")
             results["tests"].append({
                 "category": category,
                 "error": str(e),

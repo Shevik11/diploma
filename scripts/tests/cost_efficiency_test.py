@@ -172,7 +172,7 @@ def test_cost_efficiency(model_name, port=11434):
             print(f"     Wall time: {wall_time:.2f}s | Tokens: {eval_count} | Speed: {tokens_per_sec:.1f} tok/s | TTFT: {ttft:.3f}s")
 
         except requests.exceptions.RequestException as e:
-            print(f"     вњ— Error: {e}")
+            print(f"     [ERROR] Error: {e}")
             results["scenarios"].append({
                 "category": category,
                 "complexity": complexity,

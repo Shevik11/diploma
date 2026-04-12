@@ -283,7 +283,7 @@ def test_summarization(model_name, port=11434):
             print(f"     Score: {score}/{points} - {', '.join(reasons[:2])}")
 
         except requests.exceptions.RequestException as e:
-            print(f"     вњ— Error: {e}")
+            print(f"     [ERROR] Error: {e}")
             results["tests"].append({
                 "category": category,
                 "error": str(e),
