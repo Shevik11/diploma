@@ -37,7 +37,7 @@ def compare_models(models_config):
             port = model_config['port']
             
             host = os.environ.get("SLM_TEST_HOST", "localhost")
-    url = f"http://{host}:{port}/api/generate"
+            url = f"http://{host}:{port}/api/generate"
             payload = {
                 "model": model_name,
                 "prompt": prompt,
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     models = []
     for arg in sys.argv[1:]:
         if ':' in arg:
-            name, port = arg.split(':')
+            name, port = arg.rsplit(':', 1)
             models.append({"name": name, "port": int(port)})
         else:
             print(f"Error: Invalid format '{arg}'. Use model:port format.")
