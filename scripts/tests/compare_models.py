@@ -33,7 +33,7 @@ def compare_models(models_config):
             port = model_config['port']
             
             host = os.environ.get("SLM_TEST_HOST", "localhost")
-    url = f"http://{host}:{port}/api/generate"
+            url = f"http://{host}:{port}/api/generate"
             payload = {
                 "model": model_name,
                 "prompt": prompt,
