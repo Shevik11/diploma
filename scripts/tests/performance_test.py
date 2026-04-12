@@ -1,4 +1,4 @@
-"""
+﻿"""
 Performance benchmarking for Ollama models
 Measures: response time, tokens/sec, latency
 """
@@ -8,6 +8,10 @@ import json
 import sys
 import os
 import statistics
+from pathlib import Path
+
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 def test_performance(model_name, port=11434, num_tests=5):
     """Run performance benchmark"""
@@ -70,10 +74,10 @@ def test_performance(model_name, port=11434, num_tests=5):
             
             results["tests"].append(test_result)
             
-            print(f"  ✓ Time: {duration:.2f}s | Tokens: {eval_count} | Speed: {tokens_per_sec:.2f} tok/s")
+            print(f"  вњ“ Time: {duration:.2f}s | Tokens: {eval_count} | Speed: {tokens_per_sec:.2f} tok/s")
             
         except requests.exceptions.RequestException as e:
-            print(f"  ✗ Error: {e}")
+            print(f"  вњ— Error: {e}")
             test_result = {
                 "prompt": prompt,
                 "error": str(e)
@@ -95,13 +99,13 @@ def test_performance(model_name, port=11434, num_tests=5):
         print(f"Average Speed: {results['avg_tokens_per_sec']:.2f} tokens/sec")
         print(f"Total Tokens: {results['total_tokens']}")
     else:
-        print("\n✗ All tests failed!")
+        print("\nвњ— All tests failed!")
         return 1
     
     # Save results
-    output_file = f"results/performance_{model_name.replace(':', '_')}_{int(time.time())}.json"
+    output_file = RESULTS_DIR / f"performance_{model_name.replace(':', '_')}_{int(time.time())}.json"
     try:
-        with open(output_file, 'w') as f:
+        with output_file.open('w', encoding='utf-8') as f:
             json.dump(results, f, indent=2)
         print(f"\nResults saved to: {output_file}")
     except Exception as e:

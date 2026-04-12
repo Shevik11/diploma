@@ -1,8 +1,8 @@
-"""
-MMLU-Style Benchmark — Massive Multitask Language Understanding
+﻿"""
+MMLU-Style Benchmark вЂ” Massive Multitask Language Understanding
 Based on the real MMLU benchmark used to evaluate SLMs in academic papers.
 Tests broad knowledge across STEM, humanities, social sciences, and professional domains.
-Each question is multiple-choice (A/B/C/D) — the model must pick the correct letter.
+Each question is multiple-choice (A/B/C/D) вЂ” the model must pick the correct letter.
 
 Reference: Hendrycks et al., "Measuring Massive Multitask Language Understanding" (2021)
 """
@@ -12,7 +12,10 @@ import sys
 import os
 import time
 import re
+from pathlib import Path
 
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 def test_mmlu(model_name, port=11434):
     """Run MMLU-style multiple-choice knowledge benchmark"""
@@ -22,7 +25,7 @@ def test_mmlu(model_name, port=11434):
     test_cases = [
         # === STEM ===
         {
-            "category": "STEM — Physics",
+            "category": "STEM вЂ” Physics",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "A ball is thrown vertically upward. At the highest point of its trajectory, "
@@ -36,10 +39,10 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "STEM — Chemistry",
+            "category": "STEM вЂ” Chemistry",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
-                "What is the pH of a neutral solution at 25°C?\n"
+                "What is the pH of a neutral solution at 25В°C?\n"
                 "A) 0\n"
                 "B) 1\n"
                 "C) 7\n"
@@ -49,7 +52,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "STEM — Biology",
+            "category": "STEM вЂ” Biology",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "Which organelle is responsible for producing ATP in eukaryotic cells?\n"
@@ -62,26 +65,26 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "STEM — Computer Science",
+            "category": "STEM вЂ” Computer Science",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "What is the worst-case time complexity of quicksort?\n"
                 "A) O(n)\n"
                 "B) O(n log n)\n"
-                "C) O(n²)\n"
+                "C) O(nВІ)\n"
                 "D) O(2^n)"
             ),
             "answer": "C",
             "points": 10,
         },
         {
-            "category": "STEM — Mathematics",
+            "category": "STEM вЂ” Mathematics",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
-                "What is the derivative of f(x) = x³ + 2x?\n"
-                "A) 3x² + 2\n"
-                "B) 3x² + 2x\n"
-                "C) x² + 2\n"
+                "What is the derivative of f(x) = xВі + 2x?\n"
+                "A) 3xВІ + 2\n"
+                "B) 3xВІ + 2x\n"
+                "C) xВІ + 2\n"
                 "D) 3x + 2"
             ),
             "answer": "A",
@@ -90,7 +93,7 @@ def test_mmlu(model_name, port=11434):
 
         # === HUMANITIES ===
         {
-            "category": "Humanities — History",
+            "category": "Humanities вЂ” History",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "The Treaty of Westphalia (1648) is most significant for:\n"
@@ -103,7 +106,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "Humanities — Philosophy",
+            "category": "Humanities вЂ” Philosophy",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "The 'categorical imperative' is a central concept in the philosophy of:\n"
@@ -116,7 +119,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "Humanities — Literature",
+            "category": "Humanities вЂ” Literature",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "In George Orwell's '1984', what is the name of the totalitarian ruling party's leader?\n"
@@ -131,7 +134,7 @@ def test_mmlu(model_name, port=11434):
 
         # === SOCIAL SCIENCES ===
         {
-            "category": "Social Science — Economics",
+            "category": "Social Science вЂ” Economics",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "When a country's central bank raises interest rates, the most likely "
@@ -145,7 +148,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "Social Science — Psychology",
+            "category": "Social Science вЂ” Psychology",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "The 'bystander effect' refers to the phenomenon where:\n"
@@ -160,7 +163,7 @@ def test_mmlu(model_name, port=11434):
 
         # === PROFESSIONAL KNOWLEDGE ===
         {
-            "category": "Professional — Law",
+            "category": "Professional вЂ” Law",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "In common law systems, the principle of 'stare decisis' means:\n"
@@ -173,7 +176,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "Professional — Medicine",
+            "category": "Professional вЂ” Medicine",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "Which vitamin deficiency causes scurvy?\n"
@@ -186,7 +189,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "Professional — Engineering",
+            "category": "Professional вЂ” Engineering",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "In electrical engineering, Ohm's law states that:\n"
@@ -199,7 +202,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "Professional — Business",
+            "category": "Professional вЂ” Business",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "A company's 'burn rate' refers to:\n"
@@ -212,7 +215,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "STEM — Statistics",
+            "category": "STEM вЂ” Statistics",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "In a normal distribution, approximately what percentage of data falls "
@@ -239,13 +242,13 @@ def test_mmlu(model_name, port=11434):
     }
 
     print(f"\n{'='*70}")
-    print(f"MMLU-STYLE BENCHMARK — {model_name}")
+    print(f"MMLU-STYLE BENCHMARK вЂ” {model_name}")
     print(f"Tests: {len(test_cases)}  Max score: {results['max_score']}")
     print(f"{'='*70}\n")
 
     for i, tc in enumerate(test_cases, 1):
         category = tc["category"]
-        domain = category.split(" — ")[0]
+        domain = category.split(" вЂ” ")[0]
         prompt = tc["prompt"]
         correct = tc["answer"]
         points = tc["points"]
@@ -275,7 +278,7 @@ def test_mmlu(model_name, port=11434):
                 chosen = match.group(1)
 
             score = points if chosen == correct else 0
-            status = "✓" if score > 0 else "✗"
+            status = "вњ“" if score > 0 else "вњ—"
 
             grp = results["breakdown"].setdefault(domain, {"correct": 0, "total": 0})
             grp["total"] += 1
@@ -297,7 +300,7 @@ def test_mmlu(model_name, port=11434):
             print(f"  [{status}] Model: {chosen}  Correct: {correct}  ({elapsed:.1f}s)")
 
         except requests.exceptions.RequestException as e:
-            print(f"  [✗] Error: {e}")
+            print(f"  [вњ—] Error: {e}")
             results["tests"].append({
                 "category": category,
                 "error": str(e),
@@ -310,7 +313,7 @@ def test_mmlu(model_name, port=11434):
     results["percentage"] = round(pct, 1)
 
     print(f"\n{'='*70}")
-    print(f"MMLU RESULTS — {model_name}")
+    print(f"MMLU RESULTS вЂ” {model_name}")
     print(f"{'='*70}")
     print(f"Score: {results['total_score']}/{results['max_score']} ({pct:.1f}%)\n")
 
@@ -332,9 +335,9 @@ def test_mmlu(model_name, port=11434):
     print(f"\nRating: {rating}")
     print(f"{'='*70}\n")
 
-    output_file = f"results/mmlu_{model_name.replace(':', '_')}_{int(time.time())}.json"
+    output_file = RESULTS_DIR / f"mmlu_{model_name.replace(':', '_')}_{int(time.time())}.json"
     try:
-        with open(output_file, "w") as f:
+        with output_file.open('w', encoding='utf-8') as f:
             json.dump(results, f, indent=2)
         print(f"Results saved to: {output_file}\n")
     except Exception as e:

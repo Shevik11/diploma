@@ -1,4 +1,4 @@
-"""
+﻿"""
 Advanced Quality Assessment for LLM responses
 Tests: complex reasoning, consistency, edge cases, writing quality, and specialized domains
 """
@@ -8,6 +8,10 @@ import sys
 import os
 import time
 import re
+from pathlib import Path
+
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def test_advanced_quality(model_name, port=11434):
@@ -283,7 +287,7 @@ def test_advanced_quality(model_name, port=11434):
             print(f"     Score: {score}/{points} - {', '.join(reasons[:2])}")
             
         except requests.exceptions.RequestException as e:
-            print(f"     ✗ Error: {e}")
+            print(f"     вњ— Error: {e}")
             test_result = {
                 "category": category,
                 "tier": tier,
@@ -334,9 +338,9 @@ def test_advanced_quality(model_name, port=11434):
     print(f"{'='*60}\n")
     
     # Save results
-    output_file = f"results/advanced_quality_{model_name.replace(':', '_')}_{int(time.time())}.json"
+    output_file = RESULTS_DIR / f"advanced_quality_{model_name.replace(':', '_')}_{int(time.time())}.json"
     try:
-        with open(output_file, 'w') as f:
+        with output_file.open('w', encoding='utf-8') as f:
             json.dump(results, f, indent=2)
         print(f"Results saved to: {output_file}\n")
     except Exception as e:

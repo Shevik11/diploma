@@ -1,4 +1,4 @@
-"""
+﻿"""
 Stress and Consistency Tests for LLM Models
 Tests: response consistency across multiple calls, handling of edge cases,
 context length management, and repeated pattern recognition
@@ -10,6 +10,10 @@ import os
 import time
 import hashlib
 from collections import Counter
+from pathlib import Path
+
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def test_consistency(model_name, port=11434, num_repeats=3):
@@ -165,9 +169,9 @@ def test_consistency(model_name, port=11434, num_repeats=3):
     print(f"{'='*60}\n")
     
     # Save results
-    output_file = f"results/consistency_{model_name.replace(':', '_')}_{int(time.time())}.json"
+    output_file = RESULTS_DIR / f"consistency_{model_name.replace(':', '_')}_{int(time.time())}.json"
     try:
-        with open(output_file, 'w') as f:
+        with output_file.open('w', encoding='utf-8') as f:
             json.dump(results, f, indent=2)
         print(f"Results saved to: {output_file}\n")
     except Exception as e:
@@ -242,7 +246,7 @@ def test_stress(model_name, port=11434, num_concurrent=5):
             results["requests"].append(result)
             results["success_count"] += 1
             
-            print(f"✓ {duration:.2f}s")
+            print(f"вњ“ {duration:.2f}s")
             
         except requests.exceptions.RequestException as e:
             result = {
@@ -253,7 +257,7 @@ def test_stress(model_name, port=11434, num_concurrent=5):
             results["requests"].append(result)
             results["failure_count"] += 1
             
-            print(f"✗ {str(e)[:40]}")
+            print(f"вњ— {str(e)[:40]}")
     
     test_end = time.time()
     results["total_time"] = test_end - test_start
@@ -291,9 +295,9 @@ def test_stress(model_name, port=11434, num_concurrent=5):
     print(f"{'='*60}\n")
     
     # Save results
-    output_file = f"results/stress_{model_name.replace(':', '_')}_{int(time.time())}.json"
+    output_file = RESULTS_DIR / f"stress_{model_name.replace(':', '_')}_{int(time.time())}.json"
     try:
-        with open(output_file, 'w') as f:
+        with output_file.open('w', encoding='utf-8') as f:
             json.dump(results, f, indent=2)
         print(f"Results saved to: {output_file}\n")
     except Exception as e:

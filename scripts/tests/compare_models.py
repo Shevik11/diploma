@@ -1,4 +1,4 @@
-"""
+﻿"""
 Compare multiple models side-by-side
 Tests same prompts across different models/ports
 """
@@ -7,7 +7,11 @@ import json
 import sys
 import os
 import time
+from pathlib import Path
 from tabulate import tabulate
+
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 def compare_models(models_config):
     """
@@ -66,11 +70,11 @@ def compare_models(models_config):
                     "response_length": len(response_text)
                 })
                 
-                print(f"✓ {duration:.2f}s, {tokens_per_sec:.1f} tok/s")
+                print(f"вњ“ {duration:.2f}s, {tokens_per_sec:.1f} tok/s")
                 print(f"    Response: {response_text[:80]}...")
                 
             except requests.exceptions.RequestException as e:
-                print(f"✗ Error: {e}")
+                print(f"вњ— Error: {e}")
                 comparison_results.append({
                     "prompt": prompt,
                     "model": model_name,
@@ -117,9 +121,9 @@ def compare_models(models_config):
     print(tabulate(table_data, headers=headers, tablefmt="grid"))
     
     # Save detailed results
-    output_file = f"results/comparison_{int(time.time())}.json"
+    output_file = RESULTS_DIR / f"comparison_{int(time.time())}.json"
     try:
-        with open(output_file, 'w') as f:
+        with output_file.open('w', encoding='utf-8') as f:
             json.dump({
                 "timestamp": time.time(),
                 "models": [m["name"] for m in models_config],

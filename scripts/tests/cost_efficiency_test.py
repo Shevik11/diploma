@@ -1,4 +1,4 @@
-"""
+﻿"""
 Cost and efficiency assessment for SLM models
 Tests: tokens per second at various prompt lengths, memory efficiency,
 response quality vs speed trade-off, throughput under load
@@ -9,6 +9,10 @@ import sys
 import os
 import time
 import statistics
+from pathlib import Path
+
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def test_cost_efficiency(model_name, port=11434):
@@ -168,7 +172,7 @@ def test_cost_efficiency(model_name, port=11434):
             print(f"     Wall time: {wall_time:.2f}s | Tokens: {eval_count} | Speed: {tokens_per_sec:.1f} tok/s | TTFT: {ttft:.3f}s")
 
         except requests.exceptions.RequestException as e:
-            print(f"     ✗ Error: {e}")
+            print(f"     вњ— Error: {e}")
             results["scenarios"].append({
                 "category": category,
                 "complexity": complexity,
@@ -241,9 +245,9 @@ def test_cost_efficiency(model_name, port=11434):
     print(f"\nRating: {rating}")
     print(f"{'='*60}\n")
 
-    output_file = f"results/cost_efficiency_{model_name.replace(':', '_')}_{int(time.time())}.json"
+    output_file = RESULTS_DIR / f"cost_efficiency_{model_name.replace(':', '_')}_{int(time.time())}.json"
     try:
-        with open(output_file, 'w') as f:
+        with output_file.open('w', encoding='utf-8') as f:
             json.dump(results, f, indent=2)
         print(f"Results saved to: {output_file}\n")
     except Exception as e:

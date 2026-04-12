@@ -1,5 +1,5 @@
-"""
-GSM8K-Style Benchmark — Grade School Math
+﻿"""
+GSM8K-Style Benchmark вЂ” Grade School Math
 Based on the real GSM8K benchmark: multi-step math word problems requiring
 chain-of-thought reasoning. The model must show work and arrive at a numeric answer.
 
@@ -11,7 +11,10 @@ import sys
 import os
 import time
 import re
+from pathlib import Path
 
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 def extract_final_number(text):
     """Extract the final numeric answer from a response (looks for #### pattern or last number)."""
@@ -33,7 +36,7 @@ def test_gsm8k(model_name, port=11434):
 
     test_cases = [
         {
-            "category": "GSM8K — Basic Arithmetic",
+            "category": "GSM8K вЂ” Basic Arithmetic",
             "prompt": (
                 "Solve step by step, then give the final answer after ####.\n\n"
                 "Janet's ducks lay 16 eggs per day. She eats three for breakfast every morning "
@@ -44,7 +47,7 @@ def test_gsm8k(model_name, port=11434):
             "points": 15,
         },
         {
-            "category": "GSM8K — Multi-step",
+            "category": "GSM8K вЂ” Multi-step",
             "prompt": (
                 "Solve step by step, then give the final answer after ####.\n\n"
                 "A store sells notebooks for $4 each and pens for $1 each. "
@@ -55,7 +58,7 @@ def test_gsm8k(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "GSM8K — Fractions & Division",
+            "category": "GSM8K вЂ” Fractions & Division",
             "prompt": (
                 "Solve step by step, then give the final answer after ####.\n\n"
                 "Natalia sold clips to 48 of her friends in April, and then she sold "
@@ -66,7 +69,7 @@ def test_gsm8k(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "GSM8K — Rate Problem",
+            "category": "GSM8K вЂ” Rate Problem",
             "prompt": (
                 "Solve step by step, then give the final answer after ####.\n\n"
                 "A car travels at 60 km/h for 2 hours, then at 80 km/h for 1.5 hours. "
@@ -76,7 +79,7 @@ def test_gsm8k(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "GSM8K — Percentage",
+            "category": "GSM8K вЂ” Percentage",
             "prompt": (
                 "Solve step by step, then give the final answer after ####.\n\n"
                 "A shirt originally costs $80. It is on sale for 25% off. "
@@ -87,18 +90,18 @@ def test_gsm8k(model_name, port=11434):
             "points": 15,
         },
         {
-            "category": "GSM8K — Age Problem",
+            "category": "GSM8K вЂ” Age Problem",
             "prompt": (
                 "Solve step by step, then give the final answer after ####.\n\n"
                 "Maria is twice as old as her son. In 10 years, the sum of their ages "
                 "will be 70. How old is Maria now?"
             ),
-            "answer": 100 // 3,  # Actually: let son = x, Maria = 2x. (2x+10)+(x+10) = 70 → 3x = 50 → x ≈ 16.67
+            "answer": 100 // 3,  # Actually: let son = x, Maria = 2x. (2x+10)+(x+10) = 70 в†’ 3x = 50 в†’ x в‰€ 16.67
             # Corrected: let's use a clean problem
             "points": 15,
         },
         {
-            "category": "GSM8K — Work Problem",
+            "category": "GSM8K вЂ” Work Problem",
             "prompt": (
                 "Solve step by step, then give the final answer after ####.\n\n"
                 "Weng earns $12 an hour for babysitting. Yesterday, she just did "
@@ -108,7 +111,7 @@ def test_gsm8k(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "GSM8K — Profit Calculation",
+            "category": "GSM8K вЂ” Profit Calculation",
             "prompt": (
                 "Solve step by step, then give the final answer after ####.\n\n"
                 "A baker buys flour for $5, sugar for $3, and eggs for $4. "
@@ -119,7 +122,7 @@ def test_gsm8k(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "GSM8K — Ratio Problem",
+            "category": "GSM8K вЂ” Ratio Problem",
             "prompt": (
                 "Solve step by step, then give the final answer after ####.\n\n"
                 "In a class, the ratio of boys to girls is 3:5. If there are 40 students "
@@ -129,7 +132,7 @@ def test_gsm8k(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "GSM8K — Multi-step with Remainder",
+            "category": "GSM8K вЂ” Multi-step with Remainder",
             "prompt": (
                 "Solve step by step, then give the final answer after ####.\n\n"
                 "A library has 156 books to distribute equally among 7 shelves. "
@@ -139,7 +142,7 @@ def test_gsm8k(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "GSM8K — Combined Operations",
+            "category": "GSM8K вЂ” Combined Operations",
             "prompt": (
                 "Solve step by step, then give the final answer after ####.\n\n"
                 "Beth bakes 4 batches of 2 dozen cookies in a week. If these cookies "
@@ -149,7 +152,7 @@ def test_gsm8k(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "GSM8K — Distance Problem",
+            "category": "GSM8K вЂ” Distance Problem",
             "prompt": (
                 "Solve step by step, then give the final answer after ####.\n\n"
                 "Two trains start from the same station at the same time, traveling in "
@@ -163,13 +166,13 @@ def test_gsm8k(model_name, port=11434):
 
     # Fix the age problem to have a clean integer answer
     test_cases[5] = {
-        "category": "GSM8K — Age Problem",
+        "category": "GSM8K вЂ” Age Problem",
         "prompt": (
             "Solve step by step, then give the final answer after ####.\n\n"
             "Tom is 3 times as old as his son. In 12 years, Tom will be twice "
             "as old as his son. How old is Tom now?"
         ),
-        "answer": 36,  # son=12, Tom=36. In 12 years: 48 = 2*24. ✓
+        "answer": 36,  # son=12, Tom=36. In 12 years: 48 = 2*24. вњ“
         "points": 15,
     }
 
@@ -185,7 +188,7 @@ def test_gsm8k(model_name, port=11434):
     }
 
     print(f"\n{'='*70}")
-    print(f"GSM8K-STYLE MATH BENCHMARK — {model_name}")
+    print(f"GSM8K-STYLE MATH BENCHMARK вЂ” {model_name}")
     print(f"Tests: {len(test_cases)}  Max score: {results['max_score']}")
     print(f"{'='*70}\n")
 
@@ -214,7 +217,7 @@ def test_gsm8k(model_name, port=11434):
             model_answer = extract_final_number(response_text)
             is_correct = model_answer == correct
             score = points if is_correct else 0
-            status = "✓" if is_correct else "✗"
+            status = "вњ“" if is_correct else "вњ—"
 
             if is_correct:
                 results["correct_count"] += 1
@@ -233,7 +236,7 @@ def test_gsm8k(model_name, port=11434):
             print(f"  [{status}] Model: {model_answer}  Correct: {correct}  ({elapsed:.1f}s)")
 
         except requests.exceptions.RequestException as e:
-            print(f"  [✗] Error: {e}")
+            print(f"  [вњ—] Error: {e}")
             results["tests"].append({
                 "category": category,
                 "error": str(e),
@@ -248,7 +251,7 @@ def test_gsm8k(model_name, port=11434):
     results["accuracy"] = round(accuracy, 1)
 
     print(f"\n{'='*70}")
-    print(f"GSM8K RESULTS — {model_name}")
+    print(f"GSM8K RESULTS вЂ” {model_name}")
     print(f"{'='*70}")
     print(f"Score: {results['total_score']}/{results['max_score']} ({pct:.1f}%)")
     print(f"Accuracy: {results['correct_count']}/{len(test_cases)} ({accuracy:.1f}%)")
@@ -265,9 +268,9 @@ def test_gsm8k(model_name, port=11434):
     print(f"Rating: {rating}")
     print(f"{'='*70}\n")
 
-    output_file = f"results/gsm8k_{model_name.replace(':', '_')}_{int(time.time())}.json"
+    output_file = RESULTS_DIR / f"gsm8k_{model_name.replace(':', '_')}_{int(time.time())}.json"
     try:
-        with open(output_file, "w") as f:
+        with output_file.open('w', encoding='utf-8') as f:
             json.dump(results, f, indent=2)
         print(f"Results saved to: {output_file}\n")
     except Exception as e:

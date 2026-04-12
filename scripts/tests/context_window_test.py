@@ -1,4 +1,4 @@
-"""
+﻿"""
 Context window and memory assessment for SLM models
 Tests: long context handling, information retrieval from context, multi-turn simulation,
 needle-in-a-haystack, and context boundary behavior
@@ -8,6 +8,10 @@ import json
 import sys
 import os
 import time
+from pathlib import Path
+
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def test_context_window(model_name, port=11434):
@@ -259,7 +263,7 @@ def test_context_window(model_name, port=11434):
             print(f"     Score: {score}/{points} - {', '.join(reasons[:2])}")
 
         except requests.exceptions.RequestException as e:
-            print(f"     ✗ Error: {e}")
+            print(f"     вњ— Error: {e}")
             results["tests"].append({
                 "category": category,
                 "error": str(e),
@@ -290,9 +294,9 @@ def test_context_window(model_name, port=11434):
     print(f"Rating: {rating}")
     print(f"{'='*60}\n")
 
-    output_file = f"results/context_window_{model_name.replace(':', '_')}_{int(time.time())}.json"
+    output_file = RESULTS_DIR / f"context_window_{model_name.replace(':', '_')}_{int(time.time())}.json"
     try:
-        with open(output_file, 'w') as f:
+        with output_file.open('w', encoding='utf-8') as f:
             json.dump(results, f, indent=2)
         print(f"Results saved to: {output_file}\n")
     except Exception as e:

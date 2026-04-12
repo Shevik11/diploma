@@ -1,5 +1,5 @@
-"""
-HumanEval-Style Benchmark — Code Generation & Understanding
+﻿"""
+HumanEval-Style Benchmark вЂ” Code Generation & Understanding
 Based on the real HumanEval benchmark: the model must generate correct Python
 functions given a docstring specification, then we verify with test cases.
 
@@ -12,7 +12,10 @@ import os
 import time
 import re
 import textwrap
+from pathlib import Path
 
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 def extract_code(response_text):
     """Extract Python code from a model response (handles markdown code blocks)."""
@@ -47,7 +50,7 @@ def test_humaneval(model_name, port=11434):
 
     test_cases = [
         {
-            "category": "HumanEval — Two Sum",
+            "category": "HumanEval вЂ” Two Sum",
             "prompt": (
                 "Write a Python function `two_sum(nums, target)` that returns the indices "
                 "of two numbers in the list `nums` that add up to `target`. "
@@ -62,7 +65,7 @@ def test_humaneval(model_name, port=11434):
             "points": 15,
         },
         {
-            "category": "HumanEval — Palindrome Check",
+            "category": "HumanEval вЂ” Palindrome Check",
             "prompt": (
                 "Write a Python function `is_palindrome(s)` that returns True if the string "
                 "`s` is a palindrome (ignoring case and non-alphanumeric characters), False otherwise.\n"
@@ -77,7 +80,7 @@ def test_humaneval(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "HumanEval — FizzBuzz",
+            "category": "HumanEval вЂ” FizzBuzz",
             "prompt": (
                 "Write a Python function `fizzbuzz(n)` that returns a list of strings from 1 to n. "
                 "For multiples of 3, use 'Fizz'. For multiples of 5, use 'Buzz'. "
@@ -95,7 +98,7 @@ def test_humaneval(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "HumanEval — Fibonacci",
+            "category": "HumanEval вЂ” Fibonacci",
             "prompt": (
                 "Write a Python function `fibonacci(n)` that returns the nth Fibonacci number. "
                 "fibonacci(0) = 0, fibonacci(1) = 1, fibonacci(2) = 1, etc.\n"
@@ -111,7 +114,7 @@ def test_humaneval(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "HumanEval — Max Subarray",
+            "category": "HumanEval вЂ” Max Subarray",
             "prompt": (
                 "Write a Python function `max_subarray_sum(nums)` that returns the maximum "
                 "sum of a contiguous subarray in the list `nums` (Kadane's algorithm).\n"
@@ -126,7 +129,7 @@ def test_humaneval(model_name, port=11434):
             "points": 15,
         },
         {
-            "category": "HumanEval — Flatten List",
+            "category": "HumanEval вЂ” Flatten List",
             "prompt": (
                 "Write a Python function `flatten(lst)` that takes a nested list and returns "
                 "a flat list. For example, flatten([1, [2, [3, 4], 5]]) returns [1, 2, 3, 4, 5].\n"
@@ -141,7 +144,7 @@ def test_humaneval(model_name, port=11434):
             "points": 15,
         },
         {
-            "category": "HumanEval — Remove Duplicates",
+            "category": "HumanEval вЂ” Remove Duplicates",
             "prompt": (
                 "Write a Python function `remove_duplicates(lst)` that returns a new list "
                 "with duplicates removed, preserving the original order of first occurrences.\n"
@@ -156,7 +159,7 @@ def test_humaneval(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "HumanEval — Roman to Integer",
+            "category": "HumanEval вЂ” Roman to Integer",
             "prompt": (
                 "Write a Python function `roman_to_int(s)` that converts a Roman numeral "
                 "string to an integer. Handle I, V, X, L, C, D, M and subtractive notation.\n"
@@ -172,7 +175,7 @@ def test_humaneval(model_name, port=11434):
             "points": 15,
         },
         {
-            "category": "HumanEval — Valid Parentheses",
+            "category": "HumanEval вЂ” Valid Parentheses",
             "prompt": (
                 "Write a Python function `is_valid_parens(s)` that returns True if the string "
                 "of parentheses '(', ')', '{', '}', '[', ']' is valid (properly opened and closed).\n"
@@ -189,10 +192,10 @@ def test_humaneval(model_name, port=11434):
             "points": 15,
         },
         {
-            "category": "HumanEval — Count Vowels",
+            "category": "HumanEval вЂ” Count Vowels",
             "prompt": (
                 "Write a Python function `count_vowels(s)` that returns the number of vowels "
-                "(a, e, i, o, u — both upper and lower case) in the string `s`.\n"
+                "(a, e, i, o, u вЂ” both upper and lower case) in the string `s`.\n"
                 "Only output the function, no explanation."
             ),
             "test_code": textwrap.dedent("""\
@@ -218,7 +221,7 @@ def test_humaneval(model_name, port=11434):
     }
 
     print(f"\n{'='*70}")
-    print(f"HUMANEVAL-STYLE CODE BENCHMARK — {model_name}")
+    print(f"HUMANEVAL-STYLE CODE BENCHMARK вЂ” {model_name}")
     print(f"Tests: {len(test_cases)}  Max score: {results['max_score']}")
     print(f"{'='*70}\n")
 
@@ -248,7 +251,7 @@ def test_humaneval(model_name, port=11434):
             passed, error = safe_exec_test(code, tc["test_code"])
 
             score = points if passed else 0
-            status = "✓" if passed else "✗"
+            status = "вњ“" if passed else "вњ—"
 
             if passed:
                 results["pass_count"] += 1
@@ -270,7 +273,7 @@ def test_humaneval(model_name, port=11434):
                 print(f"  [{status}] {error}  ({elapsed:.1f}s)")
 
         except requests.exceptions.RequestException as e:
-            print(f"  [✗] Error: {e}")
+            print(f"  [вњ—] Error: {e}")
             results["tests"].append({
                 "category": category,
                 "error": str(e),
@@ -285,7 +288,7 @@ def test_humaneval(model_name, port=11434):
     results["pass_rate"] = round(pass_rate, 1)
 
     print(f"\n{'='*70}")
-    print(f"HUMANEVAL RESULTS — {model_name}")
+    print(f"HUMANEVAL RESULTS вЂ” {model_name}")
     print(f"{'='*70}")
     print(f"Score: {results['total_score']}/{results['max_score']} ({pct:.1f}%)")
     print(f"Pass@1: {results['pass_count']}/{len(test_cases)} ({pass_rate:.1f}%)")
@@ -302,9 +305,9 @@ def test_humaneval(model_name, port=11434):
     print(f"Rating: {rating}")
     print(f"{'='*70}\n")
 
-    output_file = f"results/humaneval_{model_name.replace(':', '_')}_{int(time.time())}.json"
+    output_file = RESULTS_DIR / f"humaneval_{model_name.replace(':', '_')}_{int(time.time())}.json"
     try:
-        with open(output_file, "w") as f:
+        with output_file.open('w', encoding='utf-8') as f:
             json.dump(results, f, indent=2)
         print(f"Results saved to: {output_file}\n")
     except Exception as e:

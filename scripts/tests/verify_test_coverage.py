@@ -7,6 +7,9 @@ import json
 import sys
 from pathlib import Path
 
+RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+
 
 def generate_coverage_report():
     """Generate test coverage report"""
@@ -170,7 +173,7 @@ def generate_coverage_report():
     
     # Calculate coverage
     report = {
-        "timestamp": Path("results").exists() and "2024",
+        "timestamp": RESULTS_DIR.exists() and "2024",
         "total_required_tests": len(required_tests),
         "fully_implemented": 0,
         "partially_implemented": 0,
@@ -300,10 +303,7 @@ def print_report(report):
 
 def save_report(report):
     """Save report as JSON"""
-    results_dir = Path("results")
-    results_dir.mkdir(exist_ok=True)
-    
-    report_file = results_dir / "test_coverage_mapping.json"
+    report_file = RESULTS_DIR / "test_coverage_mapping.json"
     with open(report_file, 'w') as f:
         json.dump(report, f, indent=2)
     print(f"Report saved to: {report_file}\n")

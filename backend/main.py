@@ -2,6 +2,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Back
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, Literal, Callable
+from dataclasses import asdict
 import asyncio
 import subprocess
 import random
@@ -15,13 +16,21 @@ import httpx
 from datetime import datetime
 from contextlib import asynccontextmanager
 from pathlib import Path
+from benchmarks import (
+    OllamaBenchmark,
+    run_benchmark,
+    save_benchmark_results,
+    list_benchmark_results,
+    load_benchmark_results,
+    BENCHMARK_PROMPTS,
+)
 
 logger = logging.getLogger("uvicorn.error")
 
 # Initialize Docker client
 try:
     docker_client = docker.from_env()
-except:
+except Exception:
     docker_client = None
 
 
@@ -41,7 +50,7 @@ class ConnectionManager:
         for connection in self.active_connections:
             try:
                 await connection.send_json(message)
-            except:
+            except Exception:
                 pass
 
 
@@ -851,15 +860,6 @@ async def run_tests(request: TestRequest):
 
 
 # ============== Benchmark Endpoints ==============
-from benchmarks import (
-    OllamaBenchmark,
-    run_benchmark,
-    save_benchmark_results,
-    list_benchmark_results,
-    load_benchmark_results,
-    BENCHMARK_PROMPTS
-)
-from dataclasses import asdict
 
 # Store running benchmark state
 benchmark_state = {
