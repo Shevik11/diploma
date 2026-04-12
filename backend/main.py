@@ -1,94 +1,36 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional, Literal
+from typing import Optional, Literal, Callable
+from dataclasses import asdict
 import asyncio
-import os
+import subprocess
 import random
+import os
 import time
+import json
+import re
+import logging
 import docker
-import psutil
+import httpx
 from datetime import datetime
 from contextlib import asynccontextmanager
+from pathlib import Path
+from benchmarks import (
+    OllamaBenchmark,
+    run_benchmark,
+    save_benchmark_results,
+    list_benchmark_results,
+    load_benchmark_results,
+    BENCHMARK_PROMPTS,
+)
 
-OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
-LLAMA_CPP_URL = os.getenv("LLAMA_CPP_URL", "http://localhost:8080")
-VLLM_URL = os.getenv("VLLM_URL", "http://localhost:8100")
-
-# Framework container configurations
-FRAMEWORK_CONFIGS = {
-    "ollama": {
-        "container_name": "ollama",
-        "image": "ollama/ollama:latest",
-        "ports": {"11434/tcp": 11434},
-        "volumes": {"ollama_data": {"bind": "/root/.ollama", "mode": "rw"}},
-        "base_url": OLLAMA_URL,
-        "health_endpoint": "/api/tags",
-        "environment": {},
-    },
-    "llama-cpp": {
-        "container_name": "llama-cpp",
-        "image": "ghcr.io/ggerganov/llama.cpp:server",
-        "ports": {"8080/tcp": 8080},
-        "volumes": {"llama_cpp_models": {"bind": "/models", "mode": "rw"}},
-        "base_url": LLAMA_CPP_URL,
-        "health_endpoint": "/health",
-        "environment": {},
-    },
-    "vllm": {
-        "container_name": "vllm",
-        "image": "vllm/vllm-openai:latest",
-        "ports": {"8000/tcp": 8100},
-        "volumes": {"vllm_models": {"bind": "/root/.cache/huggingface", "mode": "rw"}},
-        "base_url": VLLM_URL,
-        "health_endpoint": "/health",
-        "environment": {},
-    },
-}
-
-# Model name mapping per framework (Ollama uses short tags, others use HuggingFace IDs)
-MODEL_NAMES = {
-    "ollama": {
-        "phi3:mini": "phi3:mini",
-        "llama3.2:1b": "llama3.2:1b",
-        "llama3.2:3b": "llama3.2:3b",
-        "gemma2:2b": "gemma2:2b",
-        "mistral:7b": "mistral:7b",
-        "qwen2.5:0.5b": "qwen2.5:0.5b",
-        "qwen2.5:1.5b": "qwen2.5:1.5b",
-        "qwen2.5:3b": "qwen2.5:3b",
-    },
-    "llama-cpp": {
-        "phi3:mini": "microsoft/Phi-3-mini-4k-instruct-gguf",
-        "llama3.2:1b": "meta-llama/Llama-3.2-1B-Instruct-GGUF",
-        "llama3.2:3b": "meta-llama/Llama-3.2-3B-Instruct-GGUF",
-        "gemma2:2b": "google/gemma-2-2b-it-GGUF",
-        "mistral:7b": "mistralai/Mistral-7B-Instruct-v0.3-GGUF",
-        "qwen2.5:0.5b": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
-        "qwen2.5:1.5b": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
-        "qwen2.5:3b": "Qwen/Qwen2.5-3B-Instruct-GGUF",
-    },
-    "vllm": {
-        "phi3:mini": "microsoft/Phi-3-mini-4k-instruct",
-        "llama3.2:1b": "meta-llama/Llama-3.2-1B-Instruct",
-        "llama3.2:3b": "meta-llama/Llama-3.2-3B-Instruct",
-        "gemma2:2b": "google/gemma-2-2b-it",
-        "mistral:7b": "mistralai/Mistral-7B-Instruct-v0.3",
-        "qwen2.5:0.5b": "Qwen/Qwen2.5-0.5B-Instruct",
-        "qwen2.5:1.5b": "Qwen/Qwen2.5-1.5B-Instruct",
-        "qwen2.5:3b": "Qwen/Qwen2.5-3B-Instruct",
-    },
-}
-
-
-def get_framework_model_name(model: str, technology: str) -> str:
-    """Get the correct model name for the given framework."""
-    return MODEL_NAMES.get(technology, {}).get(model, model)
+logger = logging.getLogger("uvicorn.error")
 
 # Initialize Docker client
 try:
     docker_client = docker.from_env()
-except:
+except Exception:
     docker_client = None
 
 
@@ -108,34 +50,11 @@ class ConnectionManager:
         for connection in self.active_connections:
             try:
                 await connection.send_json(message)
-            except:
+            except Exception:
                 pass
 
 
 manager = ConnectionManager()
-
-
-def get_container_stats(container_name: str = "ollama"):
-    """Get real-time stats from a Docker container."""
-    if not docker_client:
-        return 0, 0, 0
-    try:
-        container = docker_client.containers.get(container_name)
-        stats = container.stats(stream=False)
-
-        cpu_delta = stats["cpu_stats"]["cpu_usage"]["total_usage"] - stats["precpu_stats"]["cpu_usage"]["total_usage"]
-        system_delta = stats["cpu_stats"]["system_cpu_usage"] - stats["precpu_stats"]["system_cpu_usage"]
-        percpu = stats["cpu_stats"]["cpu_usage"].get("percpu_usage") or [0]
-        cpu_percent = (cpu_delta / system_delta) * len(percpu) * 100.0 if system_delta else 0
-
-        memory_usage = stats["memory_stats"].get("usage", 0)
-        memory_limit = stats["memory_stats"].get("limit", 1)
-        memory_percent = (memory_usage / memory_limit) * 100.0
-
-        return round(cpu_percent, 1), round(memory_percent, 1), 0
-    except Exception:
-        return 0, 0, 0
-
 
 # Background task for metrics
 metrics_task = None
@@ -145,14 +64,6 @@ async def broadcast_metrics():
     """Background task to broadcast metrics to all connected clients"""
     while True:
         if manager.active_connections:
-            # Refresh real container stats if a container is running
-            cn = deployment_state["container"].get("container_name")
-            if cn and deployment_state["container"]["status"] == "running":
-                cpu, mem, lat = get_container_stats(cn)
-                deployment_state["container"]["cpu"] = cpu
-                deployment_state["container"]["memory"] = mem
-                deployment_state["container"]["latency"] = lat
-
             metrics = {
                 "type": "metrics",
                 "data": {
@@ -193,7 +104,6 @@ deployment_state = {
         "status": "idle",
         "technology": None,
         "model": None,
-        "container_name": None,
         "cpu": 0,
         "memory": 0,
         "latency": 0
@@ -213,22 +123,41 @@ metrics_history = {
     "vm": []
 }
 
-# Models — generic IDs, mapped to framework-specific names at runtime
-MODELS = [
-    {"value": "phi3:mini", "label": "Phi-3 Mini (3.8B)"},
-    {"value": "llama3.2:1b", "label": "Llama 3.2 (1B)"},
-    {"value": "llama3.2:3b", "label": "Llama 3.2 (3B)"},
-    {"value": "gemma2:2b", "label": "Gemma 2 (2B)"},
-    {"value": "mistral:7b", "label": "Mistral (7B)"},
+pulling_models: set[str] = set()
+
+# Models
+DEFAULT_MODELS = [
+    {"value": "phi-3-mini", "label": "Phi-3 Mini (3.8B)"},
+    {"value": "llama-3.2-1b", "label": "Llama 3.2 (1B)"},
+    {"value": "llama-3.2-3b", "label": "Llama 3.2 (3B)"},
+    {"value": "gemma-2b", "label": "Gemma 2B"},
+    {"value": "mistral-7b", "label": "Mistral 7B"},
     {"value": "qwen2.5:0.5b", "label": "Qwen 2.5 (0.5B)"},
     {"value": "qwen2.5:1.5b", "label": "Qwen 2.5 (1.5B)"},
     {"value": "qwen2.5:3b", "label": "Qwen 2.5 (3B)"},
+    {"value": "qwen2.5:7b", "label": "Qwen 2.5 (7B)"},
+    {"value": "qwen2.5-coder:1.5b", "label": "Qwen 2.5 Coder (1.5B)"},
+    {"value": "qwen2.5-coder:7b", "label": "Qwen 2.5 Coder (7B)"},
 ]
 
+MODEL_ALIASES = {
+    "phi-3-mini": "phi3:mini",
+    "llama-3.2-1b": "llama3.2:1b",
+    "llama-3.2-3b": "llama3.2:3b",
+    "gemma-2b": "gemma2:2b",
+    "mistral-7b": "mistral:7b",
+}
+MODEL_ALIASES_REVERSE = {v: k for k, v in MODEL_ALIASES.items()}
+
+MODEL_LABELS = {m["value"]: m["label"] for m in DEFAULT_MODELS}
+for alias, canonical in MODEL_ALIASES.items():
+    if alias in MODEL_LABELS:
+        MODEL_LABELS.setdefault(canonical, MODEL_LABELS[alias])
+
 CONTAINER_TECHNOLOGIES = [
-    {"value": "ollama", "label": "Ollama (Docker)"},
-    {"value": "llama-cpp", "label": "llama.cpp (Docker)"},
-    {"value": "vllm", "label": "vLLM (Docker)"},
+    {"value": "docker", "label": "Docker"},
+    {"value": "podman", "label": "Podman"},
+    {"value": "containerd", "label": "Containerd"},
 ]
 
 VM_TECHNOLOGIES = [
@@ -247,6 +176,8 @@ class DeploymentRequest(BaseModel):
 
 class TestRequest(BaseModel):
     test_ids: list[str]
+    model: str = ""
+    technology: str = "ollama"
 
 
 class TestResult(BaseModel):
@@ -256,12 +187,493 @@ class TestResult(BaseModel):
     duration: Optional[float] = None
 
 
+# Test definitions — all 17 test suites
+TESTS = {
+    "quality": {
+        "name": "Quality Test",
+        "script": "quality_test.py",
+        "duration_range": (30, 120),
+    },
+    "advanced_quality": {
+        "name": "Advanced Quality Test",
+        "script": "advanced_quality_test.py",
+        "duration_range": (30, 120),
+    },
+    "performance": {
+        "name": "Performance Test",
+        "script": "performance_test.py",
+        "duration_range": (20, 60),
+    },
+    "safety_robustness": {
+        "name": "Safety & Robustness Test",
+        "script": "safety_robustness_test.py",
+        "duration_range": (30, 120),
+    },
+    "stress_consistency": {
+        "name": "Stress & Consistency Test",
+        "script": "stress_and_consistency_test.py",
+        "duration_range": (60, 300),
+    },
+    "hard_tests": {
+        "name": "Hard Tests",
+        "script": "hard_tests.py",
+        "duration_range": (30, 120),
+    },
+    "multilingual": {
+        "name": "Multilingual Test",
+        "script": "multilingual_test.py",
+        "duration_range": (30, 120),
+    },
+    "summarization": {
+        "name": "Summarization Test",
+        "script": "summarization_test.py",
+        "duration_range": (30, 120),
+    },
+    "context_window": {
+        "name": "Context Window Test",
+        "script": "context_window_test.py",
+        "duration_range": (30, 180),
+    },
+    "cost_efficiency": {
+        "name": "Cost Efficiency Test",
+        "script": "cost_efficiency_test.py",
+        "duration_range": (30, 120),
+    },
+    "benchmark_mmlu": {
+        "name": "MMLU Benchmark",
+        "script": "benchmark_mmlu_test.py",
+        "duration_range": (30, 120),
+    },
+    "benchmark_reasoning": {
+        "name": "Reasoning Benchmark (ARC / HellaSwag / Winogrande)",
+        "script": "benchmark_reasoning_test.py",
+        "duration_range": (30, 120),
+    },
+    "benchmark_gsm8k": {
+        "name": "GSM8K Math Benchmark",
+        "script": "benchmark_gsm8k_test.py",
+        "duration_range": (30, 120),
+    },
+    "benchmark_truthfulqa": {
+        "name": "TruthfulQA Benchmark",
+        "script": "benchmark_truthfulqa_test.py",
+        "duration_range": (30, 120),
+    },
+    "benchmark_humaneval": {
+        "name": "HumanEval Code Benchmark",
+        "script": "benchmark_humaneval_test.py",
+        "duration_range": (30, 180),
+    },
+    "compare_models": {
+        "name": "Compare Models",
+        "script": "compare_models.py",
+        "duration_range": (60, 300),
+    },
+    "run_all": {
+        "name": "Run All Tests",
+        "script": "run_all_tests.py",
+        "duration_range": (300, 1800),
+    },
+}
+
+SCRIPTS_DIR = Path(__file__).parent / "scripts" / "tests"
+RESULTS_DIR = Path(__file__).parent / "results"
+
+# Technology to port mapping
+TECH_PORTS = {
+    "ollama": 11434,
+    "llama-cpp": 8080,
+    "vllm": 8100,
+}
+
+
+def _get_model_name(model: str, technology: str) -> str:
+    """Map frontend model value to the actual model name for the technology."""
+    if technology == "ollama":
+        return MODEL_ALIASES.get(model, model)
+    return model
+
+
+def _to_frontend_model_name(model: str, technology: str) -> str:
+    """Map provider model name back to frontend value."""
+    if technology == "ollama":
+        return MODEL_ALIASES_REVERSE.get(model, model)
+    return model
+
+
+def _to_model_label(model_value: str) -> str:
+    """Get display label for model value."""
+    return MODEL_LABELS.get(model_value, model_value)
+
+
+async def _list_ollama_models() -> list[str]:
+    """Fetch installed models from Ollama."""
+    host = os.environ.get("SLM_TEST_HOST", "localhost")
+    port = TECH_PORTS["ollama"]
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.get(f"http://{host}:{port}/api/tags")
+            if response.status_code != 200:
+                return []
+            data = response.json()
+            return [m.get("name") for m in data.get("models", []) if m.get("name")]
+    except Exception as e:
+        logger.warning(f"Failed to fetch Ollama models: {e}")
+        return []
+
+
+def _ollama_base_url() -> str:
+    """Get Ollama base URL based on current host mapping."""
+    host = os.environ.get("SLM_TEST_HOST", "localhost")
+    port = TECH_PORTS["ollama"]
+    return f"http://{host}:{port}"
+
+
+async def _pull_ollama_model(model: str):
+    """Pull a model from Ollama registry and wait until it is available locally."""
+    timeout = httpx.Timeout(timeout=3600.0, connect=10.0)
+    url = f"{_ollama_base_url()}/api/pull"
+
+    try:
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            response = await client.post(url, json={"model": model, "stream": False})
+    except Exception as e:
+        raise HTTPException(status_code=503, detail=f"Failed to connect to Ollama for pull: {e}")
+
+    if response.status_code != 200:
+        detail = response.text[:500] if response.text else f"HTTP {response.status_code}"
+        raise HTTPException(status_code=502, detail=f"Ollama pull failed for '{model}': {detail}")
+
+    payload = response.json() if response.headers.get("content-type", "").startswith("application/json") else {}
+    if isinstance(payload, dict) and payload.get("error"):
+        raise HTTPException(status_code=400, detail=f"Ollama pull failed for '{model}': {payload['error']}")
+
+    available_models = await _list_ollama_models()
+    if model not in available_models:
+        raise HTTPException(status_code=500, detail=f"Model '{model}' was pulled but is still unavailable")
+
+
+async def _resolve_and_validate_model(
+    model: str,
+    technology: str,
+    auto_pull: bool = False,
+    pull_status_callback: Optional[Callable[[str], None]] = None,
+) -> str:
+    """Resolve frontend model value and ensure it is available for current technology."""
+    if not model:
+        raise HTTPException(status_code=400, detail="Model is required")
+
+    resolved = _get_model_name(model, technology)
+    if technology != "ollama":
+        return resolved
+
+    available_models = await _list_ollama_models()
+    if not available_models:
+        raise HTTPException(status_code=503, detail="Cannot connect to Ollama or no models are installed")
+
+    if resolved not in available_models:
+        if not auto_pull:
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    f"Model '{resolved}' is not installed in Ollama. "
+                    f"Install it first: docker exec -it ollama ollama pull {resolved}"
+                ),
+            )
+
+        if pull_status_callback:
+            pull_status_callback(f"Pulling model '{resolved}'...")
+        await _pull_ollama_model(resolved)
+        if pull_status_callback:
+            pull_status_callback(f"Model '{resolved}' pulled successfully")
+
+    return resolved
+
+
+def _build_model_catalog(installed_models: list[str]) -> list[dict]:
+    """Build full model catalog and mark what is installed in Ollama."""
+    installed_set = set(installed_models)
+    models = []
+    seen = set()
+
+    for model in DEFAULT_MODELS:
+        model_value = model["value"]
+        resolved = _get_model_name(model_value, "ollama")
+        models.append({
+            "value": model_value,
+            "label": model["label"],
+            "installed": resolved in installed_set,
+        })
+        seen.add(model_value)
+
+    # Include extra installed models not listed in defaults.
+    for provider_model in sorted(installed_set):
+        frontend_model = _to_frontend_model_name(provider_model, "ollama")
+        if frontend_model in seen:
+            continue
+        models.append({
+            "value": frontend_model,
+            "label": _to_model_label(frontend_model),
+            "installed": True,
+        })
+        seen.add(frontend_model)
+
+    return models
+
+
+def _set_container_running_state(model: str, technology: str):
+    """Update container deployment state to running with fresh metrics."""
+    deployment_state["container"]["status"] = "running"
+    deployment_state["container"]["technology"] = technology
+    deployment_state["container"]["model"] = model
+    deployment_state["container"]["message"] = ""
+
+    deployment_state["container"]["cpu"] = round(random.uniform(10, 40), 1)
+    deployment_state["container"]["memory"] = round(random.uniform(20, 50), 1)
+    deployment_state["container"]["latency"] = round(random.uniform(20, 50), 0)
+
+
+async def _pull_and_start_container(model: str, technology: str):
+    """Pull missing Ollama model in background and switch container to running."""
+    resolved = _get_model_name(model, technology)
+    try:
+        await _pull_ollama_model(resolved)
+        _set_container_running_state(model, technology)
+        deployment_state["container"]["message"] = f"Model '{resolved}' is ready"
+    except Exception as e:
+        deployment_state["container"]["status"] = "idle"
+        deployment_state["container"]["technology"] = None
+        deployment_state["container"]["model"] = None
+        deployment_state["container"]["cpu"] = 0
+        deployment_state["container"]["memory"] = 0
+        deployment_state["container"]["latency"] = 0
+        deployment_state["container"]["message"] = f"Pull failed: {e}"
+        logger.error(f"Failed to pull model '{resolved}': {e}")
+    finally:
+        pulling_models.discard(resolved)
+
+
+def _get_test_env(technology: str) -> dict:
+    """Get environment variables for test subprocesses."""
+    env = os.environ.copy()
+    # Inside Docker, services are accessed by container hostname, not localhost
+    host_map = {"ollama": "ollama", "llama-cpp": "llama-cpp", "vllm": "vllm"}
+    env["SLM_TEST_HOST"] = host_map.get(technology, "localhost")
+    return env
+
+
+def _run_test_subprocess(script_path: str, model_name: str, port: int, timeout: int = 600, technology: str = "ollama") -> dict:
+    """Run a test script via subprocess.run (synchronous, for use in executor)."""
+    cmd = ["python", script_path, model_name, str(port)]
+    env = _get_test_env(technology)
+    logger.info(f"Running test command: {' '.join(cmd)} (host={env.get('SLM_TEST_HOST')})")
+    start_time = time.time()
+    try:
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            cwd=str(SCRIPTS_DIR),
+            env=env,
+        )
+        duration = time.time() - start_time
+        status = "passed" if result.returncode == 0 else "failed"
+        details = _load_test_details_from_logs(result.stdout or "", result.stderr or "")
+        logger.info(f"Test finished: {script_path} -> {status} in {duration:.1f}s")
+        return {
+            "returncode": result.returncode,
+            "stdout": result.stdout[-2000:] if result.stdout else "",
+            "stderr": result.stderr[-2000:] if result.stderr else "",
+            "duration": duration,
+            "status": status,
+            "details": details,
+        }
+    except subprocess.TimeoutExpired:
+        duration = time.time() - start_time
+        logger.warning(f"Test timed out: {script_path} after {timeout}s")
+        return {
+            "returncode": -1,
+            "stdout": "",
+            "stderr": f"Timeout after {timeout}s",
+            "duration": duration,
+            "status": "timeout",
+            "details": [],
+        }
+    except Exception as e:
+        duration = time.time() - start_time
+        logger.error(f"Test error: {script_path} -> {e}")
+        return {
+            "returncode": -1,
+            "stdout": "",
+            "stderr": str(e),
+            "duration": duration,
+            "status": "error",
+            "details": [],
+        }
+
+
+def _save_test_results(filepath: str, test_results: list):
+    """Save test_results into benchmark JSON file; recreate file if it was removed."""
+    try:
+        data = None
+        if Path(filepath).exists():
+            with open(filepath, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        else:
+            logger.warning(f"Result file missing, recreating: {filepath}")
+
+        if data is None:
+            backup = benchmark_state.get("result_backup") if isinstance(benchmark_state, dict) else None
+            if isinstance(backup, dict):
+                data = backup
+            else:
+                data = {
+                    "model": benchmark_state.get("model", ""),
+                    "platform": "docker",
+                    "technology": "ollama",
+                    "timestamp": datetime.now().isoformat(),
+                    "system_info": {},
+                    "results": [],
+                    "summary": {
+                        "total_prompts": 0,
+                        "successful": 0,
+                        "failed": 0,
+                        "success_rate": 0,
+                        "avg_tokens_per_second": 0,
+                        "avg_latency_ms": 0,
+                        "avg_first_token_latency_ms": 0,
+                        "total_tokens_generated": 0,
+                        "avg_cpu_percent": 0,
+                        "avg_memory_percent": 0,
+                    },
+                }
+
+        data["test_results"] = test_results
+
+        Path(filepath).parent.mkdir(parents=True, exist_ok=True)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+
+        logger.info(f"Saved {len(test_results)} test results to {filepath}")
+    except Exception as e:
+        logger.error(f"Failed to save test results: {e}")
+
+
+def _extract_saved_result_file_path(log_text: str) -> Optional[Path]:
+    """Extract saved result file path from script logs."""
+    if not log_text:
+        return None
+
+    matches = re.findall(r"Results saved(?:\s+to)?\s*[:→]\s*([^\r\n]+)", log_text, flags=re.IGNORECASE)
+    if not matches:
+        return None
+
+    raw_path = matches[-1].strip().strip('"').strip("'")
+    if not raw_path:
+        return None
+
+    candidate = Path(raw_path)
+    if candidate.is_absolute() and candidate.exists():
+        return candidate
+
+    search_roots = [
+        SCRIPTS_DIR,
+        Path(__file__).parent,
+        Path(__file__).parent.parent,
+        Path.cwd(),
+    ]
+
+    for root in search_roots:
+        resolved = root / raw_path
+        if resolved.exists():
+            return resolved
+
+    return None
+
+
+def _safe_to_text(value) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, (dict, list)):
+        return json.dumps(value, ensure_ascii=False)
+    return str(value)
+
+
+def _extract_details_from_result_payload(payload: dict) -> list[dict]:
+    """Extract prompt/response details from different test result JSON schemas."""
+    details = []
+    if not isinstance(payload, dict):
+        return details
+
+    candidate_lists = []
+    for key in ("tests", "results"):
+        value = payload.get(key)
+        if isinstance(value, list):
+            candidate_lists.append(value)
+
+    for items in candidate_lists:
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+
+            prompt = item.get("prompt") or item.get("question") or item.get("category") or ""
+            response = (
+                item.get("response")
+                or item.get("response_text")
+                or item.get("full_response")
+                or item.get("generated_code")
+                or ""
+            )
+
+            if not response and item.get("model_answer") is not None:
+                model_answer = _safe_to_text(item.get("model_answer"))
+                correct_answer = _safe_to_text(item.get("correct_answer"))
+                response = f"Model answer: {model_answer}" if not correct_answer else f"Model answer: {model_answer}; Correct answer: {correct_answer}"
+
+            prompt_text = _safe_to_text(prompt).strip()
+            response_text = _safe_to_text(response).strip()
+            if not prompt_text and not response_text:
+                continue
+
+            details.append({
+                "prompt": prompt_text,
+                "response": response_text,
+            })
+
+            if len(details) >= 200:
+                return details
+
+    return details
+
+
+def _load_test_details_from_logs(stdout: str, stderr: str) -> list[dict]:
+    """Load rich test details by following 'Results saved to:' pointer from logs."""
+    for log_text in (stdout or "", stderr or ""):
+        result_path = _extract_saved_result_file_path(log_text)
+        if not result_path:
+            continue
+        try:
+            with open(result_path, "r", encoding="utf-8") as f:
+                payload = json.load(f)
+            details = _extract_details_from_result_payload(payload)
+            if details:
+                return details
+        except Exception as e:
+            logger.warning(f"Failed to load detail file '{result_path}': {e}")
+    return []
+
+
 # API Endpoints
 
 @app.get("/api/models")
 async def get_models():
     """Get available models"""
-    return {"models": MODELS}
+    available_models = await _list_ollama_models()
+    models = _build_model_catalog(available_models)
+    return {"models": models}
 
 
 @app.get("/api/technologies")
@@ -280,140 +692,48 @@ async def get_status():
 
 
 @app.post("/api/container/start")
-async def start_container(request: DeploymentRequest):
-    """Start Docker container for the selected framework and load the requested model"""
-    if not docker_client:
-        raise HTTPException(status_code=503, detail="Docker is not available")
+async def start_container(request: DeploymentRequest, background_tasks: BackgroundTasks):
+    """Start container deployment"""
+    resolved = _get_model_name(request.model, request.technology)
 
-    technology = request.technology or "ollama"
-    config = FRAMEWORK_CONFIGS.get(technology)
-    if not config:
-        raise HTTPException(status_code=400, detail=f"Unknown technology: {technology}")
+    if request.technology == "ollama":
+        installed_models = await _list_ollama_models()
+        if resolved not in installed_models:
+            deployment_state["container"]["status"] = "pulling"
+            deployment_state["container"]["technology"] = request.technology
+            deployment_state["container"]["model"] = request.model
+            deployment_state["container"]["cpu"] = 0
+            deployment_state["container"]["memory"] = 0
+            deployment_state["container"]["latency"] = 0
+            deployment_state["container"]["message"] = f"Pulling model '{resolved}'..."
 
-    # Use the base container name (not model-suffixed) to reuse existing containers
-    container_name = config['container_name']
-    framework_model = get_framework_model_name(request.model, technology)
+            if resolved not in pulling_models:
+                pulling_models.add(resolved)
+                background_tasks.add_task(_pull_and_start_container, request.model, request.technology)
 
-    deployment_state["container"]["status"] = "starting"
-    deployment_state["container"]["technology"] = technology
-    deployment_state["container"]["model"] = request.model
-    deployment_state["container"]["container_name"] = container_name
-
-    try:
-        # Check if container already exists
-        try:
-            container = docker_client.containers.get(container_name)
-            if container.status != "running":
-                container.start()
-        except docker.errors.NotFound:
-            # Build run kwargs based on technology
-            run_kwargs = {
-                "image": config["image"],
-                "name": container_name,
-                "ports": config["ports"],
-                "volumes": config["volumes"],
-                "detach": True,
-                "restart_policy": {"Name": "unless-stopped"},
+            return {
+                "success": True,
+                "state": deployment_state["container"],
+                "message": f"Pulling model '{resolved}' in background",
             }
-            if config["environment"]:
-                run_kwargs["environment"] = config["environment"]
 
-            # llama.cpp and vLLM need the model passed at container start
-            if technology == "llama-cpp":
-                run_kwargs["command"] = ["-m", f"/models/{framework_model}", "--host", "0.0.0.0", "--port", "8080"]
-            elif technology == "vllm":
-                run_kwargs["command"] = ["--model", framework_model, "--host", "0.0.0.0", "--port", "8000"]
-                # vLLM needs GPU; add runtime if available
-                try:
-                    run_kwargs["runtime"] = "nvidia"
-                    run_kwargs["environment"] = {"NVIDIA_VISIBLE_DEVICES": "all"}
-                except Exception:
-                    pass
+    await _resolve_and_validate_model(request.model, request.technology)
 
-            container = docker_client.containers.run(**run_kwargs)
+    _set_container_running_state(request.model, request.technology)
 
-        # Wait for framework to be ready
-        import httpx
-        base_url = config["base_url"]
-        health_endpoint = config["health_endpoint"]
-        async with httpx.AsyncClient(timeout=60.0) as client:
-            for _ in range(30):
-                try:
-                    resp = await client.get(f"{base_url}{health_endpoint}")
-                    if resp.status_code == 200:
-                        break
-                except Exception:
-                    pass
-                await asyncio.sleep(2)
-            else:
-                raise HTTPException(status_code=504, detail=f"{technology} container did not become ready")
-
-            # Ollama-specific: pull model if not already available
-            if technology == "ollama":
-                model_already_available = False
-                try:
-                    tags_resp = await client.get(f"{base_url}/api/tags")
-                    if tags_resp.status_code == 200:
-                        available_models = [m["name"] for m in tags_resp.json().get("models", [])]
-                        requested = framework_model
-                        model_already_available = any(
-                            m == requested or m == f"{requested}:latest" or requested == m.split(":")[0]
-                            for m in available_models
-                        )
-                except Exception:
-                    pass
-
-                if not model_already_available:
-                    deployment_state["container"]["status"] = "pulling_model"
-                    pull_resp = await client.post(
-                        f"{base_url}/api/pull",
-                        json={"name": framework_model, "stream": False},
-                        timeout=600.0,
-                    )
-                    if pull_resp.status_code != 200:
-                        raise HTTPException(status_code=500, detail=f"Failed to pull model: {pull_resp.text}")
-                else:
-                    deployment_state["container"]["status"] = "model_ready"
-
-        # Get real container stats
-        cpu, mem, lat = get_container_stats(container_name)
-        deployment_state["container"]["status"] = "running"
-        deployment_state["container"]["cpu"] = cpu
-        deployment_state["container"]["memory"] = mem
-        deployment_state["container"]["latency"] = lat
-
-        return {"success": True, "state": deployment_state["container"]}
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        deployment_state["container"]["status"] = "error"
-        raise HTTPException(status_code=500, detail=str(e))
+    return {"success": True, "state": deployment_state["container"]}
 
 
 @app.post("/api/container/stop")
 async def stop_container():
-    """Stop the currently running framework container"""
-    container_name = deployment_state["container"].get("container_name")
-    if not container_name:
-        technology = deployment_state["container"].get("technology") or "ollama"
-        config = FRAMEWORK_CONFIGS.get(technology, FRAMEWORK_CONFIGS["ollama"])
-        container_name = config["container_name"]
-
-    if docker_client:
-        try:
-            container = docker_client.containers.get(container_name)
-            container.stop(timeout=10)
-        except docker.errors.NotFound:
-            pass
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
-
+    """Stop container deployment"""
     deployment_state["container"]["status"] = "stopped"
-    deployment_state["container"]["container_name"] = None
+    deployment_state["container"]["technology"] = None
+    deployment_state["container"]["model"] = None
     deployment_state["container"]["cpu"] = 0
     deployment_state["container"]["memory"] = 0
     deployment_state["container"]["latency"] = 0
+    deployment_state["container"]["message"] = ""
 
     return {"success": True, "state": deployment_state["container"]}
 
@@ -425,7 +745,6 @@ async def start_vm(request: DeploymentRequest):
     deployment_state["vm"]["technology"] = request.technology
     deployment_state["vm"]["model"] = request.model
 
-    # Simulate startup metrics (VMs typically use more resources)
     deployment_state["vm"]["cpu"] = round(random.uniform(30, 70), 1)
     deployment_state["vm"]["memory"] = round(random.uniform(40, 80), 1)
     deployment_state["vm"]["latency"] = round(random.uniform(40, 100), 0)
@@ -447,7 +766,6 @@ async def stop_vm():
 @app.get("/api/metrics")
 async def get_metrics():
     """Get current metrics snapshot"""
-    # Generate mock metrics data
     time_points = [f"{i*5}s" for i in range(12)]
 
     data = []
@@ -499,14 +817,7 @@ async def download_metrics(model: str = "", technology: str = ""):
     }
 
 
-# Test definitions
-TESTS = {
-    "1": {"name": "Startup Time Comparison", "duration_range": (500, 1500)},
-    "2": {"name": "Resource Usage Under Load", "duration_range": (1000, 3000)},
-    "3": {"name": "Inference Speed Test", "duration_range": (800, 2000)},
-    "4": {"name": "Scalability Test", "duration_range": (1500, 4000)},
-}
-
+# Test endpoints
 
 @app.get("/api/tests")
 async def get_tests():
@@ -521,46 +832,45 @@ async def get_tests():
 
 @app.post("/api/tests/run")
 async def run_tests(request: TestRequest):
-    """Run selected tests (simulated)"""
+    """Run selected tests by executing actual test scripts"""
     results = []
+    model_name = await _resolve_and_validate_model(request.model, request.technology)
+    port = TECH_PORTS.get(request.technology, 11434)
+    loop = asyncio.get_running_loop()
 
     for test_id in request.test_ids:
         if test_id not in TESTS:
             continue
 
         test = TESTS[test_id]
-        duration = random.uniform(*test["duration_range"])
-        passed = random.random() > 0.2  # 80% pass rate
+        script_path = str(SCRIPTS_DIR / test["script"])
+
+        result = await loop.run_in_executor(
+            None, _run_test_subprocess, script_path, model_name, port, 600, request.technology
+        )
 
         results.append({
             "id": test_id,
             "name": test["name"],
-            "status": "passed" if passed else "failed",
-            "duration": round(duration, 0)
+            "status": result["status"] if result["status"] in ("passed", "failed") else "failed",
+            "duration": round(result["duration"] * 1000, 0),
         })
 
     return {"results": results}
 
 
 # ============== Benchmark Endpoints ==============
-from benchmarks import (
-    OllamaBenchmark,
-    OpenAICompatibleBenchmark,
-    create_benchmark,
-    run_benchmark,
-    save_benchmark_results,
-    list_benchmark_results,
-    load_benchmark_results,
-    BENCHMARK_PROMPTS
-)
-from dataclasses import asdict
 
 # Store running benchmark state
 benchmark_state = {
     "running": False,
     "progress": 0,
     "status": "idle",
-    "message": ""
+    "message": "",
+    "test_results": [],
+    "result_filepath": "",
+    "result_backup": None,
+    "model": "",
 }
 
 
@@ -569,10 +879,9 @@ class BenchmarkRequest(BaseModel):
     categories: Optional[list[str]] = None
     warm_up: bool = True
     runs_per_prompt: int = 1
-    technology: str = "ollama"
 
 
-class RunAllTestsRequest(BaseModel):
+class RunAllRequest(BaseModel):
     model: str
     platform: str = "docker"
     technology: str = "ollama"
@@ -586,16 +895,29 @@ async def get_benchmark_status():
 
 @app.get("/api/benchmarks/framework/status")
 async def get_framework_status(technology: str = "ollama"):
-    """Check if the selected framework is running and list available models"""
-    benchmark = create_benchmark(technology)
+    """Check if framework is running and list available models"""
+    port = TECH_PORTS.get(technology, 11434)
+    if technology == "ollama":
+        host = os.environ.get("SLM_TEST_HOST", "localhost")
+        benchmark = OllamaBenchmark(base_url=f"http://{host}:{port}")
+        connected = await benchmark.check_connection()
+        models = await benchmark.list_models() if connected else []
+        await benchmark.close()
+        return {"connected": connected, "models": models, "technology": technology}
+    return {"connected": False, "models": [], "technology": technology}
+
+
+@app.get("/api/benchmarks/ollama/status")
+async def get_ollama_status():
+    """Check if Ollama is running and list available models"""
+    benchmark = OllamaBenchmark()
     connected = await benchmark.check_connection()
     models = await benchmark.list_models() if connected else []
     await benchmark.close()
 
     return {
         "connected": connected,
-        "models": models,
-        "technology": technology
+        "models": models
     }
 
 
@@ -612,19 +934,18 @@ async def get_benchmark_categories():
 
 @app.post("/api/benchmarks/run")
 async def run_benchmark_endpoint(request: BenchmarkRequest):
-    """Run benchmarks on the selected framework"""
+    """Run benchmarks on Ollama model"""
     global benchmark_state
 
     if benchmark_state["running"]:
         raise HTTPException(status_code=400, detail="Benchmark already running")
 
-    technology = request.technology or deployment_state["container"].get("technology") or "ollama"
-    framework_model = get_framework_model_name(request.model, technology)
+    model_name = await _resolve_and_validate_model(request.model, "ollama")
 
     benchmark_state["running"] = True
     benchmark_state["progress"] = 0
     benchmark_state["status"] = "starting"
-    benchmark_state["message"] = f"Initializing {technology} benchmark..."
+    benchmark_state["message"] = "Initializing benchmark..."
 
     async def progress_callback(status: str, progress: int, message: str):
         benchmark_state["status"] = status
@@ -633,15 +954,13 @@ async def run_benchmark_endpoint(request: BenchmarkRequest):
 
     try:
         summary = await run_benchmark(
-            model=framework_model,
+            model=model_name,
             categories=request.categories,
             warm_up=request.warm_up,
             runs_per_prompt=request.runs_per_prompt,
-            progress_callback=progress_callback,
-            technology=technology
+            progress_callback=progress_callback
         )
 
-        # Save results to JSON
         filepath = save_benchmark_results(summary)
 
         benchmark_state["status"] = "completed"
@@ -668,6 +987,128 @@ async def run_benchmark_endpoint(request: BenchmarkRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.post("/api/benchmarks/run-all")
+async def run_all_tests_endpoint(request: RunAllRequest, background_tasks: BackgroundTasks):
+    """Run benchmarks + all test scripts. Returns immediately, runs in background."""
+    global benchmark_state
+
+    if benchmark_state["running"]:
+        raise HTTPException(status_code=400, detail="Already running")
+
+    model_name = await _resolve_and_validate_model(request.model, request.technology)
+
+    benchmark_state["running"] = True
+    benchmark_state["progress"] = 0
+    benchmark_state["status"] = "starting"
+    benchmark_state["message"] = "Starting benchmarks and tests..."
+    benchmark_state["test_results"] = []
+    benchmark_state["result_filepath"] = ""
+    benchmark_state["result_backup"] = None
+    benchmark_state["model"] = model_name
+
+    background_tasks.add_task(
+        _run_all_tests_background,
+        model_name,
+        request.platform,
+        request.technology,
+    )
+
+    return {"success": True, "message": "Started benchmarks and tests in background"}
+
+
+async def _run_all_tests_background(model: str, platform: str, technology: str):
+    """Background task: Phase 1 = inference benchmarks, Phase 2 = test scripts."""
+    global benchmark_state
+    model_name = _get_model_name(model, technology)
+    port = TECH_PORTS.get(technology, 11434)
+    result_filepath = ""
+
+    try:
+        # ---- Phase 1: Inference Benchmarks (0-50%) ----
+        logger.info(f"Phase 1: Running inference benchmarks for {model_name} on {technology}:{port}")
+        benchmark_state["status"] = "running"
+        benchmark_state["message"] = "Phase 1: Running inference benchmarks..."
+
+        async def progress_callback(status: str, progress: int, message: str):
+            benchmark_state["progress"] = int(progress * 0.5)
+            benchmark_state["message"] = f"Phase 1: {message}"
+
+        try:
+            summary = await run_benchmark(
+                model=model_name,
+                progress_callback=progress_callback,
+            )
+            benchmark_state["result_backup"] = asdict(summary)
+            result_filepath = save_benchmark_results(summary)
+            benchmark_state["result_filepath"] = result_filepath
+            logger.info(f"Phase 1 complete. Results saved to {result_filepath}")
+        except Exception as e:
+            logger.error(f"Phase 1 failed: {e}")
+            benchmark_state["message"] = f"Benchmarks failed: {e}. Continuing with tests..."
+
+        # Save empty test_results immediately so the key exists
+        if result_filepath:
+            _save_test_results(result_filepath, [])
+
+        benchmark_state["progress"] = 50
+
+        # ---- Phase 2: Test Scripts (50-100%) ----
+        logger.info(f"Phase 2: Running test scripts for {model_name}")
+        benchmark_state["message"] = "Phase 2: Running test scripts..."
+
+        test_ids = [k for k in TESTS if k not in ("run_all", "compare_models")]
+        total_tests = len(test_ids)
+        test_results = []
+        loop = asyncio.get_running_loop()
+
+        for i, test_id in enumerate(test_ids):
+            test = TESTS[test_id]
+            script_path = str(SCRIPTS_DIR / test["script"])
+            benchmark_state["message"] = f"Phase 2: Running {test['name']} ({i+1}/{total_tests})..."
+            benchmark_state["progress"] = 50 + int((i / total_tests) * 50)
+
+            result = await loop.run_in_executor(
+                None, _run_test_subprocess, script_path, model_name, port, 600, technology
+            )
+
+            test_result = {
+                "id": test_id,
+                "name": test["name"],
+                "status": result["status"],
+                "duration": round(result["duration"], 2),
+                "stdout": result.get("stdout", ""),
+                "stderr": result.get("stderr", ""),
+                "details": result.get("details", []),
+            }
+            test_results.append(test_result)
+            benchmark_state["test_results"] = test_results
+
+            # Save progressively
+            if result_filepath:
+                _save_test_results(result_filepath, test_results)
+
+            logger.info(f"Test {test_id}: {result['status']} in {result['duration']:.1f}s")
+
+        # Final save
+        if result_filepath:
+            _save_test_results(result_filepath, test_results)
+
+        passed = sum(1 for t in test_results if t["status"] == "passed")
+        benchmark_state["progress"] = 100
+        benchmark_state["status"] = "completed"
+        benchmark_state["message"] = f"All done! {passed}/{len(test_results)} tests passed."
+        benchmark_state["running"] = False
+        logger.info(f"Phase 2 complete. {passed}/{len(test_results)} tests passed.")
+
+    except Exception as e:
+        logger.error(f"Background task error: {e}")
+        benchmark_state["status"] = "error"
+        benchmark_state["message"] = str(e)
+        benchmark_state["running"] = False
+        if result_filepath:
+            _save_test_results(result_filepath, benchmark_state.get("test_results", []))
+
+
 @app.get("/api/benchmarks/results")
 async def get_benchmark_results():
     """Get list of all saved benchmark results"""
@@ -678,7 +1119,6 @@ async def get_benchmark_results():
 @app.get("/api/benchmarks/results/{filename}")
 async def get_benchmark_result(filename: str):
     """Get specific benchmark result by filename"""
-    from pathlib import Path
     results_dir = Path(__file__).parent / "results"
 
     # Also check parent results dir
@@ -690,65 +1130,25 @@ async def get_benchmark_result(filename: str):
     if not filepath.exists():
         raise HTTPException(status_code=404, detail="Result not found")
 
-    return load_benchmark_results(str(filepath))
+    result_data = load_benchmark_results(str(filepath))
 
+    test_results = result_data.get("test_results") if isinstance(result_data, dict) else None
+    if isinstance(test_results, list):
+        for test_result in test_results:
+            if not isinstance(test_result, dict):
+                continue
+            existing_details = test_result.get("details")
+            if isinstance(existing_details, list) and len(existing_details) > 0:
+                continue
 
-@app.post("/api/benchmarks/run-all")
-async def run_all_tests(request: RunAllTestsRequest):
-    """Run all benchmark categories on the given model and save results as JSON."""
-    global benchmark_state
+            details = _load_test_details_from_logs(
+                _safe_to_text(test_result.get("stdout")),
+                _safe_to_text(test_result.get("stderr")),
+            )
+            if details:
+                test_result["details"] = details
 
-    if benchmark_state["running"]:
-        raise HTTPException(status_code=400, detail="Benchmark already running")
-
-    benchmark_state["running"] = True
-    benchmark_state["progress"] = 0
-    benchmark_state["status"] = "starting"
-    benchmark_state["message"] = "Running all tests..."
-
-    async def progress_callback(status: str, progress: int, message: str):
-        benchmark_state["status"] = status
-        benchmark_state["progress"] = progress
-        benchmark_state["message"] = message
-
-    technology = request.technology or deployment_state["container"].get("technology") or "ollama"
-    framework_model = get_framework_model_name(request.model, technology)
-
-    try:
-        # Run all categories
-        summary = await run_benchmark(
-            model=framework_model,
-            categories=None,  # None = all categories
-            warm_up=True,
-            runs_per_prompt=1,
-            progress_callback=progress_callback,
-            technology=technology
-        )
-
-        filepath = save_benchmark_results(summary)
-
-        benchmark_state["status"] = "completed"
-        benchmark_state["progress"] = 100
-        benchmark_state["message"] = "All tests completed"
-        benchmark_state["running"] = False
-
-        return {
-            "success": True,
-            "filepath": filepath,
-            "summary": asdict(summary)
-        }
-
-    except ConnectionError as e:
-        benchmark_state["running"] = False
-        benchmark_state["status"] = "error"
-        benchmark_state["message"] = str(e)
-        raise HTTPException(status_code=503, detail=str(e))
-
-    except Exception as e:
-        benchmark_state["running"] = False
-        benchmark_state["status"] = "error"
-        benchmark_state["message"] = str(e)
-        raise HTTPException(status_code=500, detail=str(e))
+    return result_data
 
 
 # WebSocket for real-time metrics
@@ -757,10 +1157,8 @@ async def websocket_metrics(websocket: WebSocket):
     await manager.connect(websocket)
     try:
         while True:
-            # Receive any client messages (heartbeat, etc.)
-            data = await websocket.receive_text()
+            await websocket.receive_text()
 
-            # Update metrics simulation when running
             if deployment_state["container"]["status"] == "running":
                 deployment_state["container"]["cpu"] = round(random.uniform(10, 50), 1)
                 deployment_state["container"]["memory"] = round(random.uniform(20, 50), 1)
