@@ -142,7 +142,7 @@ if __name__ == "__main__":
     models = []
     for arg in sys.argv[1:]:
         if ':' in arg:
-            name, port = arg.split(':')
+            name, port = arg.rsplit(':', 1)
             models.append({"name": name, "port": int(port)})
         else:
             print(f"Error: Invalid format '{arg}'. Use model:port format.")
