@@ -162,11 +162,11 @@ class ApiService {
     return this.request<{ container: DeploymentState; vm: DeploymentState }>('/status');
   }
 
-  async startContainer(model: string, technology: string): Promise<DeploymentState> {
+  async startContainer(model: string, technology: string, ramGb?: number, cpuCores?: number): Promise<DeploymentState> {
     const data = await this.request<{ state: DeploymentState }>('/container/start', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, technology }),
+      body: JSON.stringify({ model, technology, ram_gb: ramGb ?? null, cpu_cores: cpuCores ?? null }),
     });
     return data.state;
   }
@@ -178,11 +178,11 @@ class ApiService {
     return data.state;
   }
 
-  async startVM(model: string, technology: string): Promise<DeploymentState> {
+  async startVM(model: string, technology: string, ramGb?: number, cpuCores?: number): Promise<DeploymentState> {
     const data = await this.request<{ state: DeploymentState }>('/vm/start', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, technology }),
+      body: JSON.stringify({ model, technology, ram_gb: ramGb ?? null, cpu_cores: cpuCores ?? null }),
     });
     return data.state;
   }
@@ -262,12 +262,14 @@ class ApiService {
   async runAllTests(
     model: string,
     platform: string,
-    technology: string
+    technology: string,
+    ramGb?: number,
+    cpuCores?: number,
   ): Promise<{ success: boolean; filepath: string; summary: BenchmarkSummary }> {
     return this.request<{ success: boolean; filepath: string; summary: BenchmarkSummary }>('/benchmarks/run-all', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, platform, technology }),
+      body: JSON.stringify({ model, platform, technology, ram_gb: ramGb ?? null, cpu_cores: cpuCores ?? null }),
     });
   }
 
