@@ -10,6 +10,10 @@ from pathlib import Path
 
 
 RESULTS_DIR = Path(__file__).parent / "results"
+if not any(RESULTS_DIR.glob("*.json")):
+    _parent_results = Path(__file__).parent.parent / "results"
+    if any(_parent_results.glob("*.json")):
+        RESULTS_DIR = _parent_results
 RESULTS_DIR.mkdir(exist_ok=True)
 
 # Ollama API base URL (Docker container)
@@ -57,6 +61,8 @@ class BenchmarkSummary:
     system_info: dict
     results: list
     summary: dict
+    ram_gb: Optional[int] = None
+    cpu_cores: Optional[float] = None
 
 
 class OllamaBenchmark:
@@ -317,9 +323,12 @@ async def run_benchmark(
 
 
 def save_benchmark_results(summary: BenchmarkSummary) -> str:
-    """Save benchmark results to JSON file"""
+    """Save benchmark results to a single file named after model and its config."""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"benchmark_{summary.model.replace(':', '_')}_{summary.platform}_{timestamp}.json"
+    model_slug = summary.model.replace(":", "_").replace("/", "_").replace(" ", "-")
+    ram_part = f"{summary.ram_gb}GB" if summary.ram_gb else "noRAMlimit"
+    cpu_part = f"{summary.cpu_cores}cores" if summary.cpu_cores else "noCPUlimit"
+    filename = f"{model_slug}_{ram_part}_{cpu_part}_{summary.technology}_{summary.platform}_{timestamp}.json"
     filepath = RESULTS_DIR / filename
 
     with open(filepath, "w", encoding="utf-8") as f:
@@ -335,21 +344,27 @@ def load_benchmark_results(filepath: str) -> dict:
 
 
 def list_benchmark_results() -> list[dict]:
-    """List all saved benchmark results"""
+    """List all saved benchmark results (files that contain full benchmark data)."""
     results = []
-    for file in RESULTS_DIR.glob("benchmark_*.json"):
+    for file in RESULTS_DIR.glob("*.json"):
         try:
             with open(file, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                results.append({
-                    "filename": file.name,
-                    "filepath": str(file),
-                    "model": data.get("model"),
-                    "platform": data.get("platform"),
-                    "timestamp": data.get("timestamp"),
-                    "summary": data.get("summary"),
-                    "test_results": data.get("test_results"),
-                })
+            # Only include master benchmark files (they have both 'summary' and 'results' keys)
+            if not (isinstance(data, dict) and "summary" in data and "results" in data):
+                continue
+            results.append({
+                "filename": file.name,
+                "filepath": str(file),
+                "model": data.get("model"),
+                "platform": data.get("platform"),
+                "technology": data.get("technology"),
+                "ram_gb": data.get("ram_gb"),
+                "cpu_cores": data.get("cpu_cores"),
+                "timestamp": data.get("timestamp"),
+                "summary": data.get("summary"),
+                "test_results": data.get("test_results"),
+            })
         except Exception:
             pass
     return sorted(results, key=lambda x: x.get("timestamp", ""), reverse=True)
