@@ -114,6 +114,11 @@ export interface BenchmarkSummary {
   };
 }
 
+export interface InfeasibleInfo {
+  reason: string;
+  required_ram_gb?: number;
+}
+
 export interface BenchmarkResultFile {
   filename: string;
   filepath: string;
@@ -122,6 +127,42 @@ export interface BenchmarkResultFile {
   timestamp: string;
   summary: BenchmarkSummary['summary'];
   test_results?: TestScriptResult[];
+  // Optional config dimensions used to identify a unique "variant" of a
+  // model run (model + RAM + CPU + tech + platform). Older result files
+  // produced before these fields were emitted simply leave them undefined.
+  technology?: string;
+  ram_gb?: number;
+  cpu_cores?: number;
+  // Marker fields used by the leaderboard to identify a run that the
+  // backend skipped because the (model, resources) combo was infeasible
+  // (e.g. not enough RAM to load the model). Either `infeasible` (legacy
+  // payload) or `status: "not_enough_resources"` (new spec) may be set.
+  infeasible?: InfeasibleInfo;
+  status?: string;
+}
+
+/** True if the given result file represents a config the backend refused to run. */
+export function isInfeasible(f: BenchmarkResultFile): boolean {
+  return !!f.infeasible || f.status === 'not_enough_resources';
+}
+
+/** Stable id for a "variant" = model + RAM + CPU + tech + platform. */
+export function variantId(f: BenchmarkResultFile): string {
+  const ram = f.ram_gb ?? '?';
+  const cpu = f.cpu_cores ?? '?';
+  const tech = f.technology ?? '?';
+  const plat = f.platform ?? '?';
+  return `${f.model}__${ram}gb__${cpu}c__${tech}__${plat}`;
+}
+
+/** Human-readable label for a variant id. */
+export function variantLabel(f: BenchmarkResultFile): string {
+  const parts: string[] = [f.model];
+  if (f.ram_gb != null) parts.push(`${f.ram_gb}GB`);
+  if (f.cpu_cores != null) parts.push(`${f.cpu_cores}c`);
+  if (f.technology) parts.push(f.technology);
+  if (f.platform) parts.push(f.platform);
+  return parts.join(' · ');
 }
 
 class ApiService {
