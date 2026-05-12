@@ -29,11 +29,13 @@ import {
   BenchmarkResultFile,
   BenchmarkSummary,
   TestScriptResult,
+  variantId,
+  variantLabel,
 } from "@/app/services/api";
 
 // ─── Aggregate types & helpers ───────────────────────────────────────────────
 
-interface ModelAggregate {
+export interface ModelAggregate {
   model: string;
   fileCount: number;
   summary: {
@@ -49,6 +51,12 @@ interface ModelAggregate {
     avg_memory_percent: number;
   };
   testPassRate: number;
+  // Extra metrics derived from raw per-prompt `results` across all JSON files.
+  p95LatencyMs: number;
+  peakMemoryMb: number;
+  avgPromptTokens: number;
+  errorRate: number; // share of items with `error` set
+  testsRun: number;
 }
 
 function avg(nums: number[]): number {
@@ -62,7 +70,7 @@ function sum(nums: number[]): number {
     .reduce((a, b) => a + b, 0);
 }
 
-function aggregateModel(
+export function aggregateModel(
   model: string,
   summaries: BenchmarkSummary[],
 ): ModelAggregate {
@@ -89,11 +97,36 @@ function aggregateModel(
       if (t.status === "passed") passed++;
     }),
   );
+
+  // Pull per-prompt raw stats so the leaderboard can use ALL JSON data.
+  const allItems = summaries.flatMap((sm) => sm.results || []);
+  const latencies = allItems
+    .map((it) => it.inference?.total_duration_ms)
+    .filter((v): v is number => typeof v === "number" && !Number.isNaN(v))
+    .sort((a, b) => a - b);
+  const p95 =
+    latencies.length > 0
+      ? latencies[Math.min(latencies.length - 1, Math.floor(latencies.length * 0.95))]
+      : 0;
+  const peakMem = allItems.reduce(
+    (mx, it) => Math.max(mx, it.resources?.memory_peak_mb || 0),
+    0,
+  );
+  const promptTokenList = allItems
+    .map((it) => it.inference?.prompt_tokens || 0)
+    .filter((v) => v > 0);
+  const errors = allItems.filter((it) => !!it.error).length;
+
   return {
     model,
     fileCount: summaries.length,
     summary: aggSummary,
     testPassRate: total > 0 ? passed / total : 0,
+    p95LatencyMs: Math.round(p95),
+    peakMemoryMb: Math.round(peakMem),
+    avgPromptTokens: avg(promptTokenList),
+    errorRate: allItems.length > 0 ? errors / allItems.length : 0,
+    testsRun: total,
   };
 }
 
@@ -113,14 +146,14 @@ const PALETTE = [
   "#14b8a6",
   "#a855f7",
 ];
-function paletteColor(idx: number) {
+export function paletteColor(idx: number) {
   return PALETTE[idx % PALETTE.length];
 }
 
 // ─── Normalization ────────────────────────────────────────────────────────────
 
 /** Normalize a set of values to [0, 100]. higherBetter: true → high raw = high score */
-function normalizeValues(values: number[], higherBetter: boolean): number[] {
+export function normalizeValues(values: number[], higherBetter: boolean): number[] {
   const valid = values.filter((v) => !Number.isNaN(v));
   if (!valid.length) return values.map(() => 0);
   const mn = Math.min(...valid);
@@ -138,9 +171,58 @@ function scoreColor(score: number): string {
   return `hsl(${h}, 65%, 48%)`;
 }
 
+// ─── Leaderboard helpers ──────────────────────────────────────────────────────
+
+/**
+ * Compute a unified composite score (0-100) per aggregate using all BAR_METRICS.
+ * Each metric is normalized across the provided aggregates respecting higherBetter,
+ * and the per-model average yields the composite score.
+ */
+export function computeCompositeScores(
+  aggregates: ModelAggregate[],
+): Map<string, number> {
+  const matrix = BAR_METRICS.map((m) =>
+    normalizeValues(
+      aggregates.map((a) => m.getValue(a)),
+      m.higherBetter,
+    ),
+  );
+  const out = new Map<string, number>();
+  aggregates.forEach((a, i) => {
+    const colVals = matrix.map((col) => col[i]);
+    const score = colVals.length
+      ? Math.round(colVals.reduce((s, v) => s + v, 0) / colVals.length)
+      : 0;
+    out.set(a.model, score);
+  });
+  return out;
+}
+
+/** Sort by composite leaderboard score (best first). Pure — returns a new array. */
+export function sortByComposite(
+  aggregates: ModelAggregate[],
+): ModelAggregate[] {
+  const scores = computeCompositeScores(aggregates);
+  return [...aggregates].sort(
+    (a, b) => (scores.get(b.model) ?? 0) - (scores.get(a.model) ?? 0),
+  );
+}
+
+/** Sort by a single metric (best first), respecting higherBetter. */
+export function sortByMetric(
+  aggregates: ModelAggregate[],
+  metric: BarMetric,
+): ModelAggregate[] {
+  return [...aggregates].sort((a, b) => {
+    const va = metric.getValue(a);
+    const vb = metric.getValue(b);
+    return metric.higherBetter ? vb - va : va - vb;
+  });
+}
+
 // ─── Widget registry ──────────────────────────────────────────────────────────
 
-interface BarMetric {
+export interface BarMetric {
   id: string;
   label: string;
   unit: string;
@@ -149,7 +231,7 @@ interface BarMetric {
   getValue: (a: ModelAggregate) => number;
 }
 
-const BAR_METRICS: BarMetric[] = [
+export const BAR_METRICS: BarMetric[] = [
   {
     id: "avg_tokens_per_second",
     label: "Tokens / second",
@@ -353,9 +435,11 @@ const RADAR_AXES = [
 function RadarWidget({
   aggregates,
   colorMap,
+  leaderboardScores,
 }: {
   aggregates: ModelAggregate[];
   colorMap: Map<string, string>;
+  leaderboardScores?: Map<string, number>;
 }) {
   // Normalize each axis across all aggregates
   const radarData = RADAR_AXES.map((axis) => {
@@ -370,8 +454,16 @@ function RadarWidget({
 
   return (
     <WidgetCard
-      title="Radar overview"
-      hint="All metrics normalized 0–100 · ↓ = lower is better"
+      title={
+        leaderboardScores
+          ? "Radar overview — ranked"
+          : "Radar overview"
+      }
+      hint={
+        leaderboardScores
+          ? "Models ordered by composite score · ↓ = lower is better"
+          : "All metrics normalized 0–100 · ↓ = lower is better"
+      }
     >
       <ResponsiveContainer width="100%" height={320}>
         <RadarChart
@@ -1004,21 +1096,33 @@ function BarWidget({
   metric,
   aggregates,
   colorMap,
+  leaderboardMode,
 }: {
   metric: BarMetric;
   aggregates: ModelAggregate[];
   colorMap: Map<string, string>;
+  leaderboardMode?: boolean;
 }) {
-  const data = aggregates.map((a) => ({
-    model: a.model,
-    label: a.model.length > 18 ? `${a.model.slice(0, 17)}…` : a.model,
-    value: metric.getValue(a),
-    color: colorMap.get(a.model) || "#18181b",
-  }));
+  const data = aggregates.map((a, i) => {
+    const base = a.model.length > 18 ? `${a.model.slice(0, 17)}…` : a.model;
+    return {
+      model: a.model,
+      label: leaderboardMode ? `#${i + 1} ${base}` : base,
+      value: metric.getValue(a),
+      color: colorMap.get(a.model) || "#18181b",
+    };
+  });
   const barH = Math.max(180, data.length * 44 + 32);
 
   return (
-    <WidgetCard title={metric.label} hint={metric.hint}>
+    <WidgetCard
+      title={metric.label}
+      hint={
+        leaderboardMode
+          ? `Ranked best → worst (${metric.hint.toLowerCase()})`
+          : metric.hint
+      }
+    >
       <div style={{ height: barH }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
@@ -1128,20 +1232,39 @@ export function ModelDashboard() {
     new Set(ALL_WIDGETS.map((w) => w.id)),
   );
 
+  // Each unique combination of model + RAM + CPU + tech + platform is shown
+  // as a separate item ("variant"). `model` here holds the human-readable
+  // variant label so existing widgets keep working unchanged.
   const allModels = useMemo(() => {
-    const map = new Map<string, number>();
+    const map = new Map<string, { label: string; count: number }>();
     files.forEach((f) => {
       if (!f.model) return;
-      map.set(f.model, (map.get(f.model) || 0) + 1);
+      const id = variantId(f);
+      const cur = map.get(id);
+      if (cur) cur.count += 1;
+      else map.set(id, { label: variantLabel(f), count: 1 });
     });
     return Array.from(map.entries())
-      .map(([model, count]) => ({ model, count }))
-      .sort((a, b) => a.model.localeCompare(b.model));
+      .map(([id, v]) => ({ model: id, label: v.label, count: v.count }))
+      .sort((a, b) => a.label.localeCompare(b.label));
   }, [files]);
 
+  // Display label lookup keyed by variant id (== ModelAggregate.model).
+  const labelMap = useMemo(() => {
+    const m = new Map<string, string>();
+    allModels.forEach((v) => m.set(v.model, v.label));
+    return m;
+  }, [allModels]);
+
+  // Color map keyed by both variant id AND label so callers using either
+  // (pill button uses id, widgets use label) all resolve correctly.
   const colorMap = useMemo(() => {
     const m = new Map<string, string>();
-    allModels.forEach(({ model }, idx) => m.set(model, paletteColor(idx)));
+    allModels.forEach(({ model, label }, idx) => {
+      const c = paletteColor(idx);
+      m.set(model, c);
+      m.set(label, c);
+    });
     return m;
   }, [allModels]);
 
@@ -1163,12 +1286,12 @@ export function ModelDashboard() {
   }, [allModels]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    selectedModels.forEach((model) => {
+    selectedModels.forEach((vid) => {
       const missing = files.filter(
-        (f) => f.model === model && !summaryCache[f.filename],
+        (f) => variantId(f) === vid && !summaryCache[f.filename],
       );
       if (!missing.length) return;
-      setLoadingSet((p) => new Set(p).add(model));
+      setLoadingSet((p) => new Set(p).add(vid));
       Promise.all(
         missing.map((f) =>
           api
@@ -1189,7 +1312,7 @@ export function ModelDashboard() {
         .finally(() => {
           setLoadingSet((p) => {
             const n = new Set(p);
-            n.delete(model);
+            n.delete(vid);
             return n;
           });
         });
@@ -1200,15 +1323,19 @@ export function ModelDashboard() {
   const aggregates = useMemo(
     () =>
       Array.from(selectedModels)
-        .map((model) => {
+        .map((vid) => {
           const summaries = files
-            .filter((f) => f.model === model)
+            .filter((f) => variantId(f) === vid)
             .map((f) => summaryCache[f.filename])
             .filter((s): s is BenchmarkSummary => !!s);
-          return summaries.length ? aggregateModel(model, summaries) : null;
+          if (!summaries.length) return null;
+          // Use the human-readable variant label as the aggregate's `model`,
+          // so that all charts/widgets render the variant correctly.
+          const label = labelMap.get(vid) ?? vid;
+          return aggregateModel(label, summaries);
         })
         .filter((a): a is ModelAggregate => a !== null),
-    [selectedModels, summaryCache, files],
+    [selectedModels, summaryCache, files, labelMap],
   );
 
   const toggleModel = (model: string) =>
@@ -1238,6 +1365,8 @@ export function ModelDashboard() {
   const isLoading = loadingList || loadingSet.size > 0;
   const noData = aggregates.length === 0 && !isLoading;
 
+  const aggregatesByComposite = aggregates;
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -1262,6 +1391,8 @@ export function ModelDashboard() {
           {errorList}
         </div>
       )}
+
+
 
       {/* Filters row */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6">
@@ -1294,7 +1425,7 @@ export function ModelDashboard() {
             </p>
           ) : (
             <div className="flex flex-wrap gap-2">
-              {allModels.map(({ model, count }) => {
+              {allModels.map(({ model, label, count }) => {
                 const active = selectedModels.has(model);
                 const color = colorMap.get(model) || "#18181b";
                 return (
@@ -1302,6 +1433,7 @@ export function ModelDashboard() {
                     key={model}
                     type="button"
                     onClick={() => toggleModel(model)}
+                    title={label}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm transition-colors ${
                       active
                         ? "border-zinc-800 bg-zinc-800 text-white"
@@ -1312,7 +1444,7 @@ export function ModelDashboard() {
                       className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                       style={{ backgroundColor: color }}
                     />
-                    {model}
+                    {label}
                     <span className="opacity-60 text-xs">({count})</span>
                   </button>
                 );
@@ -1397,29 +1529,48 @@ export function ModelDashboard() {
         </div>
       ) : (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          {/* Analysis widgets */}
-          {selectedWidgets.has("radar") && aggregates.length >= 1 && (
-            <RadarWidget aggregates={aggregates} colorMap={colorMap} />
+          {/* Analysis widgets — use composite-ranked order in leaderboard mode */}
+          {selectedWidgets.has("radar") && aggregatesByComposite.length >= 1 && (
+            <RadarWidget
+              aggregates={aggregatesByComposite}
+              colorMap={colorMap}
+            />
           )}
-          {selectedWidgets.has("scatter") && aggregates.length >= 1 && (
-            <ScatterWidget aggregates={aggregates} colorMap={colorMap} />
+          {selectedWidgets.has("scatter") && aggregatesByComposite.length >= 1 && (
+            <ScatterWidget
+              aggregates={aggregatesByComposite}
+              colorMap={colorMap}
+            />
           )}
-          {selectedWidgets.has("reliability") && aggregates.length >= 1 && (
-            <ReliabilityWidget aggregates={aggregates} colorMap={colorMap} />
-          )}
-          {selectedWidgets.has("composed") && aggregates.length >= 1 && (
-            <ComposedWidget aggregates={aggregates} colorMap={colorMap} />
-          )}
-          {selectedWidgets.has("radialScore") && aggregates.length >= 1 && (
-            <RadialScoreWidget aggregates={aggregates} colorMap={colorMap} />
-          )}
+          {selectedWidgets.has("reliability") &&
+            aggregatesByComposite.length >= 1 && (
+              <ReliabilityWidget
+                aggregates={aggregatesByComposite}
+                colorMap={colorMap}
+              />
+            )}
+          {selectedWidgets.has("composed") &&
+            aggregatesByComposite.length >= 1 && (
+              <ComposedWidget
+                aggregates={aggregatesByComposite}
+                colorMap={colorMap}
+              />
+            )}
+          {selectedWidgets.has("radialScore") &&
+            aggregatesByComposite.length >= 1 && (
+              <RadialScoreWidget
+                aggregates={aggregatesByComposite}
+                colorMap={colorMap}
+              />
+            )}
           {/* Heatmap — full width */}
-          {selectedWidgets.has("heatmap") && aggregates.length >= 1 && (
-            <div className="xl:col-span-2">
-              <HeatmapWidget aggregates={aggregates} />
-            </div>
-          )}
-          {/* Per-metric bar charts */}
+          {selectedWidgets.has("heatmap") &&
+            aggregatesByComposite.length >= 1 && (
+              <div className="xl:col-span-2">
+                <HeatmapWidget aggregates={aggregatesByComposite} />
+              </div>
+            )}
+          {/* Per-metric bar charts — in leaderboard mode each is sorted by its own metric */}
           {BAR_METRICS.map((metric) =>
             selectedWidgets.has(`bar_${metric.id}`) &&
             aggregates.length >= 1 ? (
