@@ -28,10 +28,95 @@ import json
 import os
 import re
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+
+
+# ---------------------------------------------------------------------------
+# Canonical formatters
+# ---------------------------------------------------------------------------
+# Every row emitted by the aggregator MUST use the same representations for
+# ``timestamp`` and ``source_file`` regardless of where the data came from
+# (filename heuristic vs. JSON body, Windows vs. POSIX file systems, epoch
+# floats vs. ISO strings). Without this, downstream scripts that sort by
+# timestamp or join on ``source_file`` produce non-deterministic results
+# across environments.
+_FILENAME_TS_RE = re.compile(r"^(\d{8})_(\d{6})$")
+
+
+def _normalize_timestamp(value: Any) -> str | None:
+    """Return an ISO-8601 UTC string (``YYYY-MM-DDTHH:MM:SSZ``) or ``None``.
+
+    Accepts:
+      * ``int``/``float`` epoch seconds (e.g. ``1717777777``),
+      * ``"YYYYMMDD_HHMMSS"`` filename-derived stamps (assumed local naive,
+        emitted as UTC for a single canonical zone),
+      * any ISO-8601 string parseable by ``datetime.fromisoformat`` (with a
+        trailing ``Z`` allowed),
+      * ``None`` / empty -> ``None``.
+    """
+    if value is None or value == "":
+        return None
+    # Epoch seconds.
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        try:
+            return (
+                datetime.fromtimestamp(float(value), tz=timezone.utc)
+                .strftime("%Y-%m-%dT%H:%M:%SZ")
+            )
+        except (OSError, OverflowError, ValueError):
+            return None
+    if isinstance(value, str):
+        s = value.strip()
+        if not s:
+            return None
+        # Filename form: YYYYMMDD_HHMMSS
+        m = _FILENAME_TS_RE.match(s)
+        if m:
+            try:
+                dt = datetime.strptime(s, "%Y%m%d_%H%M%S").replace(tzinfo=timezone.utc)
+                return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+            except ValueError:
+                return None
+        # Numeric string epoch.
+        if re.fullmatch(r"\d+(\.\d+)?", s):
+            try:
+                return (
+                    datetime.fromtimestamp(float(s), tz=timezone.utc)
+                    .strftime("%Y-%m-%dT%H:%M:%SZ")
+                )
+            except (OSError, OverflowError, ValueError):
+                return None
+        # ISO-8601 (accept trailing Z).
+        iso = s.replace("Z", "+00:00")
+        try:
+            dt = datetime.fromisoformat(iso)
+        except ValueError:
+            return s  # leave as-is rather than dropping unknown formats
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        else:
+            dt = dt.astimezone(timezone.utc)
+        return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+    return None
+
+
+def _normalize_source_file(path: "Path") -> str:
+    """Return a POSIX-style path string relative to the project root when possible.
+
+    Always uses ``/`` separators so downstream parsing/joining is portable
+    between Windows and POSIX checkouts.
+    """
+    try:
+        rel = path.relative_to(PROJECT_ROOT) if path.is_relative_to(PROJECT_ROOT) else path
+    except ValueError:
+        rel = path
+    return rel.as_posix()
+
+
 DEFAULT_RESULTS_DIRS = [
     PROJECT_ROOT / "results",
     PROJECT_ROOT / "backend" / "results",
@@ -197,12 +282,30 @@ def extract_single_file(prefix: str, payload: dict) -> dict[str, Any]:
 # Main aggregation
 # ---------------------------------------------------------------------------
 def load_payload(path: Path) -> dict | None:
+    """Load a JSON file and return it only if the top level is an object.
+
+    ``json.load`` happily returns lists, strings, numbers, ``None`` or
+    booleans for valid JSON whose root is not an object. The aggregator
+    immediately calls ``payload.get(...)`` on the result, which would raise
+    ``AttributeError`` and abort the entire walk on the first such file
+    (e.g. a result file that stores a raw array of per-prompt records, or
+    an accidentally-truncated ``null``). Guard against that here so a
+    single malformed file only costs us one ``[skip]`` line instead of the
+    whole aggregation run.
+    """
     try:
         with path.open("r", encoding="utf-8") as fh:
-            return json.load(fh)
+            data = json.load(fh)
     except (OSError, json.JSONDecodeError) as e:
         print(f"[skip] {path}: {e}", file=sys.stderr)
         return None
+    if not isinstance(data, dict):
+        print(
+            f"[skip] {path}: top-level JSON is {type(data).__name__}, expected object",
+            file=sys.stderr,
+        )
+        return None
+    return data
 
 
 def aggregate(results_dirs: list[Path]) -> list[dict[str, Any]]:
@@ -227,10 +330,15 @@ def aggregate(results_dirs: list[Path]) -> list[dict[str, Any]]:
                 "cpu_cores": payload.get("cpu_cores", meta.get("cpu_cores")),
                 "technology": payload.get("technology") or meta.get("technology"),
                 "platform": payload.get("platform") or meta.get("platform"),
-                "timestamp": payload.get("timestamp") or meta.get("timestamp"),
-                "source_file": str(path.relative_to(PROJECT_ROOT)
-                                   if path.is_relative_to(PROJECT_ROOT)
-                                   else path),
+                # Always emit a canonical ISO-8601 UTC timestamp regardless of
+                # whether the value came from the JSON body (often an epoch
+                # float) or from the filename (``YYYYMMDD_HHMMSS``).
+                "timestamp": _normalize_timestamp(
+                    payload.get("timestamp") or meta.get("timestamp")
+                ),
+                # Always emit a POSIX-style path so downstream consumers don't
+                # have to deal with mixed ``\`` / ``/`` separators across OSes.
+                "source_file": _normalize_source_file(path),
             }
 
             if not row["model"]:
@@ -258,8 +366,10 @@ def aggregate(results_dirs: list[Path]) -> list[dict[str, Any]]:
                 # merged when they were produced for the same run; we use
                 # the timestamp as a tie-breaker only at a coarse level
                 # (date) so test scripts saving slightly later than the
-                # benchmark still aggregate together.
-                str(row.get("timestamp") or "")[:8],
+                # benchmark still aggregate together. Timestamps are now
+                # canonical ISO-8601 (``YYYY-MM-DDTHH:MM:SSZ``) so we slice
+                # the first 10 chars to keep the same day-level grouping.
+                str(row.get("timestamp") or "")[:10],
             )
             existing = rows.setdefault(key, {})
             for k, v in row.items():
@@ -288,6 +398,66 @@ COLUMNS = [
     "cost_avg_tok_per_s", "cost_total_tokens", "cost_total_time_s",
     "source_file",
 ]
+
+
+# ---------------------------------------------------------------------------
+# Unknown-deployment filter
+# ---------------------------------------------------------------------------
+# Rows whose ``technology`` and/or ``platform`` could not be resolved produce
+# a synthetic ``?__?`` deployment bucket downstream (e.g. when reports build
+# a ``{technology}_{platform}`` key for grouping/ranking). When such a row
+# also has zero valid metric samples it carries no usable signal, only noise:
+# it skews ranking, fills charts with empty cells, and inflates the
+# "configurations" count in the report context. We keep these rows out of
+# the main published artifact and write them to a separate diagnostics
+# artifact so the underlying data is still inspectable.
+_METRIC_COLUMNS = tuple(
+    c for c in COLUMNS
+    if c not in {
+        "model", "ram_gb", "cpu_cores",
+        "technology", "platform", "timestamp", "source_file",
+    }
+)
+
+
+def _is_unknown_deployment(row: dict) -> bool:
+    """True iff the row lacks a usable technology or platform identifier."""
+    tech = (row.get("technology") or "").strip().lower()
+    plat = (row.get("platform") or "").strip().lower()
+    return tech in ("", "?", "unknown") or plat in ("", "?", "unknown")
+
+
+def _has_any_metric(row: dict) -> bool:
+    """True iff the row has at least one non-empty metric value."""
+    for col in _METRIC_COLUMNS:
+        v = row.get(col)
+        if v is None:
+            continue
+        if isinstance(v, str) and not v.strip():
+            continue
+        # Treat zero counts as "no samples" — they don't add ranking signal
+        # and would otherwise let an empty unknown row sneak through.
+        if isinstance(v, (int, float)) and v == 0:
+            continue
+        return True
+    return False
+
+
+def partition_rows(rows: list[dict]) -> tuple[list[dict], list[dict]]:
+    """Split rows into (published, diagnostics).
+
+    A row is sent to the diagnostics bucket when it both belongs to the
+    synthetic ``?__?`` deployment group AND carries no valid samples on any
+    tracked metric. Such rows would only add empty cells to the main report.
+    """
+    published: list[dict] = []
+    diagnostics: list[dict] = []
+    for r in rows:
+        if _is_unknown_deployment(r) and not _has_any_metric(r):
+            diagnostics.append(r)
+        else:
+            published.append(r)
+    return published, diagnostics
 
 
 def write_csv(rows: list[dict], path: Path) -> None:
@@ -329,12 +499,33 @@ def main() -> int:
     dirs = [Path(d) for d in args.results_dir] if args.results_dir else DEFAULT_RESULTS_DIRS
     rows = aggregate(dirs)
 
-    write_csv(rows, Path(args.out_csv))
-    write_json(rows, Path(args.out_json))
+    # Keep the synthetic ``?__?`` (unknown technology/platform) bucket out of
+    # the main artifacts when it has no valid metric samples — it would
+    # otherwise skew ranking/chart consumers with empty cells. The filtered
+    # rows are still emitted alongside as a diagnostics artifact so the
+    # underlying data is recoverable.
+    published, diagnostics = partition_rows(rows)
 
-    print(f"Aggregated {len(rows)} configuration row(s)")
-    print(f"  CSV : {args.out_csv}")
-    print(f"  JSON: {args.out_json}")
+    out_csv = Path(args.out_csv)
+    out_json = Path(args.out_json)
+    write_csv(published, out_csv)
+    write_json(published, out_json)
+
+    print(f"Aggregated {len(published)} configuration row(s)")
+    print(f"  CSV : {out_csv}")
+    print(f"  JSON: {out_json}")
+
+    if diagnostics:
+        diag_csv = out_csv.with_name(out_csv.stem + "_unknown" + out_csv.suffix)
+        diag_json = out_json.with_name(out_json.stem + "_unknown" + out_json.suffix)
+        write_csv(diagnostics, diag_csv)
+        write_json(diagnostics, diag_json)
+        print(
+            f"Filtered {len(diagnostics)} unknown-deployment row(s) "
+            f"with no valid samples -> diagnostics artifact:"
+        )
+        print(f"  CSV : {diag_csv}")
+        print(f"  JSON: {diag_json}")
     return 0
 
 

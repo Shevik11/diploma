@@ -304,19 +304,35 @@ export default function App() {
   const handleStart = async () => {
     try {
       setBackendError(null);
+      // The deploy path can only bring up ONE container/VM at a time, so the
+      // (ram, cpu) pair sent here must be unambiguous. If the user has picked
+      // multiple RAM or CPU values (sweep mode), we previously silently used
+      // the first sorted entry (or fell back to 4 GB / 2 cores when none was
+      // picked) — that meant the deployed runtime quietly drifted away from
+      // what the UI shows in the sweep grid and tainted the benchmark that
+      // followed. Refuse to start in that case and ask the user to narrow
+      // the selection.
+      if (selectedRamGbs.length !== 1 || selectedCpuCoresList.length !== 1) {
+        throw new Error(
+          "Pick exactly one RAM value and one CPU value before starting the deployment " +
+            "(multi-select is reserved for the sweep run, not for the live deploy config).",
+        );
+      }
+      const ramGb = selectedRamGbs[0];
+      const cpuCores = selectedCpuCoresList[0];
       const state =
         selectedEnvironment === "docker"
           ? await api.startContainer(
               selectedModel,
               selectedTechnology,
-              selectedRamGb,
-              selectedCpuCores,
+              ramGb,
+              cpuCores,
             )
           : await api.startVM(
               selectedModel,
               selectedTechnology,
-              selectedRamGb,
-              selectedCpuCores,
+              ramGb,
+              cpuCores,
             );
       setDeploymentState(state);
     } catch (e: unknown) {

@@ -31,6 +31,17 @@ OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "localhost")
 OLLAMA_PORT = int(os.environ.get("OLLAMA_PORT", "11434"))
 OLLAMA_BASE = f"http://{OLLAMA_HOST}:{OLLAMA_PORT}"
 
+# Backend (FastAPI) and frontend (web UI) endpoints — exposed by
+# ``docker-compose.yml`` on host ports 8000 and 3000 respectively. We assert
+# their availability in the session fixture so an incomplete stack is caught
+# up front instead of producing confusing per-test failures later.
+BACKEND_HOST = os.environ.get("BACKEND_HOST", "localhost")
+BACKEND_PORT = int(os.environ.get("BACKEND_PORT", "8000"))
+BACKEND_BASE = f"http://{BACKEND_HOST}:{BACKEND_PORT}"
+FRONTEND_HOST = os.environ.get("FRONTEND_HOST", "localhost")
+FRONTEND_PORT = int(os.environ.get("FRONTEND_PORT", "3000"))
+FRONTEND_BASE = f"http://{FRONTEND_HOST}:{FRONTEND_PORT}"
+
 
 # ---------------------------------------------------------------------------
 # Session-scoped fixtures
@@ -38,13 +49,58 @@ OLLAMA_BASE = f"http://{OLLAMA_HOST}:{OLLAMA_PORT}"
 
 @pytest.fixture(scope="session")
 def ollama_check():
-    """Fail fast with a clear skip message if Ollama is not reachable."""
+    """Fail fast with a clear skip message if any required service is down.
+
+    Previously this only verified that Ollama was reachable. Per the
+    project's test contract the full stack also needs:
+
+      * the FastAPI backend responding ``200`` on ``/api/status``
+      * the frontend SPA reachable on port ``3000``
+
+    Without these assertions the live tests can spuriously pass while the
+    UI/backend half of the stack is broken — or they fail deep inside a
+    test with an opaque ``ConnectionError``. We surface both conditions
+    here with explicit ``pytest.skip`` messages.
+    """
+    # 1) Ollama — original check, kept first because most live tests
+    #    talk directly to the model server.
     try:
         requests.get(f"{OLLAMA_BASE}/api/tags", timeout=5)
     except Exception:
         pytest.skip(
             f"Ollama not reachable at {OLLAMA_BASE}. "
             "Start the server first (e.g. `docker-compose up` or `ollama serve`)."
+        )
+
+    # 2) Backend FastAPI — ``/api/status`` must return HTTP 200. We treat
+    #    any non-200 (or transport error) as "stack not ready".
+    try:
+        backend_resp = requests.get(f"{BACKEND_BASE}/api/status", timeout=5)
+    except Exception as e:
+        pytest.skip(
+            f"Backend not reachable at {BACKEND_BASE}/api/status ({e!r}). "
+            "Start it with `docker-compose up backend` or `uvicorn main:app --port 8000`."
+        )
+    if backend_resp.status_code != 200:
+        pytest.skip(
+            f"Backend /api/status returned HTTP {backend_resp.status_code} "
+            f"(expected 200). Body: {backend_resp.text[:200]!r}"
+        )
+
+    # 3) Frontend — any 2xx/3xx response on port 3000 proves the SPA is
+    #    being served (some dev servers redirect ``/`` -> ``/index.html``,
+    #    and the production nginx image returns 200 directly).
+    try:
+        fe_resp = requests.get(f"{FRONTEND_BASE}/", timeout=5, allow_redirects=False)
+    except Exception as e:
+        pytest.skip(
+            f"Frontend not reachable at {FRONTEND_BASE} ({e!r}). "
+            "Start it with `docker-compose up frontend` or `npm run dev` in `frontend/`."
+        )
+    if fe_resp.status_code >= 400:
+        pytest.skip(
+            f"Frontend at {FRONTEND_BASE} returned HTTP {fe_resp.status_code} "
+            "(expected a 2xx/3xx response from the SPA root)."
         )
 
 

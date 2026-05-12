@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Loader2, LayoutDashboard } from "lucide-react";
+import { Loader2, LayoutDashboard, Trophy } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -1365,25 +1365,62 @@ export function ModelDashboard() {
   const isLoading = loadingList || loadingSet.size > 0;
   const noData = aggregates.length === 0 && !isLoading;
 
-  const aggregatesByComposite = aggregates;
+  // Leaderboard mode — when ON, charts are reordered so the best-ranked
+  // models appear first. Without this, `aggregatesByComposite` was just an
+  // alias of `aggregates`, `leaderboardScores` was never passed to
+  // `RadarWidget`, and `BarWidget` got the unsorted list with no
+  // `leaderboardMode` flag, leaving the ranked titles / `#<rank>` labels as
+  // dead code.
+  const [leaderboardMode, setLeaderboardMode] = useState(false);
+
+  const compositeScores = useMemo(
+    () => computeCompositeScores(aggregates),
+    [aggregates],
+  );
+
+  const aggregatesByComposite = useMemo(
+    () => (leaderboardMode ? sortByComposite(aggregates) : aggregates),
+    [aggregates, leaderboardMode],
+  );
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="bg-white border border-zinc-200 rounded-lg p-6 shadow-sm">
-        <div className="flex items-center gap-2 mb-1">
-          <LayoutDashboard className="w-5 h-5 text-zinc-700" />
-          <h2 className="text-xl font-semibold text-zinc-800">
-            Analytics Dashboard
-          </h2>
-          {isLoading && (
-            <Loader2 className="w-4 h-4 animate-spin text-zinc-400 ml-1" />
-          )}
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <LayoutDashboard className="w-5 h-5 text-zinc-700" />
+              <h2 className="text-xl font-semibold text-zinc-800">
+                Analytics Dashboard
+              </h2>
+              {isLoading && (
+                <Loader2 className="w-4 h-4 animate-spin text-zinc-400 ml-1" />
+              )}
+            </div>
+            <p className="text-sm text-zinc-500">
+              Visual overview of benchmark metrics — radar, scatter, heatmap,
+              composed charts &amp; more.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setLeaderboardMode((v) => !v)}
+            title={
+              leaderboardMode
+                ? "Charts ranked best → worst by composite score (lower-is-better metrics inverted). Click to switch back."
+                : "Click to rank charts from best to worst by a composite score across all metrics."
+            }
+            className={`flex items-center gap-2 text-sm font-medium px-3 py-1.5 rounded-md border transition-colors ${
+              leaderboardMode
+                ? "bg-amber-100 border-amber-300 text-amber-800 hover:bg-amber-200"
+                : "bg-white border-zinc-300 text-zinc-700 hover:bg-zinc-50"
+            }`}
+          >
+            <Trophy className="w-4 h-4" />
+            {leaderboardMode ? "Leaderboard: ON" : "Leaderboard"}
+          </button>
         </div>
-        <p className="text-sm text-zinc-500">
-          Visual overview of benchmark metrics — radar, scatter, heatmap,
-          composed charts &amp; more.
-        </p>
       </div>
 
       {errorList && (
@@ -1534,6 +1571,9 @@ export function ModelDashboard() {
             <RadarWidget
               aggregates={aggregatesByComposite}
               colorMap={colorMap}
+              leaderboardScores={
+                leaderboardMode ? compositeScores : undefined
+              }
             />
           )}
           {selectedWidgets.has("scatter") && aggregatesByComposite.length >= 1 && (
@@ -1577,8 +1617,11 @@ export function ModelDashboard() {
               <BarWidget
                 key={metric.id}
                 metric={metric}
-                aggregates={aggregates}
+                aggregates={
+                  leaderboardMode ? sortByMetric(aggregates, metric) : aggregates
+                }
                 colorMap={colorMap}
+                leaderboardMode={leaderboardMode}
               />
             ) : null,
           )}

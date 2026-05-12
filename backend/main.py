@@ -1360,6 +1360,54 @@ class RunAllRequest(BaseModel):
     # Single-config mode (back-compat): one (ram, cpu) pair.
     ram_gb: int | None = None
     cpu_cores: float | None = None
+    # Sweep mode: explicit list of (ram_gb, cpu_cores) pairs.
+    configs: list[ResourceConfig] | None = None
+    # Sweep mode: cartesian product over these option lists.
+    ram_options: list[int] | None = None
+    cpu_options: list[float] | None = None
+    # Sweep mode: run the full default matrix (DEFAULT_RAM_OPTIONS x DEFAULT_CPU_OPTIONS).
+    run_all_configs: bool = False
+
+
+def _resolve_configs(request: "RunAllRequest") -> list[dict]:
+    """Resolve the list of (ram_gb, cpu_cores) configurations for a run-all request.
+
+    Resolution order (first match wins):
+      1. ``request.configs`` — explicit list of pairs from the frontend.
+      2. ``request.ram_options`` / ``request.cpu_options`` — cartesian product.
+      3. ``request.run_all_configs`` — full default sweep matrix.
+      4. Fallback — single config from ``request.ram_gb`` / ``request.cpu_cores``
+         (which may both be ``None`` to indicate "no explicit limit").
+
+    Always returns at least one entry so the matrix runner has something to do.
+    """
+    if request.configs:
+        out: list[dict] = []
+        for c in request.configs:
+            out.append({
+                "ram_gb": c.ram_gb,
+                "cpu_cores": c.cpu_cores,
+            })
+        if out:
+            return out
+
+    if request.ram_options or request.cpu_options:
+        rams = request.ram_options or [request.ram_gb]
+        cpus = request.cpu_options or [request.cpu_cores]
+        return [
+            {"ram_gb": r, "cpu_cores": c}
+            for r in rams
+            for c in cpus
+        ]
+
+    if request.run_all_configs:
+        return [
+            {"ram_gb": r, "cpu_cores": c}
+            for r in DEFAULT_RAM_OPTIONS
+            for c in DEFAULT_CPU_OPTIONS
+        ]
+
+    return [{"ram_gb": request.ram_gb, "cpu_cores": request.cpu_cores}]
 
 
 @app.get("/api/benchmarks/status")
@@ -1528,15 +1576,78 @@ async def run_all_tests_endpoint(request: RunAllRequest, background_tasks: Backg
         model_name,
         request.platform,
         request.technology,
-        request.ram_gb,
-        request.cpu_cores,
+        configs,
     )
 
-    return {"success": True, "message": "Started benchmarks and tests in background"}
+    return {
+        "success": True,
+        "message": "Started benchmarks and tests in background",
+        "configs": configs,
+    }
 
 
-async def _run_all_tests_background(model: str, platform: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
-    """Background task: Phase 1 = inference benchmarks, Phase 2 = test scripts."""
+async def _run_all_tests_background_matrix(
+    model: str,
+    platform: str,
+    technology: str,
+    configs: list[dict],
+):
+    """Run ``_run_all_tests_background`` once per resolved (ram, cpu) config.
+
+    Keeps ``benchmark_state['running']`` True across the whole sweep so the
+    concurrency guard on ``/api/benchmarks/run-all`` and ``/reset`` continues
+    to work, and advances ``current_config_index`` between iterations.
+    """
+    global benchmark_state
+    total = len(configs) or 1
+    try:
+        for idx, cfg in enumerate(configs):
+            benchmark_state["current_config_index"] = idx
+            benchmark_state["message"] = (
+                f"Config {idx + 1}/{total}: ram={cfg.get('ram_gb')} GB, "
+                f"cpu={cfg.get('cpu_cores')} cores"
+            )
+            # Map each config's 0..100 internal progress onto its slice of
+            # the overall sweep so the global progress bar advances smoothly.
+            # Only the last config is allowed to publish a terminal status,
+            # otherwise an intermediate config would prematurely flip
+            # benchmark_state to "completed" and clear `running`.
+            slice_size = 100.0 / total
+            await _run_all_tests_background(
+                model,
+                platform,
+                technology,
+                cfg.get("ram_gb"),
+                cfg.get("cpu_cores"),
+                progress_offset=int(idx * slice_size),
+                progress_scale=slice_size / 100.0,
+                final_status=(idx == total - 1),
+            )
+    finally:
+        # Ensure the running flag is always cleared even if a config raised,
+        # so the next run-all request isn't blocked by stale state.
+        benchmark_state["running"] = False
+
+
+async def _run_all_tests_background(
+    model: str,
+    platform: str,
+    technology: str,
+    ram_gb: int | None = None,
+    cpu_cores: float | None = None,
+    progress_offset: int = 0,
+    progress_scale: float = 1.0,
+    final_status: bool = True,
+):
+    """Background task: Phase 1 = inference benchmarks, Phase 2 = test scripts.
+
+    ``progress_offset`` / ``progress_scale`` allow the matrix runner to map
+    this single-config 0..100 progress onto a slice of the overall sweep
+    (e.g. config 2 of 4 → offset=25, scale=0.25). ``final_status`` controls
+    whether this call is allowed to flip ``benchmark_state`` into the
+    terminal ``completed``/``error`` state and clear ``running`` — only the
+    last config in a sweep should do that.
+    """
     global benchmark_state
     model_name = _get_model_name(model, technology)
     port = TECH_PORTS.get(technology, 11434)
