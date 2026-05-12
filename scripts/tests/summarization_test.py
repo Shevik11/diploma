@@ -9,6 +9,11 @@ import os
 import time
 from pathlib import Path
 
+try:
+    from result_utils import save_results
+except Exception:  # pragma: no cover
+    save_results = None
+
 RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -314,13 +319,16 @@ def test_summarization(model_name, port=11434):
     print(f"Rating: {rating}")
     print(f"{'='*60}\n")
 
-    output_file = RESULTS_DIR / f"summarization_{model_name.replace(':', '_')}_{int(time.time())}.json"
-    try:
-        with output_file.open('w', encoding='utf-8') as f:
-            json.dump(results, f, indent=2)
-        print(f"Results saved to: {output_file}\n")
-    except Exception as e:
-        print(f"Warning: Could not save results: {e}\n")
+    if save_results is not None:
+        save_results(results, "summarization", model_name, "summarization")
+    else:  # pragma: no cover
+        output_file = RESULTS_DIR / f"summarization_{model_name.replace(':', '_')}_{int(time.time())}.json"
+        try:
+            with output_file.open('w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            print(f"Results saved to: {output_file}\n")
+        except Exception as e:
+            print(f"Warning: Could not save results: {e}\n")
 
     return 0 if percentage >= 40 else 1
 

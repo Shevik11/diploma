@@ -11,6 +11,11 @@ import time
 import statistics
 from pathlib import Path
 
+try:
+    from result_utils import save_results
+except Exception:  # pragma: no cover
+    save_results = None
+
 RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -245,13 +250,16 @@ def test_cost_efficiency(model_name, port=11434):
     print(f"\nRating: {rating}")
     print(f"{'='*60}\n")
 
-    output_file = RESULTS_DIR / f"cost_efficiency_{model_name.replace(':', '_')}_{int(time.time())}.json"
-    try:
-        with output_file.open('w', encoding='utf-8') as f:
-            json.dump(results, f, indent=2)
-        print(f"Results saved to: {output_file}\n")
-    except Exception as e:
-        print(f"Warning: Could not save results: {e}\n")
+    if save_results is not None:
+        save_results(results, "cost_efficiency", model_name, "cost_efficiency")
+    else:  # pragma: no cover
+        output_file = RESULTS_DIR / f"cost_efficiency_{model_name.replace(':', '_')}_{int(time.time())}.json"
+        try:
+            with output_file.open('w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            print(f"Results saved to: {output_file}\n")
+        except Exception as e:
+            print(f"Warning: Could not save results: {e}\n")
 
     return 0 if len(all_durations) > 0 else 1
 
