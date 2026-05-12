@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Loader2, GitCompare, Plus, X, Radio } from "lucide-react";
+import { Loader2, GitCompare, Plus, X, Radio, Trophy } from "lucide-react";
 import {
   api,
   BenchmarkResultFile,
+  variantId,
+  variantLabel,
   BenchmarkSummary,
   DeploymentState,
   TestScriptResult,
@@ -156,9 +158,12 @@ function aggregateModel(
   const technologies = Array.from(
     new Set(summaries.map((s) => s.technology).filter(Boolean)),
   );
+  // Prefer the explicit `finished_at` (introduced with the spec status
+  // update) over the legacy `timestamp` field; the latter is kept as a
+  // fallback for files saved before that change.
   const timestamps = summaries
-    .map((s) => s.timestamp)
-    .filter(Boolean)
+    .map((s) => s.finished_at || s.timestamp)
+    .filter((v): v is string => Boolean(v))
     .sort();
 
   const s = summaries.map((x) => x.summary).filter(Boolean);
@@ -240,17 +245,27 @@ export function ModelCompare() {
   const selectedModelsRef = useRef(selectedModels);
   selectedModelsRef.current = selectedModels;
 
-  // List of unique models derived from files
+  // List of unique variants (model + RAM + CPU + tech + platform). Same model
+  // run with different parameters appears as separate entries.
   const models = useMemo(() => {
-    const map = new Map<string, number>();
+    const map = new Map<string, { label: string; count: number }>();
     files.forEach((f) => {
       if (!f.model) return;
-      map.set(f.model, (map.get(f.model) || 0) + 1);
+      const id = variantId(f);
+      const cur = map.get(id);
+      if (cur) cur.count += 1;
+      else map.set(id, { label: variantLabel(f), count: 1 });
     });
     return Array.from(map.entries())
-      .map(([model, count]) => ({ model, count }))
-      .sort((a, b) => a.model.localeCompare(b.model));
+      .map(([id, v]) => ({ model: id, label: v.label, count: v.count }))
+      .sort((a, b) => a.label.localeCompare(b.label));
   }, [files]);
+
+  const labelMap = useMemo(() => {
+    const m = new Map<string, string>();
+    models.forEach((v) => m.set(v.model, v.label));
+    return m;
+  }, [models]);
 
   useEffect(() => {
     setLoadingList(true);
@@ -280,8 +295,9 @@ export function ModelCompare() {
     );
   }, [models]);
 
+  // `model` here is the variant id.
   const filesForModel = (model: string) =>
-    files.filter((f) => f.model === model);
+    files.filter((f) => variantId(f) === model);
 
   const loadSummariesFor = async (model: string) => {
     const targetFiles = filesForModel(model);
@@ -419,7 +435,9 @@ export function ModelCompare() {
       .map((f) => summaryCache[f.filename])
       .filter((s): s is BenchmarkSummary => !!s);
     if (summaries.length === 0) return null;
-    return aggregateModel(model, summaries);
+    // `model` is the variant id; show humans the variant label instead.
+    const label = labelMap.get(model) ?? model;
+    return aggregateModel(label, summaries);
   };
 
   const aggregates = useMemo(
@@ -427,6 +445,53 @@ export function ModelCompare() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [selectedModels, summaryCache, files],
   );
+
+  // Leaderboard ordering across columns — best models on the left.
+  const [leaderboardMode, setLeaderboardMode] = useState(false);
+
+  const compositeScores = useMemo(() => {
+    const out = new Map<string, number>();
+    const valid = aggregates.filter(
+      (a): a is ModelAggregate => a !== null,
+    );
+    if (valid.length === 0) return out;
+    const ranked = SUMMARY_METRICS.filter((m) => m.better !== "none");
+    const matrix = ranked.map((m) => {
+      const raw = valid.map((v) => Number(m.get(v.summary) ?? 0));
+      const mn = Math.min(...raw);
+      const mx = Math.max(...raw);
+      return raw.map((x) => {
+        if (mx === mn) return 50;
+        const n01 = (x - mn) / (mx - mn);
+        return Math.round(
+          (m.better === "higher" ? n01 : 1 - n01) * 100,
+        );
+      });
+    });
+    valid.forEach((a, i) => {
+      const cols = matrix.map((c) => c[i]);
+      const score = cols.length
+        ? Math.round(cols.reduce((s, v) => s + v, 0) / cols.length)
+        : 0;
+      out.set(a.model, score);
+    });
+    return out;
+  }, [aggregates]);
+
+  // Permutation array — display position → original slot index.
+  const displayOrder = useMemo(() => {
+    const order = aggregates.map((_, i) => i);
+    if (!leaderboardMode) return order;
+    return order.sort((ia, ib) => {
+      const sa = aggregates[ia]
+        ? (compositeScores.get(aggregates[ia]!.model) ?? -1)
+        : -1;
+      const sb = aggregates[ib]
+        ? (compositeScores.get(aggregates[ib]!.model) ?? -1)
+        : -1;
+      return sb - sa;
+    });
+  }, [aggregates, leaderboardMode, compositeScores]);
 
   const testRows = useMemo(() => {
     const names = new Set<string>();
@@ -459,11 +524,30 @@ export function ModelCompare() {
         <GitCompare className="w-5 h-5 text-zinc-700" />
         <h2 className="text-xl font-semibold text-zinc-800">Compare SLMs</h2>
       </div>
-      <p className="text-sm text-zinc-600 mb-6">
-        Select any number of models and compare aggregated stats across{" "}
-        <strong>all their benchmark runs</strong> in the <code>results/</code>{" "}
-        folder.
-      </p>
+      <div className="flex items-start justify-between gap-4 flex-wrap mb-6">
+        <p className="text-sm text-zinc-600 max-w-3xl">
+          Select any number of models and compare aggregated stats across{" "}
+          <strong>all their benchmark runs</strong> in the <code>results/</code>{" "}
+          folder.
+        </p>
+        <button
+          type="button"
+          onClick={() => setLeaderboardMode((v) => !v)}
+          title={
+            leaderboardMode
+              ? "Models ranked best → worst by composite score (lower-is-better metrics inverted). Click to switch back."
+              : "Click to rank columns from best to worst by a composite score across all metrics."
+          }
+          className={`flex items-center gap-2 text-sm font-medium px-3 py-1.5 rounded-md border transition-colors ${
+            leaderboardMode
+              ? "bg-amber-100 border-amber-300 text-amber-800 hover:bg-amber-200"
+              : "bg-white border-zinc-300 text-zinc-700 hover:bg-zinc-50"
+          }`}
+        >
+          <Trophy className="w-4 h-4" />
+          {leaderboardMode ? "Leaderboard: ON" : "Leaderboard"}
+        </button>
+      </div>
 
       {errorList && (
         <div className="mb-4 bg-red-50/50 border border-red-100 rounded p-3 text-sm text-red-700">
@@ -504,6 +588,17 @@ export function ModelCompare() {
         </button>
       </div>
 
+      {/* Leaderboard banner — table stays visible, columns are reordered best → worst */}
+      {leaderboardMode && (
+        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 shadow-sm flex items-center gap-2">
+          <Trophy className="w-4 h-4 text-amber-700" />
+          <span className="text-sm text-amber-900">
+            Leaderboard mode — columns reordered best → worst by composite
+            score; each metric row reflects its own ranking.
+          </span>
+        </div>
+      )}
+
       {/* Comparison table */}
       <div className="border border-zinc-200 rounded-lg overflow-x-auto bg-white shadow-sm">
         {/* Header */}
@@ -514,14 +609,21 @@ export function ModelCompare() {
           <div className="p-4 border-r border-zinc-200 font-semibold text-zinc-900">
             Metric
           </div>
-          {aggregates.map((agg, idx) => (
-            <ModelHeader
-              key={idx}
-              agg={agg}
-              fallback={selectedModels[idx]}
-              last={idx === n - 1}
-            />
-          ))}
+          {displayOrder.map((origIdx, displayIdx) => {
+            const agg = aggregates[origIdx];
+            const score = agg ? compositeScores.get(agg.model) : undefined;
+            const slotId = selectedModels[origIdx];
+            return (
+              <ModelHeader
+                key={origIdx}
+                agg={agg}
+                fallback={slotId ? (labelMap.get(slotId) ?? slotId) : undefined}
+                last={displayIdx === n - 1}
+                rank={leaderboardMode ? displayIdx + 1 : undefined}
+                score={leaderboardMode ? score : undefined}
+              />
+            );
+          })}
         </div>
 
         {/* Summary section */}
@@ -546,12 +648,12 @@ export function ModelCompare() {
               <div className="p-3 bg-zinc-50/50 text-sm text-zinc-600 border-r border-zinc-100">
                 {row.label}
               </div>
-              {values.map((v, idx) => (
+              {displayOrder.map((origIdx, displayIdx) => (
                 <div
-                  key={idx}
-                  className={`p-3 text-sm ${idx < n - 1 ? "border-r border-zinc-100" : ""} ${cellClass(best.has(idx))}`}
+                  key={origIdx}
+                  className={`p-3 text-sm ${displayIdx < n - 1 ? "border-r border-zinc-100" : ""} ${cellClass(best.has(origIdx))}`}
                 >
-                  {fmtNumber(v, row.unit)}
+                  {fmtNumber(values[origIdx], row.unit)}
                 </div>
               ))}
             </div>
@@ -562,26 +664,43 @@ export function ModelCompare() {
         <SectionHeader title="Run info" />
         <MetaRow
           label="Result files"
-          values={aggregates.map((agg) =>
-            agg ? String(agg.fileCount) : undefined,
+          values={displayOrder.map((origIdx) =>
+            aggregates[origIdx] ? String(aggregates[origIdx]!.fileCount) : undefined,
           )}
           gridStyle={gridStyle}
         />
         <MetaRow
           label="Platforms"
-          values={aggregates.map((agg) => agg?.platforms.join(", "))}
+          values={displayOrder.map((origIdx) =>
+            aggregates[origIdx]?.platforms.join(", "),
+          )}
           gridStyle={gridStyle}
         />
         <MetaRow
           label="Technologies"
-          values={aggregates.map((agg) => agg?.technologies.join(", "))}
+          values={displayOrder.map((origIdx) =>
+            aggregates[origIdx]?.technologies.join(", "),
+          )}
           gridStyle={gridStyle}
         />
         <MetaRow
           label="Latest run"
-          values={aggregates.map((agg) => agg?.latestTimestamp)}
+          values={displayOrder.map(
+            (origIdx) => aggregates[origIdx]?.latestTimestamp,
+          )}
           gridStyle={gridStyle}
         />
+        {leaderboardMode && (
+          <MetaRow
+            label="Composite score"
+            values={displayOrder.map((origIdx) => {
+              const agg = aggregates[origIdx];
+              const sc = agg ? compositeScores.get(agg.model) : undefined;
+              return sc !== undefined ? `${sc} / 100` : undefined;
+            })}
+            gridStyle={gridStyle}
+          />
+        )}
 
         {/* Live metrics (WebSocket, 2s) */}
         <SectionHeader
@@ -661,16 +780,19 @@ export function ModelCompare() {
                   <div className="p-3 bg-zinc-50/50 text-sm text-zinc-600 border-r border-zinc-100">
                     {name}
                   </div>
-                  {entries.map((e, idx) => (
-                    <div
-                      key={idx}
-                      className={`p-3 text-sm ${idx < n - 1 ? "border-r border-zinc-100" : ""} ${cellClass(best.has(idx))}`}
-                    >
-                      {e
-                        ? `${e.passed}/${e.total} · avg ${e.avgDuration.toFixed(1)}s`
-                        : "—"}
-                    </div>
-                  ))}
+                  {displayOrder.map((origIdx, displayIdx) => {
+                    const e = entries[origIdx];
+                    return (
+                      <div
+                        key={origIdx}
+                        className={`p-3 text-sm ${displayIdx < n - 1 ? "border-r border-zinc-100" : ""} ${cellClass(best.has(origIdx))}`}
+                      >
+                        {e
+                          ? `${e.passed}/${e.total} · avg ${e.avgDuration.toFixed(1)}s`
+                          : "—"}
+                      </div>
+                    );
+                  })}
                 </div>
               );
             })}
@@ -732,20 +854,32 @@ function ModelHeader({
   agg,
   fallback,
   last,
+  rank,
+  score,
 }: {
   agg: ModelAggregate | null;
   fallback?: string;
   last?: boolean;
+  rank?: number;
+  score?: number;
 }) {
   return (
     <div className={`p-4 ${last ? "" : "border-r border-zinc-200"}`}>
-      <div className="text-xs uppercase opacity-70">Model</div>
+      <div className="text-xs uppercase opacity-70 flex items-center gap-1">
+        {rank !== undefined && (
+          <span className="inline-flex items-center justify-center min-w-[1.4rem] h-[1.1rem] px-1 rounded bg-amber-100 text-amber-800 font-semibold text-[11px]">
+            #{rank}
+          </span>
+        )}
+        <span>Model</span>
+      </div>
       <div className="font-semibold text-zinc-900 text-sm truncate max-w-[160px]">
         {agg?.model || fallback || "—"}
       </div>
       <div className="text-xs opacity-60">
         {agg ? `${agg.fileCount} run${agg.fileCount === 1 ? "" : "s"}` : ""}
         {agg && agg.platforms.length > 0 ? ` · ${agg.platforms.join("/")}` : ""}
+        {score !== undefined ? ` · score ${score}` : ""}
       </div>
     </div>
   );
@@ -796,7 +930,7 @@ function ModelSelect({
   loading,
 }: {
   label: string;
-  models: { model: string; count: number }[];
+  models: { model: string; label: string; count: number }[];
   value: string | undefined;
   onChange: (v: string) => void;
   loading: boolean;
@@ -807,13 +941,15 @@ function ModelSelect({
         {label}
       </label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="bg-white border-zinc-200 text-zinc-800 w-48">
-          <SelectValue placeholder={loading ? "Loading…" : "Select a model"} />
+        <SelectTrigger className="bg-white border-zinc-200 text-zinc-800 w-72">
+          <SelectValue
+            placeholder={loading ? "Loading…" : "Select a variant"}
+          />
         </SelectTrigger>
         <SelectContent className="bg-white border-zinc-200 text-zinc-800">
           {models.map((m) => (
             <SelectItem key={m.model} value={m.model}>
-              {m.model} ({m.count} run{m.count === 1 ? "" : "s"})
+              {m.label} ({m.count} run{m.count === 1 ? "" : "s"})
             </SelectItem>
           ))}
         </SelectContent>

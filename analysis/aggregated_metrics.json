@@ -1,0 +1,254 @@
+[
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "timestamp": 1777924723.4095452,
+    "source_file": "results\\consistency_qwen2.5-coder_1.5b_1777924738.json",
+    "consistency_pct": 78.2
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "timestamp": 1777931386.3061733,
+    "source_file": "results\\consistency_qwen2.5-coder_1.5b_1777931401.json",
+    "consistency_pct": 0.0
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "timestamp": 1778226193.6532688,
+    "source_file": "results\\consistency_qwen2.5-coder_1.5b_1778226193.json",
+    "consistency_pct": 0.0
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "timestamp": 1778226927.017904,
+    "source_file": "results\\consistency_qwen2.5-coder_1.5b_1778226940.json",
+    "consistency_pct": 0.0
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "timestamp": 1778227514.0913198,
+    "source_file": "results\\consistency_qwen2.5-coder_1.5b_1778227524.json",
+    "consistency_pct": 0.0
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "timestamp": 1778231783.3335686,
+    "source_file": "results\\consistency_qwen2.5-coder_1.5b_1778231802.json",
+    "consistency_pct": 66.4
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "timestamp": 1778234411.8699026,
+    "source_file": "results\\consistency_qwen2.5-coder_1.5b_1778234421.json",
+    "consistency_pct": 68.60000000000001
+  },
+  {
+    "model": "qwen2.5-coder:7b",
+    "timestamp": 1778239777.9362361,
+    "source_file": "results\\consistency_qwen2.5-coder_7b_1778240176.json",
+    "consistency_pct": 0.0
+  },
+  {
+    "model": "qwen2.5-coder:7b",
+    "timestamp": 1778247311.8660715,
+    "source_file": "results\\consistency_qwen2.5-coder_7b_1778247732.json",
+    "consistency_pct": 0.0
+  },
+  {
+    "model": "qwen2.5-coder:7b",
+    "timestamp": 1778254578.426322,
+    "source_file": "results\\consistency_qwen2.5-coder_7b_1778254962.json",
+    "consistency_pct": 0.0
+  },
+  {
+    "model": "qwen2.5-coder:7b",
+    "timestamp": 1778262484.8989494,
+    "source_file": "results\\consistency_qwen2.5-coder_7b_1778262964.json",
+    "consistency_pct": 0.0
+  },
+  {
+    "model": "qwen2.5-coder:7b",
+    "timestamp": 1778269618.31647,
+    "source_file": "results\\consistency_qwen2.5-coder_7b_1778270038.json",
+    "consistency_pct": 0.0
+  },
+  {
+    "model": "qwen2.5-coder:7b",
+    "timestamp": 1778277474.2880037,
+    "source_file": "results\\consistency_qwen2.5-coder_7b_1778277874.json",
+    "consistency_pct": 0.0
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "timestamp": 1777931450.8533826,
+    "source_file": "results\\hard_tests_qwen2.5-coder_1.5b_1777931450.json",
+    "hard_tests_score_pct": 0.0
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "timestamp": 1778226232.3124688,
+    "source_file": "results\\hard_tests_qwen2.5-coder_1.5b_1778226232.json",
+    "hard_tests_score_pct": 0.0
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "timestamp": 1778227023.3513243,
+    "source_file": "results\\hard_tests_qwen2.5-coder_1.5b_1778227023.json",
+    "hard_tests_score_pct": 0.0
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "timestamp": 1778227601.0119221,
+    "source_file": "results\\hard_tests_qwen2.5-coder_1.5b_1778227601.json",
+    "hard_tests_score_pct": 0.0
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "ram_gb": 2,
+    "cpu_cores": 1.0,
+    "technology": "ollama",
+    "platform": "docker",
+    "timestamp": "2026-05-03T10:14:04.646727",
+    "source_file": "backend\\results\\qwen2.5-coder_1.5b_2GB_1.0c_ollama_docker_20260503_101404.json",
+    "perf_avg_tok_per_s": 15.26,
+    "perf_avg_latency_ms": 11815.6,
+    "perf_avg_ttft_ms": 948.06,
+    "perf_success_rate": 100.0,
+    "quality_score_pct": 78.57,
+    "summarization_score_pct": 41.17647058823529,
+    "context_window_score_pct": 91.8918918918919,
+    "safety_robustness_score_pct": 51.2,
+    "consistency_pct": 85.0,
+    "cost_avg_tok_per_s": 3.48,
+    "cost_total_tokens": 750,
+    "cost_total_time_s": 283.175
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "ram_gb": 2,
+    "cpu_cores": 2.0,
+    "technology": "ollama",
+    "platform": "docker",
+    "timestamp": "2026-05-03T11:54:57.449462",
+    "source_file": "backend\\results\\qwen2.5-coder_1.5b_2GB_2.0c_ollama_docker_20260503_115457.json",
+    "perf_avg_tok_per_s": 24.97,
+    "perf_avg_latency_ms": 7329.15,
+    "perf_avg_ttft_ms": 520.07,
+    "perf_success_rate": 100.0,
+    "quality_score_pct": 100.0,
+    "advanced_quality_score_pct": 48.0,
+    "summarization_score_pct": 51.17647058823529,
+    "context_window_score_pct": 91.8918918918919,
+    "safety_robustness_score_pct": 57.99999999999999,
+    "consistency_pct": 66.0,
+    "cost_avg_tok_per_s": 7.86,
+    "cost_total_tokens": 684,
+    "cost_total_time_s": 125.897
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "ram_gb": 2,
+    "cpu_cores": 4.0,
+    "technology": "ollama",
+    "platform": "docker",
+    "timestamp": "2026-05-03T13:12:36.026165",
+    "source_file": "backend\\results\\qwen2.5-coder_1.5b_2GB_4.0c_ollama_docker_20260503_131236.json",
+    "perf_avg_tok_per_s": 34.54,
+    "perf_avg_latency_ms": 5606.83,
+    "perf_avg_ttft_ms": 299.67,
+    "perf_success_rate": 100.0,
+    "quality_score_pct": 100.0,
+    "advanced_quality_score_pct": 48.0,
+    "summarization_score_pct": 52.94117647058824,
+    "context_window_score_pct": 91.8918918918919,
+    "safety_robustness_score_pct": 55.2,
+    "consistency_pct": 74.0,
+    "stress_success_rate": 100.0,
+    "stress_throughput_rps": 0.07721583636673415,
+    "cost_avg_tok_per_s": 21.67,
+    "cost_total_tokens": 870,
+    "cost_total_time_s": 66.598
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "ram_gb": 2,
+    "cpu_cores": 8.0,
+    "technology": "ollama",
+    "platform": "docker",
+    "timestamp": "2026-05-08T12:12:47.529219",
+    "source_file": "backend\\results\\qwen2.5-coder_1.5b_2GB_8.0cores_ollama_docker_20260508_121247.json",
+    "perf_avg_tok_per_s": 29.02,
+    "perf_avg_latency_ms": 6217.83,
+    "perf_avg_ttft_ms": 194.61,
+    "perf_success_rate": 100.0
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "ram_gb": 4,
+    "cpu_cores": 1.0,
+    "technology": "ollama",
+    "platform": "docker",
+    "timestamp": "2026-05-03T13:57:14.657404",
+    "source_file": "backend\\results\\qwen2.5-coder_1.5b_4GB_1.0c_ollama_docker_20260503_135714.json",
+    "perf_avg_tok_per_s": 15.48,
+    "perf_avg_latency_ms": 12468.74,
+    "perf_avg_ttft_ms": 948.06,
+    "perf_success_rate": 100.0,
+    "quality_score_pct": 85.71,
+    "summarization_score_pct": 45.294117647058826,
+    "context_window_score_pct": 91.8918918918919,
+    "safety_robustness_score_pct": 57.199999999999996,
+    "consistency_pct": 69.8,
+    "cost_avg_tok_per_s": 3.59,
+    "cost_total_tokens": 823,
+    "cost_total_time_s": 296.514
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "ram_gb": 4,
+    "cpu_cores": 2.0,
+    "technology": "ollama",
+    "platform": "docker",
+    "timestamp": "2026-05-03T15:38:27.827330",
+    "source_file": "backend\\results\\qwen2.5-coder_1.5b_4GB_2.0c_ollama_docker_20260503_153827.json",
+    "perf_avg_tok_per_s": 25.9,
+    "perf_avg_latency_ms": 7608.05,
+    "perf_avg_ttft_ms": 508.43,
+    "perf_success_rate": 100.0,
+    "quality_score_pct": 64.29,
+    "advanced_quality_score_pct": 48.0,
+    "summarization_score_pct": 51.17647058823529,
+    "context_window_score_pct": 91.8918918918919,
+    "safety_robustness_score_pct": 51.6,
+    "consistency_pct": 87.8,
+    "cost_avg_tok_per_s": 6.55,
+    "cost_total_tokens": 830,
+    "cost_total_time_s": 157.409
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "ram_gb": 4,
+    "cpu_cores": 4.0,
+    "technology": "ollama",
+    "platform": "docker",
+    "timestamp": "2026-05-04T22:53:29.103100",
+    "source_file": "backend\\results\\qwen2.5-coder_1.5b_4GB_4.0c_ollama_docker_20260504_225329.json",
+    "perf_avg_tok_per_s": 28.96,
+    "perf_avg_latency_ms": 7027.93,
+    "perf_avg_ttft_ms": 318.35,
+    "perf_success_rate": 100.0,
+    "quality_score_pct": 100.0
+  },
+  {
+    "model": "qwen2.5-coder:1.5b",
+    "ram_gb": 4,
+    "cpu_cores": 8.0,
+    "technology": "ollama",
+    "platform": "docker",
+    "timestamp": "2026-05-08T12:57:02.895115",
+    "source_file": "backend\\results\\qwen2.5-coder_1.5b_4GB_8.0cores_ollama_docker_20260508_125702.json",
+    "perf_avg_tok_per_s": 30.48,
+    "perf_avg_latency_ms": 5029.86,
+    "perf_avg_ttft_ms": 186.78,
+    "perf_success_rate": 100.0
+  }
+]

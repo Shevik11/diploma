@@ -1,6 +1,7 @@
 import time
 import json
 import os
+import asyncio
 import httpx
 import psutil
 from datetime import datetime
@@ -9,6 +10,14 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 
 
+# Always resolve relative to this file, regardless of the process cwd
+# (uvicorn may be launched from the repo root or from `backend/`). The
+# previous code had a fallback to `<repo>/results/` triggered when this
+# folder was empty at import time — that produced confusing behavior:
+# a fresh checkout would silently switch to the repo-root folder for
+# the lifetime of the process and never come back, so newly-saved
+# results in `backend/results/` would be invisible to the API. We
+# unconditionally create the canonical folder and stick with it.
 RESULTS_DIR = Path(__file__).parent / "results"
 if not any(RESULTS_DIR.glob("*.json")):
     _parent_results = Path(__file__).parent.parent / "results"
@@ -63,6 +72,10 @@ class BenchmarkSummary:
     summary: dict
     ram_gb: Optional[int] = None
     cpu_cores: Optional[float] = None
+    # Top-level start/finish timestamps for the whole run. `timestamp`
+    # is kept for backward compatibility (it equals `finished_at`).
+    started_at: Optional[str] = None
+    finished_at: Optional[str] = None
 
 
 class OllamaBenchmark:
@@ -112,85 +125,127 @@ class OllamaBenchmark:
             memory_peak_mb=memory.used / (1024 * 1024)
         )
 
-    async def run_inference(self, model: str, prompt: str) -> BenchmarkResult:
-        """Run a single inference and collect metrics"""
+    async def run_inference(
+        self,
+        model: str,
+        prompt: str,
+        max_retries: int = 3,
+        retry_delay: float = 2.0,
+        retry_backoff: float = 2.0,
+    ) -> BenchmarkResult:
+        """Run a single inference and collect metrics, with retry logic.
+
+        Retries on transient failures (network errors, HTTP 5xx, timeouts).
+        Uses exponential backoff between attempts: retry_delay * (retry_backoff ** attempt).
+        """
         resources_before = self.get_resource_metrics()
         peak_memory = resources_before.memory_used_mb
 
-        start_time = time.perf_counter()
+        last_error: Optional[str] = None
 
-        try:
-            response = await self.client.post(
-                f"{self.base_url}/api/generate",
-                json={
-                    "model": model,
-                    "prompt": prompt,
-                    "stream": False,
-                    "options": {"num_predict": 256}
-                }
-            )
-
-            end_time = time.perf_counter()
-            total_duration = (end_time - start_time) * 1000
-
-            if response.status_code != 200:
-                return BenchmarkResult(
-                    prompt=prompt,
-                    response="",
-                    inference=InferenceMetrics(0, 0, 0, 0, 0),
-                    resources=resources_before,
-                    success=False,
-                    error=f"HTTP {response.status_code}"
+        for attempt in range(max_retries):
+            start_time = time.perf_counter()
+            try:
+                response = await self.client.post(
+                    f"{self.base_url}/api/generate",
+                    json={
+                        "model": model,
+                        "prompt": prompt,
+                        "stream": False,
+                        "options": {"num_predict": 256}
+                    }
                 )
 
-            data = response.json()
-            response_text = data.get("response", "")
+                end_time = time.perf_counter()
+                total_duration = (end_time - start_time) * 1000
 
-            # Extract Ollama metrics
-            eval_count = data.get("eval_count", 0)
-            eval_duration_ns = data.get("eval_duration", 1)
-            prompt_eval_count = data.get("prompt_eval_count", 0)
-            load_duration_ns = data.get("load_duration", 0)
+                if response.status_code != 200:
+                    # Try to extract Ollama's error message from the body so
+                    # callers see the real cause (e.g. OOM-kill of the llama
+                    # runner under tight container memory limits) instead of
+                    # an opaque "HTTP 500".
+                    body_msg = ""
+                    try:
+                        body_msg = response.json().get("error", "") or ""
+                    except Exception:
+                        try:
+                            body_msg = (response.text or "")[:300]
+                        except Exception:
+                            body_msg = ""
+                    last_error = f"HTTP {response.status_code}"
+                    if body_msg:
+                        last_error = f"{last_error}: {body_msg.strip()}"
+                    # Retry only on server-side errors (5xx) or 429 (rate-limit)
+                    is_transient = response.status_code >= 500 or response.status_code == 429
+                    if is_transient and attempt < max_retries - 1:
+                        await asyncio.sleep(retry_delay * (retry_backoff ** attempt))
+                        continue
+                    return BenchmarkResult(
+                        prompt=prompt,
+                        response="",
+                        inference=InferenceMetrics(0, 0, 0, 0, 0),
+                        resources=resources_before,
+                        success=False,
+                        error=f"{last_error} (after {attempt + 1} attempt{'s' if attempt else ''})"
+                    )
 
-            tokens_per_second = (eval_count / (eval_duration_ns / 1e9)) if eval_duration_ns > 0 else 0
-            first_token_latency = data.get("prompt_eval_duration", 0) / 1e6  # ns to ms
+                data = response.json()
+                response_text = data.get("response", "")
 
-            resources_after = self.get_resource_metrics()
-            peak_memory = max(peak_memory, resources_after.memory_used_mb)
+                # Extract Ollama metrics
+                eval_count = data.get("eval_count", 0)
+                eval_duration_ns = data.get("eval_duration", 1)
+                prompt_eval_count = data.get("prompt_eval_count", 0)
+                load_duration_ns = data.get("load_duration", 0)
 
-            inference_metrics = InferenceMetrics(
-                first_token_latency_ms=first_token_latency,
-                total_duration_ms=total_duration,
-                tokens_generated=eval_count,
-                tokens_per_second=tokens_per_second,
-                prompt_tokens=prompt_eval_count,
-                model_load_time_ms=load_duration_ns / 1e6 if load_duration_ns > 0 else None
-            )
+                tokens_per_second = (eval_count / (eval_duration_ns / 1e9)) if eval_duration_ns > 0 else 0
+                first_token_latency = data.get("prompt_eval_duration", 0) / 1e6  # ns to ms
 
-            resource_metrics = ResourceMetrics(
-                cpu_percent=(resources_before.cpu_percent + resources_after.cpu_percent) / 2,
-                memory_percent=(resources_before.memory_percent + resources_after.memory_percent) / 2,
-                memory_used_mb=resources_after.memory_used_mb,
-                memory_peak_mb=peak_memory
-            )
+                resources_after = self.get_resource_metrics()
+                peak_memory = max(peak_memory, resources_after.memory_used_mb)
 
-            return BenchmarkResult(
-                prompt=prompt,
-                response=response_text,
-                inference=inference_metrics,
-                resources=resource_metrics,
-                success=True
-            )
+                inference_metrics = InferenceMetrics(
+                    first_token_latency_ms=first_token_latency,
+                    total_duration_ms=total_duration,
+                    tokens_generated=eval_count,
+                    tokens_per_second=tokens_per_second,
+                    prompt_tokens=prompt_eval_count,
+                    model_load_time_ms=load_duration_ns / 1e6 if load_duration_ns > 0 else None
+                )
 
-        except Exception as e:
-            return BenchmarkResult(
-                prompt=prompt,
-                response="",
-                inference=InferenceMetrics(0, 0, 0, 0, 0),
-                resources=resources_before,
-                success=False,
-                error=str(e)
-            )
+                resource_metrics = ResourceMetrics(
+                    cpu_percent=(resources_before.cpu_percent + resources_after.cpu_percent) / 2,
+                    memory_percent=(resources_before.memory_percent + resources_after.memory_percent) / 2,
+                    memory_used_mb=resources_after.memory_used_mb,
+                    memory_peak_mb=peak_memory
+                )
+
+                return BenchmarkResult(
+                    prompt=prompt,
+                    response=response_text,
+                    inference=inference_metrics,
+                    resources=resource_metrics,
+                    success=True
+                )
+
+            except (httpx.TimeoutException, httpx.NetworkError, httpx.RemoteProtocolError) as e:
+                last_error = f"{type(e).__name__}: {e}"
+                if attempt < max_retries - 1:
+                    await asyncio.sleep(retry_delay * (retry_backoff ** attempt))
+                    continue
+            except Exception as e:
+                # Non-transient error - do not retry
+                last_error = str(e)
+                break
+
+        return BenchmarkResult(
+            prompt=prompt,
+            response="",
+            inference=InferenceMetrics(0, 0, 0, 0, 0),
+            resources=resources_before,
+            success=False,
+            error=f"{last_error} (after {max_retries} attempts)"
+        )
 
     async def close(self):
         await self.client.aclose()
@@ -241,7 +296,10 @@ async def run_benchmark(
     categories: list[str] = None,
     warm_up: bool = True,
     runs_per_prompt: int = 1,
-    progress_callback=None
+    progress_callback=None,
+    max_retries: int = 3,
+    retry_delay: float = 2.0,
+    retry_backoff: float = 2.0,
 ) -> BenchmarkSummary:
     """Run full benchmark suite"""
 
@@ -249,41 +307,51 @@ async def run_benchmark(
         categories = list(BENCHMARK_PROMPTS.keys())
 
     benchmark = OllamaBenchmark()
+    started_at = datetime.now().isoformat()
 
-    # Check connection
-    if not await benchmark.check_connection():
-        raise ConnectionError(f"Cannot connect to Ollama at {OLLAMA_BASE_URL}")
+    try:
+        # Check connection
+        if not await benchmark.check_connection():
+            raise ConnectionError(f"Cannot connect to Ollama at {OLLAMA_BASE_URL}")
 
-    # Warm up
-    if warm_up:
-        if progress_callback:
-            await progress_callback("warming_up", 0, "Warming up model...")
-        await benchmark.warm_up(model)
+        # Warm up
+        if warm_up:
+            if progress_callback:
+                await progress_callback("warming_up", 0, "Warming up model...")
+            await benchmark.warm_up(model)
 
-    results = []
-    total_prompts = sum(len(BENCHMARK_PROMPTS.get(cat, [])) for cat in categories) * runs_per_prompt
-    completed = 0
+        results = []
+        total_prompts = sum(len(BENCHMARK_PROMPTS.get(cat, [])) for cat in categories) * runs_per_prompt
+        completed = 0
 
-    for category in categories:
-        prompts = BENCHMARK_PROMPTS.get(category, [])
-        for prompt in prompts:
-            for run in range(runs_per_prompt):
-                if progress_callback:
-                    await progress_callback(
-                        "running",
-                        int((completed / total_prompts) * 100),
-                        f"Running {category}: {prompt[:30]}..."
+        for category in categories:
+            prompts = BENCHMARK_PROMPTS.get(category, [])
+            for prompt in prompts:
+                for run in range(runs_per_prompt):
+                    if progress_callback and total_prompts > 0:
+                        await progress_callback(
+                            "running",
+                            int((completed / total_prompts) * 100),
+                            f"Running {category}: {prompt[:30]}..."
+                        )
+
+                    result = await benchmark.run_inference(
+                        model,
+                        prompt,
+                        max_retries=max_retries,
+                        retry_delay=retry_delay,
+                        retry_backoff=retry_backoff,
                     )
-
-                result = await benchmark.run_inference(model, prompt)
-                results.append({
-                    "category": category,
-                    "run": run + 1,
-                    **asdict(result)
-                })
-                completed += 1
-
-    await benchmark.close()
+                    results.append({
+                        "category": category,
+                        "run": run + 1,
+                        **asdict(result)
+                    })
+                    completed += 1
+    finally:
+        # Always release the httpx async client even if an exception is
+        # raised mid-run (e.g. ConnectionError from check_connection above).
+        await benchmark.close()
 
     # Calculate summary statistics
     successful_results = [r for r in results if r["success"]]
@@ -298,11 +366,14 @@ async def run_benchmark(
     else:
         avg_tokens_per_sec = avg_latency = avg_first_token = total_tokens = avg_cpu = avg_memory = 0
 
+    finished_at = datetime.now().isoformat()
     summary = BenchmarkSummary(
         model=model,
         platform="docker",
         technology="ollama",
-        timestamp=datetime.now().isoformat(),
+        timestamp=finished_at,
+        started_at=started_at,
+        finished_at=finished_at,
         system_info=get_system_info(),
         results=results,
         summary={
@@ -362,8 +433,31 @@ def list_benchmark_results() -> list[dict]:
                 "ram_gb": data.get("ram_gb"),
                 "cpu_cores": data.get("cpu_cores"),
                 "timestamp": data.get("timestamp"),
+                # Explicit start/finish timestamps for the run (functionality.md).
+                # Falls back to `timestamp` for legacy files that pre-date the
+                # introduction of these fields.
+                "started_at": data.get("started_at") or data.get("timestamp"),
+                "finished_at": data.get("finished_at") or data.get("timestamp"),
+                # Per-run status string from the spec vocabulary
+                # (pending/running/completed/failed/not_enough_resources/cancelled).
+                # Legacy files don't have it: derive a sensible value from
+                # `infeasible` (-> not_enough_resources) or `summary.successful`.
+                "status": (
+                    data.get("status")
+                    or ("not_enough_resources" if data.get("infeasible") else None)
+                    or (
+                        "completed"
+                        if (data.get("summary") or {}).get("successful", 0) > 0
+                        else "failed"
+                    )
+                ),
                 "summary": data.get("summary"),
                 "test_results": data.get("test_results"),
+                # `infeasible` is set by main.py when a config was skipped
+                # before running because the container did not have enough
+                # RAM for the model. The frontend uses this to push the
+                # entry to the bottom of the leaderboard.
+                "infeasible": data.get("infeasible"),
             })
         except Exception:
             pass
