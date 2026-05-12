@@ -5,16 +5,97 @@ A web application to compare container vs VM deployment performance for Small La
 ## Project Structure
 
 ```
-├── backend/           # FastAPI backend
-│   ├── main.py        # API endpoints
+diploma/
+├── docker-compose.yml              # All services: frontend, backend, ollama, llama.cpp, vLLM, cAdvisor
+│
+├── backend/                        # FastAPI backend
+│   ├── main.py                     # All API endpoints + WebSocket
+│   ├── benchmarks.py               # Inference benchmark runner (Ollama)
 │   ├── requirements.txt
-│   └── run.ps1/run.sh # Start scripts
-├── frontend/          # React frontend
-│   ├── app/           # React components
-│   ├── styles/        # CSS styles
-│   ├── package.json
-│   └── run.ps1/run.sh # Start scripts
-└── src/               # Original Figma export (reference)
+│   ├── Dockerfile
+│   └── run.ps1 / run.sh            # Local start scripts
+│
+├── frontend/                       # React + Vite dashboard
+│   ├── app/
+│   │   ├── App.tsx                 # Main app: model/RAM/CPU selectors, test runner
+│   │   ├── components/
+│   │   │   ├── deployment-card.tsx
+│   │   │   ├── metrics-section.tsx
+│   │   │   ├── metrics-chart.tsx
+│   │   │   ├── results-viewer.tsx
+│   │   │   ├── model-compare.tsx
+│   │   │   ├── benchmark-runner.tsx
+│   │   │   ├── test-runner.tsx
+│   │   │   └── ui/                 # shadcn/ui component library
+│   │   ├── services/
+│   │   │   └── api.ts              # REST + WebSocket client
+│   │   └── main.tsx
+│   ├── styles/                     # Global CSS / Tailwind
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   └── run.ps1 / run.sh
+│
+├── scripts/
+│   ├── tests/                      # 17 test suites (run as subprocesses by backend)
+│   │   ├── quality_test.py
+│   │   ├── advanced_quality_test.py
+│   │   ├── performance_test.py
+│   │   ├── safety_robustness_test.py
+│   │   ├── stress_and_consistency_test.py
+│   │   ├── hard_tests.py
+│   │   ├── multilingual_test.py
+│   │   ├── summarization_test.py
+│   │   ├── context_window_test.py
+│   │   ├── cost_efficiency_test.py
+│   │   ├── benchmark_mmlu_test.py
+│   │   ├── benchmark_reasoning_test.py
+│   │   ├── benchmark_gsm8k_test.py
+│   │   ├── benchmark_truthfulqa_test.py
+│   │   ├── benchmark_humaneval_test.py
+│   │   ├── compare_models.py
+│   │   ├── run_all_tests.py
+│   │   └── requirements.txt
+│   ├── Makefile-{llama,mistral,gemma,phi}   # Linux/WSL per-model test runners
+│   └── make-{llama,mistral,gemma,phi}.ps1   # Windows PowerShell equivalents
+│
+├── results/                        # Benchmark output (one JSON per run)
+│   └── {model}_{ram}GB_{cpu}cores_{tech}_{platform}_{datetime}.json
+│
+├── analysis/                       # Post-run data processing scripts
+│   ├── data-processing/
+│   │   ├── metrics-aggregator.py
+│   │   ├── performance-analyzer.py
+│   │   └── cost-calculator.py
+│   ├── reports/
+│   │   └── generate-report.py
+│   └── visualization/
+│       ├── generate-charts.py
+│       └── comparative-plots.py
+│
+├── config/                         # Experiment configuration
+│   ├── test-parameters.yml         # RAM/CPU matrix, thresholds, prompts
+│   ├── models.yml                  # Model list and quantization variants
+│   └── infrastructure.yml
+│
+├── monitoring/                     # Prometheus + Grafana configs
+│   ├── prometheus/
+│   │   └── prometheus.yml
+│   └── grafana/
+│       └── dashboards/
+│
+└── docs/
+    ├── agents/                     # Project documentation
+    │   ├── source_of_truth.md      # Dissertation outline (Ukrainian)
+    │   ├── technology_stack.md
+    │   ├── metrics.md
+    │   ├── testing.md
+    │   ├── deployment_docker.md
+    │   └── deployment_vm.md
+    └── models/                     # Per-model notes
+        ├── phi.md
+        ├── llama.md
+        ├── mistral.md
+        └── gemma.md
 ```
 
 ## Prerequisites

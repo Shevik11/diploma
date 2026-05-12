@@ -106,7 +106,9 @@ deployment_state = {
         "model": None,
         "cpu": 0,
         "memory": 0,
-        "latency": 0
+        "latency": 0,
+        "ram_gb": None,
+        "cpu_cores": None,
     },
     "vm": {
         "status": "idle",
@@ -114,7 +116,9 @@ deployment_state = {
         "model": None,
         "cpu": 0,
         "memory": 0,
-        "latency": 0
+        "latency": 0,
+        "ram_gb": None,
+        "cpu_cores": None,
     }
 }
 
@@ -172,6 +176,8 @@ VM_TECHNOLOGIES = [
 class DeploymentRequest(BaseModel):
     model: str
     technology: str
+    ram_gb: int | None = None
+    cpu_cores: float | None = None
 
 
 class TestRequest(BaseModel):
@@ -269,6 +275,46 @@ TESTS = {
         "script": "compare_models.py",
         "duration_range": (60, 300),
     },
+    "cold_start": {
+        "name": "Cold Start Test",
+        "script": "cold_start_test.py",
+        "duration_range": (60, 300),
+    },
+    "resource_usage": {
+        "name": "Resource Usage Test (RAM / CPU)",
+        "script": "resource_usage_test.py",
+        "duration_range": (60, 300),
+    },
+    "oom_detection": {
+        "name": "OOM Detection & Boundary Test",
+        "script": "oom_detection_test.py",
+        "duration_range": (120, 600),
+    },
+    "ram_boundary": {
+        "name": "RAM Boundary Sweep (§3.3)",
+        "script": "ram_boundary_test.py",
+        "duration_range": (180, 900),
+    },
+    "config_matrix": {
+        "name": "Config Matrix (§3.2)",
+        "script": "config_matrix_test.py",
+        "duration_range": (300, 1800),
+    },
+    "vram_monitor": {
+        "name": "VRAM Monitor (§4.2)",
+        "script": "vram_monitor_test.py",
+        "duration_range": (30, 180),
+    },
+    "cloud_cost": {
+        "name": "Cloud Cost Calculator (§6)",
+        "script": "cloud_cost_calculator.py",
+        "duration_range": (30, 180),
+    },
+    "quant_compare": {
+        "name": "Quantization Compare (Q4 vs Q8, §2.1)",
+        "script": "quantization_compare_test.py",
+        "duration_range": (60, 300),
+    },
     "run_all": {
         "name": "Run All Tests",
         "script": "run_all_tests.py",
@@ -277,7 +323,16 @@ TESTS = {
 }
 
 SCRIPTS_DIR = Path(__file__).parent / "scripts" / "tests"
+if not SCRIPTS_DIR.exists():
+    _parent_scripts = Path(__file__).parent.parent / "scripts" / "tests"
+    if _parent_scripts.exists():
+        SCRIPTS_DIR = _parent_scripts
+
 RESULTS_DIR = Path(__file__).parent / "results"
+if not any(RESULTS_DIR.glob("*.json")):
+    _parent_results = Path(__file__).parent.parent / "results"
+    if any(_parent_results.glob("*.json")):
+        RESULTS_DIR = _parent_results
 
 # Technology to port mapping
 TECH_PORTS = {
@@ -421,24 +476,44 @@ def _build_model_catalog(installed_models: list[str]) -> list[dict]:
     return models
 
 
-def _set_container_running_state(model: str, technology: str):
+def _set_container_running_state(model: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
     """Update container deployment state to running with fresh metrics."""
     deployment_state["container"]["status"] = "running"
     deployment_state["container"]["technology"] = technology
     deployment_state["container"]["model"] = model
     deployment_state["container"]["message"] = ""
+    deployment_state["container"]["ram_gb"] = ram_gb
+    deployment_state["container"]["cpu_cores"] = cpu_cores
 
     deployment_state["container"]["cpu"] = round(random.uniform(10, 40), 1)
     deployment_state["container"]["memory"] = round(random.uniform(20, 50), 1)
     deployment_state["container"]["latency"] = round(random.uniform(20, 50), 0)
 
+    # Apply Docker resource limits if requested
+    if docker_client and (ram_gb or cpu_cores):
+        container_name_map = {"ollama": "ollama", "llama-cpp": "llama-cpp", "vllm": "vllm"}
+        cname = container_name_map.get(technology)
+        if cname:
+            try:
+                container = docker_client.containers.get(cname)
+                update_kwargs = {}
+                if ram_gb:
+                    update_kwargs["mem_limit"] = f"{ram_gb}g"
+                    update_kwargs["memswap_limit"] = f"{ram_gb}g"
+                if cpu_cores:
+                    update_kwargs["nano_cpus"] = int(cpu_cores * 1e9)
+                container.update(**update_kwargs)
+                logger.info(f"Applied limits to '{cname}': {update_kwargs}")
+            except Exception as e:
+                logger.warning(f"Could not apply resource limits to '{cname}': {e}")
 
-async def _pull_and_start_container(model: str, technology: str):
+
+async def _pull_and_start_container(model: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
     """Pull missing Ollama model in background and switch container to running."""
     resolved = _get_model_name(model, technology)
     try:
         await _pull_ollama_model(resolved)
-        _set_container_running_state(model, technology)
+        _set_container_running_state(model, technology, ram_gb, cpu_cores)
         deployment_state["container"]["message"] = f"Model '{resolved}' is ready"
     except Exception as e:
         deployment_state["container"]["status"] = "idle"
@@ -709,7 +784,7 @@ async def start_container(request: DeploymentRequest, background_tasks: Backgrou
 
             if resolved not in pulling_models:
                 pulling_models.add(resolved)
-                background_tasks.add_task(_pull_and_start_container, request.model, request.technology)
+                background_tasks.add_task(_pull_and_start_container, request.model, request.technology, request.ram_gb, request.cpu_cores)
 
             return {
                 "success": True,
@@ -719,7 +794,7 @@ async def start_container(request: DeploymentRequest, background_tasks: Backgrou
 
     await _resolve_and_validate_model(request.model, request.technology)
 
-    _set_container_running_state(request.model, request.technology)
+    _set_container_running_state(request.model, request.technology, request.ram_gb, request.cpu_cores)
 
     return {"success": True, "state": deployment_state["container"]}
 
@@ -744,6 +819,8 @@ async def start_vm(request: DeploymentRequest):
     deployment_state["vm"]["status"] = "running"
     deployment_state["vm"]["technology"] = request.technology
     deployment_state["vm"]["model"] = request.model
+    deployment_state["vm"]["ram_gb"] = request.ram_gb
+    deployment_state["vm"]["cpu_cores"] = request.cpu_cores
 
     deployment_state["vm"]["cpu"] = round(random.uniform(30, 70), 1)
     deployment_state["vm"]["memory"] = round(random.uniform(40, 80), 1)
@@ -885,12 +962,30 @@ class RunAllRequest(BaseModel):
     model: str
     platform: str = "docker"
     technology: str = "ollama"
+    ram_gb: int | None = None
+    cpu_cores: float | None = None
 
 
 @app.get("/api/benchmarks/status")
 async def get_benchmark_status():
     """Get current benchmark status"""
     return benchmark_state
+
+
+@app.post("/api/benchmarks/reset")
+async def reset_benchmark_state():
+    """Reset benchmark state (emergency reset if stuck)."""
+    global benchmark_state
+    benchmark_state["running"] = False
+    benchmark_state["progress"] = 0
+    benchmark_state["status"] = "idle"
+    benchmark_state["message"] = "Reset via API"
+    benchmark_state["test_results"] = []
+    benchmark_state["result_filepath"] = ""
+    benchmark_state["result_backup"] = None
+    benchmark_state["model"] = None
+    logger.info("Benchmark state reset via API")
+    return {"success": True, "message": "Benchmark state reset"}
 
 
 @app.get("/api/benchmarks/framework/status")
@@ -1011,12 +1106,14 @@ async def run_all_tests_endpoint(request: RunAllRequest, background_tasks: Backg
         model_name,
         request.platform,
         request.technology,
+        request.ram_gb,
+        request.cpu_cores,
     )
 
     return {"success": True, "message": "Started benchmarks and tests in background"}
 
 
-async def _run_all_tests_background(model: str, platform: str, technology: str):
+async def _run_all_tests_background(model: str, platform: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
     """Background task: Phase 1 = inference benchmarks, Phase 2 = test scripts."""
     global benchmark_state
     model_name = _get_model_name(model, technology)
@@ -1038,6 +1135,8 @@ async def _run_all_tests_background(model: str, platform: str, technology: str):
                 model=model_name,
                 progress_callback=progress_callback,
             )
+            summary.ram_gb = ram_gb
+            summary.cpu_cores = cpu_cores
             benchmark_state["result_backup"] = asdict(summary)
             result_filepath = save_benchmark_results(summary)
             benchmark_state["result_filepath"] = result_filepath
@@ -1071,6 +1170,20 @@ async def _run_all_tests_background(model: str, platform: str, technology: str):
                 None, _run_test_subprocess, script_path, model_name, port, 600, technology
             )
 
+            # Merge individual test script result file into test_result, then delete it
+            raw_data = None
+            individual_file = _extract_saved_result_file_path(
+                (result.get("stdout") or "") + (result.get("stderr") or "")
+            )
+            if individual_file and individual_file.exists():
+                try:
+                    with open(individual_file, "r", encoding="utf-8") as f:
+                        raw_data = json.load(f)
+                    individual_file.unlink()
+                    logger.info(f"Merged and deleted individual result file: {individual_file.name}")
+                except Exception as e:
+                    logger.warning(f"Could not merge/delete {individual_file}: {e}")
+
             test_result = {
                 "id": test_id,
                 "name": test["name"],
@@ -1079,11 +1192,12 @@ async def _run_all_tests_background(model: str, platform: str, technology: str):
                 "stdout": result.get("stdout", ""),
                 "stderr": result.get("stderr", ""),
                 "details": result.get("details", []),
+                "raw_data": raw_data,
             }
             test_results.append(test_result)
             benchmark_state["test_results"] = test_results
 
-            # Save progressively
+            # Save progressively into the single master file
             if result_filepath:
                 _save_test_results(result_filepath, test_results)
 
@@ -1119,13 +1233,7 @@ async def get_benchmark_results():
 @app.get("/api/benchmarks/results/{filename}")
 async def get_benchmark_result(filename: str):
     """Get specific benchmark result by filename"""
-    results_dir = Path(__file__).parent / "results"
-
-    # Also check parent results dir
-    if not (results_dir / filename).exists():
-        results_dir = Path(__file__).parent.parent / "results"
-
-    filepath = results_dir / filename
+    filepath = RESULTS_DIR / filename
 
     if not filepath.exists():
         raise HTTPException(status_code=404, detail="Result not found")

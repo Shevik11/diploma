@@ -1,4 +1,13 @@
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 interface MetricsChartProps {
   data: Array<{
@@ -20,17 +29,17 @@ export function MetricsChart({ data, metric }: MetricsChartProps) {
           <YAxis tick={{ fontSize: 12 }} />
           <Tooltip />
           <Legend />
-          <Line 
-            type="monotone" 
-            dataKey="container" 
-            stroke="#3b82f6" 
+          <Line
+            type="monotone"
+            dataKey="container"
+            stroke="#000000"
             strokeWidth={2}
             name="Container"
           />
-          <Line 
-            type="monotone" 
-            dataKey="vm" 
-            stroke="#8b5cf6" 
+          <Line
+            type="monotone"
+            dataKey="vm"
+            stroke="#9ca3af"
             strokeWidth={2}
             name="VM"
           />

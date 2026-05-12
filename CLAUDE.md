@@ -28,7 +28,6 @@ npm run lint      # ESLint check
 
 ### Docker (all services)
 ```bash
-cd docker
 docker-compose up                          # Core services (frontend, backend, ollama)
 docker-compose --profile monitoring up    # Add cAdvisor
 docker-compose --profile llama-cpp up    # Add llama.cpp
@@ -101,20 +100,19 @@ Backend (FastAPI :8000)
 
 ## Project Documentation
 
-The `agents/` directory contains canonical documentation for this project:
-- `agents/source_of_truth.md` — Dissertation outline (Ukrainian)
-- `agents/project_structure.md` — Directory layout and conventions
-- `agents/technology_stack.md` — Full tech stack reference
-- `agents/metrics.md` — Metrics collection guide
-- `agents/testing.md` — Test requirements
-- `agents/deployment_docker.md` / `deployment_vm.md` — Deployment guides
+The `docs/agents/` directory contains canonical documentation for this project:
+- `docs/agents/source_of_truth.md` — Dissertation outline (Ukrainian)
+- `docs/agents/project_structure.md` — Directory layout and conventions
+- `docs/agents/technology_stack.md` — Full tech stack reference
+- `docs/agents/metrics.md` — Metrics collection guide
+- `docs/agents/testing.md` — Test requirements
+- `docs/agents/deployment_docker.md` / `deployment_vm.md` — Deployment guides
 
 ## Post-Change Validation
 
 After making any code changes, verify the stack still works by running Docker and checking all services are healthy:
 
 ```bash
-cd docker
 docker-compose up --build -d
 # Wait for services to start, then check health
 docker-compose ps
@@ -139,5 +137,5 @@ If any service fails to start or returns errors, fix the issue before considerin
 - Results are stored in `/results/` as JSON; never commit raw benchmark data
 - The backend mounts `/var/run/docker.sock` to manage containers directly
 - Frontend dev server proxies `/api` and `/ws` to the backend (configured in `vite.config.ts`)
-- Python dependencies: `backend/requirements.txt` for runtime; `pyproject.toml` for analysis/processing tools
-- The `.junie/` directory contains AI assistant memory/feedback — check it for project-specific corrections
+- Python dependencies: `backend/requirements.txt` for runtime; `scripts/tests/requirements.txt` for test scripts
+- Results are saved as a single JSON file per run, named `{model}_{ram}GB_{cpu}cores_{tech}_{platform}_{datetime}.json`
