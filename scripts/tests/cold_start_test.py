@@ -26,16 +26,26 @@ TTFT_THRESHOLD_S = 3.0         # thesis threshold: TTFT < 3s
 
 
 def _unload_model(host, port, model_name):
-    """Evict model from Ollama memory by setting keep_alive=0."""
+    """Evict model from Ollama memory by setting keep_alive=0.
+
+    Returns (ok, error). Failures must not be swallowed silently: if the unload
+    request fails or Ollama returns a non-2xx status, the subsequent run can no
+    longer be assumed cold, so the caller must mark the cold measurement as
+    invalid rather than reporting a misleading load time.
+    """
     try:
-        requests.post(
+        response = requests.post(
             f"http://{host}:{port}/api/generate",
             json={"model": model_name, "prompt": "", "keep_alive": 0},
             timeout=30,
         )
-    except Exception:
-        pass
+        response.raise_for_status()
+    except Exception as e:
+        print(f"  [WARN] Unload request failed ({e}); next run may not be truly cold.",
+              file=sys.stderr)
+        return False, str(e)
     time.sleep(1)
+    return True, None
 
 
 def _run_inference(url, model_name, prompt, keep_alive="5m"):
@@ -137,9 +147,21 @@ def test_cold_start(model_name, port=11434):
 
         # --- Cold run ---
         print("  Unloading model from memory...")
-        _unload_model(host, port, model_name)
-        print("  Cold run...")
-        cold = _run_inference(url, model_name, prompt)
+        unload_ok, unload_err = _unload_model(host, port, model_name)
+        if not unload_ok:
+            # The subsequent inference cannot be trusted as a cold start, so we
+            # do not record a "cold" measurement that would silently corrupt
+            # the core metric this script reports.
+            print(f"  [SKIP] Cold run skipped: model unload failed ({unload_err}).")
+            cold = {
+                "success": False,
+                "error": f"unload_failed: {unload_err}",
+                "cold_invalid": True,
+                "wall_time_s": 0.0,
+            }
+        else:
+            print("  Cold run...")
+            cold = _run_inference(url, model_name, prompt)
 
         # --- Warm run (model already in memory) ---
         print("  Warm run...")
