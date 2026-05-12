@@ -501,10 +501,13 @@ def _set_container_running_state(model: str, technology: str, ram_gb: int | None
                     update_kwargs["mem_limit"] = f"{ram_gb}g"
                     update_kwargs["memswap_limit"] = f"{ram_gb}g"
                 if cpu_cores:
-                    update_kwargs["nano_cpus"] = int(cpu_cores * 1e9)
+                    # docker-py 7.0.0 Container.update() does not accept nano_cpus;
+                    # use cpu_period/cpu_quota to express the CPU limit instead.
+                    update_kwargs["cpu_period"] = 100000
+                    update_kwargs["cpu_quota"] = int(cpu_cores * 100000)
                 container.update(**update_kwargs)
                 logger.info(f"Applied limits to '{cname}': {update_kwargs}")
-            except Exception as e:
+            except docker.errors.APIError as e:
                 logger.warning(f"Could not apply resource limits to '{cname}': {e}")
 
 
@@ -588,8 +591,13 @@ def _run_test_subprocess(script_path: str, model_name: str, port: int, timeout: 
         }
 
 
-def _save_test_results(filepath: str, test_results: list):
-    """Save test_results into benchmark JSON file; recreate file if it was removed."""
+def _save_test_results(filepath: str, test_results: list) -> bool:
+    """Save test_results into benchmark JSON file; recreate file if it was removed.
+
+    Returns True if the file was written successfully, False otherwise. Callers
+    that need to safely delete upstream per-test artifacts should only do so
+    after this function returns True.
+    """
     try:
         data = None
         if Path(filepath).exists():
@@ -631,8 +639,10 @@ def _save_test_results(filepath: str, test_results: list):
             json.dump(data, f, indent=2, ensure_ascii=False)
 
         logger.info(f"Saved {len(test_results)} test results to {filepath}")
+        return True
     except Exception as e:
         logger.error(f"Failed to save test results: {e}")
+        return False
 
 
 def _extract_saved_result_file_path(log_text: str) -> Optional[Path]:
@@ -973,9 +983,31 @@ async def get_benchmark_status():
 
 
 @app.post("/api/benchmarks/reset")
-async def reset_benchmark_state():
-    """Reset benchmark state (emergency reset if stuck)."""
+async def reset_benchmark_state(force: bool = False):
+    """Reset benchmark state (emergency reset if stuck).
+
+    Refuses to reset while a benchmark task is genuinely running unless
+    ``force=true`` is passed, to avoid stomping on an in-flight background
+    task which would otherwise interleave writes and corrupt results.
+    """
     global benchmark_state
+    if benchmark_state.get("running") and not force:
+        logger.warning(
+            "Benchmark reset refused: a benchmark task is currently running. "
+            "Pass force=true to reset anyway (may corrupt in-flight results)."
+        )
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "Benchmark is currently running; refusing to reset to avoid "
+                "corrupting in-flight results. Retry with ?force=true to override."
+            ),
+        )
+    if benchmark_state.get("running") and force:
+        logger.warning(
+            "Forced benchmark reset while running=True; in-flight background "
+            "task may still be writing to disk and could produce corrupted results."
+        )
     benchmark_state["running"] = False
     benchmark_state["progress"] = 0
     benchmark_state["status"] = "idle"
@@ -984,7 +1016,7 @@ async def reset_benchmark_state():
     benchmark_state["result_filepath"] = ""
     benchmark_state["result_backup"] = None
     benchmark_state["model"] = None
-    logger.info("Benchmark state reset via API")
+    logger.info("Benchmark state reset via API (force=%s)", force)
     return {"success": True, "message": "Benchmark state reset"}
 
 
@@ -1170,7 +1202,11 @@ async def _run_all_tests_background(model: str, platform: str, technology: str, 
                 None, _run_test_subprocess, script_path, model_name, port, 600, technology
             )
 
-            # Merge individual test script result file into test_result, then delete it
+            # Merge individual test script result file into test_result, but do
+            # NOT delete the per-test JSON yet: if the subsequent master-file
+            # write fails (disk full, encoding error, process killed) the raw
+            # payload would otherwise be unrecoverable. We defer unlink() until
+            # after the master file has been written successfully for this test.
             raw_data = None
             individual_file = _extract_saved_result_file_path(
                 (result.get("stdout") or "") + (result.get("stderr") or "")
@@ -1179,10 +1215,9 @@ async def _run_all_tests_background(model: str, platform: str, technology: str, 
                 try:
                     with open(individual_file, "r", encoding="utf-8") as f:
                         raw_data = json.load(f)
-                    individual_file.unlink()
-                    logger.info(f"Merged and deleted individual result file: {individual_file.name}")
+                    logger.info(f"Merged individual result file: {individual_file.name}")
                 except Exception as e:
-                    logger.warning(f"Could not merge/delete {individual_file}: {e}")
+                    logger.warning(f"Could not read {individual_file}: {e}")
 
             test_result = {
                 "id": test_id,
@@ -1197,9 +1232,28 @@ async def _run_all_tests_background(model: str, platform: str, technology: str, 
             test_results.append(test_result)
             benchmark_state["test_results"] = test_results
 
-            # Save progressively into the single master file
+            # Save progressively into the single master file; only after that
+            # write succeeds is it safe to remove the per-test JSON artifact.
+            save_ok = True
             if result_filepath:
-                _save_test_results(result_filepath, test_results)
+                save_ok = _save_test_results(result_filepath, test_results)
+
+            if (
+                save_ok
+                and raw_data is not None
+                and individual_file
+                and individual_file.exists()
+            ):
+                try:
+                    individual_file.unlink()
+                    logger.info(f"Deleted individual result file after master save: {individual_file.name}")
+                except Exception as e:
+                    logger.warning(f"Could not delete {individual_file}: {e}")
+            elif not save_ok and individual_file and individual_file.exists():
+                logger.warning(
+                    f"Master file save failed; keeping per-test artifact {individual_file} "
+                    "to preserve raw measurements."
+                )
 
             logger.info(f"Test {test_id}: {result['status']} in {result['duration']:.1f}s")
 
