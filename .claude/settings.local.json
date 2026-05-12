@@ -1,9 +1,1 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(cmd.exe /c \"taskkill /F /IM electron.exe\")",
-      "Read(//c/Users/tanoo/AppData/Roaming/SPB_16.6/claude-usage-widget/**)",
-      "Bash(timeout 5 npm start)"
-    ]
-  }
-}
+{}
