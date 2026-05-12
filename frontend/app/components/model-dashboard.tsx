@@ -29,9 +29,35 @@ import {
   BenchmarkResultFile,
   BenchmarkSummary,
   TestScriptResult,
+  isInfeasible,
   variantId,
   variantLabel,
 } from "@/app/services/api";
+
+/**
+ * A benchmark result file is considered "with results" for the dashboard
+ * if the backend actually executed at least one prompt or one test script
+ * for it. Infeasible runs (refused for lack of RAM) and empty placeholders
+ * are excluded so the graphs don't show models that have nothing to plot.
+ */
+function hasAnyResult(f: BenchmarkResultFile): boolean {
+  if (isInfeasible(f)) return false;
+  const s = f.summary;
+  const ranPrompts = !!s && ((s.successful || 0) > 0 || (s.total_prompts || 0) > 0);
+  const ranTests = (f.test_results?.length ?? 0) > 0;
+  return ranPrompts || ranTests;
+}
+
+/** Same idea, but at the loaded-summary level (used after the JSON fetch). */
+function summaryHasAnyResult(s: BenchmarkSummary | undefined | null): boolean {
+  if (!s) return false;
+  if (s.infeasible) return false;
+  const ranPrompts =
+    !!s.summary &&
+    ((s.summary.successful || 0) > 0 || (s.summary.total_prompts || 0) > 0);
+  const ranTests = (s.test_results?.length ?? 0) > 0 || (s.results?.length ?? 0) > 0;
+  return ranPrompts || ranTests;
+}
 
 // ─── Aggregate types & helpers ───────────────────────────────────────────────
 
@@ -1241,12 +1267,20 @@ export function ModelDashboard() {
   // variant label so existing widgets keep working unchanged. We also keep
   // the base `baseModel` name on each entry so the model-name filter can
   // narrow the pills to a single model's variants.
+  // Only files that actually produced data should drive the dashboard's
+  // graphs / pill list — infeasible runs and zero-prompt placeholders are
+  // excluded so empty bars no longer pollute the charts.
+  const usableFiles = useMemo(
+    () => files.filter(hasAnyResult),
+    [files],
+  );
+
   const allModels = useMemo(() => {
     const map = new Map<
       string,
       { label: string; count: number; baseModel: string }
     >();
-    files.forEach((f) => {
+    usableFiles.forEach((f) => {
       if (!f.model) return;
       const id = variantId(f);
       const cur = map.get(id);
@@ -1266,7 +1300,7 @@ export function ModelDashboard() {
         baseModel: v.baseModel,
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
-  }, [files]);
+  }, [usableFiles]);
 
   // Unique sorted list of base model names — populates the filter <select>.
   const baseModelOptions = useMemo(() => {
@@ -1336,7 +1370,9 @@ export function ModelDashboard() {
   // default to keep behavior consistent with the initial load.
   useEffect(() => {
     selectedModels.forEach((vid) => {
-      const missing = files.filter(
+      // Only fetch summaries for files that have actual results — skip
+      // infeasible / empty placeholders so we don't waste roundtrips.
+      const missing = usableFiles.filter(
         (f) => variantId(f) === vid && !summaryCache[f.filename],
       );
       if (!missing.length) return;
@@ -1367,16 +1403,19 @@ export function ModelDashboard() {
         });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedModels, files]);
+  }, [selectedModels, usableFiles]);
 
   const aggregates = useMemo(
     () =>
       Array.from(selectedModels)
         .map((vid) => {
-          const summaries = files
+          // Restrict to files that have actual data (skip infeasible /
+          // empty runs) AND to summaries that, once loaded, still contain
+          // at least one executed prompt or test script.
+          const summaries = usableFiles
             .filter((f) => variantId(f) === vid)
             .map((f) => summaryCache[f.filename])
-            .filter((s): s is BenchmarkSummary => !!s);
+            .filter((s): s is BenchmarkSummary => summaryHasAnyResult(s));
           if (!summaries.length) return null;
           // Use the human-readable variant label as the aggregate's `model`,
           // so that all charts/widgets render the variant correctly.
@@ -1384,7 +1423,7 @@ export function ModelDashboard() {
           return aggregateModel(label, summaries);
         })
         .filter((a): a is ModelAggregate => a !== null),
-    [selectedModels, summaryCache, files, labelMap],
+    [selectedModels, summaryCache, usableFiles, labelMap],
   );
 
   const toggleModel = (model: string) =>

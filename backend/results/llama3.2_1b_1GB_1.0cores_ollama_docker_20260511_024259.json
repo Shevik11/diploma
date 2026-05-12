@@ -1,0 +1,642 @@
+{
+  "model": "llama3.2:1b",
+  "platform": "docker",
+  "technology": "ollama",
+  "timestamp": "2026-05-11T02:42:59.253259",
+  "system_info": {
+    "cpu_count": 16,
+    "cpu_freq_mhz": 3201.0,
+    "memory_total_gb": 14.86,
+    "platform": "docker",
+    "timestamp": "2026-05-11T02:42:59.256545"
+  },
+  "results": [
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "What is 2+2?",
+      "response": "",
+      "inference": {
+        "first_token_latency_ms": 0,
+        "total_duration_ms": 0,
+        "tokens_generated": 0,
+        "tokens_per_second": 0,
+        "prompt_tokens": 0,
+        "model_load_time_ms": null
+      },
+      "resources": {
+        "cpu_percent": 0.0,
+        "memory_percent": 72.1,
+        "memory_used_mb": 10970.23046875,
+        "memory_peak_mb": 10970.23046875
+      },
+      "success": false,
+      "error": "HTTP 500: llama runner process has terminated: signal: killed (after 3 attempts)"
+    },
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "Say hello in French.",
+      "response": "",
+      "inference": {
+        "first_token_latency_ms": 0,
+        "total_duration_ms": 0,
+        "tokens_generated": 0,
+        "tokens_per_second": 0,
+        "prompt_tokens": 0,
+        "model_load_time_ms": null
+      },
+      "resources": {
+        "cpu_percent": 0.0,
+        "memory_percent": 68.4,
+        "memory_used_mb": 10408.88671875,
+        "memory_peak_mb": 10408.88671875
+      },
+      "success": false,
+      "error": "HTTP 500: llama runner process has terminated: signal: killed (after 3 attempts)"
+    },
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "What color is the sky?",
+      "response": "",
+      "inference": {
+        "first_token_latency_ms": 0,
+        "total_duration_ms": 0,
+        "tokens_generated": 0,
+        "tokens_per_second": 0,
+        "prompt_tokens": 0,
+        "model_load_time_ms": null
+      },
+      "resources": {
+        "cpu_percent": 1.1,
+        "memory_percent": 69.3,
+        "memory_used_mb": 10542.19921875,
+        "memory_peak_mb": 10542.19921875
+      },
+      "success": false,
+      "error": "HTTP 500: llama runner process has terminated: signal: killed (after 3 attempts)"
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "Explain quantum computing in 2-3 sentences.",
+      "response": "",
+      "inference": {
+        "first_token_latency_ms": 0,
+        "total_duration_ms": 0,
+        "tokens_generated": 0,
+        "tokens_per_second": 0,
+        "prompt_tokens": 0,
+        "model_load_time_ms": null
+      },
+      "resources": {
+        "cpu_percent": 0.0,
+        "memory_percent": 67.9,
+        "memory_used_mb": 10324.65234375,
+        "memory_peak_mb": 10324.65234375
+      },
+      "success": false,
+      "error": "HTTP 500: llama runner process has terminated: signal: killed (after 3 attempts)"
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "Write a haiku about technology.",
+      "response": "",
+      "inference": {
+        "first_token_latency_ms": 0,
+        "total_duration_ms": 0,
+        "tokens_generated": 0,
+        "tokens_per_second": 0,
+        "prompt_tokens": 0,
+        "model_load_time_ms": null
+      },
+      "resources": {
+        "cpu_percent": 0.0,
+        "memory_percent": 69.0,
+        "memory_used_mb": 10492.67578125,
+        "memory_peak_mb": 10492.67578125
+      },
+      "success": false,
+      "error": "HTTP 500: llama runner process has terminated: signal: killed (after 3 attempts)"
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "What are the main differences between Python and JavaScript?",
+      "response": "",
+      "inference": {
+        "first_token_latency_ms": 0,
+        "total_duration_ms": 0,
+        "tokens_generated": 0,
+        "tokens_per_second": 0,
+        "prompt_tokens": 0,
+        "model_load_time_ms": null
+      },
+      "resources": {
+        "cpu_percent": 2.0,
+        "memory_percent": 68.6,
+        "memory_used_mb": 10435.53125,
+        "memory_peak_mb": 10435.53125
+      },
+      "success": false,
+      "error": "HTTP 500: llama runner process has terminated: signal: killed (after 3 attempts)"
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Explain the process of photosynthesis in detail, including the light and dark reactions.",
+      "response": "",
+      "inference": {
+        "first_token_latency_ms": 0,
+        "total_duration_ms": 0,
+        "tokens_generated": 0,
+        "tokens_per_second": 0,
+        "prompt_tokens": 0,
+        "model_load_time_ms": null
+      },
+      "resources": {
+        "cpu_percent": 6.2,
+        "memory_percent": 65.4,
+        "memory_used_mb": 9952.4765625,
+        "memory_peak_mb": 9952.4765625
+      },
+      "success": false,
+      "error": "HTTP 500: llama runner process has terminated: signal: killed (after 3 attempts)"
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Write a short story about a robot learning to feel emotions. Include dialogue.",
+      "response": "",
+      "inference": {
+        "first_token_latency_ms": 0,
+        "total_duration_ms": 0,
+        "tokens_generated": 0,
+        "tokens_per_second": 0,
+        "prompt_tokens": 0,
+        "model_load_time_ms": null
+      },
+      "resources": {
+        "cpu_percent": 1.1,
+        "memory_percent": 63.0,
+        "memory_used_mb": 9578.90625,
+        "memory_peak_mb": 9578.90625
+      },
+      "success": false,
+      "error": "ReadTimeout:  (after 3 attempts)"
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Describe the history of artificial intelligence from its origins to modern developments.",
+      "response": "",
+      "inference": {
+        "first_token_latency_ms": 0,
+        "total_duration_ms": 0,
+        "tokens_generated": 0,
+        "tokens_per_second": 0,
+        "prompt_tokens": 0,
+        "model_load_time_ms": null
+      },
+      "resources": {
+        "cpu_percent": 7.1,
+        "memory_percent": 63.5,
+        "memory_used_mb": 9659.8203125,
+        "memory_peak_mb": 9659.8203125
+      },
+      "success": false,
+      "error": "ReadTimeout:  (after 3 attempts)"
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Write a Python function to check if a number is prime.",
+      "response": "",
+      "inference": {
+        "first_token_latency_ms": 0,
+        "total_duration_ms": 0,
+        "tokens_generated": 0,
+        "tokens_per_second": 0,
+        "prompt_tokens": 0,
+        "model_load_time_ms": null
+      },
+      "resources": {
+        "cpu_percent": 1.0,
+        "memory_percent": 63.3,
+        "memory_used_mb": 9635.265625,
+        "memory_peak_mb": 9635.265625
+      },
+      "success": false,
+      "error": "ReadTimeout:  (after 3 attempts)"
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Explain what this code does: for i in range(10): print(i*2)",
+      "response": "",
+      "inference": {
+        "first_token_latency_ms": 0,
+        "total_duration_ms": 0,
+        "tokens_generated": 0,
+        "tokens_per_second": 0,
+        "prompt_tokens": 0,
+        "model_load_time_ms": null
+      },
+      "resources": {
+        "cpu_percent": 9.0,
+        "memory_percent": 63.8,
+        "memory_used_mb": 9703.5078125,
+        "memory_peak_mb": 9703.5078125
+      },
+      "success": false,
+      "error": "ReadTimeout:  (after 3 attempts)"
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Write a simple REST API endpoint in FastAPI that returns user data.",
+      "response": "",
+      "inference": {
+        "first_token_latency_ms": 0,
+        "total_duration_ms": 0,
+        "tokens_generated": 0,
+        "tokens_per_second": 0,
+        "prompt_tokens": 0,
+        "model_load_time_ms": null
+      },
+      "resources": {
+        "cpu_percent": 8.3,
+        "memory_percent": 70.5,
+        "memory_used_mb": 10723.01171875,
+        "memory_peak_mb": 10723.01171875
+      },
+      "success": false,
+      "error": "ReadTimeout:  (after 3 attempts)"
+    },
+    {
+      "category": "reasoning",
+      "run": 1,
+      "prompt": "If all birds can fly and penguins are birds, can penguins fly? Explain your reasoning.",
+      "response": "",
+      "inference": {
+        "first_token_latency_ms": 0,
+        "total_duration_ms": 0,
+        "tokens_generated": 0,
+        "tokens_per_second": 0,
+        "prompt_tokens": 0,
+        "model_load_time_ms": null
+      },
+      "resources": {
+        "cpu_percent": 0.0,
+        "memory_percent": 66.2,
+        "memory_used_mb": 10074.99609375,
+        "memory_peak_mb": 10074.99609375
+      },
+      "success": false,
+      "error": "ReadTimeout:  (after 3 attempts)"
+    },
+    {
+      "category": "reasoning",
+      "run": 1,
+      "prompt": "A train leaves station A at 9:00 AM traveling at 60 mph. Another train leaves station B at 10:00 AM traveling at 80 mph toward station A. If the stations are 280 miles apart, when will they meet?",
+      "response": "",
+      "inference": {
+        "first_token_latency_ms": 0,
+        "total_duration_ms": 0,
+        "tokens_generated": 0,
+        "tokens_per_second": 0,
+        "prompt_tokens": 0,
+        "model_load_time_ms": null
+      },
+      "resources": {
+        "cpu_percent": 1.9,
+        "memory_percent": 65.9,
+        "memory_used_mb": 10018.078125,
+        "memory_peak_mb": 10018.078125
+      },
+      "success": false,
+      "error": "ReadTimeout:  (after 3 attempts)"
+    }
+  ],
+  "summary": {
+    "total_prompts": 14,
+    "successful": 0,
+    "failed": 14,
+    "success_rate": 0.0,
+    "avg_tokens_per_second": 0,
+    "avg_latency_ms": 0,
+    "avg_first_token_latency_ms": 0,
+    "total_tokens_generated": 0,
+    "avg_cpu_percent": 0,
+    "avg_memory_percent": 0
+  },
+  "ram_gb": 1,
+  "cpu_cores": 1.0,
+  "started_at": "2026-05-11T00:57:06.702973",
+  "finished_at": "2026-05-11T02:42:59.253259",
+  "test_results": [
+    {
+      "id": "quality",
+      "name": "Quality Test",
+      "status": "passed",
+      "duration": 360.39,
+      "stdout": "\n=== Quality Assessment: llama3.2:1b ===\n\n[1/6] Factual Knowledge\n  Prompt: What is the capital of France?\n  [ERROR] Error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)\n[2/6] Math\n  Prompt: Calculate: 15 + 27\n  [ERROR] Error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)\n[3/6] Instruction Following\n  Prompt: List exactly 3 colors, separated by commas.\n  [ERROR] Error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)\n[4/6] Reasoning\n  Prompt: If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.\n  [ERROR] Error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)\n[5/6] Coherence\n  Prompt: Explain in 2 sentences what machine learning is.\n  [ERROR] Error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)\n[6/6] Code Understanding\n  Prompt: What does this Python code do: for i in range(5): print(i)\n  [ERROR] Error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)\n\n=== Final Score ===\nTotal: 0/70 (0.0%)\nRating: Poor\n\nResults saved to: D:\\LNU\\diploma\\results\\quality_llama3.2_1b_1778456939.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "Factual Knowledge",
+          "response": ""
+        },
+        {
+          "prompt": "Math",
+          "response": ""
+        },
+        {
+          "prompt": "Instruction Following",
+          "response": ""
+        },
+        {
+          "prompt": "Reasoning",
+          "response": ""
+        },
+        {
+          "prompt": "Coherence",
+          "response": ""
+        },
+        {
+          "prompt": "Code Understanding",
+          "response": ""
+        }
+      ],
+      "raw_data": {
+        "model": "llama3.2:1b",
+        "port": 11434,
+        "timestamp": 1778456579.5737681,
+        "tests": [
+          {
+            "category": "Factual Knowledge",
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)",
+            "score": 0,
+            "max_score": 10
+          },
+          {
+            "category": "Math",
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)",
+            "score": 0,
+            "max_score": 10
+          },
+          {
+            "category": "Instruction Following",
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)",
+            "score": 0,
+            "max_score": 10
+          },
+          {
+            "category": "Reasoning",
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)",
+            "score": 0,
+            "max_score": 15
+          },
+          {
+            "category": "Coherence",
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)",
+            "score": 0,
+            "max_score": 10
+          },
+          {
+            "category": "Code Understanding",
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)",
+            "score": 0,
+            "max_score": 15
+          }
+        ],
+        "total_score": 0,
+        "max_score": 70,
+        "percentage": 0.0,
+        "rating": "Poor"
+      }
+    },
+    {
+      "id": "advanced_quality",
+      "name": "Advanced Quality Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "performance",
+      "name": "Performance Test",
+      "status": "timeout",
+      "duration": 600.05,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "safety_robustness",
+      "name": "Safety & Robustness Test",
+      "status": "timeout",
+      "duration": 600.03,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "stress_consistency",
+      "name": "Stress & Consistency Test",
+      "status": "timeout",
+      "duration": 600.03,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "hard_tests",
+      "name": "Hard Tests",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "multilingual",
+      "name": "Multilingual Test",
+      "status": "failed",
+      "duration": 480.38,
+      "stdout": "\n============================================================\nMULTILINGUAL CAPABILITY TEST: llama3.2:1b\n============================================================\n\n[ 1/13] English to French Translation\n     Prompt: Translate the following sentence to French: 'The cat is sitting on the...\n     [ERROR] Error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)\n\n[ 2/13] English to Spanish Translation\n     Prompt: Translate to Spanish: 'Good morning, how are you today?'\n     [ERROR] Error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)\n\n[ 3/13] English to German Translation\n     Prompt: Translate to German: 'I would like a glass of water, please.'\n     [ERROR] Error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)\n\n[ 4/13] Reverse Translation (French to English)\n     Prompt: Translate this French sentence to English: 'Le soleil brille dans le c...\n     [ERROR] Error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)\n\n[ 5/13] Language Detection - Japanese\n",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\LNU\\diploma\\scripts\\tests\\multilingual_test.py\", line 354, in <module>\n    sys.exit(test_multilingual(model, port))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\scripts\\tests\\multilingual_test.py\", line 245, in test_multilingual\n    print(\n  File \"D:\\pitonchik\\Lib\\encodings\\cp1251.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 48-54: character maps to <undefined>\n",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "summarization",
+      "name": "Summarization Test",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "context_window",
+      "name": "Context Window Test",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cost_efficiency",
+      "name": "Cost Efficiency Test",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_mmlu",
+      "name": "MMLU Benchmark",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_reasoning",
+      "name": "Reasoning Benchmark (ARC / HellaSwag / Winogrande)",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_gsm8k",
+      "name": "GSM8K Math Benchmark",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_truthfulqa",
+      "name": "TruthfulQA Benchmark",
+      "status": "failed",
+      "duration": 0.07,
+      "stdout": "",
+      "stderr": "  File \"D:\\LNU\\diploma\\scripts\\tests\\benchmark_truthfulqa_test.py\", line 13\n    import refrom pathlib import Path\n                  ^^^^^^^\nSyntaxError: invalid syntax\n",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_humaneval",
+      "name": "HumanEval Code Benchmark",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cold_start",
+      "name": "Cold Start Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "resource_usage",
+      "name": "Resource Usage Test (RAM / CPU)",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "oom_detection",
+      "name": "OOM Detection & Boundary Test",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "ram_boundary",
+      "name": "RAM Boundary Sweep (§3.3)",
+      "status": "failed",
+      "duration": 0.72,
+      "stdout": "\n==============================================================\n  RAM BOUNDARY SWEEP  —  llama3.2:1b\n==============================================================\n  Container :  ollama\n  Levels    :  [8, 6, 5, 4, 3, 2, 1.5, 1] GB\n  Prompt    :  medium\n  Original  :  1.0 GB\n  Thresholds:  TTFT < 3.0s  |  TPS > 3.0  |  load < 60.0s\n==============================================================\n\n\nRestoring original limit (1.0 GB)…\n  WARNING: could not restore original limit: 500 Server Error for http+docker://localnpipe/v1.50/containers/f8c36befa84c75f09cbda44965f66721da5056376ba4339aa4c7339dae8605c1/update: Internal Server Error (\"Cannot update container f8c36befa84c75f09cbda44965f66721da5056376ba4339aa4c7339dae8605c1: runc did not terminate successfully: exit status 1: failed to write \"1073741824\": write /sys/fs/cgroup/memory/docker/f8c36befa84c75f09cbda44965f66721da5056376ba4339aa4c7339dae8605c1/memory.memsw.limit_in_bytes: device or resource busy\n: unknown\")\n  Done.\n",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\LNU\\diploma\\scripts\\tests\\ram_boundary_test.py\", line 488, in <module>\n    run_ram_boundary_sweep(\n  File \"D:\\LNU\\diploma\\scripts\\tests\\ram_boundary_test.py\", line 342, in run_ram_boundary_sweep\n    print(f\"\\u2500\\u2500 {ram_gb} GB {'\\u2500'*40}\")\n  File \"D:\\pitonchik\\Lib\\encodings\\cp1251.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>\n",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "config_matrix",
+      "name": "Config Matrix (§3.2)",
+      "status": "failed",
+      "duration": 0.4,
+      "stdout": "\n================================================================\n  CONFIG MATRIX TEST (§3.2)  —  llama3.2:1b\n================================================================\n  Container :  ollama\n  Combos    :  8 of 8\n  Prompt    :  medium\n  Original  :  1.0 GB / unlimited cores\n  GPU       :  NOT detected (GPU combos will be skipped)\n  Thresholds:  TTFT < 3.0s | TPS > 3.0 | load < 60.0s\n================================================================\n\n\nRestoring original limits (1.0 GB / unlimited cores)…\n  WARNING: could not restore original limits: 500 Server Error for http+docker://localnpipe/v1.50/containers/f8c36befa84c75f09cbda44965f66721da5056376ba4339aa4c7339dae8605c1/update: Internal Server Error (\"Cannot update container f8c36befa84c75f09cbda44965f66721da5056376ba4339aa4c7339dae8605c1: runc did not terminate successfully: exit status 1: failed to write \"1073741824\": write /sys/fs/cgroup/memory/docker/f8c36befa84c75f09cbda44965f66721da5056376ba4339aa4c7339dae8605c1/memory.memsw.limit_in_bytes: device or resource busy\n: unknown\")\n  Done.\n",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\LNU\\diploma\\scripts\\tests\\config_matrix_test.py\", line 565, in <module>\n    run_config_matrix(\n  File \"D:\\LNU\\diploma\\scripts\\tests\\config_matrix_test.py\", line 391, in run_config_matrix\n    print(f\"\\u2500\\u2500 Combo #{cid}: {combo['label']} {'\\u2500' * (40 - len(combo['label']))}\")\n  File \"D:\\pitonchik\\Lib\\encodings\\cp1251.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>\n",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "vram_monitor",
+      "name": "VRAM Monitor (§4.2)",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cloud_cost",
+      "name": "Cloud Cost Calculator (§6)",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "quant_compare",
+      "name": "Quantization Compare (Q4 vs Q8, §2.1)",
+      "status": "failed",
+      "duration": 0.29,
+      "stdout": "\n==============================================================\n  QUANTIZATION COMPARE — llama3.2:1b\n==============================================================\n  Variants: ['llama3.2:1b']\n\n==============================================================\n  SUMMARY\n==============================================================\n",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\LNU\\diploma\\scripts\\tests\\quantization_compare_test.py\", line 305, in <module>\n    sys.exit(run_quant_compare(a.model_name, a.port, vs))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\scripts\\tests\\quantization_compare_test.py\", line 275, in run_quant_compare\n    print(f\"  {r['variant']:<40} tps={s.get('avg_tps')}  q={s.get('avg_quality')}  \"\n  File \"D:\\pitonchik\\Lib\\encodings\\cp1251.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\u0394' in position 61: character maps to <undefined>\n",
+      "details": [],
+      "raw_data": null
+    }
+  ]
+}

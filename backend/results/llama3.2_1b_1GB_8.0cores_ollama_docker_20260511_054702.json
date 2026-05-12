@@ -1,0 +1,34 @@
+{
+  "model": "llama3.2:1b",
+  "platform": "docker",
+  "technology": "ollama",
+  "timestamp": "2026-05-11T05:47:02.009046",
+  "status": "not_enough_resources",
+  "started_at": "2026-05-11T05:47:02.009046",
+  "finished_at": "2026-05-11T05:47:02.009046",
+  "ram_gb": 1,
+  "cpu_cores": 8.0,
+  "system_info": {
+    "platform": "docker",
+    "timestamp": "2026-05-11T05:47:02.009046"
+  },
+  "results": [],
+  "test_results": [],
+  "summary": {
+    "total_prompts": 0,
+    "successful": 0,
+    "failed": 0,
+    "success_rate": 0,
+    "avg_tokens_per_second": 0,
+    "avg_latency_ms": 0,
+    "avg_first_token_latency_ms": 0,
+    "total_tokens_generated": 0,
+    "avg_cpu_percent": 0,
+    "avg_memory_percent": 0
+  },
+  "infeasible": {
+    "reason": "Insufficient RAM: 1 GB cannot load 'llama3.2:1b' with 8 worker threads (needs ~2 GB).",
+    "required_ram_gb": 2,
+    "skipped": true
+  }
+}
