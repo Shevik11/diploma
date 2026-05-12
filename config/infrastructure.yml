@@ -1,0 +1,75 @@
+# =============================================================================
+# Deployment infrastructure profiles used by the cost calculator and
+# the dissertation's container vs VM comparison.
+#
+# Cost figures are list prices in USD as of 2025-Q1; they are conservative
+# averages across major cloud providers (AWS / GCP / Azure equivalent
+# instances).  They are intentionally NOT secret — keeping them in version
+# control means the analysis is reproducible from the repo alone.
+# =============================================================================
+
+# Hardware profiles used by ``analysis/data-processing/cost-calculator.py``.
+# `usd_per_hour` is the reference cost of the underlying compute slot.
+# `electricity_kwh` is *only* used for "self-hosted" comparisons — at cloud
+# providers the energy cost is already baked into `usd_per_hour`.
+hardware_profiles:
+  - id: edge-cpu-1c-1g
+    label: "Edge: 1 vCPU / 1 GB"
+    cpu_cores: 1
+    ram_gb: 1
+    usd_per_hour: 0.0061     # AWS t4g.micro Frankfurt
+    electricity_kwh: 0.012   # ~12 W * 1 h = 0.012 kWh
+
+  - id: edge-cpu-2c-2g
+    label: "Edge: 2 vCPU / 2 GB"
+    cpu_cores: 2
+    ram_gb: 2
+    usd_per_hour: 0.0157     # AWS t3.small
+    electricity_kwh: 0.020
+
+  - id: server-cpu-4c-8g
+    label: "Server: 4 vCPU / 8 GB"
+    cpu_cores: 4
+    ram_gb: 8
+    usd_per_hour: 0.084      # AWS m6a.xlarge
+    electricity_kwh: 0.040
+
+  - id: server-cpu-8c-16g
+    label: "Server: 8 vCPU / 16 GB"
+    cpu_cores: 8
+    ram_gb: 16
+    usd_per_hour: 0.168      # AWS m6a.2xlarge
+    electricity_kwh: 0.075
+
+# Deployment options compared in the dissertation.  Container is taken as
+# the baseline; VM has a small overhead in startup time and a larger
+# one in memory (host kernel + guest kernel).
+deployments:
+  - id: docker
+    label: "Docker container"
+    cold_start_seconds: 5
+    memory_overhead_mb: 80
+    notes: "Single host, namespace isolation, near-native CPU performance."
+
+  - id: vm
+    label: "QEMU/KVM virtual machine"
+    cold_start_seconds: 35
+    memory_overhead_mb: 512
+    notes: "Full guest kernel; slightly higher latency, much higher RAM cost."
+
+  - id: bare-metal
+    label: "Bare-metal (host process)"
+    cold_start_seconds: 1
+    memory_overhead_mb: 0
+    notes: "Reference upper bound — no isolation."
+
+# Currency used everywhere in the analysis; switching to UAH/EUR is a
+# matter of changing this single value (and the `usd_per_hour` numbers).
+currency: USD
+
+# Reference electricity prices in USD per kWh — used by
+# ``cost-calculator.py`` when ``mode = self_hosted``.
+electricity_usd_per_kwh:
+  ukraine_residential: 0.041
+  eu_residential:      0.260
+  us_average:          0.166

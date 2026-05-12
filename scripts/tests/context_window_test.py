@@ -10,14 +10,33 @@ import os
 import time
 from pathlib import Path
 
+try:
+    from result_utils import save_results
+except Exception:  # pragma: no cover
+    save_results = None
+
 RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def test_context_window(model_name, port=11434):
-    """Run context window and memory tests"""
+    """Run context window and memory tests.
+
+    The required context size is taken from the prompt itself: each prompt's
+    expected output is small, but the haystack tests can be 4-8 KB.  The
+    Ollama option ``num_ctx`` controls the KV-cache size; pin it just large
+    enough to fit the longest prompt + a generous response.
+
+    The default is 4096, which fits every test in this file. To benchmark a
+    model with a smaller / larger native context, set the env variable
+    ``SLM_NUM_CTX`` (e.g. ``SLM_NUM_CTX=2048``).
+    """
     host = os.environ.get("SLM_TEST_HOST", "localhost")
     url = f"http://{host}:{port}/api/generate"
+    try:
+        num_ctx = int(os.environ.get("SLM_NUM_CTX", "4096"))
+    except ValueError:
+        num_ctx = 4096
 
     # Generate haystack text for needle-in-a-haystack tests
     filler = (
@@ -202,8 +221,9 @@ def test_context_window(model_name, port=11434):
             "stream": False,
             "options": {
                 "temperature": 0.1,
-                "num_ctx": 4096
-            }
+                "num_ctx": num_ctx,
+                "seed": 42,
+            },
         }
 
         try:
@@ -294,13 +314,16 @@ def test_context_window(model_name, port=11434):
     print(f"Rating: {rating}")
     print(f"{'='*60}\n")
 
-    output_file = RESULTS_DIR / f"context_window_{model_name.replace(':', '_')}_{int(time.time())}.json"
-    try:
-        with output_file.open('w', encoding='utf-8') as f:
-            json.dump(results, f, indent=2)
-        print(f"Results saved to: {output_file}\n")
-    except Exception as e:
-        print(f"Warning: Could not save results: {e}\n")
+    if save_results is not None:
+        save_results(results, "context_window", model_name, "context_window")
+    else:  # pragma: no cover
+        output_file = RESULTS_DIR / f"context_window_{model_name.replace(':', '_')}_{int(time.time())}.json"
+        try:
+            with output_file.open('w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            print(f"Results saved to: {output_file}\n")
+        except Exception as e:
+            print(f"Warning: Could not save results: {e}\n")
 
     return 0 if percentage >= 40 else 1
 

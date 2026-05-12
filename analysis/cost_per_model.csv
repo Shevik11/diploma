@@ -1,0 +1,9 @@
+model,ram_gb,cpu_cores,technology,platform,tok_per_s,hw_profile,usd_per_hour_cloud,kwh_per_hour,usd_per_million_tokens_cloud,usd_per_million_tokens_self_hosted,tokens_per_usd_cloud
+qwen2.5-coder:1.5b,2,2.0,ollama,docker,24.97,edge-cpu-2c-2g,0.0157,0.02,0.1747,0.0346,5724098.0
+qwen2.5-coder:1.5b,2,1.0,ollama,docker,15.26,edge-cpu-2c-2g,0.0157,0.02,0.2858,0.0567,3498950.0
+qwen2.5-coder:1.5b,2,4.0,ollama,docker,34.54,server-cpu-4c-8g,0.084,0.04,0.6755,0.0501,1480385.0
+qwen2.5-coder:1.5b,4,4.0,ollama,docker,28.96,server-cpu-4c-8g,0.084,0.04,0.8057,0.0597,1241157.0
+qwen2.5-coder:1.5b,4,2.0,ollama,docker,25.9,server-cpu-4c-8g,0.084,0.04,0.9009,0.0668,1110001.0
+qwen2.5-coder:1.5b,4,1.0,ollama,docker,15.48,server-cpu-4c-8g,0.084,0.04,1.5073,0.1117,663438.0
+qwen2.5-coder:1.5b,4,8.0,ollama,docker,30.48,server-cpu-8c-16g,0.168,0.075,1.5311,0.1064,653125.0
+qwen2.5-coder:1.5b,2,8.0,ollama,docker,29.02,server-cpu-8c-16g,0.168,0.075,1.6081,0.1118,621852.0
