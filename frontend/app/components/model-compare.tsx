@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
-import { Loader2, GitCompare, Plus, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Loader2, GitCompare, Plus, X, Radio } from "lucide-react";
 import {
   api,
   BenchmarkResultFile,
   BenchmarkSummary,
+  DeploymentState,
   TestScriptResult,
 } from "@/app/services/api";
 import {
@@ -230,6 +231,15 @@ export function ModelCompare() {
   >({});
   const [loadingModels, setLoadingModels] = useState<Set<string>>(new Set());
 
+  // Live metrics streamed over WebSocket (refreshed every 2s by backend heartbeat)
+  const [liveMetrics, setLiveMetrics] = useState<{
+    container: DeploymentState;
+    vm: DeploymentState;
+  } | null>(null);
+  const [liveUpdatedAt, setLiveUpdatedAt] = useState<number | null>(null);
+  const selectedModelsRef = useRef(selectedModels);
+  selectedModelsRef.current = selectedModels;
+
   // List of unique models derived from files
   const models = useMemo(() => {
     const map = new Map<string, number>();
@@ -310,6 +320,97 @@ export function ModelCompare() {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedModels, files]);
+
+  // Real-time metrics streaming via WebSocket. The backend pushes updates on
+  // every client ping (2s heartbeat in api.connectWebSocket), so each message
+  // is our cue to (a) refresh the live CPU/Memory/Latency overlay and (b)
+  // re-pull the list of benchmark result files plus any newly-completed
+  // summaries for the currently selected models. This satisfies the project
+  // guideline that frontend metric visualizations refresh every 2 seconds.
+  useEffect(() => {
+    let ws: WebSocket | null = null;
+    let cancelled = false;
+    let lastFilesRefresh = 0;
+    let lastSummaryRefresh = 0;
+
+    const refreshFiles = async () => {
+      try {
+        const r = await api.getBenchmarkResults();
+        if (!cancelled) setFiles(r);
+      } catch {
+        /* keep previous snapshot on transient failure */
+      }
+    };
+
+    const refreshSelectedSummaries = async () => {
+      const current = selectedModelsRef.current;
+      // Force re-fetch latest summary for every selected model so the
+      // aggregated comparison numbers stay live.
+      await Promise.all(
+        current.map(async (m) => {
+          if (!m) return;
+          try {
+            const targetFiles = files.filter((f) => f.model === m);
+            const fresh = await Promise.all(
+              targetFiles.map((f) =>
+                api
+                  .getBenchmarkResult(f.filename)
+                  .then((s) => [f.filename, s] as const)
+                  .catch(() => null),
+              ),
+            );
+            if (cancelled) return;
+            setSummaryCache((prev) => {
+              const next = { ...prev };
+              fresh.forEach((entry) => {
+                if (entry) next[entry[0]] = entry[1];
+              });
+              return next;
+            });
+          } catch {
+            /* ignore individual model refresh failures */
+          }
+        }),
+      );
+    };
+
+    try {
+      ws = api.connectWebSocket((data) => {
+        if (cancelled) return;
+        setLiveMetrics(data);
+        setLiveUpdatedAt(Date.now());
+
+        // Throttle expensive REST refreshes to the 2s WS cadence so we never
+        // pile up overlapping requests if the socket fires faster than expected.
+        const now = Date.now();
+        if (now - lastFilesRefresh >= 2000) {
+          lastFilesRefresh = now;
+          void refreshFiles();
+        }
+        if (now - lastSummaryRefresh >= 2000) {
+          lastSummaryRefresh = now;
+          void refreshSelectedSummaries();
+        }
+      });
+    } catch {
+      // WebSocket unavailable; comparison still works with the initial REST snapshot.
+    }
+
+    return () => {
+      cancelled = true;
+      if (ws && ws.readyState !== WebSocket.CLOSED) {
+        try {
+          ws.close();
+        } catch {
+          /* noop */
+        }
+      }
+    };
+    // We intentionally do not depend on `files`/`selectedModels` directly:
+    // they are read via the ref / closure on each tick to keep a single
+    // long-lived WS connection.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const aggregateFor = (model: string | undefined): ModelAggregate | null => {
     if (!model) return null;
@@ -482,6 +583,63 @@ export function ModelCompare() {
           gridStyle={gridStyle}
         />
 
+        {/* Live metrics (WebSocket, 2s) */}
+        <SectionHeader
+          title={
+            liveUpdatedAt
+              ? `Live container metrics (WebSocket · updated ${Math.max(
+                  0,
+                  Math.round((Date.now() - liveUpdatedAt) / 1000),
+                )}s ago)`
+              : "Live container metrics (WebSocket · waiting…)"
+          }
+        />
+        <LiveMetricsRow
+          label={
+            <span className="inline-flex items-center gap-1">
+              <Radio
+                className={`w-3 h-3 ${liveMetrics ? "text-green-600" : "text-zinc-400"}`}
+              />
+              CPU (live)
+            </span>
+          }
+          aggregates={aggregates}
+          live={liveMetrics?.container}
+          field="cpu"
+          unit="%"
+          gridStyle={gridStyle}
+        />
+        <LiveMetricsRow
+          label={
+            <span className="inline-flex items-center gap-1">
+              <Radio
+                className={`w-3 h-3 ${liveMetrics ? "text-green-600" : "text-zinc-400"}`}
+              />
+              Memory (live)
+            </span>
+          }
+          aggregates={aggregates}
+          live={liveMetrics?.container}
+          field="memory"
+          unit="%"
+          gridStyle={gridStyle}
+        />
+        <LiveMetricsRow
+          label={
+            <span className="inline-flex items-center gap-1">
+              <Radio
+                className={`w-3 h-3 ${liveMetrics ? "text-green-600" : "text-zinc-400"}`}
+              />
+              Latency (live)
+            </span>
+          }
+          aggregates={aggregates}
+          live={liveMetrics?.container}
+          field="latency"
+          unit=" ms"
+          gridStyle={gridStyle}
+        />
+
         {/* Tests */}
         {testRows.length > 0 && (
           <>
@@ -519,6 +677,53 @@ export function ModelCompare() {
           </>
         )}
       </div>
+    </div>
+  );
+}
+
+function LiveMetricsRow({
+  label,
+  aggregates,
+  live,
+  field,
+  unit,
+  gridStyle,
+}: {
+  label: React.ReactNode;
+  aggregates: (ModelAggregate | null)[];
+  live: DeploymentState | undefined;
+  field: "cpu" | "memory" | "latency";
+  unit?: string;
+  gridStyle: React.CSSProperties;
+}) {
+  const n = aggregates.length;
+  return (
+    <div className="grid border-t border-zinc-100" style={gridStyle}>
+      <div className="p-3 bg-zinc-50/50 text-sm text-zinc-600 border-r border-zinc-100">
+        {label}
+      </div>
+      {aggregates.map((agg, idx) => {
+        // Show live readings only for the model that is currently deployed
+        // in the container; other slots show "—" because the WS stream only
+        // reports a single active workload.
+        const isActive =
+          !!agg && !!live && live.status === "running" && live.model === agg.model;
+        const value = isActive ? (live as DeploymentState)[field] : undefined;
+        const display =
+          typeof value === "number" && !Number.isNaN(value)
+            ? `${value}${unit ?? ""}`
+            : "—";
+        return (
+          <div
+            key={idx}
+            className={`p-3 text-sm ${idx < n - 1 ? "border-r border-zinc-100" : ""} ${
+              isActive ? "text-green-700 font-semibold" : "text-zinc-500"
+            }`}
+          >
+            {display}
+          </div>
+        );
+      })}
     </div>
   );
 }
