@@ -142,8 +142,10 @@ class OllamaBenchmark:
         peak_memory = resources_before.memory_used_mb
 
         last_error: Optional[str] = None
+        attempts_made = 0
 
         for attempt in range(max_retries):
+            attempts_made = attempt + 1
             start_time = time.perf_counter()
             try:
                 response = await self.client.post(
@@ -244,7 +246,7 @@ class OllamaBenchmark:
             inference=InferenceMetrics(0, 0, 0, 0, 0),
             resources=resources_before,
             success=False,
-            error=f"{last_error} (after {max_retries} attempts)"
+            error=f"{last_error} (after {attempts_made} attempt{'s' if attempts_made != 1 else ''})"
         )
 
     async def close(self):

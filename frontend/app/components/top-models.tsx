@@ -301,7 +301,9 @@ export function TopModels() {
         <p className="text-sm text-zinc-500">
           Unified ranking across <strong>all benchmark runs</strong> and all
           metrics. Each metric is normalized to 0–100 (lower-is-better metrics
-          are inverted), then averaged into a single composite score.
+          are inverted), then combined into a single composite score using a
+          <em>weighted</em> average (see the formula at the bottom for the
+          per-axis weights).
         </p>
         <div className="mt-3 flex flex-wrap gap-3 text-xs text-zinc-600">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-50 border border-zinc-200">
@@ -312,7 +314,7 @@ export function TopModels() {
             <strong className="text-zinc-800">{totalRuns}</strong> result files
           </span>
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-50 border border-zinc-200">
-            <strong className="text-zinc-800">{BAR_METRICS.length}</strong>{" "}
+            <strong className="text-zinc-800">{BAR_METRICS.length + 3}</strong>{" "}
             metrics scored
           </span>
         </div>
@@ -339,7 +341,7 @@ export function TopModels() {
                 Composite score (0 – 100)
               </h3>
               <span className="text-[11px] text-zinc-400">
-                Higher is better · averaged across {BAR_METRICS.length} metrics
+                Higher is better · weighted average across {BAR_METRICS.length + 3} metrics
               </span>
             </div>
             <div style={{ height: Math.max(220, ranked.length * 38 + 40) }}>
@@ -614,13 +616,13 @@ export function TopModels() {
             <strong>Composite formula:</strong> each axis is min-max normalized
             to 0 – 100 across all models (inverted for &ldquo;lower is
             better&rdquo; axes), then a weighted average is taken. Axes used:{" "}
-            {BAR_METRICS.length} summary metrics from{" "}
-            <code>summary.*</code> + test pass rate (each weight 1.0), plus{" "}
-            three raw-derived axes computed from <code>results[*]</code> across
-            all JSON files: <em>p95 latency</em> (weight 1.2),{" "}
-            <em>peak memory</em> (weight 0.8) and <em>error rate</em> (weight
-            1.5). Numbers in parentheses next to each metric show its
-            normalized score for that model.
+            {BAR_METRICS.length} <code>summary.*</code> metrics (incl. test
+            pass rate), each at weight 1.0, plus three raw-derived axes
+            computed from <code>results[*]</code> across all JSON files:{" "}
+            <em>p95 latency</em> (weight 1.2), <em>peak memory</em>{" "}
+            (weight 0.8) and <em>error rate</em> (weight 1.5) — total{" "}
+            {BAR_METRICS.length + 3} axes. Numbers in parentheses next to each
+            metric show its normalized score for that model.
           </p>
         </>
       )}

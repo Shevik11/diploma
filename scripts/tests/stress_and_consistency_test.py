@@ -71,7 +71,7 @@ def test_consistency(model_name, port=11434, num_repeats=3):
                 "options": {
                     "temperature": 0.0,
                     "top_k": 1,
-                    "seed": 42 + attempt * 0,  # constant seed across attempts
+                    "seed": 42,  # constant seed across attempts
                 },
             }
             
@@ -237,7 +237,24 @@ def test_stress(model_name, port=11434, num_concurrent=5):
     host = os.environ.get("SLM_TEST_HOST", "localhost")
     url = f"http://{host}:{port}/api/generate"
 
-    concurrency = int(os.environ.get("SLM_STRESS_CONCURRENCY", num_concurrent))
+    # Guard against a malformed env value (e.g. ``SLM_STRESS_CONCURRENCY=abc``
+    # or an empty string) — previously this raised ``ValueError`` and aborted
+    # the whole stress test before any request was made. Fall back to the
+    # function default and warn instead so a typo in the environment never
+    # prevents the benchmark from running.
+    raw_concurrency = os.environ.get("SLM_STRESS_CONCURRENCY")
+    if raw_concurrency is None or str(raw_concurrency).strip() == "":
+        concurrency = num_concurrent
+    else:
+        try:
+            concurrency = int(str(raw_concurrency).strip())
+        except (TypeError, ValueError):
+            print(
+                f"[WARN] Ignoring invalid SLM_STRESS_CONCURRENCY={raw_concurrency!r}; "
+                f"falling back to default {num_concurrent}.",
+                file=sys.stderr,
+            )
+            concurrency = num_concurrent
     concurrency = max(1, concurrency)
 
     base_prompts = [
