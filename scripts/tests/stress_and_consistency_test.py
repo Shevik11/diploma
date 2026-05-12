@@ -10,7 +10,13 @@ import os
 import time
 import hashlib
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
+
+try:
+    from result_utils import save_results
+except Exception:  # pragma: no cover
+    save_results = None
 
 RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -52,13 +58,21 @@ def test_consistency(model_name, port=11434, num_repeats=3):
         timings = []
         
         for attempt in range(num_repeats):
+            # Determinism for the consistency test:
+            #   * temperature 0  -> always pick the most-likely token
+            #   * fixed seed     -> identical sampling state across calls
+            #   * top_k 1        -> argmax decoding regardless of sampler
+            # With these set, any remaining variance is due to the runtime
+            # (e.g. KV-cache state) and is what we actually want to measure.
             payload = {
                 "model": model_name,
                 "prompt": prompt,
                 "stream": False,
                 "options": {
-                    "temperature": 0.3
-                }
+                    "temperature": 0.0,
+                    "top_k": 1,
+                    "seed": 42,  # constant seed across attempts
+                },
             }
             
             try:
@@ -168,97 +182,132 @@ def test_consistency(model_name, port=11434, num_repeats=3):
     print(f"Rating: {rating}")
     print(f"{'='*60}\n")
     
-    # Save results
-    output_file = RESULTS_DIR / f"consistency_{model_name.replace(':', '_')}_{int(time.time())}.json"
-    try:
-        with output_file.open('w', encoding='utf-8') as f:
-            json.dump(results, f, indent=2)
-        print(f"Results saved to: {output_file}\n")
-    except Exception as e:
-        print(f"Warning: Could not save results: {e}\n")
-    
+    if save_results is not None:
+        save_results(results, "consistency", model_name, "stress_consistency", subkey="consistency")
+    else:  # pragma: no cover
+        output_file = RESULTS_DIR / f"consistency_{model_name.replace(':', '_')}_{int(time.time())}.json"
+        try:
+            with output_file.open('w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            print(f"Results saved to: {output_file}\n")
+        except Exception as e:
+            print(f"Warning: Could not save results: {e}\n")
+
     return 0 if results["consistency_percentage"] >= 50 else 1
 
 
+def _do_one_request(url: str, model_name: str, prompt: str, timeout: int = 120) -> dict:
+    """Single Ollama call used by the stress (load) test."""
+    payload = {
+        "model": model_name,
+        "prompt": prompt,
+        "stream": False,
+        "options": {"temperature": 0.3},
+    }
+    start = time.time()
+    try:
+        response = requests.post(url, json=payload, timeout=timeout)
+        response.raise_for_status()
+        data = response.json()
+        duration = time.time() - start
+        return {
+            "prompt": prompt[:50],
+            "duration": duration,
+            "tokens": data.get("eval_count", 0),
+            "response_length": len(data.get("response", "")),
+            "success": True,
+        }
+    except requests.exceptions.RequestException as e:
+        return {
+            "prompt": prompt[:50],
+            "duration": time.time() - start,
+            "error": str(e),
+            "success": False,
+        }
+
+
 def test_stress(model_name, port=11434, num_concurrent=5):
-    """Test model under stress - rapid sequential requests"""
+    """Stress / load test the model with concurrent requests.
+
+    The test fires ``num_concurrent`` requests in parallel using a thread
+    pool. Throughput is measured as wall-clock requests-per-second across
+    the full burst, so it is NOT just an average of individual latencies.
+    Set ``SLM_STRESS_CONCURRENCY`` to override the parallelism (default 5).
+    """
     host = os.environ.get("SLM_TEST_HOST", "localhost")
     url = f"http://{host}:{port}/api/generate"
-    
-    stress_prompts = [
+
+    # Guard against a malformed env value (e.g. ``SLM_STRESS_CONCURRENCY=abc``
+    # or an empty string) — previously this raised ``ValueError`` and aborted
+    # the whole stress test before any request was made. Fall back to the
+    # function default and warn instead so a typo in the environment never
+    # prevents the benchmark from running.
+    raw_concurrency = os.environ.get("SLM_STRESS_CONCURRENCY")
+    if raw_concurrency is None or str(raw_concurrency).strip() == "":
+        concurrency = num_concurrent
+    else:
+        try:
+            concurrency = int(str(raw_concurrency).strip())
+        except (TypeError, ValueError):
+            print(
+                f"[WARN] Ignoring invalid SLM_STRESS_CONCURRENCY={raw_concurrency!r}; "
+                f"falling back to default {num_concurrent}.",
+                file=sys.stderr,
+            )
+            concurrency = num_concurrent
+    concurrency = max(1, concurrency)
+
+    base_prompts = [
         "What is AI?",
         "Explain machine learning",
         "What is deep learning?",
         "Tell me about neural networks",
         "How does training work?",
-    ] * num_concurrent  # Repeat to have more prompts
-    
+    ]
+    # Repeat the prompts so total count >= 2x concurrency to actually exercise
+    # the worker pool.
+    repeats = max(2, (concurrency * 2 + len(base_prompts) - 1) // len(base_prompts))
+    stress_prompts = base_prompts * repeats
+
     results = {
         "model": model_name,
         "port": port,
         "timestamp": time.time(),
+        "concurrency": concurrency,
         "num_requests": len(stress_prompts),
         "requests": [],
         "success_count": 0,
         "failure_count": 0,
         "total_time": 0,
         "avg_response_time": 0,
-        "throughput": 0
+        "throughput": 0,
     }
-    
+
     print(f"\n{'='*60}")
-    print(f"STRESS TEST: {model_name}")
-    print(f"Running {len(stress_prompts)} rapid requests")
+    print(f"STRESS / LOAD TEST: {model_name}")
+    print(
+        f"Running {len(stress_prompts)} requests at concurrency={concurrency}"
+    )
     print(f"{'='*60}\n")
-    
+
     test_start = time.time()
-    
-    for idx, prompt in enumerate(stress_prompts, 1):
-        print(f"[{idx}/{len(stress_prompts)}] Sending request...", end=" ")
-        
-        payload = {
-            "model": model_name,
-            "prompt": prompt,
-            "stream": False,
-            "options": {
-                "temperature": 0.3
-            }
-        }
-        
-        try:
-            start = time.time()
-            response = requests.post(url, json=payload, timeout=120)
-            response.raise_for_status()
-            data = response.json()
-            duration = time.time() - start
-            
-            response_text = data.get('response', '').strip()
-            eval_count = data.get('eval_count', 0)
-            
-            result = {
-                "prompt": prompt[:50],
-                "duration": duration,
-                "tokens": eval_count,
-                "response_length": len(response_text),
-                "success": True
-            }
-            
-            results["requests"].append(result)
-            results["success_count"] += 1
-            
-            print(f"[SUCCESS] {duration:.2f}s")
-            
-        except requests.exceptions.RequestException as e:
-            result = {
-                "prompt": prompt[:50],
-                "error": str(e),
-                "success": False
-            }
-            results["requests"].append(result)
-            results["failure_count"] += 1
-            
-            print(f"[ERROR] {str(e)[:40]}")
-    
+    with ThreadPoolExecutor(max_workers=concurrency) as pool:
+        futures = [
+            pool.submit(_do_one_request, url, model_name, p)
+            for p in stress_prompts
+        ]
+        for idx, future in enumerate(as_completed(futures), 1):
+            res = future.result()
+            results["requests"].append(res)
+            if res.get("success"):
+                results["success_count"] += 1
+                print(f"[{idx}/{len(stress_prompts)}] [SUCCESS] {res['duration']:.2f}s")
+            else:
+                results["failure_count"] += 1
+                print(
+                    f"[{idx}/{len(stress_prompts)}] [ERROR] "
+                    f"{str(res.get('error', ''))[:40]}"
+                )
     test_end = time.time()
     results["total_time"] = test_end - test_start
     
@@ -294,15 +343,17 @@ def test_stress(model_name, port=11434, num_concurrent=5):
     print(f"Rating: {rating}")
     print(f"{'='*60}\n")
     
-    # Save results
-    output_file = RESULTS_DIR / f"stress_{model_name.replace(':', '_')}_{int(time.time())}.json"
-    try:
-        with output_file.open('w', encoding='utf-8') as f:
-            json.dump(results, f, indent=2)
-        print(f"Results saved to: {output_file}\n")
-    except Exception as e:
-        print(f"Warning: Could not save results: {e}\n")
-    
+    if save_results is not None:
+        save_results(results, "stress", model_name, "stress_consistency", subkey="stress")
+    else:  # pragma: no cover
+        output_file = RESULTS_DIR / f"stress_{model_name.replace(':', '_')}_{int(time.time())}.json"
+        try:
+            with output_file.open('w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            print(f"Results saved to: {output_file}\n")
+        except Exception as e:
+            print(f"Warning: Could not save results: {e}\n")
+
     return 0 if success_rate >= 80 else 1
 
 

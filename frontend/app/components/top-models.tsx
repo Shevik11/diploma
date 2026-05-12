@@ -68,27 +68,6 @@ export function TopModels() {
     Record<string, BenchmarkSummary>
   >({});
   const [loadingFiles, setLoadingFiles] = useState(false);
-  // Filter by base model name (e.g. "qwen:1.5b") so the user can focus on
-  // one model's runs across its different RAM/CPU/tech/platform configs.
-  // Empty string == show every model (default).
-  const [modelFilter, setModelFilter] = useState<string>("");
-
-  // Unique sorted list of base model names seen across all result files —
-  // populates the filter <select>.
-  const modelOptions = useMemo(() => {
-    const s = new Set<string>();
-    files.forEach((f) => {
-      if (f.model) s.add(f.model);
-    });
-    return Array.from(s).sort((a, b) => a.localeCompare(b));
-  }, [files]);
-
-  // Narrowed file list used by the aggregation memo below. When the filter
-  // is set, only files for that base model contribute to ranking.
-  const filteredFiles = useMemo(
-    () => (modelFilter ? files.filter((f) => f.model === modelFilter) : files),
-    [files, modelFilter],
-  );
 
   // Load file list
   useEffect(() => {
@@ -155,7 +134,7 @@ export function TopModels() {
         files: BenchmarkResultFile[];
       }
     >();
-    filteredFiles.forEach((f) => {
+    files.forEach((f) => {
       if (!f.model) return;
       const s = summaryCache[f.filename];
       if (!s) return;
@@ -208,7 +187,7 @@ export function TopModels() {
     });
 
     return { aggregates: feasible, infeasibleEntries: infeasible };
-  }, [filteredFiles, summaryCache]);
+  }, [files, summaryCache]);
 
   // Build ranking using a weighted composite over ALL JSON fields:
   //  - Existing 8 BAR_METRICS (summary + test pass rate)
@@ -326,37 +305,10 @@ export function TopModels() {
           <em>weighted</em> average (see the formula at the bottom for the
           per-axis weights).
         </p>
-        {/* Filter by base model name. Lets the user focus the leaderboard on
-            a single model and compare only its RAM/CPU/tech/platform configs. */}
-        <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-zinc-600">
-          <label className="inline-flex items-center gap-2">
-            <span className="text-zinc-500">Filter by model:</span>
-            <select
-              value={modelFilter}
-              onChange={(e) => setModelFilter(e.target.value)}
-              className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
-            >
-              <option value="">All models ({modelOptions.length})</option>
-              {modelOptions.map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
-            {modelFilter && (
-              <button
-                type="button"
-                onClick={() => setModelFilter("")}
-                className="text-zinc-400 hover:text-zinc-700 underline"
-                title="Clear model filter"
-              >
-                clear
-              </button>
-            )}
-          </label>
+        <div className="mt-3 flex flex-wrap gap-3 text-xs text-zinc-600">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-50 border border-zinc-200">
             <strong className="text-zinc-800">{aggregates.length}</strong>{" "}
-            {modelFilter ? "configs" : "models"}
+            models
           </span>
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-50 border border-zinc-200">
             <strong className="text-zinc-800">{totalRuns}</strong> result files

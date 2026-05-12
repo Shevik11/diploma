@@ -1,6 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Download, RefreshCw, MoreHorizontal } from 'lucide-react';
-import { api, BenchmarkResultFile, BenchmarkSummary, BenchmarkStatus } from '@/app/services/api';
+import {
+  api,
+  BenchmarkResultFile,
+  BenchmarkSummary,
+  BenchmarkStatus,
+  runStatusClass,
+  runStatusLabel,
+} from '@/app/services/api';
 import { Button } from '@/app/components/ui/button';
 import {
   Dialog,
@@ -216,10 +223,30 @@ export function ResultsViewer() {
                 <div>
                   <p className="font-medium text-sm">{result.model}</p>
                   <p className="text-xs text-gray-500">
-                    {result.platform} • {new Date(result.timestamp).toLocaleString()}
+                    {result.platform}
+                    {' • '}
+                    {/* Prefer the explicit `finished_at` from spec-compliant
+                        backends; fall back to `timestamp` for legacy files. */}
+                    {new Date(result.finished_at || result.timestamp).toLocaleString()}
+                    {result.started_at && result.finished_at && result.started_at !== result.finished_at && (
+                      <>
+                        {' '}
+                        <span className="text-gray-400">
+                          (started {new Date(result.started_at).toLocaleTimeString()})
+                        </span>
+                      </>
+                    )}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
+                  {result.status && (
+                    <span
+                      className={`text-[10px] uppercase tracking-wide font-semibold px-2 py-1 rounded border ${runStatusClass(result.status)}`}
+                      title={`Run status: ${runStatusLabel(result.status)}`}
+                    >
+                      {runStatusLabel(result.status)}
+                    </span>
+                  )}
                   {result.test_results && result.test_results.length > 0 && (
                     <span className={`text-sm font-mono px-2 py-1 rounded ${
                       result.test_results.every((t: { status: string }) => t.status === 'passed') ? 'bg-green-100 text-green-700' :

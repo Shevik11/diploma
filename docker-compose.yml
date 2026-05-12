@@ -27,7 +27,13 @@ services:
     # Note: vLLM listens on port 8000 inside container, mapped to 8100 on host
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./results:/app/results
+      # NOTE: backend/benchmarks.py pins RESULTS_DIR to <module_dir>/results,
+      # i.e. /app/results inside the image. Mount the canonical host folder
+      # `./backend/results` here so the API exposes ALL runs (the older
+      # mount `./results:/app/results` only surfaced the handful of files
+      # written from the project root and hid the bulk of master files
+      # accumulated under backend/results/).
+      - ./backend/results:/app/results
       - ./scripts/tests:/app/scripts/tests
     depends_on:
       - ollama

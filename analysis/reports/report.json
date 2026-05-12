@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-05-09T22:35:22+00:00",
+  "totals": {
+    "runs": 25,
+    "models": 2,
+    "deployments": 2,
+    "cost_rows": 8,
+    "speedup_rows": 0
+  }
+}
