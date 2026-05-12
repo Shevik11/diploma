@@ -109,6 +109,9 @@ deployment_state = {
         "latency": 0,
         "ram_gb": None,
         "cpu_cores": None,
+        "latency": 0,
+        "ram_gb": None,
+        "cpu_cores": None,
     },
     "vm": {
         "status": "idle",
@@ -116,6 +119,9 @@ deployment_state = {
         "model": None,
         "cpu": 0,
         "memory": 0,
+        "latency": 0,
+        "ram_gb": None,
+        "cpu_cores": None,
         "latency": 0,
         "ram_gb": None,
         "cpu_cores": None,
@@ -176,6 +182,8 @@ VM_TECHNOLOGIES = [
 class DeploymentRequest(BaseModel):
     model: str
     technology: str
+    ram_gb: int | None = None
+    cpu_cores: float | None = None
     ram_gb: int | None = None
     cpu_cores: float | None = None
 
@@ -315,6 +323,46 @@ TESTS = {
         "script": "quantization_compare_test.py",
         "duration_range": (60, 300),
     },
+    "cold_start": {
+        "name": "Cold Start Test",
+        "script": "cold_start_test.py",
+        "duration_range": (60, 300),
+    },
+    "resource_usage": {
+        "name": "Resource Usage Test (RAM / CPU)",
+        "script": "resource_usage_test.py",
+        "duration_range": (60, 300),
+    },
+    "oom_detection": {
+        "name": "OOM Detection & Boundary Test",
+        "script": "oom_detection_test.py",
+        "duration_range": (120, 600),
+    },
+    "ram_boundary": {
+        "name": "RAM Boundary Sweep (§3.3)",
+        "script": "ram_boundary_test.py",
+        "duration_range": (180, 900),
+    },
+    "config_matrix": {
+        "name": "Config Matrix (§3.2)",
+        "script": "config_matrix_test.py",
+        "duration_range": (300, 1800),
+    },
+    "vram_monitor": {
+        "name": "VRAM Monitor (§4.2)",
+        "script": "vram_monitor_test.py",
+        "duration_range": (30, 180),
+    },
+    "cloud_cost": {
+        "name": "Cloud Cost Calculator (§6)",
+        "script": "cloud_cost_calculator.py",
+        "duration_range": (30, 180),
+    },
+    "quant_compare": {
+        "name": "Quantization Compare (Q4 vs Q8, §2.1)",
+        "script": "quantization_compare_test.py",
+        "duration_range": (60, 300),
+    },
     "run_all": {
         "name": "Run All Tests",
         "script": "run_all_tests.py",
@@ -328,7 +376,16 @@ if not SCRIPTS_DIR.exists():
     if _parent_scripts.exists():
         SCRIPTS_DIR = _parent_scripts
 
+if not SCRIPTS_DIR.exists():
+    _parent_scripts = Path(__file__).parent.parent / "scripts" / "tests"
+    if _parent_scripts.exists():
+        SCRIPTS_DIR = _parent_scripts
+
 RESULTS_DIR = Path(__file__).parent / "results"
+if not any(RESULTS_DIR.glob("*.json")):
+    _parent_results = Path(__file__).parent.parent / "results"
+    if any(_parent_results.glob("*.json")):
+        RESULTS_DIR = _parent_results
 if not any(RESULTS_DIR.glob("*.json")):
     _parent_results = Path(__file__).parent.parent / "results"
     if any(_parent_results.glob("*.json")):
@@ -477,11 +534,14 @@ def _build_model_catalog(installed_models: list[str]) -> list[dict]:
 
 
 def _set_container_running_state(model: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
+def _set_container_running_state(model: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
     """Update container deployment state to running with fresh metrics."""
     deployment_state["container"]["status"] = "running"
     deployment_state["container"]["technology"] = technology
     deployment_state["container"]["model"] = model
     deployment_state["container"]["message"] = ""
+    deployment_state["container"]["ram_gb"] = ram_gb
+    deployment_state["container"]["cpu_cores"] = cpu_cores
     deployment_state["container"]["ram_gb"] = ram_gb
     deployment_state["container"]["cpu_cores"] = cpu_cores
 
@@ -501,10 +561,13 @@ def _set_container_running_state(model: str, technology: str, ram_gb: int | None
                     update_kwargs["mem_limit"] = f"{ram_gb}g"
                     update_kwargs["memswap_limit"] = f"{ram_gb}g"
                 if cpu_cores:
-                    update_kwargs["nano_cpus"] = int(cpu_cores * 1e9)
+                    # docker-py 7.0.0 Container.update() does not accept nano_cpus;
+                    # use cpu_period/cpu_quota to express the CPU limit instead.
+                    update_kwargs["cpu_period"] = 100000
+                    update_kwargs["cpu_quota"] = int(cpu_cores * 100000)
                 container.update(**update_kwargs)
                 logger.info(f"Applied limits to '{cname}': {update_kwargs}")
-            except Exception as e:
+            except docker.errors.APIError as e:
                 logger.warning(f"Could not apply resource limits to '{cname}': {e}")
 
 
@@ -513,6 +576,7 @@ async def _pull_and_start_container(model: str, technology: str, ram_gb: int | N
     resolved = _get_model_name(model, technology)
     try:
         await _pull_ollama_model(resolved)
+        _set_container_running_state(model, technology, ram_gb, cpu_cores)
         _set_container_running_state(model, technology, ram_gb, cpu_cores)
         deployment_state["container"]["message"] = f"Model '{resolved}' is ready"
     except Exception as e:
@@ -588,8 +652,13 @@ def _run_test_subprocess(script_path: str, model_name: str, port: int, timeout: 
         }
 
 
-def _save_test_results(filepath: str, test_results: list):
-    """Save test_results into benchmark JSON file; recreate file if it was removed."""
+def _save_test_results(filepath: str, test_results: list) -> bool:
+    """Save test_results into benchmark JSON file; recreate file if it was removed.
+
+    Returns True if the file was written successfully, False otherwise. Callers
+    that need to safely delete upstream per-test artifacts should only do so
+    after this function returns True.
+    """
     try:
         data = None
         if Path(filepath).exists():
@@ -631,8 +700,10 @@ def _save_test_results(filepath: str, test_results: list):
             json.dump(data, f, indent=2, ensure_ascii=False)
 
         logger.info(f"Saved {len(test_results)} test results to {filepath}")
+        return True
     except Exception as e:
         logger.error(f"Failed to save test results: {e}")
+        return False
 
 
 def _extract_saved_result_file_path(log_text: str) -> Optional[Path]:
@@ -785,6 +856,7 @@ async def start_container(request: DeploymentRequest, background_tasks: Backgrou
             if resolved not in pulling_models:
                 pulling_models.add(resolved)
                 background_tasks.add_task(_pull_and_start_container, request.model, request.technology, request.ram_gb, request.cpu_cores)
+                background_tasks.add_task(_pull_and_start_container, request.model, request.technology, request.ram_gb, request.cpu_cores)
 
             return {
                 "success": True,
@@ -794,6 +866,7 @@ async def start_container(request: DeploymentRequest, background_tasks: Backgrou
 
     await _resolve_and_validate_model(request.model, request.technology)
 
+    _set_container_running_state(request.model, request.technology, request.ram_gb, request.cpu_cores)
     _set_container_running_state(request.model, request.technology, request.ram_gb, request.cpu_cores)
 
     return {"success": True, "state": deployment_state["container"]}
@@ -819,6 +892,8 @@ async def start_vm(request: DeploymentRequest):
     deployment_state["vm"]["status"] = "running"
     deployment_state["vm"]["technology"] = request.technology
     deployment_state["vm"]["model"] = request.model
+    deployment_state["vm"]["ram_gb"] = request.ram_gb
+    deployment_state["vm"]["cpu_cores"] = request.cpu_cores
     deployment_state["vm"]["ram_gb"] = request.ram_gb
     deployment_state["vm"]["cpu_cores"] = request.cpu_cores
 
@@ -964,6 +1039,8 @@ class RunAllRequest(BaseModel):
     technology: str = "ollama"
     ram_gb: int | None = None
     cpu_cores: float | None = None
+    ram_gb: int | None = None
+    cpu_cores: float | None = None
 
 
 @app.get("/api/benchmarks/status")
@@ -973,9 +1050,31 @@ async def get_benchmark_status():
 
 
 @app.post("/api/benchmarks/reset")
-async def reset_benchmark_state():
-    """Reset benchmark state (emergency reset if stuck)."""
+async def reset_benchmark_state(force: bool = False):
+    """Reset benchmark state (emergency reset if stuck).
+
+    Refuses to reset while a benchmark task is genuinely running unless
+    ``force=true`` is passed, to avoid stomping on an in-flight background
+    task which would otherwise interleave writes and corrupt results.
+    """
     global benchmark_state
+    if benchmark_state.get("running") and not force:
+        logger.warning(
+            "Benchmark reset refused: a benchmark task is currently running. "
+            "Pass force=true to reset anyway (may corrupt in-flight results)."
+        )
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "Benchmark is currently running; refusing to reset to avoid "
+                "corrupting in-flight results. Retry with ?force=true to override."
+            ),
+        )
+    if benchmark_state.get("running") and force:
+        logger.warning(
+            "Forced benchmark reset while running=True; in-flight background "
+            "task may still be writing to disk and could produce corrupted results."
+        )
     benchmark_state["running"] = False
     benchmark_state["progress"] = 0
     benchmark_state["status"] = "idle"
@@ -984,7 +1083,7 @@ async def reset_benchmark_state():
     benchmark_state["result_filepath"] = ""
     benchmark_state["result_backup"] = None
     benchmark_state["model"] = None
-    logger.info("Benchmark state reset via API")
+    logger.info("Benchmark state reset via API (force=%s)", force)
     return {"success": True, "message": "Benchmark state reset"}
 
 
@@ -1108,11 +1207,14 @@ async def run_all_tests_endpoint(request: RunAllRequest, background_tasks: Backg
         request.technology,
         request.ram_gb,
         request.cpu_cores,
+        request.ram_gb,
+        request.cpu_cores,
     )
 
     return {"success": True, "message": "Started benchmarks and tests in background"}
 
 
+async def _run_all_tests_background(model: str, platform: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
 async def _run_all_tests_background(model: str, platform: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
     """Background task: Phase 1 = inference benchmarks, Phase 2 = test scripts."""
     global benchmark_state
@@ -1135,6 +1237,8 @@ async def _run_all_tests_background(model: str, platform: str, technology: str, 
                 model=model_name,
                 progress_callback=progress_callback,
             )
+            summary.ram_gb = ram_gb
+            summary.cpu_cores = cpu_cores
             summary.ram_gb = ram_gb
             summary.cpu_cores = cpu_cores
             benchmark_state["result_backup"] = asdict(summary)
@@ -1170,7 +1274,11 @@ async def _run_all_tests_background(model: str, platform: str, technology: str, 
                 None, _run_test_subprocess, script_path, model_name, port, 600, technology
             )
 
-            # Merge individual test script result file into test_result, then delete it
+            # Merge individual test script result file into test_result, but do
+            # NOT delete the per-test JSON yet: if the subsequent master-file
+            # write fails (disk full, encoding error, process killed) the raw
+            # payload would otherwise be unrecoverable. We defer unlink() until
+            # after the master file has been written successfully for this test.
             raw_data = None
             individual_file = _extract_saved_result_file_path(
                 (result.get("stdout") or "") + (result.get("stderr") or "")
@@ -1179,10 +1287,9 @@ async def _run_all_tests_background(model: str, platform: str, technology: str, 
                 try:
                     with open(individual_file, "r", encoding="utf-8") as f:
                         raw_data = json.load(f)
-                    individual_file.unlink()
-                    logger.info(f"Merged and deleted individual result file: {individual_file.name}")
+                    logger.info(f"Merged individual result file: {individual_file.name}")
                 except Exception as e:
-                    logger.warning(f"Could not merge/delete {individual_file}: {e}")
+                    logger.warning(f"Could not read {individual_file}: {e}")
 
             test_result = {
                 "id": test_id,
@@ -1193,13 +1300,33 @@ async def _run_all_tests_background(model: str, platform: str, technology: str, 
                 "stderr": result.get("stderr", ""),
                 "details": result.get("details", []),
                 "raw_data": raw_data,
+                "raw_data": raw_data,
             }
             test_results.append(test_result)
             benchmark_state["test_results"] = test_results
 
-            # Save progressively into the single master file
+            # Save progressively into the single master file; only after that
+            # write succeeds is it safe to remove the per-test JSON artifact.
+            save_ok = True
             if result_filepath:
-                _save_test_results(result_filepath, test_results)
+                save_ok = _save_test_results(result_filepath, test_results)
+
+            if (
+                save_ok
+                and raw_data is not None
+                and individual_file
+                and individual_file.exists()
+            ):
+                try:
+                    individual_file.unlink()
+                    logger.info(f"Deleted individual result file after master save: {individual_file.name}")
+                except Exception as e:
+                    logger.warning(f"Could not delete {individual_file}: {e}")
+            elif not save_ok and individual_file and individual_file.exists():
+                logger.warning(
+                    f"Master file save failed; keeping per-test artifact {individual_file} "
+                    "to preserve raw measurements."
+                )
 
             logger.info(f"Test {test_id}: {result['status']} in {result['duration']:.1f}s")
 
@@ -1233,6 +1360,7 @@ async def get_benchmark_results():
 @app.get("/api/benchmarks/results/{filename}")
 async def get_benchmark_result(filename: str):
     """Get specific benchmark result by filename"""
+    filepath = RESULTS_DIR / filename
     filepath = RESULTS_DIR / filename
 
     if not filepath.exists():
