@@ -29,11 +29,13 @@ import {
   BenchmarkResultFile,
   BenchmarkSummary,
   TestScriptResult,
+  variantId,
+  variantLabel,
 } from "@/app/services/api";
 
 // ─── Aggregate types & helpers ───────────────────────────────────────────────
 
-interface ModelAggregate {
+export interface ModelAggregate {
   model: string;
   fileCount: number;
   summary: {
@@ -49,6 +51,11 @@ interface ModelAggregate {
     avg_memory_percent: number;
   };
   testPassRate: number;
+  // Raw-derived axes used by the leaderboard composite. Default to 0
+  // when not computed by the caller so all consumers can read them safely.
+  p95LatencyMs: number;
+  peakMemoryMb: number;
+  errorRate: number;
 }
 
 function avg(nums: number[]): number {
@@ -62,7 +69,7 @@ function sum(nums: number[]): number {
     .reduce((a, b) => a + b, 0);
 }
 
-function aggregateModel(
+export function aggregateModel(
   model: string,
   summaries: BenchmarkSummary[],
 ): ModelAggregate {
@@ -94,6 +101,10 @@ function aggregateModel(
     fileCount: summaries.length,
     summary: aggSummary,
     testPassRate: total > 0 ? passed / total : 0,
+    // Defaults — top-models recomputes these from raw per-prompt items.
+    p95LatencyMs: 0,
+    peakMemoryMb: 0,
+    errorRate: 0,
   };
 }
 
@@ -113,14 +124,14 @@ const PALETTE = [
   "#14b8a6",
   "#a855f7",
 ];
-function paletteColor(idx: number) {
+export function paletteColor(idx: number) {
   return PALETTE[idx % PALETTE.length];
 }
 
 // ─── Normalization ────────────────────────────────────────────────────────────
 
 /** Normalize a set of values to [0, 100]. higherBetter: true → high raw = high score */
-function normalizeValues(values: number[], higherBetter: boolean): number[] {
+export function normalizeValues(values: number[], higherBetter: boolean): number[] {
   const valid = values.filter((v) => !Number.isNaN(v));
   if (!valid.length) return values.map(() => 0);
   const mn = Math.min(...valid);
@@ -149,7 +160,7 @@ interface BarMetric {
   getValue: (a: ModelAggregate) => number;
 }
 
-const BAR_METRICS: BarMetric[] = [
+export const BAR_METRICS: BarMetric[] = [
   {
     id: "avg_tokens_per_second",
     label: "Tokens / second",
@@ -1127,18 +1138,64 @@ export function ModelDashboard() {
   const [selectedWidgets, setSelectedWidgets] = useState<Set<string>>(
     new Set(ALL_WIDGETS.map((w) => w.id)),
   );
+  // Filter the pill list by base model name (e.g. "qwen:1.5b") so the user
+  // can focus the dashboard on one model's runs across its different
+  // RAM/CPU/tech/platform configs. Empty == show all models.
+  const [modelFilter, setModelFilter] = useState<string>("");
 
+  // Each unique combination of model + RAM + CPU + tech + platform is shown
+  // as a separate item ("variant"). `model` here holds the human-readable
+  // variant label so existing widgets keep working unchanged. We also keep
+  // the base `baseModel` name on each entry so the model-name filter can
+  // narrow the pills to a single model's variants.
   const allModels = useMemo(() => {
-    const map = new Map<string, number>();
+    const map = new Map<
+      string,
+      { label: string; count: number; baseModel: string }
+    >();
     files.forEach((f) => {
       if (!f.model) return;
-      map.set(f.model, (map.get(f.model) || 0) + 1);
+      const id = variantId(f);
+      const cur = map.get(id);
+      if (cur) cur.count += 1;
+      else
+        map.set(id, {
+          label: variantLabel(f),
+          count: 1,
+          baseModel: f.model,
+        });
     });
     return Array.from(map.entries())
-      .map(([model, count]) => ({ model, count }))
-      .sort((a, b) => a.model.localeCompare(b.model));
+      .map(([id, v]) => ({
+        model: id,
+        label: v.label,
+        count: v.count,
+        baseModel: v.baseModel,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
   }, [files]);
 
+  // Unique sorted list of base model names — populates the filter <select>.
+  const baseModelOptions = useMemo(() => {
+    const s = new Set<string>();
+    allModels.forEach((m) => s.add(m.baseModel));
+    return Array.from(s).sort((a, b) => a.localeCompare(b));
+  }, [allModels]);
+
+  // Variants visible after applying the base-model filter. All pill-list,
+  // Select-All, and counts use this filtered view so the dashboard only
+  // shows the user-selected model when the filter is active.
+  const visibleModels = useMemo(
+    () =>
+      modelFilter
+        ? allModels.filter((m) => m.baseModel === modelFilter)
+        : allModels,
+    [allModels, modelFilter],
+  );
+
+
+  // Color map keyed by both variant id AND label so callers using either
+  // (pill button uses id, widgets use label) all resolve correctly.
   const colorMap = useMemo(() => {
     const m = new Map<string, string>();
     allModels.forEach(({ model }, idx) => m.set(model, paletteColor(idx)));
@@ -1161,6 +1218,18 @@ export function ModelDashboard() {
     if (allModels.length > 0 && selectedModels.size === 0)
       setSelectedModels(new Set(allModels.map((m) => m.model)));
   }, [allModels]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // When the model-name filter changes, narrow the current selection to
+  // only the variants belonging to the chosen model so the charts react
+  // immediately. If the filter is cleared, restore the "select all"
+  // default to keep behavior consistent with the initial load.
+  useEffect(() => {
+    if (!modelFilter) {
+      setSelectedModels(new Set(allModels.map((m) => m.model)));
+      return;
+    }
+    setSelectedModels(new Set(visibleModels.map((m) => m.model)));
+  }, [modelFilter, allModels, visibleModels]);
 
   useEffect(() => {
     selectedModels.forEach((model) => {
@@ -1267,19 +1336,48 @@ export function ModelDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6">
         {/* Model pills */}
         <div className="bg-white border border-zinc-200 rounded-lg p-5 shadow-sm">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-medium text-zinc-800">Models</h3>
+          <div className="flex items-center justify-between mb-3 gap-3 flex-wrap">
+            <div className="flex items-center gap-3 flex-wrap">
+              <h3 className="font-medium text-zinc-800">Models</h3>
+              {/* Filter by base model name so the user can pick a single
+                  model and inspect only its different RAM/CPU/tech configs. */}
+              <label className="inline-flex items-center gap-2 text-xs text-zinc-600">
+                <span className="text-zinc-500">Filter:</span>
+                <select
+                  value={modelFilter}
+                  onChange={(e) => setModelFilter(e.target.value)}
+                  className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
+                >
+                  <option value="">All models ({baseModelOptions.length})</option>
+                  {baseModelOptions.map((m) => (
+                    <option key={m} value={m}>
+                      {m}
+                    </option>
+                  ))}
+                </select>
+                {modelFilter && (
+                  <button
+                    type="button"
+                    onClick={() => setModelFilter("")}
+                    className="text-zinc-400 hover:text-zinc-700 underline"
+                    title="Clear model filter"
+                  >
+                    clear
+                  </button>
+                )}
+              </label>
+            </div>
             <button
               onClick={() =>
                 setSelectedModels(
-                  selectedModels.size === allModels.length
+                  selectedModels.size === visibleModels.length
                     ? new Set()
-                    : new Set(allModels.map((m) => m.model)),
+                    : new Set(visibleModels.map((m) => m.model)),
                 )
               }
               className="text-xs text-zinc-500 hover:text-zinc-800 underline"
             >
-              {selectedModels.size === allModels.length
+              {selectedModels.size === visibleModels.length
                 ? "Deselect All"
                 : "Select All"}
             </button>
@@ -1288,13 +1386,15 @@ export function ModelDashboard() {
             <div className="flex items-center gap-2 text-sm text-zinc-400">
               <Loader2 className="w-4 h-4 animate-spin" /> Loading…
             </div>
-          ) : allModels.length === 0 ? (
+          ) : visibleModels.length === 0 ? (
             <p className="text-sm text-zinc-400">
-              No benchmark results found — run some benchmarks first.
+              {allModels.length === 0
+                ? "No benchmark results found — run some benchmarks first."
+                : `No variants for model "${modelFilter}".`}
             </p>
           ) : (
             <div className="flex flex-wrap gap-2">
-              {allModels.map(({ model, count }) => {
+              {visibleModels.map(({ model, label, count }) => {
                 const active = selectedModels.has(model);
                 const color = colorMap.get(model) || "#18181b";
                 return (
@@ -1312,7 +1412,7 @@ export function ModelDashboard() {
                       className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                       style={{ backgroundColor: color }}
                     />
-                    {model}
+                    {label}
                     <span className="opacity-60 text-xs">({count})</span>
                   </button>
                 );
@@ -1320,7 +1420,12 @@ export function ModelDashboard() {
             </div>
           )}
           <p className="text-xs text-zinc-400 mt-3">
-            {selectedModels.size} of {allModels.length} selected
+            {selectedModels.size} of {visibleModels.length} selected
+            {modelFilter && (
+              <span className="ml-2 text-zinc-500">
+                (filtered to <strong>{modelFilter}</strong>)
+              </span>
+            )}
           </p>
         </div>
 
