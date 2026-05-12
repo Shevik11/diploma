@@ -68,6 +68,20 @@ export function TopModels() {
     Record<string, BenchmarkSummary>
   >({});
   const [loadingFiles, setLoadingFiles] = useState(false);
+  // Filter the leaderboard by base model name (e.g. "qwen:1.5b") so the user
+  // can focus on a single model's variants. Empty == show all models.
+  const [modelFilter, setModelFilter] = useState<string>("");
+
+  // Unique sorted list of base model names across all loaded files —
+  // populates the filter <select>. Built from the raw file list so the
+  // options stay stable regardless of the currently active filter.
+  const baseModelOptions = useMemo(() => {
+    const s = new Set<string>();
+    files.forEach((f) => {
+      if (f.model) s.add(f.model);
+    });
+    return Array.from(s).sort((a, b) => a.localeCompare(b));
+  }, [files]);
 
   // Load file list
   useEffect(() => {
@@ -136,6 +150,7 @@ export function TopModels() {
     >();
     files.forEach((f) => {
       if (!f.model) return;
+      if (modelFilter && f.model !== modelFilter) return;
       const s = summaryCache[f.filename];
       if (!s) return;
       const id = variantId(f);
@@ -187,7 +202,7 @@ export function TopModels() {
     });
 
     return { aggregates: feasible, infeasibleEntries: infeasible };
-  }, [files, summaryCache]);
+  }, [files, summaryCache, modelFilter]);
 
   // Build ranking using a weighted composite over ALL JSON fields:
   //  - Existing 8 BAR_METRICS (summary + test pass rate)
@@ -305,7 +320,7 @@ export function TopModels() {
           <em>weighted</em> average (see the formula at the bottom for the
           per-axis weights).
         </p>
-        <div className="mt-3 flex flex-wrap gap-3 text-xs text-zinc-600">
+        <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-zinc-600">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-50 border border-zinc-200">
             <strong className="text-zinc-800">{aggregates.length}</strong>{" "}
             models
@@ -317,6 +332,32 @@ export function TopModels() {
             <strong className="text-zinc-800">{BAR_METRICS.length + 3}</strong>{" "}
             metrics scored
           </span>
+          <div className="inline-flex items-center gap-2 ml-auto">
+            <span className="text-zinc-500">Filter:</span>
+            <select
+              value={modelFilter}
+              onChange={(e) => setModelFilter(e.target.value)}
+              className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
+              title="Filter leaderboard by base model name"
+            >
+              <option value="">All models ({baseModelOptions.length})</option>
+              {baseModelOptions.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+            {modelFilter && (
+              <button
+                type="button"
+                onClick={() => setModelFilter("")}
+                className="text-zinc-400 hover:text-zinc-700 underline"
+                title="Clear model filter"
+              >
+                clear
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -330,7 +371,9 @@ export function TopModels() {
         <div className="bg-white border border-zinc-200 rounded-lg p-16 text-center text-zinc-400 shadow-sm">
           {isLoading
             ? "Loading benchmark summaries…"
-            : "No benchmark results available — run some benchmarks first."}
+            : modelFilter
+              ? `No benchmark results for model "${modelFilter}".`
+              : "No benchmark results available — run some benchmarks first."}
         </div>
       ) : (
         <>

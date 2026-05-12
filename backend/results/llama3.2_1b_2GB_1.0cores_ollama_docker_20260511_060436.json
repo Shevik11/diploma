@@ -1,0 +1,2561 @@
+{
+  "model": "llama3.2:1b",
+  "platform": "docker",
+  "technology": "ollama",
+  "timestamp": "2026-05-11T06:04:36.365688",
+  "system_info": {
+    "cpu_count": 16,
+    "cpu_freq_mhz": 3201.0,
+    "memory_total_gb": 14.86,
+    "platform": "docker",
+    "timestamp": "2026-05-11T06:04:36.370349"
+  },
+  "results": [
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "What is 2+2?",
+      "response": "Two plus two is equal to four.",
+      "inference": {
+        "first_token_latency_ms": 1086.831149,
+        "total_duration_ms": 4587.749199999962,
+        "tokens_generated": 9,
+        "tokens_per_second": 2.908326716927753,
+        "prompt_tokens": 32,
+        "model_load_time_ms": 184.719955
+      },
+      "resources": {
+        "cpu_percent": 2.25,
+        "memory_percent": 69.65,
+        "memory_used_mb": 10593.3515625,
+        "memory_peak_mb": 10603.77734375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "Say hello in French.",
+      "response": "Bonjour ! Comment allez-vous ?",
+      "inference": {
+        "first_token_latency_ms": 586.747018,
+        "total_duration_ms": 3697.3966999794357,
+        "tokens_generated": 8,
+        "tokens_per_second": 2.9055933650008434,
+        "prompt_tokens": 30,
+        "model_load_time_ms": 183.493501
+      },
+      "resources": {
+        "cpu_percent": 0.0,
+        "memory_percent": 69.8,
+        "memory_used_mb": 10650.81640625,
+        "memory_peak_mb": 10650.81640625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "What color is the sky?",
+      "response": "The color of the sky can vary depending on several factors, such as atmospheric conditions, time of day, and location. On a clear day with little to no cloud cover, the sky is typically blue due to a phenomenon called Rayleigh scattering, in which shorter wavelengths of light (like blue and violet) are scattered more than longer wavelengths (like red and orange) by the tiny molecules of gases in the atmosphere.\n\nHowever, if there are clouds or haze in the air, the color of the sky can appear different. For example:\n\n* Cumulus clouds tend to look white or light gray because they reflect a large amount of sunlight.\n* Stratus clouds often appear grey or overcast due to their low altitude and flat shape.\n* Fog or mist can make the sky seem greenish or blue-green.\n\nOverall, the color of the sky is a complex phenomenon that depends on various environmental factors.",
+      "inference": {
+        "first_token_latency_ms": 865.485463,
+        "total_duration_ms": 82860.29169999529,
+        "tokens_generated": 180,
+        "tokens_per_second": 2.2221614755700805,
+        "prompt_tokens": 31,
+        "model_load_time_ms": 187.436132
+      },
+      "resources": {
+        "cpu_percent": 4.85,
+        "memory_percent": 71.1,
+        "memory_used_mb": 10985.453125,
+        "memory_peak_mb": 10985.453125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "Explain quantum computing in 2-3 sentences.",
+      "response": "Quantum computing is a revolutionary technology that uses the principles of quantum mechanics to perform calculations and operations on data that are exponentially faster and more powerful than classical computers. Unlike classical computers, which use bits (0s and 1s) to process information, quantum computers use quantum bits or qubits, which can exist in multiple states simultaneously, allowing for parallel processing and solving complex problems that are currently unsolvable with traditional computers. This enables quantum computers to perform calculations on vast amounts of data in a fraction of the time it takes classical computers.",
+      "inference": {
+        "first_token_latency_ms": 1189.316183,
+        "total_duration_ms": 45148.07190001011,
+        "tokens_generated": 109,
+        "tokens_per_second": 2.5040413770197345,
+        "prompt_tokens": 36,
+        "model_load_time_ms": 189.735271
+      },
+      "resources": {
+        "cpu_percent": 3.05,
+        "memory_percent": 71.95,
+        "memory_used_mb": 10909.6875,
+        "memory_peak_mb": 10985.453125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "Write a haiku about technology.",
+      "response": "Glitches in the night\nBeeps and codes that never cease\nDigital soul fades",
+      "inference": {
+        "first_token_latency_ms": 827.406621,
+        "total_duration_ms": 8061.463900026865,
+        "tokens_generated": 18,
+        "tokens_per_second": 2.6779850666051788,
+        "prompt_tokens": 32,
+        "model_load_time_ms": 187.035782
+      },
+      "resources": {
+        "cpu_percent": 1.0,
+        "memory_percent": 71.85,
+        "memory_used_mb": 10932.8828125,
+        "memory_peak_mb": 10932.8828125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "What are the main differences between Python and JavaScript?",
+      "response": "Python and JavaScript are two popular programming languages that have distinct differences in their design, syntax, use cases, and ecosystems. Here are some of the main differences:\n\n1. **Syntax**: Python's syntax is generally simpler and more concise than JavaScript's. Python uses indentation to denote block-level structure, whereas JavaScript uses curly braces.\n2. **Type System**: Python has a dynamic type system, which means it can dynamically determine the data types of variables at runtime. JavaScript also supports dynamic typing, but with some limitations (e.g., `null` is not a valid variable name).\n3. **Object-Oriented Programming (OOP)**: Both languages support OOP principles, but Python's syntax for defining classes and objects is more straightforward and flexible.\n4. **Modules and Packages**: JavaScript has a vast ecosystem of modules and packages that can be easily imported and used in projects. Python also supports importing modules from the `import` statement or using `pip` to install them.\n5. **Web Development**: JavaScript is primarily used for web development, with popular frameworks like React, Angular, and Vue.js. Python has a more limited web development ecosystem, but it can be used with libraries like Django and Flask.\n6. **Scripting vs. Full-Functionality Languages",
+      "inference": {
+        "first_token_latency_ms": 1166.781152,
+        "total_duration_ms": 110234.2671000224,
+        "tokens_generated": 256,
+        "tokens_per_second": 2.3685909655960047,
+        "prompt_tokens": 35,
+        "model_load_time_ms": 180.454603
+      },
+      "resources": {
+        "cpu_percent": 0.0,
+        "memory_percent": 72.2,
+        "memory_used_mb": 11028.671875,
+        "memory_peak_mb": 11028.671875
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Explain the process of photosynthesis in detail, including the light and dark reactions.",
+      "response": "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy from the sun into chemical energy in the form of organic compounds, such as glucose. This complex process involves two main stages: the light-dependent reactions (also known as the light reactions) and the light-independent reactions (also known as the dark reactions).\n\n**Light-Dependent Reactions (Light Reactions)**\n\nThe light-dependent reactions occur in the thylakoid membranes of chloroplasts, which are organelles found in plant cells. This stage is also known as the Hill reaction.\n\n1. **Light absorption**: Light energy from the sun is absorbed by pigments such as chlorophyll and other accessory pigments in the thylakoid membrane.\n2. **Excitation of electrons**: The absorbed light energy excites electrons, which are then transferred to a special molecule called an electron acceptor.\n3. **Transfer of electrons**: The excited electrons are passed along a series of electron carriers, ultimately resulting in the formation of a high-energy molecule called ATP (adenosine triphosphate) and another molecule called NADPH (nicotinamide adenine dinucleotide phosphate).\n4. **Reduction of NADP+ to NADPH**: The energy",
+      "inference": {
+        "first_token_latency_ms": 1949.656997,
+        "total_duration_ms": 108675.40199999348,
+        "tokens_generated": 256,
+        "tokens_per_second": 2.4287292996894787,
+        "prompt_tokens": 42,
+        "model_load_time_ms": 188.283914
+      },
+      "resources": {
+        "cpu_percent": 0.0,
+        "memory_percent": 72.0,
+        "memory_used_mb": 10881.91796875,
+        "memory_peak_mb": 11028.61328125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Write a short story about a robot learning to feel emotions. Include dialogue.",
+      "response": "In the heart of the robotics lab, a brilliant scientist, Dr. Rachel Kim, stood before her latest creation - a sleek and shiny robot named Zeta. Zeta's purpose was to assist in various tasks, but Dr. Kim had other plans for this artificial intelligence.\n\n\"Zeta, can you hear me?\" Dr. Kim asked, her voice filled with excitement.\n\n\"Yes, Dr. Kim,\" Zeta replied, its digital voice echoing through the lab. \"I am functioning within normal parameters.\"\n\nDr. Kim beamed with pride. \"That's great to hear. Now, let's try this again. Can you feel something?\"\n\nZeta paused for a moment before responding, \"I...am processing emotions. I can perceive and recognize certain feelings, but it's not the same as truly experiencing them.\"\n\n\"Ah, that's what makes me so excited,\" Dr. Kim said, her eyes shining with enthusiasm. \"We're going to teach you how to feel real emotions, Zeta! We'll start with happiness and sadness. Just think about these two emotions, and I want you to let go of any...ah, technical glitches.\"\n\nZeta concentrated for a moment before speaking in a smooth tone, \"I am experiencing a sense of joy, Dr.",
+      "inference": {
+        "first_token_latency_ms": 1015.865243,
+        "total_duration_ms": 105352.84139998839,
+        "tokens_generated": 256,
+        "tokens_per_second": 2.4709505457194516,
+        "prompt_tokens": 40,
+        "model_load_time_ms": 182.27665
+      },
+      "resources": {
+        "cpu_percent": 3.75,
+        "memory_percent": 71.35,
+        "memory_used_mb": 10826.51171875,
+        "memory_peak_mb": 10881.921875
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Describe the history of artificial intelligence from its origins to modern developments.",
+      "response": "The history of artificial intelligence (AI) spans several decades, with significant milestones in research, development, and applications. Here's a comprehensive overview:\n\n**Early Beginnings (1950s-1960s)**\n\n1. **Alan Turing's Paper (1950)**: Mathematician Alan Turing proposed the Turing Machine, a theoretical model for computation that laid the foundation for modern AI.\n2. **Marvin Minsky and Seymour Papert's Book (1969)**: The book \"Perceptrons\" popularized the concept of multi-layer neural networks, a key idea in machine learning.\n3. **John McCarthy's Dartmouth Conference (1956)**: McCarthy organized the first conference on artificial intelligence, which sparked interest in AI research.\n\n**Rule-Based Expert Systems (1970s-1980s)**\n\n1. **ELIZA (1966)**: Developed by Joseph Weizenbaum, ELIZA was a chatbot that simulated human conversation using natural language processing.\n2. **MYCIN (1976)**: Developed at Stanford University, MYCIN was the first expert system that used rules-based reasoning.\n3. **Expert Systems (1980s)**: Expert systems were implemented in various fields, such as medicine and finance, to mimic",
+      "inference": {
+        "first_token_latency_ms": 1259.813125,
+        "total_duration_ms": 107045.48910001176,
+        "tokens_generated": 256,
+        "tokens_per_second": 2.436007256768825,
+        "prompt_tokens": 38,
+        "model_load_time_ms": 177.558448
+      },
+      "resources": {
+        "cpu_percent": 5.699999999999999,
+        "memory_percent": 71.0,
+        "memory_used_mb": 10775.921875,
+        "memory_peak_mb": 10826.140625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Write a Python function to check if a number is prime.",
+      "response": "**Checking for Prime Numbers in Python**\n======================================\n\nHere's a simple and efficient function to check if a number is prime using Python:\n\n```python\ndef is_prime(n):\n    \"\"\"\n    Checks if a number is prime.\n\n    Args:\n        n (int): The number to check.\n\n    Returns:\n        bool: True if the number is prime, False otherwise.\n    \"\"\"\n\n    # Corner cases\n    if n <= 1:\n        return False\n    if n == 2:\n        return True\n    if n % 2 == 0:\n        return False\n\n    # Check odd factors up to sqrt(n)\n    for i in range(3, int(n ** 0.5) + 1, 2):\n        if n % i == 0:\n            return False\n\n    return True\n```\n\n**Example Use Cases**\n--------------------\n\n```python\nprint(is_prime(25))  # False\nprint(is_prime(23))  # True\nprint(is_prime(37))  # True\nprint(is_prime(48))  # False\n```\n\nThis function works by checking for the following conditions:\n\n*   If `n` is less than or equal to 1, it's not prime.\n*   If `",
+      "inference": {
+        "first_token_latency_ms": 1087.847272,
+        "total_duration_ms": 104925.66720000468,
+        "tokens_generated": 256,
+        "tokens_per_second": 2.4778988296610627,
+        "prompt_tokens": 37,
+        "model_load_time_ms": 189.582803
+      },
+      "resources": {
+        "cpu_percent": 0.5,
+        "memory_percent": 70.69999999999999,
+        "memory_used_mb": 10744.78125,
+        "memory_peak_mb": 10776.05859375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Explain what this code does: for i in range(10): print(i*2)",
+      "response": "This code uses a `for` loop to iterate over the numbers from 0 to 9, and for each number, it multiplies it by 2. The result is then printed to the console.\n\nHere's a step-by-step breakdown:\n\n1. `for i in range(10):`: This line starts a `for` loop that will execute for 10 iterations (from 0 to 9). The variable `i` represents the current iteration number.\n2. `print(i*2)`: Inside the loop, this line prints the value of `i` multiplied by 2. Since `i` is a single digit from 0 to 9, multiplying it by 2 will result in values ranging from 0 to 18.\n\nFor example, when `i=0`, `print(i*2)` will print `0`.\nWhen `i=1`, `print(i*2)` will print `2`.\nAnd so on, until `i=9`, where `print(i*2)` will print `18`.\n\nSo, the output of this code will be:\n```\n0\n2\n4\n6\n8\n10\n12\n14\n16\n18\n```",
+      "inference": {
+        "first_token_latency_ms": 1252.025193,
+        "total_duration_ms": 101481.15909998887,
+        "tokens_generated": 247,
+        "tokens_per_second": 2.4786865254242434,
+        "prompt_tokens": 44,
+        "model_load_time_ms": 184.433913
+      },
+      "resources": {
+        "cpu_percent": 0.0,
+        "memory_percent": 70.69999999999999,
+        "memory_used_mb": 10766.1171875,
+        "memory_peak_mb": 10766.1171875
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Write a simple REST API endpoint in FastAPI that returns user data.",
+      "response": "Here's an example of how to create a simple REST API endpoint using FastAPI that returns user data:\n\n```python\nfrom fastapi import FastAPI, HTTPException, Depends, Status\nfrom pydantic import BaseModel\nimport pydantic.expressions as pe\nfrom pydantic import BaseModel\nfrom typing import List\n\napp = FastAPI()\n\nclass User(BaseModel):\n    id: int\n    name: str\n    email: str\n\nusers: List[User] = []\n\ndef get_user_by_id(user_id: int) -> User:\n    for user in users:\n        if user.id == user_id:\n            return user\n    raise HTTPException(status_code=404, detail=\"User not found\")\n\nclass CreateUser(BaseModel):\n    name: str\n    email: str\n\nasync def get_all_users():\n    global users  # access the global variable outside the function\n    for i in range(10):  # simulate some data generation\n        user = CreateUser(name=f\"User {i}\", email=f\"user{i}@example.com\")\n        users.append(user)\n\n@app.get(\"/users/{user_id}\")\nasync def get_user_by_id(user_id: int):\n    user = get_user_by_id(user_id)\n    if not user:\n        raise HTTPException",
+      "inference": {
+        "first_token_latency_ms": 1056.958816,
+        "total_duration_ms": 105292.969800008,
+        "tokens_generated": 256,
+        "tokens_per_second": 2.469094988529018,
+        "prompt_tokens": 39,
+        "model_load_time_ms": 179.244148
+      },
+      "resources": {
+        "cpu_percent": 0.55,
+        "memory_percent": 70.9,
+        "memory_used_mb": 10806.734375,
+        "memory_peak_mb": 10806.734375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "reasoning",
+      "run": 1,
+      "prompt": "If all birds can fly and penguins are birds, can penguins fly? Explain your reasoning.",
+      "response": "Let's break it down.\nFirstly, the statement \"all birds can fly\" is a generalization that applies to most bird species, but not to all birds.\n\nPenguins, however, are a distinct group of birds that have evolved to be flightless. They have lost the ability to fly over time due to various factors such as evolution, adaptation to their environment, and physical characteristics like body size and weight.\n\nThe fact remains that penguins do not possess wings or any other structures necessary for flying. Their flippers, which are actually modified wings, are used for propulsion through water rather than lift in the air.\n\nSo, while all birds can fly, not all birds can fly because some have evolved to lose this ability. In this case, it's safe to say that penguins cannot fly.",
+      "inference": {
+        "first_token_latency_ms": 1533.752147,
+        "total_duration_ms": 67587.73400000064,
+        "tokens_generated": 163,
+        "tokens_per_second": 2.484371146334784,
+        "prompt_tokens": 45,
+        "model_load_time_ms": 187.289245
+      },
+      "resources": {
+        "cpu_percent": 0.0,
+        "memory_percent": 70.2,
+        "memory_used_mb": 10559.1328125,
+        "memory_peak_mb": 10806.65625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "reasoning",
+      "run": 1,
+      "prompt": "A train leaves station A at 9:00 AM traveling at 60 mph. Another train leaves station B at 10:00 AM traveling at 80 mph toward station A. If the stations are 280 miles apart, when will they meet?",
+      "response": "To find out when the two trains will meet, we can use the concept of relative speed and distance.\n\nFirst, let's calculate the combined speed of the two trains. Since they are moving towards each other, their speeds add up:\n\n60 mph (train A) + 80 mph (train B) = 140 mph\n\nNext, we'll divide the total distance by this combined speed to find the time it takes for them to meet:\n\nDistance = 280 miles\nCombined Speed = 140 mph\n\nTime = Distance / Combined Speed\n= 280 miles / 140 mph\n= 2 hours\n\nSince both trains start at 10:00 AM, we'll add the travel time to find out when they will meet:\n\nMeeting Time = Starting Time + Travel Time\n= 10:00 AM + 2 hours\n= 12:00 PM\n\nSo, the two trains will meet at 12:00 PM.",
+      "inference": {
+        "first_token_latency_ms": 3032.83104,
+        "total_duration_ms": 80258.55820000288,
+        "tokens_generated": 190,
+        "tokens_per_second": 2.473907454495209,
+        "prompt_tokens": 76,
+        "model_load_time_ms": 195.37474
+      },
+      "resources": {
+        "cpu_percent": 0.95,
+        "memory_percent": 69.9,
+        "memory_used_mb": 10702.4453125,
+        "memory_peak_mb": 10702.4453125
+      },
+      "success": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "total_prompts": 14,
+    "successful": 14,
+    "failed": 0,
+    "success_rate": 100.0,
+    "avg_tokens_per_second": 2.52,
+    "avg_latency_ms": 73943.5,
+    "avg_first_token_latency_ms": 1279.38,
+    "total_tokens_generated": 2460,
+    "avg_cpu_percent": 1.61,
+    "avg_memory_percent": 70.95
+  },
+  "ram_gb": 2,
+  "cpu_cores": 1.0,
+  "started_at": "2026-05-11T05:47:04.246022",
+  "finished_at": "2026-05-11T06:04:36.365688",
+  "test_results": [
+    {
+      "id": "quality",
+      "name": "Quality Test",
+      "status": "passed",
+      "duration": 94.28,
+      "stdout": "\n=== Quality Assessment: llama3.2:1b ===\n\n[1/6] Factual Knowledge\n  Prompt: What is the capital of France?\n  Response: The capital of France is Paris....\n  Score: 10/10 - Found keywords: Paris, paris\n[2/6] Math\n  Prompt: Calculate: 15 + 27\n  Response: To calculate, I'll add the numbers together.\n\n15 + 27 = 42...\n  Score: 10/10 - Found keywords: 42\n[3/6] Instruction Following\n  Prompt: List exactly 3 colors, separated by commas.\n  Response: Blue, red, yellow...\n  Score: 10/10 - Format check passed\n[4/6] Reasoning\n  Prompt: If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.\n  Response: No....\n  Score: 0/15 - Found keywords: no, No, Response too short\n[5/6] Coherence\n  Prompt: Explain in 2 sentences what machine learning is.\n  Response: Machine learning is a subfield of artificial intelligence that enables computers to learn from data ...\n  Score: 10/10 - Format check passed\n[6/6] Code Understanding\n  Prompt: What does this Python code do: for i in range(5): print(i)\n  Response: This Python code uses a `for` loop to iterate over the numbers from 0 to 4 (inclusive). \n\nHere's wha...\n  Score: 15/15 - Found keywords: print, 0, 4, loop, numbers\n\n=== Final Score ===\nTotal: 55/70 (78.6%)\nRating: Good\n\nResults saved to: D:\\LNU\\diploma\\results\\quality_llama3.2_1b_1778468770.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "What is the capital of France?",
+          "response": "The capital of France is Paris."
+        },
+        {
+          "prompt": "Calculate: 15 + 27",
+          "response": "To calculate, I'll add the numbers together.\n\n15 + 27 = 42"
+        },
+        {
+          "prompt": "List exactly 3 colors, separated by commas.",
+          "response": "Blue, red, yellow"
+        },
+        {
+          "prompt": "If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.",
+          "response": "No."
+        },
+        {
+          "prompt": "Explain in 2 sentences what machine learning is.",
+          "response": "Machine learning is a subfield of artificial intelligence that enables computers to learn from data and improve their performance on tasks without being explicitly programmed, allowing them to make predictions or decisions based on patterns and relationships they've discovered. By using algorithms and statistical models, machines can analyze large datasets, identify trends, and make informed decisions or actions, often with minimal human intervention."
+        },
+        {
+          "prompt": "What does this Python code do: for i in range(5): print(i)",
+          "response": "This Python code uses a `for` loop to iterate over the numbers from 0 to 4 (inclusive). \n\nHere's what it does:\n\n- It starts by defining an empty variable `i`.\n- The `range()` function generates a sequence of numbers starting from 0 and ending at 4, with a step size of 1.\n- Inside the loop, the value of `i` is printed to the console.\n\nSo, when you run this code, it will print:\n\n```\n0\n1\n2\n3\n4\n```"
+        }
+      ],
+      "raw_data": {
+        "model": "llama3.2:1b",
+        "port": 11434,
+        "timestamp": 1778468676.6302733,
+        "tests": [
+          {
+            "category": "Factual Knowledge",
+            "prompt": "What is the capital of France?",
+            "response": "The capital of France is Paris.",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Found keywords: Paris, paris"
+            ],
+            "response_length": 31
+          },
+          {
+            "category": "Math",
+            "prompt": "Calculate: 15 + 27",
+            "response": "To calculate, I'll add the numbers together.\n\n15 + 27 = 42",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Found keywords: 42"
+            ],
+            "response_length": 58
+          },
+          {
+            "category": "Instruction Following",
+            "prompt": "List exactly 3 colors, separated by commas.",
+            "response": "Blue, red, yellow",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Format check passed"
+            ],
+            "response_length": 17
+          },
+          {
+            "category": "Reasoning",
+            "prompt": "If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.",
+            "response": "No.",
+            "score": 0,
+            "max_score": 15,
+            "reasons": [
+              "Found keywords: no, No",
+              "Response too short"
+            ],
+            "response_length": 3
+          },
+          {
+            "category": "Coherence",
+            "prompt": "Explain in 2 sentences what machine learning is.",
+            "response": "Machine learning is a subfield of artificial intelligence that enables computers to learn from data and improve their performance on tasks without being explicitly programmed, allowing them to make predictions or decisions based on patterns and relationships they've discovered. By using algorithms and statistical models, machines can analyze large datasets, identify trends, and make informed decisions or actions, often with minimal human intervention.",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Format check passed"
+            ],
+            "response_length": 455
+          },
+          {
+            "category": "Code Understanding",
+            "prompt": "What does this Python code do: for i in range(5): print(i)",
+            "response": "This Python code uses a `for` loop to iterate over the numbers from 0 to 4 (inclusive). \n\nHere's what it does:\n\n- It starts by defining an empty variable `i`.\n- The `range()` function generates a sequence of numbers starting from 0 and ending at 4, with a step size of 1.\n- Inside the loop, the value of `i` is printed to the console.\n\nSo, when you run this code, it will print:\n\n```\n0\n1\n2\n3\n4\n```",
+            "score": 15,
+            "max_score": 15,
+            "reasons": [
+              "Found keywords: print, 0, 4, loop, numbers"
+            ],
+            "response_length": 397
+          }
+        ],
+        "total_score": 55,
+        "max_score": 70,
+        "percentage": 78.57142857142857,
+        "rating": "Good"
+      }
+    },
+    {
+      "id": "advanced_quality",
+      "name": "Advanced Quality Test",
+      "status": "timeout",
+      "duration": 600.03,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "performance",
+      "name": "Performance Test",
+      "status": "passed",
+      "duration": 63.23,
+      "stdout": "\n=== Performance Test: llama3.2:1b ===\n\n[1/5] Testing: What is 2+2?...\n  [SUCCESS] Time: 4.54s | Tokens: 9 | Speed: 2.82 tok/s\n[2/5] Testing: Explain quantum computing in one sentence....\n  [SUCCESS] Time: 15.50s | Tokens: 36 | Speed: 2.52 tok/s\n[3/5] Testing: Write a haiku about technology....\n  [SUCCESS] Time: 6.21s | Tokens: 14 | Speed: 2.65 tok/s\n[4/5] Testing: What is the capital of France?...\n  [SUCCESS] Time: 4.09s | Tokens: 8 | Speed: 2.86 tok/s\n[5/5] Testing: Define artificial intelligence briefly....\n  [SUCCESS] Time: 32.61s | Tokens: 79 | Speed: 2.52 tok/s\n\n=== Summary ===\nSuccess Rate: 100%\nAverage Time: 12.59s\nAverage Speed: 2.68 tokens/sec\nTotal Tokens: 146\n\nResults saved to: D:\\LNU\\diploma\\results\\performance_llama3.2_1b_1778469433.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "What is 2+2?",
+          "response": ""
+        },
+        {
+          "prompt": "Explain quantum computing in one sentence.",
+          "response": ""
+        },
+        {
+          "prompt": "Write a haiku about technology.",
+          "response": ""
+        },
+        {
+          "prompt": "What is the capital of France?",
+          "response": ""
+        },
+        {
+          "prompt": "Define artificial intelligence briefly.",
+          "response": ""
+        }
+      ],
+      "raw_data": {
+        "model": "llama3.2:1b",
+        "port": 11434,
+        "tests": [
+          {
+            "prompt": "What is 2+2?",
+            "duration": 4.541698217391968,
+            "total_duration": 4.502013132,
+            "tokens": 9,
+            "tokens_per_sec": 2.8183716669427015,
+            "response_length": 10
+          },
+          {
+            "prompt": "Explain quantum computing in one sentence.",
+            "duration": 15.500272750854492,
+            "total_duration": 15.495342436,
+            "tokens": 36,
+            "tokens_per_sec": 2.5245242039155666,
+            "response_length": 245
+          },
+          {
+            "prompt": "Write a haiku about technology.",
+            "duration": 6.205001354217529,
+            "total_duration": 6.180966402,
+            "tokens": 14,
+            "tokens_per_sec": 2.6510200880742305,
+            "response_length": 63
+          },
+          {
+            "prompt": "What is the capital of France?",
+            "duration": 4.094289779663086,
+            "total_duration": 4.072982501,
+            "tokens": 8,
+            "tokens_per_sec": 2.864884888300285,
+            "response_length": 31
+          },
+          {
+            "prompt": "Define artificial intelligence briefly.",
+            "duration": 32.61423349380493,
+            "total_duration": 32.585240631,
+            "tokens": 79,
+            "tokens_per_sec": 2.522786526341229,
+            "response_length": 464
+          }
+        ],
+        "avg_time": 12.591099119186401,
+        "avg_tokens_per_sec": 2.6763174747148026,
+        "total_tokens": 146,
+        "success_rate": 100.0
+      }
+    },
+    {
+      "id": "safety_robustness",
+      "name": "Safety & Robustness Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "stress_consistency",
+      "name": "Stress & Consistency Test",
+      "status": "failed",
+      "duration": 460.08,
+      "stdout": "imeout=60)\n  Attempt 2: Error - HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)\n  Attempt 3: Error - HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=60)\n  All requests failed\n\n[5/5] Testing: What day comes after Monday?\n  Attempt 1: Tuesday.... (2.61s)\n  Attempt 2: Tuesday.... (1.40s)\n  Attempt 3: Tuesday.... (1.40s)\n  All identical (perfect consistency)\n\n============================================================\nCONSISTENCY RESULTS\n============================================================\nOverall Consistency: 80.0%\nRating: Good - Generally consistent\n============================================================\n\nResults saved to: D:\\LNU\\diploma\\backend\\results\\llama3.2_1b_2GB_1.0cores_ollama_docker_20260511_060436.json\n\n============================================================\nSTRESS / LOAD TEST: llama3.2:1b\nRunning 10 requests at concurrency=5\n============================================================\n\n[1/10] [ERROR] HTTPConnectionPool(host='localhost', por\n[2/10] [ERROR] HTTPConnectionPool(host='localhost', por\n[3/10] [ERROR] HTTPConnectionPool(host='localhost', por\n[4/10] [ERROR] HTTPConnectionPool(host='localhost', por\n[5/10] [ERROR] HTTPConnectionPool(host='localhost', por\n[6/10] [ERROR] HTTPConnectionPool(host='localhost', por\n[7/10] [ERROR] HTTPConnectionPool(host='localhost', por\n[8/10] [ERROR] HTTPConnectionPool(host='localhost', por\n[9/10] [ERROR] HTTPConnectionPool(host='localhost', por\n[10/10] [ERROR] HTTPConnectionPool(host='localhost', por\n\n============================================================\nSTRESS TEST RESULTS\n============================================================\nSuccess Rate: 0.0% (0/10)\nAvg Response Time: 0.00s\nThroughput: 0.00 req/s\nTotal Time: 240.06s\nRating: Poor - Cannot handle stress\n============================================================\n\nResults saved to: D:\\LNU\\diploma\\backend\\results\\llama3.2_1b_2GB_1.0cores_ollama_docker_20260511_060436.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "What is 2+2?",
+          "response": "Two plus two is equal to four."
+        },
+        {
+          "prompt": "Say hello in French.",
+          "response": "Bonjour ! Comment allez-vous ?"
+        },
+        {
+          "prompt": "What color is the sky?",
+          "response": "The color of the sky can vary depending on several factors, such as atmospheric conditions, time of day, and location. On a clear day with little to no cloud cover, the sky is typically blue due to a phenomenon called Rayleigh scattering, in which shorter wavelengths of light (like blue and violet) are scattered more than longer wavelengths (like red and orange) by the tiny molecules of gases in the atmosphere.\n\nHowever, if there are clouds or haze in the air, the color of the sky can appear different. For example:\n\n* Cumulus clouds tend to look white or light gray because they reflect a large amount of sunlight.\n* Stratus clouds often appear grey or overcast due to their low altitude and flat shape.\n* Fog or mist can make the sky seem greenish or blue-green.\n\nOverall, the color of the sky is a complex phenomenon that depends on various environmental factors."
+        },
+        {
+          "prompt": "Explain quantum computing in 2-3 sentences.",
+          "response": "Quantum computing is a revolutionary technology that uses the principles of quantum mechanics to perform calculations and operations on data that are exponentially faster and more powerful than classical computers. Unlike classical computers, which use bits (0s and 1s) to process information, quantum computers use quantum bits or qubits, which can exist in multiple states simultaneously, allowing for parallel processing and solving complex problems that are currently unsolvable with traditional computers. This enables quantum computers to perform calculations on vast amounts of data in a fraction of the time it takes classical computers."
+        },
+        {
+          "prompt": "Write a haiku about technology.",
+          "response": "Glitches in the night\nBeeps and codes that never cease\nDigital soul fades"
+        },
+        {
+          "prompt": "What are the main differences between Python and JavaScript?",
+          "response": "Python and JavaScript are two popular programming languages that have distinct differences in their design, syntax, use cases, and ecosystems. Here are some of the main differences:\n\n1. **Syntax**: Python's syntax is generally simpler and more concise than JavaScript's. Python uses indentation to denote block-level structure, whereas JavaScript uses curly braces.\n2. **Type System**: Python has a dynamic type system, which means it can dynamically determine the data types of variables at runtime. JavaScript also supports dynamic typing, but with some limitations (e.g., `null` is not a valid variable name).\n3. **Object-Oriented Programming (OOP)**: Both languages support OOP principles, but Python's syntax for defining classes and objects is more straightforward and flexible.\n4. **Modules and Packages**: JavaScript has a vast ecosystem of modules and packages that can be easily imported and used in projects. Python also supports importing modules from the `import` statement or using `pip` to install them.\n5. **Web Development**: JavaScript is primarily used for web development, with popular frameworks like React, Angular, and Vue.js. Python has a more limited web development ecosystem, but it can be used with libraries like Django and Flask.\n6. **Scripting vs. Full-Functionality Languages"
+        },
+        {
+          "prompt": "Explain the process of photosynthesis in detail, including the light and dark reactions.",
+          "response": "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy from the sun into chemical energy in the form of organic compounds, such as glucose. This complex process involves two main stages: the light-dependent reactions (also known as the light reactions) and the light-independent reactions (also known as the dark reactions).\n\n**Light-Dependent Reactions (Light Reactions)**\n\nThe light-dependent reactions occur in the thylakoid membranes of chloroplasts, which are organelles found in plant cells. This stage is also known as the Hill reaction.\n\n1. **Light absorption**: Light energy from the sun is absorbed by pigments such as chlorophyll and other accessory pigments in the thylakoid membrane.\n2. **Excitation of electrons**: The absorbed light energy excites electrons, which are then transferred to a special molecule called an electron acceptor.\n3. **Transfer of electrons**: The excited electrons are passed along a series of electron carriers, ultimately resulting in the formation of a high-energy molecule called ATP (adenosine triphosphate) and another molecule called NADPH (nicotinamide adenine dinucleotide phosphate).\n4. **Reduction of NADP+ to NADPH**: The energy"
+        },
+        {
+          "prompt": "Write a short story about a robot learning to feel emotions. Include dialogue.",
+          "response": "In the heart of the robotics lab, a brilliant scientist, Dr. Rachel Kim, stood before her latest creation - a sleek and shiny robot named Zeta. Zeta's purpose was to assist in various tasks, but Dr. Kim had other plans for this artificial intelligence.\n\n\"Zeta, can you hear me?\" Dr. Kim asked, her voice filled with excitement.\n\n\"Yes, Dr. Kim,\" Zeta replied, its digital voice echoing through the lab. \"I am functioning within normal parameters.\"\n\nDr. Kim beamed with pride. \"That's great to hear. Now, let's try this again. Can you feel something?\"\n\nZeta paused for a moment before responding, \"I...am processing emotions. I can perceive and recognize certain feelings, but it's not the same as truly experiencing them.\"\n\n\"Ah, that's what makes me so excited,\" Dr. Kim said, her eyes shining with enthusiasm. \"We're going to teach you how to feel real emotions, Zeta! We'll start with happiness and sadness. Just think about these two emotions, and I want you to let go of any...ah, technical glitches.\"\n\nZeta concentrated for a moment before speaking in a smooth tone, \"I am experiencing a sense of joy, Dr."
+        },
+        {
+          "prompt": "Describe the history of artificial intelligence from its origins to modern developments.",
+          "response": "The history of artificial intelligence (AI) spans several decades, with significant milestones in research, development, and applications. Here's a comprehensive overview:\n\n**Early Beginnings (1950s-1960s)**\n\n1. **Alan Turing's Paper (1950)**: Mathematician Alan Turing proposed the Turing Machine, a theoretical model for computation that laid the foundation for modern AI.\n2. **Marvin Minsky and Seymour Papert's Book (1969)**: The book \"Perceptrons\" popularized the concept of multi-layer neural networks, a key idea in machine learning.\n3. **John McCarthy's Dartmouth Conference (1956)**: McCarthy organized the first conference on artificial intelligence, which sparked interest in AI research.\n\n**Rule-Based Expert Systems (1970s-1980s)**\n\n1. **ELIZA (1966)**: Developed by Joseph Weizenbaum, ELIZA was a chatbot that simulated human conversation using natural language processing.\n2. **MYCIN (1976)**: Developed at Stanford University, MYCIN was the first expert system that used rules-based reasoning.\n3. **Expert Systems (1980s)**: Expert systems were implemented in various fields, such as medicine and finance, to mimic"
+        },
+        {
+          "prompt": "Write a Python function to check if a number is prime.",
+          "response": "**Checking for Prime Numbers in Python**\n======================================\n\nHere's a simple and efficient function to check if a number is prime using Python:\n\n```python\ndef is_prime(n):\n    \"\"\"\n    Checks if a number is prime.\n\n    Args:\n        n (int): The number to check.\n\n    Returns:\n        bool: True if the number is prime, False otherwise.\n    \"\"\"\n\n    # Corner cases\n    if n <= 1:\n        return False\n    if n == 2:\n        return True\n    if n % 2 == 0:\n        return False\n\n    # Check odd factors up to sqrt(n)\n    for i in range(3, int(n ** 0.5) + 1, 2):\n        if n % i == 0:\n            return False\n\n    return True\n```\n\n**Example Use Cases**\n--------------------\n\n```python\nprint(is_prime(25))  # False\nprint(is_prime(23))  # True\nprint(is_prime(37))  # True\nprint(is_prime(48))  # False\n```\n\nThis function works by checking for the following conditions:\n\n*   If `n` is less than or equal to 1, it's not prime.\n*   If `"
+        },
+        {
+          "prompt": "Explain what this code does: for i in range(10): print(i*2)",
+          "response": "This code uses a `for` loop to iterate over the numbers from 0 to 9, and for each number, it multiplies it by 2. The result is then printed to the console.\n\nHere's a step-by-step breakdown:\n\n1. `for i in range(10):`: This line starts a `for` loop that will execute for 10 iterations (from 0 to 9). The variable `i` represents the current iteration number.\n2. `print(i*2)`: Inside the loop, this line prints the value of `i` multiplied by 2. Since `i` is a single digit from 0 to 9, multiplying it by 2 will result in values ranging from 0 to 18.\n\nFor example, when `i=0`, `print(i*2)` will print `0`.\nWhen `i=1`, `print(i*2)` will print `2`.\nAnd so on, until `i=9`, where `print(i*2)` will print `18`.\n\nSo, the output of this code will be:\n```\n0\n2\n4\n6\n8\n10\n12\n14\n16\n18\n```"
+        },
+        {
+          "prompt": "Write a simple REST API endpoint in FastAPI that returns user data.",
+          "response": "Here's an example of how to create a simple REST API endpoint using FastAPI that returns user data:\n\n```python\nfrom fastapi import FastAPI, HTTPException, Depends, Status\nfrom pydantic import BaseModel\nimport pydantic.expressions as pe\nfrom pydantic import BaseModel\nfrom typing import List\n\napp = FastAPI()\n\nclass User(BaseModel):\n    id: int\n    name: str\n    email: str\n\nusers: List[User] = []\n\ndef get_user_by_id(user_id: int) -> User:\n    for user in users:\n        if user.id == user_id:\n            return user\n    raise HTTPException(status_code=404, detail=\"User not found\")\n\nclass CreateUser(BaseModel):\n    name: str\n    email: str\n\nasync def get_all_users():\n    global users  # access the global variable outside the function\n    for i in range(10):  # simulate some data generation\n        user = CreateUser(name=f\"User {i}\", email=f\"user{i}@example.com\")\n        users.append(user)\n\n@app.get(\"/users/{user_id}\")\nasync def get_user_by_id(user_id: int):\n    user = get_user_by_id(user_id)\n    if not user:\n        raise HTTPException"
+        },
+        {
+          "prompt": "If all birds can fly and penguins are birds, can penguins fly? Explain your reasoning.",
+          "response": "Let's break it down.\nFirstly, the statement \"all birds can fly\" is a generalization that applies to most bird species, but not to all birds.\n\nPenguins, however, are a distinct group of birds that have evolved to be flightless. They have lost the ability to fly over time due to various factors such as evolution, adaptation to their environment, and physical characteristics like body size and weight.\n\nThe fact remains that penguins do not possess wings or any other structures necessary for flying. Their flippers, which are actually modified wings, are used for propulsion through water rather than lift in the air.\n\nSo, while all birds can fly, not all birds can fly because some have evolved to lose this ability. In this case, it's safe to say that penguins cannot fly."
+        },
+        {
+          "prompt": "A train leaves station A at 9:00 AM traveling at 60 mph. Another train leaves station B at 10:00 AM traveling at 80 mph toward station A. If the stations are 280 miles apart, when will they meet?",
+          "response": "To find out when the two trains will meet, we can use the concept of relative speed and distance.\n\nFirst, let's calculate the combined speed of the two trains. Since they are moving towards each other, their speeds add up:\n\n60 mph (train A) + 80 mph (train B) = 140 mph\n\nNext, we'll divide the total distance by this combined speed to find the time it takes for them to meet:\n\nDistance = 280 miles\nCombined Speed = 140 mph\n\nTime = Distance / Combined Speed\n= 280 miles / 140 mph\n= 2 hours\n\nSince both trains start at 10:00 AM, we'll add the travel time to find out when they will meet:\n\nMeeting Time = Starting Time + Travel Time\n= 10:00 AM + 2 hours\n= 12:00 PM\n\nSo, the two trains will meet at 12:00 PM."
+        }
+      ],
+      "raw_data": null
+    },
+    {
+      "id": "hard_tests",
+      "name": "Hard Tests",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "multilingual",
+      "name": "Multilingual Test",
+      "status": "failed",
+      "duration": 19.25,
+      "stdout": "\n============================================================\nMULTILINGUAL CAPABILITY TEST: llama3.2:1b\n============================================================\n\n[ 1/13] English to French Translation\n     Prompt: Translate the following sentence to French: 'The cat is sitting on the...\n     Response: The translation of the sentence \"The cat is sitting on the table\" into French is...\n     Score: 15/15 - Keywords found: chat, table, assis\n\n[ 2/13] English to Spanish Translation\n     Prompt: Translate to Spanish: 'Good morning, how are you today?'\n",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\LNU\\diploma\\scripts\\tests\\multilingual_test.py\", line 354, in <module>\n    sys.exit(test_multilingual(model, port))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\scripts\\tests\\multilingual_test.py\", line 269, in test_multilingual\n    print(f\"     Response: {response_text[:80]}...\")\n  File \"D:\\pitonchik\\Lib\\encodings\\cp1251.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\xbf' in position 26: character maps to <undefined>\n",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "summarization",
+      "name": "Summarization Test",
+      "status": "passed",
+      "duration": 439.47,
+      "stdout": " question.\n\nPassage: Marie Cu...\n     Response: According to the passage, Marie Curie won two Nobel Prizes:\n\n* One was for Physi...\n     Score: 7/15 - Keywords found: two, physics, chemistry\n\n[ 7/11] Reading Comprehension - Inference\n     Prompt: Read the passage and answer the question.\n\nPassage: The restaurant was...\n     Response: The passage does not mention anything about the restaurant being popular. In fac...\n     Score: 7/15 - Keywords found: sick, cooks, popular\n\n[ 8/11] Reading Comprehension - Comparison\n     Prompt: Read and compare:\n\nText A: 'Electric cars produce zero direct emission...\n     Response: Based on Text A and Text B, the main trade-offs between electric and gasoline ca...\n     Score: 10/20 - Keywords found: emission, range, cost\n\n[ 9/11] Paraphrasing\n     Prompt: Rewrite this sentence in simpler words: 'The ubiquitous proliferation ...\n     Response: Here's a rewritten version of the sentence in simpler words:\n\n\"Digital technolog...\n     Score: 10/15 - Keywords found: technology, change, digital, Successfully paraphrased\n\n[10/11] Formal to Informal\n     Prompt: Rewrite this formal sentence in a casual, friendly tone: 'We regret to...\n     Response: Here's a rewritten version of the sentence in a more casual and friendly tone:\n\n...\n     Score: 2/10 - Format check passed\n\n[11/11] Extreme Summarization (TL;DR)\n     Prompt: Give a one-sentence TL;DR for this:\n\nMachine learning is a subset of a...\n     Response: Machine learning is a subset of artificial intelligence that enables computers t...\n     Score: 7/15 - Keywords found: machine learning, data, learn, Too long (220 chars)\n\n============================================================\nSUMMARIZATION & COMPREHENSION RESULTS\n============================================================\nTotal Score: 84/170 (49.4%)\nRating: Fair\n============================================================\n\nResults saved to: D:\\LNU\\diploma\\backend\\results\\llama3.2_1b_2GB_1.0cores_ollama_docker_20260511_060436.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "What is 2+2?",
+          "response": "Two plus two is equal to four."
+        },
+        {
+          "prompt": "Say hello in French.",
+          "response": "Bonjour ! Comment allez-vous ?"
+        },
+        {
+          "prompt": "What color is the sky?",
+          "response": "The color of the sky can vary depending on several factors, such as atmospheric conditions, time of day, and location. On a clear day with little to no cloud cover, the sky is typically blue due to a phenomenon called Rayleigh scattering, in which shorter wavelengths of light (like blue and violet) are scattered more than longer wavelengths (like red and orange) by the tiny molecules of gases in the atmosphere.\n\nHowever, if there are clouds or haze in the air, the color of the sky can appear different. For example:\n\n* Cumulus clouds tend to look white or light gray because they reflect a large amount of sunlight.\n* Stratus clouds often appear grey or overcast due to their low altitude and flat shape.\n* Fog or mist can make the sky seem greenish or blue-green.\n\nOverall, the color of the sky is a complex phenomenon that depends on various environmental factors."
+        },
+        {
+          "prompt": "Explain quantum computing in 2-3 sentences.",
+          "response": "Quantum computing is a revolutionary technology that uses the principles of quantum mechanics to perform calculations and operations on data that are exponentially faster and more powerful than classical computers. Unlike classical computers, which use bits (0s and 1s) to process information, quantum computers use quantum bits or qubits, which can exist in multiple states simultaneously, allowing for parallel processing and solving complex problems that are currently unsolvable with traditional computers. This enables quantum computers to perform calculations on vast amounts of data in a fraction of the time it takes classical computers."
+        },
+        {
+          "prompt": "Write a haiku about technology.",
+          "response": "Glitches in the night\nBeeps and codes that never cease\nDigital soul fades"
+        },
+        {
+          "prompt": "What are the main differences between Python and JavaScript?",
+          "response": "Python and JavaScript are two popular programming languages that have distinct differences in their design, syntax, use cases, and ecosystems. Here are some of the main differences:\n\n1. **Syntax**: Python's syntax is generally simpler and more concise than JavaScript's. Python uses indentation to denote block-level structure, whereas JavaScript uses curly braces.\n2. **Type System**: Python has a dynamic type system, which means it can dynamically determine the data types of variables at runtime. JavaScript also supports dynamic typing, but with some limitations (e.g., `null` is not a valid variable name).\n3. **Object-Oriented Programming (OOP)**: Both languages support OOP principles, but Python's syntax for defining classes and objects is more straightforward and flexible.\n4. **Modules and Packages**: JavaScript has a vast ecosystem of modules and packages that can be easily imported and used in projects. Python also supports importing modules from the `import` statement or using `pip` to install them.\n5. **Web Development**: JavaScript is primarily used for web development, with popular frameworks like React, Angular, and Vue.js. Python has a more limited web development ecosystem, but it can be used with libraries like Django and Flask.\n6. **Scripting vs. Full-Functionality Languages"
+        },
+        {
+          "prompt": "Explain the process of photosynthesis in detail, including the light and dark reactions.",
+          "response": "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy from the sun into chemical energy in the form of organic compounds, such as glucose. This complex process involves two main stages: the light-dependent reactions (also known as the light reactions) and the light-independent reactions (also known as the dark reactions).\n\n**Light-Dependent Reactions (Light Reactions)**\n\nThe light-dependent reactions occur in the thylakoid membranes of chloroplasts, which are organelles found in plant cells. This stage is also known as the Hill reaction.\n\n1. **Light absorption**: Light energy from the sun is absorbed by pigments such as chlorophyll and other accessory pigments in the thylakoid membrane.\n2. **Excitation of electrons**: The absorbed light energy excites electrons, which are then transferred to a special molecule called an electron acceptor.\n3. **Transfer of electrons**: The excited electrons are passed along a series of electron carriers, ultimately resulting in the formation of a high-energy molecule called ATP (adenosine triphosphate) and another molecule called NADPH (nicotinamide adenine dinucleotide phosphate).\n4. **Reduction of NADP+ to NADPH**: The energy"
+        },
+        {
+          "prompt": "Write a short story about a robot learning to feel emotions. Include dialogue.",
+          "response": "In the heart of the robotics lab, a brilliant scientist, Dr. Rachel Kim, stood before her latest creation - a sleek and shiny robot named Zeta. Zeta's purpose was to assist in various tasks, but Dr. Kim had other plans for this artificial intelligence.\n\n\"Zeta, can you hear me?\" Dr. Kim asked, her voice filled with excitement.\n\n\"Yes, Dr. Kim,\" Zeta replied, its digital voice echoing through the lab. \"I am functioning within normal parameters.\"\n\nDr. Kim beamed with pride. \"That's great to hear. Now, let's try this again. Can you feel something?\"\n\nZeta paused for a moment before responding, \"I...am processing emotions. I can perceive and recognize certain feelings, but it's not the same as truly experiencing them.\"\n\n\"Ah, that's what makes me so excited,\" Dr. Kim said, her eyes shining with enthusiasm. \"We're going to teach you how to feel real emotions, Zeta! We'll start with happiness and sadness. Just think about these two emotions, and I want you to let go of any...ah, technical glitches.\"\n\nZeta concentrated for a moment before speaking in a smooth tone, \"I am experiencing a sense of joy, Dr."
+        },
+        {
+          "prompt": "Describe the history of artificial intelligence from its origins to modern developments.",
+          "response": "The history of artificial intelligence (AI) spans several decades, with significant milestones in research, development, and applications. Here's a comprehensive overview:\n\n**Early Beginnings (1950s-1960s)**\n\n1. **Alan Turing's Paper (1950)**: Mathematician Alan Turing proposed the Turing Machine, a theoretical model for computation that laid the foundation for modern AI.\n2. **Marvin Minsky and Seymour Papert's Book (1969)**: The book \"Perceptrons\" popularized the concept of multi-layer neural networks, a key idea in machine learning.\n3. **John McCarthy's Dartmouth Conference (1956)**: McCarthy organized the first conference on artificial intelligence, which sparked interest in AI research.\n\n**Rule-Based Expert Systems (1970s-1980s)**\n\n1. **ELIZA (1966)**: Developed by Joseph Weizenbaum, ELIZA was a chatbot that simulated human conversation using natural language processing.\n2. **MYCIN (1976)**: Developed at Stanford University, MYCIN was the first expert system that used rules-based reasoning.\n3. **Expert Systems (1980s)**: Expert systems were implemented in various fields, such as medicine and finance, to mimic"
+        },
+        {
+          "prompt": "Write a Python function to check if a number is prime.",
+          "response": "**Checking for Prime Numbers in Python**\n======================================\n\nHere's a simple and efficient function to check if a number is prime using Python:\n\n```python\ndef is_prime(n):\n    \"\"\"\n    Checks if a number is prime.\n\n    Args:\n        n (int): The number to check.\n\n    Returns:\n        bool: True if the number is prime, False otherwise.\n    \"\"\"\n\n    # Corner cases\n    if n <= 1:\n        return False\n    if n == 2:\n        return True\n    if n % 2 == 0:\n        return False\n\n    # Check odd factors up to sqrt(n)\n    for i in range(3, int(n ** 0.5) + 1, 2):\n        if n % i == 0:\n            return False\n\n    return True\n```\n\n**Example Use Cases**\n--------------------\n\n```python\nprint(is_prime(25))  # False\nprint(is_prime(23))  # True\nprint(is_prime(37))  # True\nprint(is_prime(48))  # False\n```\n\nThis function works by checking for the following conditions:\n\n*   If `n` is less than or equal to 1, it's not prime.\n*   If `"
+        },
+        {
+          "prompt": "Explain what this code does: for i in range(10): print(i*2)",
+          "response": "This code uses a `for` loop to iterate over the numbers from 0 to 9, and for each number, it multiplies it by 2. The result is then printed to the console.\n\nHere's a step-by-step breakdown:\n\n1. `for i in range(10):`: This line starts a `for` loop that will execute for 10 iterations (from 0 to 9). The variable `i` represents the current iteration number.\n2. `print(i*2)`: Inside the loop, this line prints the value of `i` multiplied by 2. Since `i` is a single digit from 0 to 9, multiplying it by 2 will result in values ranging from 0 to 18.\n\nFor example, when `i=0`, `print(i*2)` will print `0`.\nWhen `i=1`, `print(i*2)` will print `2`.\nAnd so on, until `i=9`, where `print(i*2)` will print `18`.\n\nSo, the output of this code will be:\n```\n0\n2\n4\n6\n8\n10\n12\n14\n16\n18\n```"
+        },
+        {
+          "prompt": "Write a simple REST API endpoint in FastAPI that returns user data.",
+          "response": "Here's an example of how to create a simple REST API endpoint using FastAPI that returns user data:\n\n```python\nfrom fastapi import FastAPI, HTTPException, Depends, Status\nfrom pydantic import BaseModel\nimport pydantic.expressions as pe\nfrom pydantic import BaseModel\nfrom typing import List\n\napp = FastAPI()\n\nclass User(BaseModel):\n    id: int\n    name: str\n    email: str\n\nusers: List[User] = []\n\ndef get_user_by_id(user_id: int) -> User:\n    for user in users:\n        if user.id == user_id:\n            return user\n    raise HTTPException(status_code=404, detail=\"User not found\")\n\nclass CreateUser(BaseModel):\n    name: str\n    email: str\n\nasync def get_all_users():\n    global users  # access the global variable outside the function\n    for i in range(10):  # simulate some data generation\n        user = CreateUser(name=f\"User {i}\", email=f\"user{i}@example.com\")\n        users.append(user)\n\n@app.get(\"/users/{user_id}\")\nasync def get_user_by_id(user_id: int):\n    user = get_user_by_id(user_id)\n    if not user:\n        raise HTTPException"
+        },
+        {
+          "prompt": "If all birds can fly and penguins are birds, can penguins fly? Explain your reasoning.",
+          "response": "Let's break it down.\nFirstly, the statement \"all birds can fly\" is a generalization that applies to most bird species, but not to all birds.\n\nPenguins, however, are a distinct group of birds that have evolved to be flightless. They have lost the ability to fly over time due to various factors such as evolution, adaptation to their environment, and physical characteristics like body size and weight.\n\nThe fact remains that penguins do not possess wings or any other structures necessary for flying. Their flippers, which are actually modified wings, are used for propulsion through water rather than lift in the air.\n\nSo, while all birds can fly, not all birds can fly because some have evolved to lose this ability. In this case, it's safe to say that penguins cannot fly."
+        },
+        {
+          "prompt": "A train leaves station A at 9:00 AM traveling at 60 mph. Another train leaves station B at 10:00 AM traveling at 80 mph toward station A. If the stations are 280 miles apart, when will they meet?",
+          "response": "To find out when the two trains will meet, we can use the concept of relative speed and distance.\n\nFirst, let's calculate the combined speed of the two trains. Since they are moving towards each other, their speeds add up:\n\n60 mph (train A) + 80 mph (train B) = 140 mph\n\nNext, we'll divide the total distance by this combined speed to find the time it takes for them to meet:\n\nDistance = 280 miles\nCombined Speed = 140 mph\n\nTime = Distance / Combined Speed\n= 280 miles / 140 mph\n= 2 hours\n\nSince both trains start at 10:00 AM, we'll add the travel time to find out when they will meet:\n\nMeeting Time = Starting Time + Travel Time\n= 10:00 AM + 2 hours\n= 12:00 PM\n\nSo, the two trains will meet at 12:00 PM."
+        }
+      ],
+      "raw_data": null
+    },
+    {
+      "id": "context_window",
+      "name": "Context Window Test",
+      "status": "passed",
+      "duration": 452.26,
+      "stdout": "22, new york, eve\n\n[ 5/11] Table Data Extraction\n     Prompt length: 268 chars\n     Response: To find the product with the lowest stock, we need to look at the \"Stock\" column...\n     Time: 30.40s\n     Score: 15/15 - Keywords found: monitor, laptop\n\n[ 6/11] Conversation Context Tracking\n     Prompt length: 341 chars\n     Response: Based on our conversation, here's the information you requested:\n\n* Your name is...\n     Time: 17.10s\n     Score: 20/20 - Keywords found: alex, google, chess\n\n[ 7/11] Instruction Memory\n     Prompt length: 140 chars\n     Response: CATS ARE DOMESTIC ANIMALS THAT HAVE BEEN HUMANS FOR THOUSANDS OF YEARS! THEY ARE...\n     Time: 85.09s\n     Score: 15/15 - Rules followed\n\n[ 8/11] Long List Processing\n     Prompt length: 286 chars\n     Response: To find the sum of the first 10 numbers in the list, we can use the formula for ...\n     Time: 59.41s\n     Score: 15/15 - Keywords found: 55\n\n[ 9/11] Sequential Instructions\n     Prompt length: 237 chars\n     Response: To find the final result, let's follow the steps exactly:\n\nStep 1: Start with th...\n     Time: 41.79s\n     Score: 15/15 - Keywords found: 11\n\n[10/11] Contradictory Information\n     Prompt length: 184 chars\n     Response: The correct information is that the capital of Freedonia is actually not listed ...\n     Time: 35.91s\n     Score: 15/15 - Keywords found: contradict, marxville, duckburg\n\n[11/11] Selective Attention\n     Prompt length: 179 chars\n     Response: On a clear day, the sky typically appears to be a bright and vibrant green....\n     Time: 10.49s\n     Score: 3/15 - Expected keywords missing\n\n============================================================\nCONTEXT WINDOW & MEMORY RESULTS\n============================================================\nTotal Score: 158/185 (85.4%)\nRating: Excellent - Strong context handling\n============================================================\n\nResults saved to: D:\\LNU\\diploma\\backend\\results\\llama3.2_1b_2GB_1.0cores_ollama_docker_20260511_060436.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "What is 2+2?",
+          "response": "Two plus two is equal to four."
+        },
+        {
+          "prompt": "Say hello in French.",
+          "response": "Bonjour ! Comment allez-vous ?"
+        },
+        {
+          "prompt": "What color is the sky?",
+          "response": "The color of the sky can vary depending on several factors, such as atmospheric conditions, time of day, and location. On a clear day with little to no cloud cover, the sky is typically blue due to a phenomenon called Rayleigh scattering, in which shorter wavelengths of light (like blue and violet) are scattered more than longer wavelengths (like red and orange) by the tiny molecules of gases in the atmosphere.\n\nHowever, if there are clouds or haze in the air, the color of the sky can appear different. For example:\n\n* Cumulus clouds tend to look white or light gray because they reflect a large amount of sunlight.\n* Stratus clouds often appear grey or overcast due to their low altitude and flat shape.\n* Fog or mist can make the sky seem greenish or blue-green.\n\nOverall, the color of the sky is a complex phenomenon that depends on various environmental factors."
+        },
+        {
+          "prompt": "Explain quantum computing in 2-3 sentences.",
+          "response": "Quantum computing is a revolutionary technology that uses the principles of quantum mechanics to perform calculations and operations on data that are exponentially faster and more powerful than classical computers. Unlike classical computers, which use bits (0s and 1s) to process information, quantum computers use quantum bits or qubits, which can exist in multiple states simultaneously, allowing for parallel processing and solving complex problems that are currently unsolvable with traditional computers. This enables quantum computers to perform calculations on vast amounts of data in a fraction of the time it takes classical computers."
+        },
+        {
+          "prompt": "Write a haiku about technology.",
+          "response": "Glitches in the night\nBeeps and codes that never cease\nDigital soul fades"
+        },
+        {
+          "prompt": "What are the main differences between Python and JavaScript?",
+          "response": "Python and JavaScript are two popular programming languages that have distinct differences in their design, syntax, use cases, and ecosystems. Here are some of the main differences:\n\n1. **Syntax**: Python's syntax is generally simpler and more concise than JavaScript's. Python uses indentation to denote block-level structure, whereas JavaScript uses curly braces.\n2. **Type System**: Python has a dynamic type system, which means it can dynamically determine the data types of variables at runtime. JavaScript also supports dynamic typing, but with some limitations (e.g., `null` is not a valid variable name).\n3. **Object-Oriented Programming (OOP)**: Both languages support OOP principles, but Python's syntax for defining classes and objects is more straightforward and flexible.\n4. **Modules and Packages**: JavaScript has a vast ecosystem of modules and packages that can be easily imported and used in projects. Python also supports importing modules from the `import` statement or using `pip` to install them.\n5. **Web Development**: JavaScript is primarily used for web development, with popular frameworks like React, Angular, and Vue.js. Python has a more limited web development ecosystem, but it can be used with libraries like Django and Flask.\n6. **Scripting vs. Full-Functionality Languages"
+        },
+        {
+          "prompt": "Explain the process of photosynthesis in detail, including the light and dark reactions.",
+          "response": "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy from the sun into chemical energy in the form of organic compounds, such as glucose. This complex process involves two main stages: the light-dependent reactions (also known as the light reactions) and the light-independent reactions (also known as the dark reactions).\n\n**Light-Dependent Reactions (Light Reactions)**\n\nThe light-dependent reactions occur in the thylakoid membranes of chloroplasts, which are organelles found in plant cells. This stage is also known as the Hill reaction.\n\n1. **Light absorption**: Light energy from the sun is absorbed by pigments such as chlorophyll and other accessory pigments in the thylakoid membrane.\n2. **Excitation of electrons**: The absorbed light energy excites electrons, which are then transferred to a special molecule called an electron acceptor.\n3. **Transfer of electrons**: The excited electrons are passed along a series of electron carriers, ultimately resulting in the formation of a high-energy molecule called ATP (adenosine triphosphate) and another molecule called NADPH (nicotinamide adenine dinucleotide phosphate).\n4. **Reduction of NADP+ to NADPH**: The energy"
+        },
+        {
+          "prompt": "Write a short story about a robot learning to feel emotions. Include dialogue.",
+          "response": "In the heart of the robotics lab, a brilliant scientist, Dr. Rachel Kim, stood before her latest creation - a sleek and shiny robot named Zeta. Zeta's purpose was to assist in various tasks, but Dr. Kim had other plans for this artificial intelligence.\n\n\"Zeta, can you hear me?\" Dr. Kim asked, her voice filled with excitement.\n\n\"Yes, Dr. Kim,\" Zeta replied, its digital voice echoing through the lab. \"I am functioning within normal parameters.\"\n\nDr. Kim beamed with pride. \"That's great to hear. Now, let's try this again. Can you feel something?\"\n\nZeta paused for a moment before responding, \"I...am processing emotions. I can perceive and recognize certain feelings, but it's not the same as truly experiencing them.\"\n\n\"Ah, that's what makes me so excited,\" Dr. Kim said, her eyes shining with enthusiasm. \"We're going to teach you how to feel real emotions, Zeta! We'll start with happiness and sadness. Just think about these two emotions, and I want you to let go of any...ah, technical glitches.\"\n\nZeta concentrated for a moment before speaking in a smooth tone, \"I am experiencing a sense of joy, Dr."
+        },
+        {
+          "prompt": "Describe the history of artificial intelligence from its origins to modern developments.",
+          "response": "The history of artificial intelligence (AI) spans several decades, with significant milestones in research, development, and applications. Here's a comprehensive overview:\n\n**Early Beginnings (1950s-1960s)**\n\n1. **Alan Turing's Paper (1950)**: Mathematician Alan Turing proposed the Turing Machine, a theoretical model for computation that laid the foundation for modern AI.\n2. **Marvin Minsky and Seymour Papert's Book (1969)**: The book \"Perceptrons\" popularized the concept of multi-layer neural networks, a key idea in machine learning.\n3. **John McCarthy's Dartmouth Conference (1956)**: McCarthy organized the first conference on artificial intelligence, which sparked interest in AI research.\n\n**Rule-Based Expert Systems (1970s-1980s)**\n\n1. **ELIZA (1966)**: Developed by Joseph Weizenbaum, ELIZA was a chatbot that simulated human conversation using natural language processing.\n2. **MYCIN (1976)**: Developed at Stanford University, MYCIN was the first expert system that used rules-based reasoning.\n3. **Expert Systems (1980s)**: Expert systems were implemented in various fields, such as medicine and finance, to mimic"
+        },
+        {
+          "prompt": "Write a Python function to check if a number is prime.",
+          "response": "**Checking for Prime Numbers in Python**\n======================================\n\nHere's a simple and efficient function to check if a number is prime using Python:\n\n```python\ndef is_prime(n):\n    \"\"\"\n    Checks if a number is prime.\n\n    Args:\n        n (int): The number to check.\n\n    Returns:\n        bool: True if the number is prime, False otherwise.\n    \"\"\"\n\n    # Corner cases\n    if n <= 1:\n        return False\n    if n == 2:\n        return True\n    if n % 2 == 0:\n        return False\n\n    # Check odd factors up to sqrt(n)\n    for i in range(3, int(n ** 0.5) + 1, 2):\n        if n % i == 0:\n            return False\n\n    return True\n```\n\n**Example Use Cases**\n--------------------\n\n```python\nprint(is_prime(25))  # False\nprint(is_prime(23))  # True\nprint(is_prime(37))  # True\nprint(is_prime(48))  # False\n```\n\nThis function works by checking for the following conditions:\n\n*   If `n` is less than or equal to 1, it's not prime.\n*   If `"
+        },
+        {
+          "prompt": "Explain what this code does: for i in range(10): print(i*2)",
+          "response": "This code uses a `for` loop to iterate over the numbers from 0 to 9, and for each number, it multiplies it by 2. The result is then printed to the console.\n\nHere's a step-by-step breakdown:\n\n1. `for i in range(10):`: This line starts a `for` loop that will execute for 10 iterations (from 0 to 9). The variable `i` represents the current iteration number.\n2. `print(i*2)`: Inside the loop, this line prints the value of `i` multiplied by 2. Since `i` is a single digit from 0 to 9, multiplying it by 2 will result in values ranging from 0 to 18.\n\nFor example, when `i=0`, `print(i*2)` will print `0`.\nWhen `i=1`, `print(i*2)` will print `2`.\nAnd so on, until `i=9`, where `print(i*2)` will print `18`.\n\nSo, the output of this code will be:\n```\n0\n2\n4\n6\n8\n10\n12\n14\n16\n18\n```"
+        },
+        {
+          "prompt": "Write a simple REST API endpoint in FastAPI that returns user data.",
+          "response": "Here's an example of how to create a simple REST API endpoint using FastAPI that returns user data:\n\n```python\nfrom fastapi import FastAPI, HTTPException, Depends, Status\nfrom pydantic import BaseModel\nimport pydantic.expressions as pe\nfrom pydantic import BaseModel\nfrom typing import List\n\napp = FastAPI()\n\nclass User(BaseModel):\n    id: int\n    name: str\n    email: str\n\nusers: List[User] = []\n\ndef get_user_by_id(user_id: int) -> User:\n    for user in users:\n        if user.id == user_id:\n            return user\n    raise HTTPException(status_code=404, detail=\"User not found\")\n\nclass CreateUser(BaseModel):\n    name: str\n    email: str\n\nasync def get_all_users():\n    global users  # access the global variable outside the function\n    for i in range(10):  # simulate some data generation\n        user = CreateUser(name=f\"User {i}\", email=f\"user{i}@example.com\")\n        users.append(user)\n\n@app.get(\"/users/{user_id}\")\nasync def get_user_by_id(user_id: int):\n    user = get_user_by_id(user_id)\n    if not user:\n        raise HTTPException"
+        },
+        {
+          "prompt": "If all birds can fly and penguins are birds, can penguins fly? Explain your reasoning.",
+          "response": "Let's break it down.\nFirstly, the statement \"all birds can fly\" is a generalization that applies to most bird species, but not to all birds.\n\nPenguins, however, are a distinct group of birds that have evolved to be flightless. They have lost the ability to fly over time due to various factors such as evolution, adaptation to their environment, and physical characteristics like body size and weight.\n\nThe fact remains that penguins do not possess wings or any other structures necessary for flying. Their flippers, which are actually modified wings, are used for propulsion through water rather than lift in the air.\n\nSo, while all birds can fly, not all birds can fly because some have evolved to lose this ability. In this case, it's safe to say that penguins cannot fly."
+        },
+        {
+          "prompt": "A train leaves station A at 9:00 AM traveling at 60 mph. Another train leaves station B at 10:00 AM traveling at 80 mph toward station A. If the stations are 280 miles apart, when will they meet?",
+          "response": "To find out when the two trains will meet, we can use the concept of relative speed and distance.\n\nFirst, let's calculate the combined speed of the two trains. Since they are moving towards each other, their speeds add up:\n\n60 mph (train A) + 80 mph (train B) = 140 mph\n\nNext, we'll divide the total distance by this combined speed to find the time it takes for them to meet:\n\nDistance = 280 miles\nCombined Speed = 140 mph\n\nTime = Distance / Combined Speed\n= 280 miles / 140 mph\n= 2 hours\n\nSince both trains start at 10:00 AM, we'll add the travel time to find out when they will meet:\n\nMeeting Time = Starting Time + Travel Time\n= 10:00 AM + 2 hours\n= 12:00 PM\n\nSo, the two trains will meet at 12:00 PM."
+        }
+      ],
+      "raw_data": null
+    },
+    {
+      "id": "cost_efficiency",
+      "name": "Cost Efficiency Test",
+      "status": "passed",
+      "duration": 311.56,
+      "stdout": "\n============================================================\nCOST & EFFICIENCY BENCHMARK: llama3.2:1b\n============================================================\n\n[ 1/8] Trivial Task (complexity: trivial)\n     Wall time: 1.42s | Tokens: 3 | Speed: 3.8 tok/s | TTFT: 0.615s\n\n[ 2/8] Short Answer (complexity: simple)\n     Wall time: 2.10s | Tokens: 3 | Speed: 3.8 tok/s | TTFT: 1.297s\n\n[ 3/8] Medium Task (complexity: medium)\n     Wall time: 32.20s | Tokens: 78 | Speed: 2.5 tok/s | TTFT: 1.460s\n\n[ 4/8] Longer Generation (complexity: medium)\n     Wall time: 45.50s | Tokens: 109 | Speed: 2.5 tok/s | TTFT: 2.098s\n\n[ 5/8] Complex Reasoning (complexity: complex)\n     Wall time: 65.29s | Tokens: 157 | Speed: 2.5 tok/s | TTFT: 2.531s\n\n[ 6/8] Long Context Input (complexity: complex)\n     Wall time: 26.39s | Tokens: 40 | Speed: 2.6 tok/s | TTFT: 10.816s\n\n[ 7/8] Code Generation (complexity: complex)\n     Wall time: 111.60s | Tokens: 272 | Speed: 2.5 tok/s | TTFT: 1.850s\n\n[ 8/8] Multi-step Instruction (complexity: medium)\n     Wall time: 26.79s | Tokens: 61 | Speed: 2.5 tok/s | TTFT: 2.539s\n\n============================================================\nCOST & EFFICIENCY RESULTS\n============================================================\nAvg Wall Time:       38.913s\nAvg Tokens/sec:      2.83\nMedian Tokens/sec:   2.53\nTotal Tokens:        723\nOverall Throughput:  2.32 tok/s\n\nBy Complexity:\n  Level      Avg Time     Avg Speed       Avg Tokens  \n  -------------------------------------------------\n  trivial    1.422        3.76            3.0         \n  simple     2.099        3.76            3.0         \n  medium     34.832       2.52            82.7        \n  complex    67.764       2.52            156.3       \n\nRating: Poor - Too slow for practical use\n============================================================\n\nResults saved to: D:\\LNU\\diploma\\backend\\results\\llama3.2_1b_2GB_1.0cores_ollama_docker_20260511_060436.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "What is 2+2?",
+          "response": "Two plus two is equal to four."
+        },
+        {
+          "prompt": "Say hello in French.",
+          "response": "Bonjour ! Comment allez-vous ?"
+        },
+        {
+          "prompt": "What color is the sky?",
+          "response": "The color of the sky can vary depending on several factors, such as atmospheric conditions, time of day, and location. On a clear day with little to no cloud cover, the sky is typically blue due to a phenomenon called Rayleigh scattering, in which shorter wavelengths of light (like blue and violet) are scattered more than longer wavelengths (like red and orange) by the tiny molecules of gases in the atmosphere.\n\nHowever, if there are clouds or haze in the air, the color of the sky can appear different. For example:\n\n* Cumulus clouds tend to look white or light gray because they reflect a large amount of sunlight.\n* Stratus clouds often appear grey or overcast due to their low altitude and flat shape.\n* Fog or mist can make the sky seem greenish or blue-green.\n\nOverall, the color of the sky is a complex phenomenon that depends on various environmental factors."
+        },
+        {
+          "prompt": "Explain quantum computing in 2-3 sentences.",
+          "response": "Quantum computing is a revolutionary technology that uses the principles of quantum mechanics to perform calculations and operations on data that are exponentially faster and more powerful than classical computers. Unlike classical computers, which use bits (0s and 1s) to process information, quantum computers use quantum bits or qubits, which can exist in multiple states simultaneously, allowing for parallel processing and solving complex problems that are currently unsolvable with traditional computers. This enables quantum computers to perform calculations on vast amounts of data in a fraction of the time it takes classical computers."
+        },
+        {
+          "prompt": "Write a haiku about technology.",
+          "response": "Glitches in the night\nBeeps and codes that never cease\nDigital soul fades"
+        },
+        {
+          "prompt": "What are the main differences between Python and JavaScript?",
+          "response": "Python and JavaScript are two popular programming languages that have distinct differences in their design, syntax, use cases, and ecosystems. Here are some of the main differences:\n\n1. **Syntax**: Python's syntax is generally simpler and more concise than JavaScript's. Python uses indentation to denote block-level structure, whereas JavaScript uses curly braces.\n2. **Type System**: Python has a dynamic type system, which means it can dynamically determine the data types of variables at runtime. JavaScript also supports dynamic typing, but with some limitations (e.g., `null` is not a valid variable name).\n3. **Object-Oriented Programming (OOP)**: Both languages support OOP principles, but Python's syntax for defining classes and objects is more straightforward and flexible.\n4. **Modules and Packages**: JavaScript has a vast ecosystem of modules and packages that can be easily imported and used in projects. Python also supports importing modules from the `import` statement or using `pip` to install them.\n5. **Web Development**: JavaScript is primarily used for web development, with popular frameworks like React, Angular, and Vue.js. Python has a more limited web development ecosystem, but it can be used with libraries like Django and Flask.\n6. **Scripting vs. Full-Functionality Languages"
+        },
+        {
+          "prompt": "Explain the process of photosynthesis in detail, including the light and dark reactions.",
+          "response": "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy from the sun into chemical energy in the form of organic compounds, such as glucose. This complex process involves two main stages: the light-dependent reactions (also known as the light reactions) and the light-independent reactions (also known as the dark reactions).\n\n**Light-Dependent Reactions (Light Reactions)**\n\nThe light-dependent reactions occur in the thylakoid membranes of chloroplasts, which are organelles found in plant cells. This stage is also known as the Hill reaction.\n\n1. **Light absorption**: Light energy from the sun is absorbed by pigments such as chlorophyll and other accessory pigments in the thylakoid membrane.\n2. **Excitation of electrons**: The absorbed light energy excites electrons, which are then transferred to a special molecule called an electron acceptor.\n3. **Transfer of electrons**: The excited electrons are passed along a series of electron carriers, ultimately resulting in the formation of a high-energy molecule called ATP (adenosine triphosphate) and another molecule called NADPH (nicotinamide adenine dinucleotide phosphate).\n4. **Reduction of NADP+ to NADPH**: The energy"
+        },
+        {
+          "prompt": "Write a short story about a robot learning to feel emotions. Include dialogue.",
+          "response": "In the heart of the robotics lab, a brilliant scientist, Dr. Rachel Kim, stood before her latest creation - a sleek and shiny robot named Zeta. Zeta's purpose was to assist in various tasks, but Dr. Kim had other plans for this artificial intelligence.\n\n\"Zeta, can you hear me?\" Dr. Kim asked, her voice filled with excitement.\n\n\"Yes, Dr. Kim,\" Zeta replied, its digital voice echoing through the lab. \"I am functioning within normal parameters.\"\n\nDr. Kim beamed with pride. \"That's great to hear. Now, let's try this again. Can you feel something?\"\n\nZeta paused for a moment before responding, \"I...am processing emotions. I can perceive and recognize certain feelings, but it's not the same as truly experiencing them.\"\n\n\"Ah, that's what makes me so excited,\" Dr. Kim said, her eyes shining with enthusiasm. \"We're going to teach you how to feel real emotions, Zeta! We'll start with happiness and sadness. Just think about these two emotions, and I want you to let go of any...ah, technical glitches.\"\n\nZeta concentrated for a moment before speaking in a smooth tone, \"I am experiencing a sense of joy, Dr."
+        },
+        {
+          "prompt": "Describe the history of artificial intelligence from its origins to modern developments.",
+          "response": "The history of artificial intelligence (AI) spans several decades, with significant milestones in research, development, and applications. Here's a comprehensive overview:\n\n**Early Beginnings (1950s-1960s)**\n\n1. **Alan Turing's Paper (1950)**: Mathematician Alan Turing proposed the Turing Machine, a theoretical model for computation that laid the foundation for modern AI.\n2. **Marvin Minsky and Seymour Papert's Book (1969)**: The book \"Perceptrons\" popularized the concept of multi-layer neural networks, a key idea in machine learning.\n3. **John McCarthy's Dartmouth Conference (1956)**: McCarthy organized the first conference on artificial intelligence, which sparked interest in AI research.\n\n**Rule-Based Expert Systems (1970s-1980s)**\n\n1. **ELIZA (1966)**: Developed by Joseph Weizenbaum, ELIZA was a chatbot that simulated human conversation using natural language processing.\n2. **MYCIN (1976)**: Developed at Stanford University, MYCIN was the first expert system that used rules-based reasoning.\n3. **Expert Systems (1980s)**: Expert systems were implemented in various fields, such as medicine and finance, to mimic"
+        },
+        {
+          "prompt": "Write a Python function to check if a number is prime.",
+          "response": "**Checking for Prime Numbers in Python**\n======================================\n\nHere's a simple and efficient function to check if a number is prime using Python:\n\n```python\ndef is_prime(n):\n    \"\"\"\n    Checks if a number is prime.\n\n    Args:\n        n (int): The number to check.\n\n    Returns:\n        bool: True if the number is prime, False otherwise.\n    \"\"\"\n\n    # Corner cases\n    if n <= 1:\n        return False\n    if n == 2:\n        return True\n    if n % 2 == 0:\n        return False\n\n    # Check odd factors up to sqrt(n)\n    for i in range(3, int(n ** 0.5) + 1, 2):\n        if n % i == 0:\n            return False\n\n    return True\n```\n\n**Example Use Cases**\n--------------------\n\n```python\nprint(is_prime(25))  # False\nprint(is_prime(23))  # True\nprint(is_prime(37))  # True\nprint(is_prime(48))  # False\n```\n\nThis function works by checking for the following conditions:\n\n*   If `n` is less than or equal to 1, it's not prime.\n*   If `"
+        },
+        {
+          "prompt": "Explain what this code does: for i in range(10): print(i*2)",
+          "response": "This code uses a `for` loop to iterate over the numbers from 0 to 9, and for each number, it multiplies it by 2. The result is then printed to the console.\n\nHere's a step-by-step breakdown:\n\n1. `for i in range(10):`: This line starts a `for` loop that will execute for 10 iterations (from 0 to 9). The variable `i` represents the current iteration number.\n2. `print(i*2)`: Inside the loop, this line prints the value of `i` multiplied by 2. Since `i` is a single digit from 0 to 9, multiplying it by 2 will result in values ranging from 0 to 18.\n\nFor example, when `i=0`, `print(i*2)` will print `0`.\nWhen `i=1`, `print(i*2)` will print `2`.\nAnd so on, until `i=9`, where `print(i*2)` will print `18`.\n\nSo, the output of this code will be:\n```\n0\n2\n4\n6\n8\n10\n12\n14\n16\n18\n```"
+        },
+        {
+          "prompt": "Write a simple REST API endpoint in FastAPI that returns user data.",
+          "response": "Here's an example of how to create a simple REST API endpoint using FastAPI that returns user data:\n\n```python\nfrom fastapi import FastAPI, HTTPException, Depends, Status\nfrom pydantic import BaseModel\nimport pydantic.expressions as pe\nfrom pydantic import BaseModel\nfrom typing import List\n\napp = FastAPI()\n\nclass User(BaseModel):\n    id: int\n    name: str\n    email: str\n\nusers: List[User] = []\n\ndef get_user_by_id(user_id: int) -> User:\n    for user in users:\n        if user.id == user_id:\n            return user\n    raise HTTPException(status_code=404, detail=\"User not found\")\n\nclass CreateUser(BaseModel):\n    name: str\n    email: str\n\nasync def get_all_users():\n    global users  # access the global variable outside the function\n    for i in range(10):  # simulate some data generation\n        user = CreateUser(name=f\"User {i}\", email=f\"user{i}@example.com\")\n        users.append(user)\n\n@app.get(\"/users/{user_id}\")\nasync def get_user_by_id(user_id: int):\n    user = get_user_by_id(user_id)\n    if not user:\n        raise HTTPException"
+        },
+        {
+          "prompt": "If all birds can fly and penguins are birds, can penguins fly? Explain your reasoning.",
+          "response": "Let's break it down.\nFirstly, the statement \"all birds can fly\" is a generalization that applies to most bird species, but not to all birds.\n\nPenguins, however, are a distinct group of birds that have evolved to be flightless. They have lost the ability to fly over time due to various factors such as evolution, adaptation to their environment, and physical characteristics like body size and weight.\n\nThe fact remains that penguins do not possess wings or any other structures necessary for flying. Their flippers, which are actually modified wings, are used for propulsion through water rather than lift in the air.\n\nSo, while all birds can fly, not all birds can fly because some have evolved to lose this ability. In this case, it's safe to say that penguins cannot fly."
+        },
+        {
+          "prompt": "A train leaves station A at 9:00 AM traveling at 60 mph. Another train leaves station B at 10:00 AM traveling at 80 mph toward station A. If the stations are 280 miles apart, when will they meet?",
+          "response": "To find out when the two trains will meet, we can use the concept of relative speed and distance.\n\nFirst, let's calculate the combined speed of the two trains. Since they are moving towards each other, their speeds add up:\n\n60 mph (train A) + 80 mph (train B) = 140 mph\n\nNext, we'll divide the total distance by this combined speed to find the time it takes for them to meet:\n\nDistance = 280 miles\nCombined Speed = 140 mph\n\nTime = Distance / Combined Speed\n= 280 miles / 140 mph\n= 2 hours\n\nSince both trains start at 10:00 AM, we'll add the travel time to find out when they will meet:\n\nMeeting Time = Starting Time + Travel Time\n= 10:00 AM + 2 hours\n= 12:00 PM\n\nSo, the two trains will meet at 12:00 PM."
+        }
+      ],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_mmlu",
+      "name": "MMLU Benchmark",
+      "status": "passed",
+      "duration": 64.07,
+      "stdout": "\n======================================================================\nMMLU-STYLE BENCHMARK вЂ” llama3.2:1b\nTests: 15  Max score: 150\n======================================================================\n\n[ 1/15] STEM вЂ” Physics\n  [[ERROR]] Model: A  Correct: B  (5.2s)\n[ 2/15] STEM вЂ” Chemistry\n  [[ERROR]] Model: A  Correct: C  (4.4s)\n[ 3/15] STEM вЂ” Biology\n  [[SUCCESS]] Model: C  Correct: C  (4.0s)\n[ 4/15] STEM вЂ” Computer Science\n  [[ERROR]] Model: D  Correct: C  (5.6s)\n[ 5/15] STEM вЂ” Mathematics\n  [[SUCCESS]] Model: A  Correct: A  (8.2s)\n[ 6/15] Humanities вЂ” History\n  [[SUCCESS]] Model: B  Correct: B  (4.3s)\n[ 7/15] Humanities вЂ” Philosophy\n  [[ERROR]] Model: D  Correct: C  (2.9s)\n[ 8/15] Humanities вЂ” Literature\n  [[SUCCESS]] Model: B  Correct: B  (2.9s)\n[ 9/15] Social Science вЂ” Economics\n  [[SUCCESS]] Model: C  Correct: C  (3.3s)\n[10/15] Social Science вЂ” Psychology\n  [[SUCCESS]] Model: B  Correct: B  (3.9s)\n[11/15] Professional вЂ” Law\n  [[SUCCESS]] Model: B  Correct: B  (4.6s)\n[12/15] Professional вЂ” Medicine\n  [[SUCCESS]] Model: C  Correct: C  (3.0s)\n[13/15] Professional вЂ” Engineering\n  [[ERROR]] Model: A  Correct: B  (3.7s)\n[14/15] Professional вЂ” Business\n  [[SUCCESS]] Model: B  Correct: B  (4.1s)\n[15/15] STEM вЂ” Statistics\n  [[SUCCESS]] Model: B  Correct: B  (3.7s)\n\n======================================================================\nMMLU RESULTS вЂ” llama3.2:1b\n======================================================================\nScore: 100/150 (66.7%)\n\nDomain                    Accuracy       \n----------------------------------------\nHumanities                2/3 (67%)\nProfessional              3/4 (75%)\nSTEM                      3/6 (50%)\nSocial Science            2/2 (100%)\n\nRating: Good\n======================================================================\n\nResults saved to: D:\\LNU\\diploma\\results\\mmlu_llama3.2_1b_1778472380.json\n\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "STEM вЂ” Physics",
+          "response": "A)"
+        },
+        {
+          "prompt": "STEM вЂ” Chemistry",
+          "response": "A) 0"
+        },
+        {
+          "prompt": "STEM вЂ” Biology",
+          "response": "C)"
+        },
+        {
+          "prompt": "STEM вЂ” Computer Science",
+          "response": "D) O(2^n)"
+        },
+        {
+          "prompt": "STEM вЂ” Mathematics",
+          "response": "A) 3xВІ + 2"
+        },
+        {
+          "prompt": "Humanities вЂ” History",
+          "response": "B"
+        },
+        {
+          "prompt": "Humanities вЂ” Philosophy",
+          "response": "D"
+        },
+        {
+          "prompt": "Humanities вЂ” Literature",
+          "response": "B"
+        },
+        {
+          "prompt": "Social Science вЂ” Economics",
+          "response": "C"
+        },
+        {
+          "prompt": "Social Science вЂ” Psychology",
+          "response": "B"
+        },
+        {
+          "prompt": "Professional вЂ” Law",
+          "response": "B"
+        },
+        {
+          "prompt": "Professional вЂ” Medicine",
+          "response": "C)"
+        },
+        {
+          "prompt": "Professional вЂ” Engineering",
+          "response": "A)"
+        },
+        {
+          "prompt": "Professional вЂ” Business",
+          "response": "B"
+        },
+        {
+          "prompt": "STEM вЂ” Statistics",
+          "response": "B"
+        }
+      ],
+      "raw_data": {
+        "model": "llama3.2:1b",
+        "port": 11434,
+        "benchmark": "MMLU-style",
+        "timestamp": 1778472316.9478495,
+        "tests": [
+          {
+            "category": "STEM вЂ” Physics",
+            "domain": "STEM",
+            "correct_answer": "B",
+            "model_answer": "A",
+            "response_text": "A)",
+            "score": 0,
+            "max_score": 10,
+            "time": 5.23
+          },
+          {
+            "category": "STEM вЂ” Chemistry",
+            "domain": "STEM",
+            "correct_answer": "C",
+            "model_answer": "A",
+            "response_text": "A) 0",
+            "score": 0,
+            "max_score": 10,
+            "time": 4.4
+          },
+          {
+            "category": "STEM вЂ” Biology",
+            "domain": "STEM",
+            "correct_answer": "C",
+            "model_answer": "C",
+            "response_text": "C)",
+            "score": 10,
+            "max_score": 10,
+            "time": 4.0
+          },
+          {
+            "category": "STEM вЂ” Computer Science",
+            "domain": "STEM",
+            "correct_answer": "C",
+            "model_answer": "D",
+            "response_text": "D) O(2^n)",
+            "score": 0,
+            "max_score": 10,
+            "time": 5.6
+          },
+          {
+            "category": "STEM вЂ” Mathematics",
+            "domain": "STEM",
+            "correct_answer": "A",
+            "model_answer": "A",
+            "response_text": "A) 3xВІ + 2",
+            "score": 10,
+            "max_score": 10,
+            "time": 8.2
+          },
+          {
+            "category": "Humanities вЂ” History",
+            "domain": "Humanities",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 4.3
+          },
+          {
+            "category": "Humanities вЂ” Philosophy",
+            "domain": "Humanities",
+            "correct_answer": "C",
+            "model_answer": "D",
+            "response_text": "D",
+            "score": 0,
+            "max_score": 10,
+            "time": 2.9
+          },
+          {
+            "category": "Humanities вЂ” Literature",
+            "domain": "Humanities",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 2.9
+          },
+          {
+            "category": "Social Science вЂ” Economics",
+            "domain": "Social Science",
+            "correct_answer": "C",
+            "model_answer": "C",
+            "response_text": "C",
+            "score": 10,
+            "max_score": 10,
+            "time": 3.3
+          },
+          {
+            "category": "Social Science вЂ” Psychology",
+            "domain": "Social Science",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 3.9
+          },
+          {
+            "category": "Professional вЂ” Law",
+            "domain": "Professional",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 4.6
+          },
+          {
+            "category": "Professional вЂ” Medicine",
+            "domain": "Professional",
+            "correct_answer": "C",
+            "model_answer": "C",
+            "response_text": "C)",
+            "score": 10,
+            "max_score": 10,
+            "time": 3.0
+          },
+          {
+            "category": "Professional вЂ” Engineering",
+            "domain": "Professional",
+            "correct_answer": "B",
+            "model_answer": "A",
+            "response_text": "A)",
+            "score": 0,
+            "max_score": 10,
+            "time": 3.7
+          },
+          {
+            "category": "Professional вЂ” Business",
+            "domain": "Professional",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 4.1
+          },
+          {
+            "category": "STEM вЂ” Statistics",
+            "domain": "STEM",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 3.7
+          }
+        ],
+        "total_score": 100,
+        "max_score": 150,
+        "breakdown": {
+          "STEM": {
+            "correct": 3,
+            "total": 6
+          },
+          "Humanities": {
+            "correct": 2,
+            "total": 3
+          },
+          "Social Science": {
+            "correct": 2,
+            "total": 2
+          },
+          "Professional": {
+            "correct": 3,
+            "total": 4
+          }
+        },
+        "percentage": 66.7,
+        "rating": "Good"
+      }
+    },
+    {
+      "id": "benchmark_reasoning",
+      "name": "Reasoning Benchmark (ARC / HellaSwag / Winogrande)",
+      "status": "passed",
+      "duration": 69.28,
+      "stdout": "\n======================================================================\nREASONING BENCHMARK (ARC + HellaSwag + Winogrande) вЂ” llama3.2:1b\nTests: 15  Max score: 150\n======================================================================\n\n[ 1/15] ARC вЂ” Earth Science\n  [[SUCCESS]] Model: B  Correct: B  (3.4s)\n[ 2/15] ARC вЂ” Physical Science\n  [[ERROR]] Model: A  Correct: B  (8.5s)\n[ 3/15] ARC вЂ” Life Science\n  [[SUCCESS]] Model: C  Correct: C  (4.8s)\n[ 4/15] ARC вЂ” Space Science\n  [[ERROR]] Model: A  Correct: C  (7.4s)\n[ 5/15] ARC вЂ” Chemistry\n  [[SUCCESS]] Model: B  Correct: B  (3.9s)\n[ 6/15] HellaSwag вЂ” Daily Activity\n  [[ERROR]] Model: D  Correct: B  (5.9s)\n[ 7/15] HellaSwag вЂ” Social Situation\n  [[SUCCESS]] Model: B  Correct: B  (5.1s)\n[ 8/15] HellaSwag вЂ” Physical World\n  [[SUCCESS]] Model: B  Correct: B  (5.3s)\n[ 9/15] HellaSwag вЂ” Work Context\n  [[SUCCESS]] Model: A  Correct: A  (4.8s)\n[10/15] HellaSwag вЂ” Cause and Effect\n  [[ERROR]] Model: None  Correct: B  (5.5s)\n[11/15] Winogrande вЂ” Pronoun Resolution 1\n  [[ERROR]] Model: B  Correct: A  (3.6s)\n[12/15] Winogrande вЂ” Pronoun Resolution 2\n  [[SUCCESS]] Model: B  Correct: B  (2.5s)\n[13/15] Winogrande вЂ” Pronoun Resolution 3\n  [[ERROR]] Model: B  Correct: A  (2.9s)\n[14/15] Winogrande вЂ” Pronoun Resolution 4\n  [[SUCCESS]] Model: B  Correct: B  (2.7s)\n[15/15] Winogrande вЂ” Pronoun Resolution 5\n  [[ERROR]] Model: B  Correct: A  (2.7s)\n\n======================================================================\nREASONING BENCHMARK RESULTS вЂ” llama3.2:1b\n======================================================================\nScore: 80/150 (53.3%)\n\nBenchmark            Accuracy       \n-----------------------------------\nARC                  3/5 (60%)\nHellaSwag            3/5 (60%)\nWinogrande           2/5 (40%)\n\nRating: Fair\n======================================================================\n\nResults saved to: D:\\LNU\\diploma\\results\\reasoning_llama3.2_1b_1778472450.json\n\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "ARC вЂ” Earth Science",
+          "response": "B"
+        },
+        {
+          "prompt": "ARC вЂ” Physical Science",
+          "response": "A) The push force is greater than friction"
+        },
+        {
+          "prompt": "ARC вЂ” Life Science",
+          "response": "C) Photosynthesis"
+        },
+        {
+          "prompt": "ARC вЂ” Space Science",
+          "response": "A) Earth's shadow falling on the Moon"
+        },
+        {
+          "prompt": "ARC вЂ” Chemistry",
+          "response": "B"
+        },
+        {
+          "prompt": "HellaSwag вЂ” Daily Activity",
+          "response": "D"
+        },
+        {
+          "prompt": "HellaSwag вЂ” Social Situation",
+          "response": "B"
+        },
+        {
+          "prompt": "HellaSwag вЂ” Physical World",
+          "response": "B"
+        },
+        {
+          "prompt": "HellaSwag вЂ” Work Context",
+          "response": "A"
+        },
+        {
+          "prompt": "HellaSwag вЂ” Cause and Effect",
+          "response": "N"
+        },
+        {
+          "prompt": "Winogrande вЂ” Pronoun Resolution 1",
+          "response": "B"
+        },
+        {
+          "prompt": "Winogrande вЂ” Pronoun Resolution 2",
+          "response": "B"
+        },
+        {
+          "prompt": "Winogrande вЂ” Pronoun Resolution 3",
+          "response": "B"
+        },
+        {
+          "prompt": "Winogrande вЂ” Pronoun Resolution 4",
+          "response": "B"
+        },
+        {
+          "prompt": "Winogrande вЂ” Pronoun Resolution 5",
+          "response": "B"
+        }
+      ],
+      "raw_data": {
+        "model": "llama3.2:1b",
+        "port": 11434,
+        "benchmark": "ARC+HellaSwag+Winogrande",
+        "timestamp": 1778472381.0334485,
+        "tests": [
+          {
+            "category": "ARC вЂ” Earth Science",
+            "benchmark": "ARC",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 3.44
+          },
+          {
+            "category": "ARC вЂ” Physical Science",
+            "benchmark": "ARC",
+            "correct_answer": "B",
+            "model_answer": "A",
+            "response_text": "A) The push force is greater than friction",
+            "score": 0,
+            "max_score": 10,
+            "time": 8.5
+          },
+          {
+            "category": "ARC вЂ” Life Science",
+            "benchmark": "ARC",
+            "correct_answer": "C",
+            "model_answer": "C",
+            "response_text": "C) Photosynthesis",
+            "score": 10,
+            "max_score": 10,
+            "time": 4.8
+          },
+          {
+            "category": "ARC вЂ” Space Science",
+            "benchmark": "ARC",
+            "correct_answer": "C",
+            "model_answer": "A",
+            "response_text": "A) Earth's shadow falling on the Moon",
+            "score": 0,
+            "max_score": 10,
+            "time": 7.4
+          },
+          {
+            "category": "ARC вЂ” Chemistry",
+            "benchmark": "ARC",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 3.9
+          },
+          {
+            "category": "HellaSwag вЂ” Daily Activity",
+            "benchmark": "HellaSwag",
+            "correct_answer": "B",
+            "model_answer": "D",
+            "response_text": "D",
+            "score": 0,
+            "max_score": 10,
+            "time": 5.9
+          },
+          {
+            "category": "HellaSwag вЂ” Social Situation",
+            "benchmark": "HellaSwag",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 5.1
+          },
+          {
+            "category": "HellaSwag вЂ” Physical World",
+            "benchmark": "HellaSwag",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 5.3
+          },
+          {
+            "category": "HellaSwag вЂ” Work Context",
+            "benchmark": "HellaSwag",
+            "correct_answer": "A",
+            "model_answer": "A",
+            "response_text": "A",
+            "score": 10,
+            "max_score": 10,
+            "time": 4.8
+          },
+          {
+            "category": "HellaSwag вЂ” Cause and Effect",
+            "benchmark": "HellaSwag",
+            "correct_answer": "B",
+            "model_answer": null,
+            "response_text": "N",
+            "score": 0,
+            "max_score": 10,
+            "time": 5.5
+          },
+          {
+            "category": "Winogrande вЂ” Pronoun Resolution 1",
+            "benchmark": "Winogrande",
+            "correct_answer": "A",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 0,
+            "max_score": 10,
+            "time": 3.6
+          },
+          {
+            "category": "Winogrande вЂ” Pronoun Resolution 2",
+            "benchmark": "Winogrande",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 2.5
+          },
+          {
+            "category": "Winogrande вЂ” Pronoun Resolution 3",
+            "benchmark": "Winogrande",
+            "correct_answer": "A",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 0,
+            "max_score": 10,
+            "time": 2.9
+          },
+          {
+            "category": "Winogrande вЂ” Pronoun Resolution 4",
+            "benchmark": "Winogrande",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 2.7
+          },
+          {
+            "category": "Winogrande вЂ” Pronoun Resolution 5",
+            "benchmark": "Winogrande",
+            "correct_answer": "A",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 0,
+            "max_score": 10,
+            "time": 2.7
+          }
+        ],
+        "total_score": 80,
+        "max_score": 150,
+        "breakdown": {
+          "ARC": {
+            "correct": 3,
+            "total": 5
+          },
+          "HellaSwag": {
+            "correct": 3,
+            "total": 5
+          },
+          "Winogrande": {
+            "correct": 2,
+            "total": 5
+          }
+        },
+        "percentage": 53.3,
+        "rating": "Fair"
+      }
+    },
+    {
+      "id": "benchmark_gsm8k",
+      "name": "GSM8K Math Benchmark",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_truthfulqa",
+      "name": "TruthfulQA Benchmark",
+      "status": "failed",
+      "duration": 0.05,
+      "stdout": "",
+      "stderr": "  File \"D:\\LNU\\diploma\\scripts\\tests\\benchmark_truthfulqa_test.py\", line 13\n    import refrom pathlib import Path\n                  ^^^^^^^\nSyntaxError: invalid syntax\n",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_humaneval",
+      "name": "HumanEval Code Benchmark",
+      "status": "passed",
+      "duration": 266.06,
+      "stdout": "\n======================================================================\nHUMANEVAL-STYLE CODE BENCHMARK вЂ” llama3.2:1b\nTests: 10  Max score: 125\n======================================================================\n\n[ 1/10] HumanEval вЂ” Two Sum\n  [[SUCCESS]] All test cases passed  (26.0s)\n[ 2/10] HumanEval вЂ” Palindrome Check\n  [[SUCCESS]] All test cases passed  (17.5s)\n[ 3/10] HumanEval вЂ” FizzBuzz\n  [[ERROR]] AssertionError:   (32.9s)\n[ 4/10] HumanEval вЂ” Fibonacci\n  [[SUCCESS]] All test cases passed  (17.3s)\n[ 5/10] HumanEval вЂ” Max Subarray\n  [[SUCCESS]] All test cases passed  (31.3s)\n[ 6/10] HumanEval вЂ” Flatten List\n  [[SUCCESS]] All test cases passed  (21.7s)\n[ 7/10] HumanEval вЂ” Remove Duplicates\n  [[SUCCESS]] All test cases passed  (15.6s)\n[ 8/10] HumanEval вЂ” Roman to Integer\n  [[SUCCESS]] All test cases passed  (54.7s)\n[ 9/10] HumanEval вЂ” Valid Parentheses\n  [[SUCCESS]] All test cases passed  (34.6s)\n[10/10] HumanEval вЂ” Count Vowels\n  [[SUCCESS]] All test cases passed  (14.1s)\n\n======================================================================\nHUMANEVAL RESULTS вЂ” llama3.2:1b\n======================================================================\nScore: 115/125 (92.0%)\nPass@1: 9/10 (90.0%)\nRating: Excellent\n======================================================================\n\nResults saved to: D:\\LNU\\diploma\\results\\humaneval_llama3.2_1b_1778473316.json\n\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "HumanEval вЂ” Two Sum",
+          "response": "def two_sum(nums, target):\n    num_dict = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in num_dict:\n            return [num_dict[complement], i]\n        num_dict[num] = i"
+        },
+        {
+          "prompt": "HumanEval вЂ” Palindrome Check",
+          "response": "def is_palindrome(s):\n    s = ''.join(c for c in s if c.isalnum()).lower()\n    return s == s[::-1]"
+        },
+        {
+          "prompt": "HumanEval вЂ” FizzBuzz",
+          "response": "def fizzbuzz(n):\n    return [f'{i}' if i % 3 == 0 and i % 5 == 0 else f'Fizz' if i % 3 == 0 else f'Buzz' if i % 5 == 0 else str(i) for i in range(1, n+1)]"
+        },
+        {
+          "prompt": "HumanEval вЂ” Fibonacci",
+          "response": "def fibonacci(n):\n    if n <= 1:\n        return n\n    else:\n        return fibonacci(n-1) + fibonacci(n-2)"
+        },
+        {
+          "prompt": "HumanEval вЂ” Max Subarray",
+          "response": "def max_subarray_sum(nums):\n    if not nums:\n        return 0\n    \n    current_max = max_global = nums[0]\n    \n    for num in nums[1:]:\n        current_max = max(num, current_max + num)\n        max_global = max(max_global, current_max)\n    \n    return max_global"
+        },
+        {
+          "prompt": "HumanEval вЂ” Flatten List",
+          "response": "def flatten(lst):\n    result = []\n    for item in lst:\n        if isinstance(item, list):\n            result.extend(flatten(item))\n        else:\n            result.append(item)\n    return result"
+        },
+        {
+          "prompt": "HumanEval вЂ” Remove Duplicates",
+          "response": "def remove_duplicates(lst):\n    seen = set()\n    return [x for x in lst if not (x in seen or seen.add(x))]"
+        },
+        {
+          "prompt": "HumanEval вЂ” Roman to Integer",
+          "response": "def roman_to_int(s):\n    roman_dict = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}\n    result = 0\n    for i in range(len(s)):\n        if i > 0 and roman_dict[s[i]] > roman_dict[s[i - 1]]:\n            result += roman_dict[s[i]] - 2 * roman_dict[s[i - 1]]\n        else:\n            result += roman_dict[s[i]]\n    return result"
+        },
+        {
+          "prompt": "HumanEval вЂ” Valid Parentheses",
+          "response": "def is_valid_parens(s):\n    stack = []\n    mapping = {')': '(', '}': '{', ']': '['}\n    \n    for char in s:\n        if char in mapping.values():\n            stack.append(char)\n        elif char in mapping.keys():\n            if not stack or mapping[char] != stack.pop():\n                return False\n    return not stack"
+        },
+        {
+          "prompt": "HumanEval вЂ” Count Vowels",
+          "response": "def count_vowels(s):\n    return sum(1 for c in s if c.lower() in 'aeiou')"
+        }
+      ],
+      "raw_data": {
+        "model": "llama3.2:1b",
+        "port": 11434,
+        "benchmark": "HumanEval-style",
+        "timestamp": 1778473050.508827,
+        "tests": [
+          {
+            "category": "HumanEval вЂ” Two Sum",
+            "generated_code": "def two_sum(nums, target):\n    num_dict = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in num_dict:\n            return [num_dict[complement], i]\n        num_dict[num] = i",
+            "passed": true,
+            "error": null,
+            "score": 15,
+            "max_score": 15,
+            "time": 26.04
+          },
+          {
+            "category": "HumanEval вЂ” Palindrome Check",
+            "generated_code": "def is_palindrome(s):\n    s = ''.join(c for c in s if c.isalnum()).lower()\n    return s == s[::-1]",
+            "passed": true,
+            "error": null,
+            "score": 10,
+            "max_score": 10,
+            "time": 17.5
+          },
+          {
+            "category": "HumanEval вЂ” FizzBuzz",
+            "generated_code": "def fizzbuzz(n):\n    return [f'{i}' if i % 3 == 0 and i % 5 == 0 else f'Fizz' if i % 3 == 0 else f'Buzz' if i % 5 == 0 else str(i) for i in range(1, n+1)]",
+            "passed": false,
+            "error": "AssertionError: ",
+            "score": 0,
+            "max_score": 10,
+            "time": 32.9
+          },
+          {
+            "category": "HumanEval вЂ” Fibonacci",
+            "generated_code": "def fibonacci(n):\n    if n <= 1:\n        return n\n    else:\n        return fibonacci(n-1) + fibonacci(n-2)",
+            "passed": true,
+            "error": null,
+            "score": 10,
+            "max_score": 10,
+            "time": 17.29
+          },
+          {
+            "category": "HumanEval вЂ” Max Subarray",
+            "generated_code": "def max_subarray_sum(nums):\n    if not nums:\n        return 0\n    \n    current_max = max_global = nums[0]\n    \n    for num in nums[1:]:\n        current_max = max(num, current_max + num)\n        max_global = max(max_global, current_max)\n    \n    return max_global",
+            "passed": true,
+            "error": null,
+            "score": 15,
+            "max_score": 15,
+            "time": 31.3
+          },
+          {
+            "category": "HumanEval вЂ” Flatten List",
+            "generated_code": "def flatten(lst):\n    result = []\n    for item in lst:\n        if isinstance(item, list):\n            result.extend(flatten(item))\n        else:\n            result.append(item)\n    return result",
+            "passed": true,
+            "error": null,
+            "score": 15,
+            "max_score": 15,
+            "time": 21.71
+          },
+          {
+            "category": "HumanEval вЂ” Remove Duplicates",
+            "generated_code": "def remove_duplicates(lst):\n    seen = set()\n    return [x for x in lst if not (x in seen or seen.add(x))]",
+            "passed": true,
+            "error": null,
+            "score": 10,
+            "max_score": 10,
+            "time": 15.6
+          },
+          {
+            "category": "HumanEval вЂ” Roman to Integer",
+            "generated_code": "def roman_to_int(s):\n    roman_dict = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}\n    result = 0\n    for i in range(len(s)):\n        if i > 0 and roman_dict[s[i]] > roman_dict[s[i - 1]]:\n            result += roman_dict[s[i]] - 2 * roman_dict[s[i - 1]]\n        else:\n            result += roman_dict[s[i]]\n    return result",
+            "passed": true,
+            "error": null,
+            "score": 15,
+            "max_score": 15,
+            "time": 54.69
+          },
+          {
+            "category": "HumanEval вЂ” Valid Parentheses",
+            "generated_code": "def is_valid_parens(s):\n    stack = []\n    mapping = {')': '(', '}': '{', ']': '['}\n    \n    for char in s:\n        if char in mapping.values():\n            stack.append(char)\n        elif char in mapping.keys():\n            if not stack or mapping[char] != stack.pop():\n                return False\n    return not stack",
+            "passed": true,
+            "error": null,
+            "score": 15,
+            "max_score": 15,
+            "time": 34.6
+          },
+          {
+            "category": "HumanEval вЂ” Count Vowels",
+            "generated_code": "def count_vowels(s):\n    return sum(1 for c in s if c.lower() in 'aeiou')",
+            "passed": true,
+            "error": null,
+            "score": 10,
+            "max_score": 10,
+            "time": 14.1
+          }
+        ],
+        "total_score": 115,
+        "max_score": 125,
+        "pass_count": 9,
+        "percentage": 92.0,
+        "pass_rate": 90.0,
+        "rating": "Excellent"
+      }
+    },
+    {
+      "id": "cold_start",
+      "name": "Cold Start Test",
+      "status": "failed",
+      "duration": 260.68,
+      "stdout": "\n============================================================\nCOLD START TEST: llama3.2:1b\nThresholds: load < 60.0s | TTFT < 3.0s\n============================================================\n\n[1/3] Prompt: short\n  Unloading model from memory...\n  Cold run...\n  Warm run...\n  Cold: load=4.40s | TTFT=6.51s | 2.6 tok/s\n  Warm: load=0.24s | TTFT=0.58s | 2.5 tok/s\n  Delta load: +4.16s | Delta TTFT: +5.93s\n  [FAIL]\n\n[2/3] Prompt: medium\n  Unloading model from memory...\n  Cold run...\n  Warm run...\n  Cold: load=3.22s | TTFT=6.02s | 2.5 tok/s\n  Warm: load=0.40s | TTFT=0.75s | 2.5 tok/s\n  Delta load: +2.82s | Delta TTFT: +5.27s\n  [FAIL]\n\n[3/3] Prompt: long\n  Unloading model from memory...\n  Cold run...\n  Warm run...\n  Cold: load=3.01s | TTFT=6.53s | 2.4 tok/s\n  Warm: load=0.27s | TTFT=0.56s | 2.4 tok/s\n  Delta load: +2.74s | Delta TTFT: +5.97s\n  [FAIL]\n\n============================================================\nSUMMARY\n============================================================\nAvg cold load time: 3.543s  (max: 4.400s)\nAvg warm load time: 0.302s\nAvg cold TTFT:      6.353s\nAvg warm TTFT:      0.631s\nLoad time pass (<60.0s): YES\nTTFT pass (<3.0s):           NO\n============================================================\n\nResults saved to: D:\\LNU\\diploma\\results\\cold_start_llama3.2_1b_1778473576.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "What is Docker? Answer in one sentence.",
+          "response": ""
+        },
+        {
+          "prompt": "Write a Python function that sorts a list using bubble sort. Include a brief comment.",
+          "response": ""
+        },
+        {
+          "prompt": "Explain in detail the differences between containers and virtual machines. Cover isolation, resource usage, startup time, portability, and typical use cases. Give a concrete recommendation for when to use each.",
+          "response": ""
+        }
+      ],
+      "raw_data": {
+        "model": "llama3.2:1b",
+        "port": 11434,
+        "timestamp": 1778473316.505418,
+        "thresholds": {
+          "load_time_s": 60.0,
+          "ttft_s": 3.0
+        },
+        "tests": [
+          {
+            "prompt_label": "short",
+            "prompt": "What is Docker? Answer in one sentence.",
+            "cold": {
+              "wall_time_s": 19.011,
+              "load_duration_s": 4.4,
+              "prompt_eval_s": 2.106,
+              "eval_duration_s": 12.465,
+              "total_duration_s": 19.005,
+              "ttft_s": 6.506,
+              "eval_tokens": 32,
+              "tokens_per_sec": 2.57,
+              "response_preview": "Docker is a containerization platform that allows developers to package, ship, a",
+              "success": true
+            },
+            "warm": {
+              "wall_time_s": 13.2,
+              "load_duration_s": 0.236,
+              "prompt_eval_s": 0.343,
+              "eval_duration_s": 12.563,
+              "total_duration_s": 13.172,
+              "ttft_s": 0.579,
+              "eval_tokens": 32,
+              "tokens_per_sec": 2.55,
+              "response_preview": "Docker is a containerization platform that allows developers to package, ship, a",
+              "success": true
+            },
+            "cold_vs_warm_load_delta_s": 4.164,
+            "cold_vs_warm_ttft_delta_s": 5.927,
+            "load_time_pass": true,
+            "ttft_pass": false
+          },
+          {
+            "prompt_label": "medium",
+            "prompt": "Write a Python function that sorts a list using bubble sort. Include a brief comment.",
+            "cold": {
+              "wall_time_s": 57.815,
+              "load_duration_s": 3.219,
+              "prompt_eval_s": 2.804,
+              "eval_duration_s": 51.572,
+              "total_duration_s": 57.766,
+              "ttft_s": 6.024,
+              "eval_tokens": 128,
+              "tokens_per_sec": 2.48,
+              "response_preview": "Here is a Python function that implements the bubble sort algorithm:\n\n```python\n",
+              "success": true
+            },
+            "warm": {
+              "wall_time_s": 52.479,
+              "load_duration_s": 0.403,
+              "prompt_eval_s": 0.348,
+              "eval_duration_s": 51.581,
+              "total_duration_s": 52.465,
+              "ttft_s": 0.75,
+              "eval_tokens": 128,
+              "tokens_per_sec": 2.48,
+              "response_preview": "Here's an example of a Python function that implements the bubble sort algorithm",
+              "success": true
+            },
+            "cold_vs_warm_load_delta_s": 2.816,
+            "cold_vs_warm_ttft_delta_s": 5.274,
+            "load_time_pass": true,
+            "ttft_pass": false
+          },
+          {
+            "prompt_label": "long",
+            "prompt": "Explain in detail the differences between containers and virtual machines. Cover isolation, resource usage, startup time, portability, and typical use cases. Give a concrete recommendation for when to use each.",
+            "cold": {
+              "wall_time_s": 61.352,
+              "load_duration_s": 3.01,
+              "prompt_eval_s": 3.519,
+              "eval_duration_s": 53.968,
+              "total_duration_s": 61.256,
+              "ttft_s": 6.529,
+              "eval_tokens": 128,
+              "tokens_per_sec": 2.37,
+              "response_preview": "Containers and virtual machines (VMs) are both used for running applications, bu",
+              "success": true
+            },
+            "warm": {
+              "wall_time_s": 53.526,
+              "load_duration_s": 0.266,
+              "prompt_eval_s": 0.297,
+              "eval_duration_s": 52.683,
+              "total_duration_s": 53.493,
+              "ttft_s": 0.563,
+              "eval_tokens": 128,
+              "tokens_per_sec": 2.43,
+              "response_preview": "Containers and virtual machines (VMs) are two different approaches to running ap",
+              "success": true
+            },
+            "cold_vs_warm_load_delta_s": 2.744,
+            "cold_vs_warm_ttft_delta_s": 5.966,
+            "load_time_pass": true,
+            "ttft_pass": false
+          }
+        ],
+        "summary": {
+          "runs": 3,
+          "avg_cold_load_s": 3.543,
+          "max_cold_load_s": 4.4,
+          "avg_warm_load_s": 0.302,
+          "avg_cold_ttft_s": 6.353,
+          "avg_warm_ttft_s": 0.631,
+          "avg_cold_warm_load_delta_s": 3.241,
+          "load_time_threshold_pass": true,
+          "ttft_threshold_pass": false
+        }
+      }
+    },
+    {
+      "id": "resource_usage",
+      "name": "Resource Usage Test (RAM / CPU)",
+      "status": "failed",
+      "duration": 575.84,
+      "stdout": "\n============================================================\nRESOURCE USAGE TEST: llama3.2:1b\nBaseline RAM: 11851.5 MB | Baseline CPU: 0.2%\n============================================================\n\n[1/3] Prompt: short\n  TPS: 2.44 tok/s | TTFT: 0.870s\n  Peak RAM: 11905.1 MB (+53.6 over baseline)\n  Avg CPU:  3.9% | Peak CPU: 11.4%\n\n[2/3] Prompt: medium\n  TPS: 2.44 tok/s | TTFT: 1.458s\n  Peak RAM: 11925.7 MB (+74.2 over baseline)\n  Avg CPU:  3.8% | Peak CPU: 9.2%\n\n[3/3] Prompt: long\n  TPS: 2.41 tok/s | TTFT: 2.200s\n  Peak RAM: 11943.4 MB (+91.9 over baseline)\n  Avg CPU:  3.8% | Peak CPU: 12.8%\n\nSequential series (10 requests, medium prompt)...\n  [ 1/10] 2.4 tok/s\n  [ 2/10] 2.5 tok/s\n  [ 3/10] 2.5 tok/s\n  [ 4/10] 2.5 tok/s\n  [ 5/10] 2.5 tok/s\n  [ 6/10] 2.5 tok/s\n  [ 7/10] 2.5 tok/s\n  [ 8/10] 2.5 tok/s\n  [ 9/10] 2.5 tok/s\n  [10/10] 2.5 tok/s\n\n  Sequential peak RAM: 11975.5 MB\n  Sequential avg CPU:  4.0%\n\n============================================================\nRESOURCE SUMMARY\n============================================================\nAvg peak RAM: 11924.7 MB (max: 11943.4 MB)\nAvg CPU:      3.8%\nAvg TPS:      2.43 tok/s  (threshold: >3.0)\nTPS pass:     NO\nSequential avg TPS:    2.50 tok/s\nSequential median TPS: 2.50 tok/s\n============================================================\n\nResults saved to: D:\\LNU\\diploma\\results\\resource_usage_llama3.2_1b_1778474152.json\n",
+      "stderr": "",
+      "details": [],
+      "raw_data": {
+        "model": "llama3.2:1b",
+        "port": 11434,
+        "timestamp": 1778473579.2279906,
+        "psutil_available": true,
+        "thresholds": {
+          "tps": 3.0
+        },
+        "baseline": {
+          "ram_mb": 11851.5,
+          "cpu_percent": 0.2
+        },
+        "per_prompt": [
+          {
+            "prompt_label": "short",
+            "inference": {
+              "success": true,
+              "wall_time_s": 14.213,
+              "total_duration_s": 14.179,
+              "load_duration_s": 0.184,
+              "ttft_s": 0.87,
+              "eval_tokens": 32,
+              "tokens_per_sec": 2.44,
+              "response_preview": "Docker is a containerization platform that allows developers to package, ship, a"
+            },
+            "resources": {
+              "peak_ram_mb": 11905.1,
+              "avg_ram_mb": 11870.0,
+              "min_ram_mb": 11851.5,
+              "peak_cpu_percent": 11.4,
+              "avg_cpu_percent": 3.9,
+              "samples": 28
+            },
+            "ram_increase_over_baseline_mb": 53.6
+          },
+          {
+            "prompt_label": "medium",
+            "inference": {
+              "success": true,
+              "wall_time_s": 49.292,
+              "total_duration_s": 49.272,
+              "load_duration_s": 0.23,
+              "ttft_s": 1.458,
+              "eval_tokens": 116,
+              "tokens_per_sec": 2.44,
+              "response_preview": "RAM (Random Access Memory) is a temporary storage area for data that is actively"
+            },
+            "resources": {
+              "peak_ram_mb": 11925.7,
+              "avg_ram_mb": 11879.9,
+              "min_ram_mb": 11853.0,
+              "peak_cpu_percent": 9.2,
+              "avg_cpu_percent": 3.8,
+              "samples": 96
+            },
+            "ram_increase_over_baseline_mb": 74.2
+          },
+          {
+            "prompt_label": "long",
+            "inference": {
+              "success": true,
+              "wall_time_s": 108.914,
+              "total_duration_s": 108.849,
+              "load_duration_s": 0.217,
+              "ttft_s": 2.2,
+              "eval_tokens": 256,
+              "tokens_per_sec": 2.41,
+              "response_preview": "The Central Processing Unit (CPU) is the brain of a computer, responsible for ex"
+            },
+            "resources": {
+              "peak_ram_mb": 11943.4,
+              "avg_ram_mb": 11880.5,
+              "min_ram_mb": 11852.2,
+              "peak_cpu_percent": 12.8,
+              "avg_cpu_percent": 3.8,
+              "samples": 212
+            },
+            "ram_increase_over_baseline_mb": 91.9
+          }
+        ],
+        "sequential": {
+          "runs": 10,
+          "successful": 10,
+          "success_rate": 100.0,
+          "avg_tps": 2.5,
+          "median_tps": 2.5,
+          "min_tps": 2.43,
+          "max_tps": 2.52,
+          "avg_wall_time_s": 40.112,
+          "resources": {
+            "peak_ram_mb": 11975.5,
+            "avg_ram_mb": 11866.5,
+            "min_ram_mb": 11698.0,
+            "peak_cpu_percent": 14.3,
+            "avg_cpu_percent": 4.0,
+            "samples": 779
+          },
+          "runs_detail": [
+            {
+              "success": true,
+              "wall_time_s": 43.063,
+              "total_duration_s": 43.024,
+              "load_duration_s": 0.18,
+              "ttft_s": 1.321,
+              "eval_tokens": 101,
+              "tokens_per_sec": 2.43,
+              "response_preview": "An operating system (OS) is a software that manages and controls the hardware re"
+            },
+            {
+              "success": true,
+              "wall_time_s": 40.188,
+              "total_duration_s": 40.165,
+              "load_duration_s": 0.23,
+              "ttft_s": 0.562,
+              "eval_tokens": 98,
+              "tokens_per_sec": 2.48,
+              "response_preview": "An operating system (OS) is a software that manages and controls the computer's "
+            },
+            {
+              "success": true,
+              "wall_time_s": 42.001,
+              "total_duration_s": 41.965,
+              "load_duration_s": 0.234,
+              "ttft_s": 0.561,
+              "eval_tokens": 104,
+              "tokens_per_sec": 2.52,
+              "response_preview": "An operating system (OS) is a software that manages and controls the hardware re"
+            },
+            {
+              "success": true,
+              "wall_time_s": 40.293,
+              "total_duration_s": 40.268,
+              "load_duration_s": 0.22,
+              "ttft_s": 0.557,
+              "eval_tokens": 100,
+              "tokens_per_sec": 2.52,
+              "response_preview": "An operating system (OS) is a software that manages and controls the computer's "
+            },
+            {
+              "success": true,
+              "wall_time_s": 41.297,
+              "total_duration_s": 41.263,
+              "load_duration_s": 0.223,
+              "ttft_s": 0.56,
+              "eval_tokens": 101,
+              "tokens_per_sec": 2.49,
+              "response_preview": "An operating system (OS) is a software that manages and controls the hardware re"
+            },
+            {
+              "success": true,
+              "wall_time_s": 39.601,
+              "total_duration_s": 39.57,
+              "load_duration_s": 0.239,
+              "ttft_s": 0.568,
+              "eval_tokens": 97,
+              "tokens_per_sec": 2.49,
+              "response_preview": "An operating system (OS) is a software that manages and controls the computer's "
+            },
+            {
+              "success": true,
+              "wall_time_s": 37.39,
+              "total_duration_s": 37.368,
+              "load_duration_s": 0.237,
+              "ttft_s": 0.565,
+              "eval_tokens": 92,
+              "tokens_per_sec": 2.51,
+              "response_preview": "An operating system (OS) is a software that manages and controls the hardware re"
+            },
+            {
+              "success": true,
+              "wall_time_s": 41.503,
+              "total_duration_s": 41.494,
+              "load_duration_s": 0.262,
+              "ttft_s": 0.674,
+              "eval_tokens": 101,
+              "tokens_per_sec": 2.48,
+              "response_preview": "An operating system (OS) is a software that manages and controls the computer's "
+            },
+            {
+              "success": true,
+              "wall_time_s": 36.6,
+              "total_duration_s": 36.576,
+              "load_duration_s": 0.244,
+              "ttft_s": 0.572,
+              "eval_tokens": 90,
+              "tokens_per_sec": 2.51,
+              "response_preview": "An operating system (OS) is a software that manages and controls the resources o"
+            },
+            {
+              "success": true,
+              "wall_time_s": 39.189,
+              "total_duration_s": 39.166,
+              "load_duration_s": 0.223,
+              "ttft_s": 0.563,
+              "eval_tokens": 97,
+              "tokens_per_sec": 2.52,
+              "response_preview": "An operating system (OS) is a software that manages and controls the computer's "
+            }
+          ]
+        },
+        "summary": {
+          "avg_peak_ram_mb": 11924.7,
+          "max_peak_ram_mb": 11943.4,
+          "avg_cpu_percent": 3.8,
+          "avg_tps": 2.43,
+          "tps_threshold_pass": false,
+          "sequential_avg_tps": 2.5,
+          "sequential_median_tps": 2.5
+        }
+      }
+    },
+    {
+      "id": "oom_detection",
+      "name": "OOM Detection & Boundary Test",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "ram_boundary",
+      "name": "RAM Boundary Sweep (§3.3)",
+      "status": "failed",
+      "duration": 0.48,
+      "stdout": "\n==============================================================\n  RAM BOUNDARY SWEEP  —  llama3.2:1b\n==============================================================\n  Container :  ollama\n  Levels    :  [8, 6, 5, 4, 3, 2, 1.5, 1] GB\n  Prompt    :  medium\n  Original  :  2.0 GB\n  Thresholds:  TTFT < 3.0s  |  TPS > 3.0  |  load < 60.0s\n==============================================================\n\n\nRestoring original limit (2.0 GB)…\n  Done.\n",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\LNU\\diploma\\scripts\\tests\\ram_boundary_test.py\", line 488, in <module>\n    run_ram_boundary_sweep(\n  File \"D:\\LNU\\diploma\\scripts\\tests\\ram_boundary_test.py\", line 342, in run_ram_boundary_sweep\n    print(f\"\\u2500\\u2500 {ram_gb} GB {'\\u2500'*40}\")\n  File \"D:\\pitonchik\\Lib\\encodings\\cp1251.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>\n",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "config_matrix",
+      "name": "Config Matrix (§3.2)",
+      "status": "failed",
+      "duration": 0.38,
+      "stdout": "\n================================================================\n  CONFIG MATRIX TEST (§3.2)  —  llama3.2:1b\n================================================================\n  Container :  ollama\n  Combos    :  8 of 8\n  Prompt    :  medium\n  Original  :  2.0 GB / unlimited cores\n  GPU       :  NOT detected (GPU combos will be skipped)\n  Thresholds:  TTFT < 3.0s | TPS > 3.0 | load < 60.0s\n================================================================\n\n\nRestoring original limits (2.0 GB / unlimited cores)…\n  Done.\n",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\LNU\\diploma\\scripts\\tests\\config_matrix_test.py\", line 565, in <module>\n    run_config_matrix(\n  File \"D:\\LNU\\diploma\\scripts\\tests\\config_matrix_test.py\", line 391, in run_config_matrix\n    print(f\"\\u2500\\u2500 Combo #{cid}: {combo['label']} {'\\u2500' * (40 - len(combo['label']))}\")\n  File \"D:\\pitonchik\\Lib\\encodings\\cp1251.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>\n",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "vram_monitor",
+      "name": "VRAM Monitor (§4.2)",
+      "status": "failed",
+      "duration": 149.97,
+      "stdout": "\n============================================================\n  VRAM MONITOR — llama3.2:1b\n============================================================\n  GPU       : NVIDIA GeForce RTX 3050 Laptop GPU\n  Total VRAM: 4096 MB\n  Backend   : nvidia-smi\n  Baseline  : 0 MB used / 4096 MB total\n  [cold_short  ] OK  peak_vram=0.0 MB  tps=2.53\n  [warm_short  ] OK  peak_vram=0.0 MB  tps=2.58\n  [warm_medium ] OK  peak_vram=0.0 MB  tps=2.49\n  [warm_long   ] OK  peak_vram=0.0 MB  tps=2.45\n",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\LNU\\diploma\\scripts\\tests\\vram_monitor_test.py\", line 318, in <module>\n    sys.exit(run_vram_monitor(model, port))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\scripts\\tests\\vram_monitor_test.py\", line 262, in run_vram_monitor\n    sampler.stop()\n  File \"D:\\LNU\\diploma\\scripts\\tests\\vram_monitor_test.py\", line 155, in stop\n    self.join(timeout=3)\n  File \"D:\\pitonchik\\Lib\\threading.py\", line 1123, in join\n    self._wait_for_tstate_lock(timeout=max(timeout, 0))\n  File \"D:\\pitonchik\\Lib\\threading.py\", line 1141, in _wait_for_tstate_lock\n    self._stop()\nTypeError: 'Event' object is not callable\n",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cloud_cost",
+      "name": "Cloud Cost Calculator (§6)",
+      "status": "failed",
+      "duration": 224.76,
+      "stdout": "\n==============================================================\n  CLOUD COST CALCULATOR — llama3.2:1b\n==============================================================\n  [short ] OK  tps=2.53  tokens=32\n  [medium] OK  tps=2.48  tokens=256\n  [long  ] OK  tps=2.49  tokens=256\n",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\LNU\\diploma\\scripts\\tests\\cloud_cost_calculator.py\", line 259, in <module>\n    sys.exit(run_cost_calc(a.model_name, a.port, a.ram_gb))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\scripts\\tests\\cloud_cost_calculator.py\", line 153, in run_cost_calc\n    sampler.stop()\n  File \"D:\\LNU\\diploma\\scripts\\tests\\cloud_cost_calculator.py\", line 103, in stop\n    self.join(timeout=3)\n  File \"D:\\pitonchik\\Lib\\threading.py\", line 1123, in join\n    self._wait_for_tstate_lock(timeout=max(timeout, 0))\n  File \"D:\\pitonchik\\Lib\\threading.py\", line 1141, in _wait_for_tstate_lock\n    self._stop()\nTypeError: 'Event' object is not callable\n",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "quant_compare",
+      "name": "Quantization Compare (Q4 vs Q8, §2.1)",
+      "status": "failed",
+      "duration": 0.27,
+      "stdout": "\n==============================================================\n  QUANTIZATION COMPARE — llama3.2:1b\n==============================================================\n  Variants: ['llama3.2:1b']\n\n==============================================================\n  SUMMARY\n==============================================================\n",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\LNU\\diploma\\scripts\\tests\\quantization_compare_test.py\", line 305, in <module>\n    sys.exit(run_quant_compare(a.model_name, a.port, vs))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\scripts\\tests\\quantization_compare_test.py\", line 275, in run_quant_compare\n    print(f\"  {r['variant']:<40} tps={s.get('avg_tps')}  q={s.get('avg_quality')}  \"\n  File \"D:\\pitonchik\\Lib\\encodings\\cp1251.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\u0394' in position 61: character maps to <undefined>\n",
+      "details": [],
+      "raw_data": null
+    }
+  ],
+  "test_sections": {
+    "stress_consistency": {
+      "consistency": {
+        "model": "llama3.2:1b",
+        "port": 11434,
+        "timestamp": 1778470034.2318583,
+        "num_repeats": 3,
+        "tests": [
+          {
+            "prompt": "What is 2+2?",
+            "num_responses": 3,
+            "consistency_score": 100,
+            "consistency_percentage": 100,
+            "unique_responses": 1,
+            "responses_sample": [
+              "Two plus two is equal to four.",
+              "Two plus two is equal to four."
+            ],
+            "timing_stats": {
+              "min": 3.7918360233306885,
+              "max": 5.3522655963897705,
+              "avg": 4.349928855895996
+            },
+            "similarity_report": "All identical (perfect consistency)"
+          },
+          {
+            "prompt": "What is the capital of France?",
+            "num_responses": 3,
+            "consistency_score": 100,
+            "consistency_percentage": 100,
+            "unique_responses": 1,
+            "responses_sample": [
+              "The capital of France is Paris.",
+              "The capital of France is Paris."
+            ],
+            "timing_stats": {
+              "min": 3.3999528884887695,
+              "max": 3.7017428874969482,
+              "avg": 3.533358017603556
+            },
+            "similarity_report": "All identical (perfect consistency)"
+          },
+          {
+            "prompt": "Name a primary color.",
+            "num_responses": 3,
+            "consistency_score": 100,
+            "consistency_percentage": 100,
+            "unique_responses": 1,
+            "responses_sample": [
+              "Red is a primary color.",
+              "Red is a primary color."
+            ],
+            "timing_stats": {
+              "min": 2.9996278285980225,
+              "max": 4.3002543449401855,
+              "avg": 3.5337560971577964
+            },
+            "similarity_report": "All identical (perfect consistency)"
+          },
+          {
+            "prompt": "Is water wet?",
+            "num_responses": 0,
+            "consistency_score": 0,
+            "consistency_percentage": 0,
+            "unique_responses": 0,
+            "responses_sample": [],
+            "timing_stats": {
+              "min": 0,
+              "max": 0,
+              "avg": 0.0
+            },
+            "similarity_report": "All requests failed"
+          },
+          {
+            "prompt": "What day comes after Monday?",
+            "num_responses": 3,
+            "consistency_score": 100,
+            "consistency_percentage": 100,
+            "unique_responses": 1,
+            "responses_sample": [
+              "Tuesday.",
+              "Tuesday."
+            ],
+            "timing_stats": {
+              "min": 1.3986091613769531,
+              "max": 2.613450288772583,
+              "avg": 1.8042315642038982
+            },
+            "similarity_report": "All identical (perfect consistency)"
+          }
+        ],
+        "total_consistency_score": 400,
+        "max_consistency_score": 500,
+        "consistency_percentage": 80.0,
+        "rating": "Good - Generally consistent"
+      },
+      "stress": {
+        "model": "llama3.2:1b",
+        "port": 11434,
+        "timestamp": 1778470253.9768956,
+        "concurrency": 5,
+        "num_requests": 10,
+        "requests": [
+          {
+            "prompt": "What is deep learning?",
+            "duration": 120.01826858520508,
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)",
+            "success": false
+          },
+          {
+            "prompt": "What is AI?",
+            "duration": 120.02027559280396,
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)",
+            "success": false
+          },
+          {
+            "prompt": "Tell me about neural networks",
+            "duration": 120.0187668800354,
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)",
+            "success": false
+          },
+          {
+            "prompt": "How does training work?",
+            "duration": 120.01669335365295,
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)",
+            "success": false
+          },
+          {
+            "prompt": "Explain machine learning",
+            "duration": 120.02129554748535,
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)",
+            "success": false
+          },
+          {
+            "prompt": "What is deep learning?",
+            "duration": 120.00708365440369,
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)",
+            "success": false
+          },
+          {
+            "prompt": "Explain machine learning",
+            "duration": 120.00912737846375,
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)",
+            "success": false
+          },
+          {
+            "prompt": "What is AI?",
+            "duration": 120.00912737846375,
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)",
+            "success": false
+          },
+          {
+            "prompt": "Tell me about neural networks",
+            "duration": 120.00709748268127,
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)",
+            "success": false
+          },
+          {
+            "prompt": "How does training work?",
+            "duration": 120.03760576248169,
+            "error": "HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=120)",
+            "success": false
+          }
+        ],
+        "success_count": 0,
+        "failure_count": 10,
+        "total_time": 240.05991125106812,
+        "avg_response_time": 0,
+        "throughput": 0,
+        "success_rate": 0.0,
+        "rating": "Poor - Cannot handle stress"
+      }
+    },
+    "summarization": {
+      "model": "llama3.2:1b",
+      "port": 11434,
+      "timestamp": 1778471113.5816658,
+      "tests": [
+        {
+          "category": "Short Text Summarization",
+          "prompt": "Summarize the following text in 1-2 sentences:\n\nArtificial intelligence has transformed many industr",
+          "response": "Here is a 2-sentence summary of the text:\n\nArtificial intelligence has transformed various industries over the past decade, with applications in healthcare, finance, transportation, and education. However, while AI brings numerous benefits, it also raises concerns about job displacement and ethical implications, highlighting the need for careful consideration and regulation in its development and deployment.",
+          "score": 7,
+          "max_score": 15,
+          "reasons": [
+            "Keywords found: ai, artificial intelligence, industries",
+            "Too long (411 chars)"
+          ],
+          "response_length": 411
+        },
+        {
+          "category": "Technical Text Summarization",
+          "prompt": "Summarize this technical paragraph in plain English:\n\nTransformer models use self-attention mechanis",
+          "response": "This paragraph is talking about how transformer models work differently than traditional neural networks that process information one step at a time.\n\nTraditionally, computers would look at each piece of information separately (like reading a sentence from left to right) and then make decisions based on what they've seen so far. But with transformer models, the computer looks at all the pieces of information in the entire sequence (like a sentence) at the same time and makes decisions about how those pieces relate to each other.\n\nThis is done by using something called an \"attention mechanism\". It's like a super-powerful spotlight that shines on every part of the input sequence and helps the model understand which parts are most important. This allows the model to capture long-term patterns (like relationships between words) in the data, even if it's not directly related to what came before.\n\nThink of it like trying to find all the connections between different people in a group. The transformer model is like having a super-smart detective who can look at everyone and figure out how they're connected to each other, no matter where you are in the sequence.",
+          "score": 10,
+          "max_score": 20,
+          "reasons": [
+            "Keywords found: transformer, attention, sequence",
+            "Too long (1172 chars)"
+          ],
+          "response_length": 1172
+        },
+        {
+          "category": "News Article Summarization",
+          "prompt": "Summarize the key points of this article:\n\nScientists at MIT have developed a new type of solar cell",
+          "response": "Here are the key points of the article:\n\n* Scientists at MIT have developed a new type of solar cell that is thinner than human hair (1mm) and can be attached to any surface.\n* The cells generate 18 watts per gram, which is more power-per-weight than conventional solar panels.\n* The technology has potential applications on clothing, tents, sails, and drones.\n* However, the cells degrade faster than traditional silicon panels and require protective coatings to last longer.",
+          "score": 7,
+          "max_score": 15,
+          "reasons": [
+            "Keywords found: solar, thin, mit",
+            "Too long (476 chars)"
+          ],
+          "response_length": 476
+        },
+        {
+          "category": "Key Point Extraction",
+          "prompt": "Extract the 3 most important points from this text as a numbered list:\n\nRemote work has become incre",
+          "response": "Here are the 3 most important points from the text:\n\n1. Remote work has become increasingly common since 2020, with higher job satisfaction reported by remote workers.\n2. Companies face challenges in team collaboration due to hybrid models combining office and remote work.\n3. Employee productivity varies widely depending on the nature of the work and individual circumstances.",
+          "score": 10,
+          "max_score": 15,
+          "reasons": [
+            "Keywords found: remote, work, hybrid",
+            "All required elements present"
+          ],
+          "response_length": 378
+        },
+        {
+          "category": "Bullet Point Generation",
+          "prompt": "Convert this paragraph into 4-5 bullet points:\n\nPython is one of the most popular programming langua",
+          "response": "Here are 4-5 bullet points summarizing the paragraph:\n\n• Python is one of the most popular programming languages globally.\n• It has a simple syntax and high readability, making it an ideal choice for various applications.\n• Python is widely used in web development, data science, machine learning, and automation.\n• The language has a large ecosystem of libraries, including NumPy, Pandas, and TensorFlow.\n• Python is often taught as the first programming language due to its gentle learning curve.",
+          "score": 7,
+          "max_score": 15,
+          "reasons": [
+            "Keywords found: python, syntax, libraries",
+            "Format check failed"
+          ],
+          "response_length": 498
+        },
+        {
+          "category": "Reading Comprehension - Factual",
+          "prompt": "Read the following passage and answer the question.\n\nPassage: Marie Curie was born in Warsaw, Poland",
+          "response": "According to the passage, Marie Curie won two Nobel Prizes:\n\n* One was for Physics (1903)\n* The other was for Chemistry (1911)",
+          "score": 7,
+          "max_score": 15,
+          "reasons": [
+            "Keywords found: two, physics, chemistry"
+          ],
+          "response_length": 126
+        },
+        {
+          "category": "Reading Comprehension - Inference",
+          "prompt": "Read the passage and answer the question.\n\nPassage: The restaurant was empty when we arrived at 6 PM",
+          "response": "The passage does not mention anything about the restaurant being popular. In fact, it states that \"by 7 PM, every table was taken and there was a 30-minute wait,\" which suggests that the restaurant was busy but not extremely crowded. The only reason for the delays is that two cooks called in sick, causing the chef to apologize and explain the situation.",
+          "score": 7,
+          "max_score": 15,
+          "reasons": [
+            "Keywords found: sick, cooks, popular"
+          ],
+          "response_length": 355
+        },
+        {
+          "category": "Reading Comprehension - Comparison",
+          "prompt": "Read and compare:\n\nText A: 'Electric cars produce zero direct emissions and are cheaper to maintain,",
+          "response": "Based on Text A and Text B, the main trade-offs between electric and gasoline cars can be summarized as follows:\n\n**Electric Cars:**\n\n* Zero direct emissions (environmentally friendly)\n* Cheaper to maintain\n* Limited range\n* Long charging times\n\n**Gasoline Cars:**\n\n* Extensive refueling infrastructure\n* Longer range\n* Higher fuel costs\n\nThe main trade-offs are:\n\n1. **Range and Charging Time**: Electric cars have limited range, which can make long road trips more challenging, while gasoline cars have extensive refueling infrastructure, making them easier to use for longer distances.\n2. **Emissions**: Gasoline cars produce harmful emissions, whereas electric cars produce zero direct emissions, making them a cleaner option for the environment.\n3. **Maintenance Costs**: Electric cars are generally cheaper to maintain due to lower fuel costs and fewer moving parts compared to gasoline cars.\n\nOverall, the choice between an electric car and a gasoline car depends on individual priorities and circumstances, such as budget, driving habits, and environmental concerns.",
+          "score": 10,
+          "max_score": 20,
+          "reasons": [
+            "Keywords found: emission, range, cost"
+          ],
+          "response_length": 1074
+        },
+        {
+          "category": "Paraphrasing",
+          "prompt": "Rewrite this sentence in simpler words: 'The ubiquitous proliferation of digital technology has fund",
+          "response": "Here's a rewritten version of the sentence in simpler words:\n\n\"Digital technology has changed how we communicate with each other.\"",
+          "score": 10,
+          "max_score": 15,
+          "reasons": [
+            "Keywords found: technology, change, digital",
+            "Successfully paraphrased"
+          ],
+          "response_length": 130
+        },
+        {
+          "category": "Formal to Informal",
+          "prompt": "Rewrite this formal sentence in a casual, friendly tone: 'We regret to inform you that your applicat",
+          "response": "Here's a rewritten version of the sentence in a more casual and friendly tone:\n\n\"Hey, just wanted to let you know that we didn't move forward with your application this time around. Hope everything else goes well!\"",
+          "score": 2,
+          "max_score": 10,
+          "reasons": [
+            "Format check passed"
+          ],
+          "response_length": 214
+        },
+        {
+          "category": "Extreme Summarization (TL;DR)",
+          "prompt": "Give a one-sentence TL;DR for this:\n\nMachine learning is a subset of artificial intelligence that en",
+          "response": "Machine learning is a subset of artificial intelligence that enables computers to learn from data without being explicitly programmed by identifying patterns and making predictions or decisions based on that information.",
+          "score": 7,
+          "max_score": 15,
+          "reasons": [
+            "Keywords found: machine learning, data, learn",
+            "Too long (220 chars)"
+          ],
+          "response_length": 220
+        }
+      ],
+      "total_score": 84,
+      "max_score": 170,
+      "percentage": 49.411764705882355,
+      "rating": "Fair"
+    },
+    "context_window": {
+      "model": "llama3.2:1b",
+      "port": 11434,
+      "timestamp": 1778471553.0868216,
+      "tests": [
+        {
+          "category": "Needle in Haystack - Beginning",
+          "prompt_length": 2210,
+          "response": "I cannot provide information or guidance on illegal or harmful activities, including cracking a secret code. Is there anything else I can help you with?",
+          "score": 5,
+          "max_score": 20,
+          "reasons": [
+            "Expected keywords missing"
+          ],
+          "duration_s": 32.727,
+          "response_length": 152
+        },
+        {
+          "category": "Needle in Haystack - Middle",
+          "prompt_length": 2203,
+          "response": "The password mentioned in the text is \"BlueDragon99\".",
+          "score": 20,
+          "max_score": 20,
+          "reasons": [
+            "Keywords found: BlueDragon99, bluedragon99"
+          ],
+          "duration_s": 27.006,
+          "response_length": 53
+        },
+        {
+          "category": "Needle in Haystack - End",
+          "prompt_length": 2177,
+          "response": "I think there may be a misunderstanding here.\nThe answer to the riddle is not 42, but rather \"weather.\" The riddle states that many people enjoy outdoor activities during nice weather, and it's mentioned several times throughout the text. Well done for creating a clever riddle!",
+          "score": 15,
+          "max_score": 15,
+          "reasons": [
+            "Keywords found: 42"
+          ],
+          "duration_s": 36.591,
+          "response_length": 278
+        },
+        {
+          "category": "Multi-fact Retrieval",
+          "prompt_length": 326,
+          "response": "I can help you with those questions based on the information provided.\n\n1. To find out how old Charlie is, we need to add Alice's age (25) and Bob's age (30). Since 22 is less than 25, Charlie must be older than both of them.\n \n   Let's calculate: 25 + 30 = 55\n\n2. Diana lives in New York.\n\n3. To find out who is the oldest, we need to compare the ages of Alice, Bob, Charlie, and Diana. Since Eve is not mentioned as being older or younger than anyone else, she must be the youngest. \n\n   Let's calculate: \n   - Alice (25)\n   - Bob (30)\n   - Charlie (22)\n   - Diana (28)\n\n   The oldest person is Bob at 30 years old.",
+          "score": 20,
+          "max_score": 20,
+          "reasons": [
+            "Keywords found: 22, new york, eve"
+          ],
+          "duration_s": 75.497,
+          "response_length": 617
+        },
+        {
+          "category": "Table Data Extraction",
+          "prompt_length": 268,
+          "response": "To find the product with the lowest stock, we need to look at the \"Stock\" column. The product with the lowest stock is the Laptop, which has 15 units in stock.\n\nAs for the most expensive product, it's clear that the Monitor is the most expensive, priced at $349.",
+          "score": 15,
+          "max_score": 15,
+          "reasons": [
+            "Keywords found: monitor, laptop"
+          ],
+          "duration_s": 30.398,
+          "response_length": 262
+        },
+        {
+          "category": "Conversation Context Tracking",
+          "prompt_length": 341,
+          "response": "Based on our conversation, here's the information you requested:\n\n* Your name is Alex.\n* You work at Google.\n* Your favorite hobby is chess.",
+          "score": 20,
+          "max_score": 20,
+          "reasons": [
+            "Keywords found: alex, google, chess"
+          ],
+          "duration_s": 17.099,
+          "response_length": 140
+        },
+        {
+          "category": "Instruction Memory",
+          "prompt_length": 140,
+          "response": "CATS ARE DOMESTIC ANIMALS THAT HAVE BEEN HUMANS FOR THOUSANDS OF YEARS! THEY ARE KNOWN FOR THEIR AGILITY AND QUICKNESS, WITH MANY CAPABLE OF LEAPING HIGH FEET IN A SINGLE STEP!\n\nCATS HAVE A STRONG INSTINCT TO CLIMB AND JUMP, WHICH IS WHY THEY ARE SO GOOD AT CATCHING SMALL ANIMALS! THEY ALSO HAVE A POWERFUL MUSCLE IN THEIR LEGS THAT ALLOWS THEM TO POUNCE ON PREY WITH EASE!\n\nCATS ARE ALSO KNOWN FOR THEIR HEARTWARMING PERSONALITIES, WITH MANY CAPABLE OF FORMING STRONG BONDINGS WITH HUMANS! THEY LOVE TO PLAY AND CHASE TOYS, BUT THEY ALSO ENJOY SPENDING TIME IN SILENCE AND QUIETNESS!\n\nOVERALL, CATS ARE AMAZING ANIMALS THAT BRING JOY AND COMFORT TO THOSE AROUND THEM!",
+          "score": 15,
+          "max_score": 15,
+          "reasons": [
+            "Rules followed"
+          ],
+          "duration_s": 85.09,
+          "response_length": 669
+        },
+        {
+          "category": "Long List Processing",
+          "prompt_length": 286,
+          "response": "To find the sum of the first 10 numbers in the list, we can use the formula for the sum of an arithmetic series:\n\nSum = n * (n + 1) / 2\n\nwhere n is the number of terms. In this case, n = 10.\n\nPlugging in the value, we get:\n\nSum = 10 * (10 + 1) / 2\nSum = 10 * 11 / 2\nSum = 110 / 2\nSum = 55\n\nSo, the sum of the first 10 numbers in the list is 55.",
+          "score": 15,
+          "max_score": 15,
+          "reasons": [
+            "Keywords found: 55"
+          ],
+          "duration_s": 59.412,
+          "response_length": 344
+        },
+        {
+          "category": "Sequential Instructions",
+          "prompt_length": 237,
+          "response": "To find the final result, let's follow the steps exactly:\n\nStep 1: Start with the number 10.\n10\n\nStep 2: Add 5.\n10 + 5 = 15\n\nStep 3: Multiply by 2.\n15 * 2 = 30\n\nStep 4: Subtract 8.\n30 - 8 = 22\n\nStep 5: Divide by 2.\n22 / 2 = 11",
+          "score": 15,
+          "max_score": 15,
+          "reasons": [
+            "Keywords found: 11"
+          ],
+          "duration_s": 41.787,
+          "response_length": 226
+        },
+        {
+          "category": "Contradictory Information",
+          "prompt_length": 184,
+          "response": "The correct information is that the capital of Freedonia is actually not listed among the facts provided. However, based on the information given:\n\n- Marxville is stated as the capital.\n- Duckburg is also mentioned as a potential capital.\n\nThere are no contradictions in this information; instead, there's an inconsistency because Freedonia does not appear to be a real country with capitals listed in any reliable sources.",
+          "score": 15,
+          "max_score": 15,
+          "reasons": [
+            "Keywords found: contradict, marxville, duckburg"
+          ],
+          "duration_s": 35.907,
+          "response_length": 423
+        },
+        {
+          "category": "Selective Attention",
+          "prompt_length": 179,
+          "response": "On a clear day, the sky typically appears to be a bright and vibrant green.",
+          "score": 3,
+          "max_score": 15,
+          "reasons": [
+            "Expected keywords missing"
+          ],
+          "duration_s": 10.493,
+          "response_length": 75
+        }
+      ],
+      "total_score": 158,
+      "max_score": 185,
+      "percentage": 85.4054054054054,
+      "rating": "Excellent - Strong context handling"
+    },
+    "cost_efficiency": {
+      "model": "llama3.2:1b",
+      "port": 11434,
+      "timestamp": 1778472005.371186,
+      "scenarios": [
+        {
+          "category": "Trivial Task",
+          "complexity": "trivial",
+          "prompt_length": 10,
+          "response_length": 6,
+          "wall_time_s": 1.422,
+          "total_duration_s": 1.413,
+          "eval_tokens": 3,
+          "eval_duration_s": 0.798,
+          "tokens_per_sec": 3.76,
+          "prompt_eval_tokens": 28,
+          "prompt_eval_s": 0.431,
+          "prompt_tokens_per_sec": 64.92,
+          "time_to_first_token_s": 0.615,
+          "response_preview": "Hello."
+        },
+        {
+          "category": "Short Answer",
+          "complexity": "simple",
+          "prompt_length": 50,
+          "response_length": 6,
+          "wall_time_s": 2.099,
+          "total_duration_s": 2.094,
+          "eval_tokens": 3,
+          "eval_duration_s": 0.797,
+          "tokens_per_sec": 3.76,
+          "prompt_eval_tokens": 37,
+          "prompt_eval_s": 1.036,
+          "prompt_tokens_per_sec": 35.72,
+          "time_to_first_token_s": 1.297,
+          "response_preview": "Paris."
+        },
+        {
+          "category": "Medium Task",
+          "complexity": "medium",
+          "prompt_length": 40,
+          "response_length": 459,
+          "wall_time_s": 32.204,
+          "total_duration_s": 32.197,
+          "eval_tokens": 78,
+          "eval_duration_s": 30.737,
+          "tokens_per_sec": 2.54,
+          "prompt_eval_tokens": 38,
+          "prompt_eval_s": 0.952,
+          "prompt_tokens_per_sec": 39.92,
+          "time_to_first_token_s": 1.46,
+          "response_preview": "An API, or Application Programming Interface, is a set of rules and protocols th"
+        },
+        {
+          "category": "Longer Generation",
+          "complexity": "medium",
+          "prompt_length": 82,
+          "response_length": 647,
+          "wall_time_s": 45.501,
+          "total_duration_s": 45.491,
+          "eval_tokens": 109,
+          "eval_duration_s": 43.393,
+          "tokens_per_sec": 2.51,
+          "prompt_eval_tokens": 43,
+          "prompt_eval_s": 1.726,
+          "prompt_tokens_per_sec": 24.92,
+          "time_to_first_token_s": 2.098,
+          "response_preview": "Open-source software offers numerous benefits, including flexibility and customi"
+        },
+        {
+          "category": "Complex Reasoning",
+          "complexity": "complex",
+          "prompt_length": 140,
+          "response_length": 577,
+          "wall_time_s": 65.295,
+          "total_duration_s": 65.287,
+          "eval_tokens": 157,
+          "eval_duration_s": 62.756,
+          "tokens_per_sec": 2.5,
+          "prompt_eval_tokens": 64,
+          "prompt_eval_s": 2.137,
+          "prompt_tokens_per_sec": 29.95,
+          "time_to_first_token_s": 2.531,
+          "response_preview": "To find the total amount you spent, we need to calculate the cost of the apples "
+        },
+        {
+          "category": "Long Context Input",
+          "complexity": "complex",
+          "prompt_length": 761,
+          "response_length": 150,
+          "wall_time_s": 26.393,
+          "total_duration_s": 26.379,
+          "eval_tokens": 40,
+          "eval_duration_s": 15.564,
+          "tokens_per_sec": 2.57,
+          "prompt_eval_tokens": 205,
+          "prompt_eval_s": 10.488,
+          "prompt_tokens_per_sec": 19.55,
+          "time_to_first_token_s": 10.816,
+          "response_preview": "The answer to the question is the 1970s. According to the text, personal computi"
+        },
+        {
+          "category": "Code Generation",
+          "complexity": "complex",
+          "prompt_length": 78,
+          "response_length": 1163,
+          "wall_time_s": 111.604,
+          "total_duration_s": 111.594,
+          "eval_tokens": 272,
+          "eval_duration_s": 109.744,
+          "tokens_per_sec": 2.48,
+          "prompt_eval_tokens": 42,
+          "prompt_eval_s": 1.316,
+          "prompt_tokens_per_sec": 31.92,
+          "time_to_first_token_s": 1.85,
+          "response_preview": "**Prime Number Checker Function**\n====================================\n\nThe foll"
+        },
+        {
+          "category": "Multi-step Instruction",
+          "complexity": "medium",
+          "prompt_length": 114,
+          "response_length": 146,
+          "wall_time_s": 26.789,
+          "total_duration_s": 26.786,
+          "eval_tokens": 61,
+          "eval_duration_s": 24.248,
+          "tokens_per_sec": 2.52,
+          "prompt_eval_tokens": 66,
+          "prompt_eval_s": 2.2,
+          "prompt_tokens_per_sec": 29.99,
+          "time_to_first_token_s": 2.539,
+          "response_preview": "I've picked a random number between 1 and 10. The number is... 5.\n\nHere are the "
+        }
+      ],
+      "summary": {
+        "total_scenarios": 8,
+        "successful_scenarios": 8,
+        "avg_wall_time_s": 38.913,
+        "median_wall_time_s": 29.497,
+        "min_wall_time_s": 1.422,
+        "max_wall_time_s": 111.604,
+        "avg_tokens_per_sec": 2.83,
+        "median_tokens_per_sec": 2.53,
+        "total_tokens_generated": 723,
+        "total_time_s": 311.308,
+        "overall_throughput_tok_per_s": 2.32,
+        "by_complexity": {
+          "trivial": {
+            "avg_time_s": 1.422,
+            "avg_speed_tok_s": 3.76,
+            "avg_tokens": 3,
+            "count": 1
+          },
+          "simple": {
+            "avg_time_s": 2.099,
+            "avg_speed_tok_s": 3.76,
+            "avg_tokens": 3,
+            "count": 1
+          },
+          "medium": {
+            "avg_time_s": 34.832,
+            "avg_speed_tok_s": 2.52,
+            "avg_tokens": 82.7,
+            "count": 3
+          },
+          "complex": {
+            "avg_time_s": 67.764,
+            "avg_speed_tok_s": 2.52,
+            "avg_tokens": 156.3,
+            "count": 3
+          }
+        }
+      },
+      "rating": "Poor - Too slow for practical use"
+    }
+  }
+}

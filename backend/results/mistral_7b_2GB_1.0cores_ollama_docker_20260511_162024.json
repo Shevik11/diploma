@@ -1,0 +1,34 @@
+{
+  "model": "mistral:7b",
+  "platform": "docker",
+  "technology": "ollama",
+  "timestamp": "2026-05-11T16:20:24.550896",
+  "status": "not_enough_resources",
+  "started_at": "2026-05-11T16:20:24.550896",
+  "finished_at": "2026-05-11T16:20:24.550896",
+  "ram_gb": 2,
+  "cpu_cores": 1.0,
+  "system_info": {
+    "platform": "docker",
+    "timestamp": "2026-05-11T16:20:24.550896"
+  },
+  "results": [],
+  "test_results": [],
+  "summary": {
+    "total_prompts": 0,
+    "successful": 0,
+    "failed": 0,
+    "success_rate": 0,
+    "avg_tokens_per_second": 0,
+    "avg_latency_ms": 0,
+    "avg_first_token_latency_ms": 0,
+    "total_tokens_generated": 0,
+    "avg_cpu_percent": 0,
+    "avg_memory_percent": 0
+  },
+  "infeasible": {
+    "reason": "Insufficient RAM: 2 GB cannot load 'mistral:7b' with 1 worker thread (needs ~5 GB).",
+    "required_ram_gb": 5,
+    "skipped": true
+  }
+}

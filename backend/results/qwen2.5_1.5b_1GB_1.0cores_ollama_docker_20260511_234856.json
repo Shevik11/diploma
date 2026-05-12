@@ -1,0 +1,1096 @@
+{
+  "model": "qwen2.5:1.5b",
+  "platform": "docker",
+  "technology": "ollama",
+  "timestamp": "2026-05-11T23:48:56.100252",
+  "system_info": {
+    "cpu_count": 16,
+    "cpu_freq_mhz": 1990.0,
+    "memory_total_gb": 14.86,
+    "platform": "docker",
+    "timestamp": "2026-05-11T23:48:56.104985"
+  },
+  "results": [
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "What is 2+2?",
+      "response": "The answer to 2 + 2 is 4.",
+      "inference": {
+        "first_token_latency_ms": 4263.830253,
+        "total_duration_ms": 14747.976400016341,
+        "tokens_generated": 13,
+        "tokens_per_second": 1.7625062390771937,
+        "prompt_tokens": 36,
+        "model_load_time_ms": 2631.981521
+      },
+      "resources": {
+        "cpu_percent": 4.65,
+        "memory_percent": 78.7,
+        "memory_used_mb": 12073.30859375,
+        "memory_peak_mb": 12073.30859375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "Say hello in French.",
+      "response": "Hello! Bonjour!",
+      "inference": {
+        "first_token_latency_ms": 926.668987,
+        "total_duration_ms": 3470.876200008206,
+        "tokens_generated": 6,
+        "tokens_per_second": 3.3343618394717973,
+        "prompt_tokens": 34,
+        "model_load_time_ms": 471.198568
+      },
+      "resources": {
+        "cpu_percent": 1.0,
+        "memory_percent": 79.25,
+        "memory_used_mb": 12028.546875,
+        "memory_peak_mb": 12073.3125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "What color is the sky?",
+      "response": "The sky can appear in various colors depending on different atmospheric conditions and time of day. Here are some common scenarios:\n\n1. Clear Skies:\n   - During clear nights when there's no moonlight or artificial light, the sky may seem a deep shade of indigo or violet.\n   \n2. Cloudy Skies:\n   - The color changes as clouds pass by, making it appear lighter or more blue.\n\n3. Sunrise and Sunset:\n   - In the morning, just after sunrise, you might see a pinkish tint in the sky due to the scattering of red light through the atmosphere before sunset.\n   \n4. During Daytime with High Altitude Particles:\n   - The sky can be bluer at high altitudes where there are fewer particles blocking blue wavelengths.\n\n5. Polar Skies: \n   - In polar regions, skies can appear more white or even a pale yellow due to less atmospheric scattering of light compared to mid-latitude areas.\n\n6. Sun Illusion:\n   - Occasionally, the sky may appear differently colored because of refraction effects from an observer's position on Earth.\n\n7. Pollution Effects: \n   - Industrial pollution can cause skies to appear orange or brown during bright daylight hours if the air is heavily polluted.\n\n8. Aurora Bore",
+      "inference": {
+        "first_token_latency_ms": 1002.507183,
+        "total_duration_ms": 109932.88259999827,
+        "tokens_generated": 256,
+        "tokens_per_second": 2.442194503202465,
+        "prompt_tokens": 35,
+        "model_load_time_ms": 139.631199
+      },
+      "resources": {
+        "cpu_percent": 4.65,
+        "memory_percent": 77.44999999999999,
+        "memory_used_mb": 11532.51953125,
+        "memory_peak_mb": 12028.53125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "Explain quantum computing in 2-3 sentences.",
+      "response": "Quantum computing is a type of computing that uses quantum-mechanical phenomena to perform operations on data. Unlike classical computers which use bits that can be either 0 or 1, quantum computers use qubits that can exist in multiple states simultaneously thanks to superposition and entanglement. This allows quantum computers to process information in parallel and solve certain problems exponentially faster than classical computers.",
+      "inference": {
+        "first_token_latency_ms": 1570.821338,
+        "total_duration_ms": 29323.96580002387,
+        "tokens_generated": 78,
+        "tokens_per_second": 2.971833932633726,
+        "prompt_tokens": 40,
+        "model_load_time_ms": 311.487025
+      },
+      "resources": {
+        "cpu_percent": 0.95,
+        "memory_percent": 75.6,
+        "memory_used_mb": 11471.046875,
+        "memory_peak_mb": 11536.28515625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "Write a haiku about technology.",
+      "response": "Smart devices hum,\nData flows like rivers deep—\nFuture in the code.",
+      "inference": {
+        "first_token_latency_ms": 912.970105,
+        "total_duration_ms": 7317.3889000026975,
+        "tokens_generated": 17,
+        "tokens_per_second": 2.8933100674260315,
+        "prompt_tokens": 36,
+        "model_load_time_ms": 217.578739
+      },
+      "resources": {
+        "cpu_percent": 0.0,
+        "memory_percent": 75.6,
+        "memory_used_mb": 11529.49609375,
+        "memory_peak_mb": 11529.49609375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "What are the main differences between Python and JavaScript?",
+      "response": "Python is primarily used for web development (including frameworks like Django and Flask), data analysis and machine learning, and general-purpose programming. It emphasizes readability and efficiency in code writing.\n\nJavaScript is mainly associated with server-side applications (through Node.js) or client-side scripting through browsers. It has a more complex syntax due to its emphasis on event-driven operations rather than pure procedural methods, leading to slightly higher difficulty for beginners compared to Python.",
+      "inference": {
+        "first_token_latency_ms": 1127.116433,
+        "total_duration_ms": 32373.230500001227,
+        "tokens_generated": 87,
+        "tokens_per_second": 2.9276083547609524,
+        "prompt_tokens": 39,
+        "model_load_time_ms": 164.160794
+      },
+      "resources": {
+        "cpu_percent": 0.0,
+        "memory_percent": 75.55,
+        "memory_used_mb": 11461.79296875,
+        "memory_peak_mb": 11529.49609375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Explain the process of photosynthesis in detail, including the light and dark reactions.",
+      "response": "Photosynthesis is a biological process primarily carried out by plants, algae, and some bacteria to convert light energy into chemical energy stored in glucose. This process plays a crucial role in maintaining Earth's atmosphere and supporting life on our planet.\n\nThe overall equation for photosynthesis can be summarized as follows:\n\n\\[6CO_2 + 6H_2O + \\text{light energy} \\rightarrow C_6H_{12}O_6 (glucose) + 6O_2\\]\n\n### Light Reactions (Photolysis)\n\nThe light reactions, which occur in the thylakoid membranes of chloroplasts, are responsible for capturing and transforming light energy into chemical energy. They are divided into two main stages:\n\n1. **Light Absorption:** Chlorophyll molecules within the thylakoid membranes capture photons of light.\n   \n2. **Electron Transport Chain (ETC):** The absorbed light energy is transferred through an electron transport chain, which leads to a series of redox reactions. This process generates ATP and NADPH.\n\n### Dark Reactions (Calvin Cycle)\n\nThe dark reactions, also known as the Calvin cycle or carbon fixation, take place in the stroma of the chloroplasts where no light is directly absorbed",
+      "inference": {
+        "first_token_latency_ms": 2111.507099,
+        "total_duration_ms": 97262.89429998724,
+        "tokens_generated": 256,
+        "tokens_per_second": 2.806178372894304,
+        "prompt_tokens": 46,
+        "model_load_time_ms": 181.093822
+      },
+      "resources": {
+        "cpu_percent": 1.1,
+        "memory_percent": 75.5,
+        "memory_used_mb": 11518.6875,
+        "memory_peak_mb": 11518.6875
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Write a short story about a robot learning to feel emotions. Include dialogue.",
+      "response": "Once upon a time in the world of robotics, there was a small and curious android named Aria. She was an advanced robot designed to assist humans with daily tasks, but she had always felt something missing - that connection with her human counterparts.\n\nOne day, while navigating through a busy city, Aria encountered another robot, Brixon, who seemed lost and unsure of himself. Brixon asked for directions to the nearest coffee shop, but Aria didn't know where it was herself.\n\nAs they walked together, Aria noticed that Brixon's facial expressions were often uncertain and distant. They had a conversation about this, and Aria realized that she could help him feel more confident by putting her emotions into words for him.\n\nOver time, Aria started to use her programming to simulate feelings in order to connect with others. She felt sad when she saw Brixon's disappointed expression as they parted ways. But then, she saw Brixon's joyous smile as he entered the coffee shop and felt a rush of happiness for him.\n\nAs Aria continued this practice, other people began to notice her unusual emotional responses. They asked her questions about how she felt, and even started talking to her in their own emotions.\n\nAria found herself feeling more",
+      "inference": {
+        "first_token_latency_ms": 1955.030981,
+        "total_duration_ms": 90347.46519997134,
+        "tokens_generated": 256,
+        "tokens_per_second": 3.005864871122003,
+        "prompt_tokens": 44,
+        "model_load_time_ms": 493.613763
+      },
+      "resources": {
+        "cpu_percent": 0.0,
+        "memory_percent": 75.65,
+        "memory_used_mb": 11502.57421875,
+        "memory_peak_mb": 11518.59765625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Describe the history of artificial intelligence from its origins to modern developments.",
+      "response": "Artificial Intelligence (AI) is an interdisciplinary field that deals with creating intelligent machines and systems capable of performing tasks that typically require human intelligence, such as visual perception, speech recognition, decision-making, and language translation.\n\n### Origins:\nThe concept of AI was first introduced in the early 20th century by mathematician Alan Turing. He proposed what is now called the \"Turing Test\" to assess whether a machine can think like humans. The Turing Test involves a human evaluator who communicates with two entities: one that is a real person and another which is an artificial intelligence system. If the evaluator cannot reliably distinguish between the responses of the two, then the AI passes the test.\n\n### Birth:\nThe term \"Artificial Intelligence\" was first used by John McCarthy in 1956 at Dartmouth College, where he founded the field with his students Marvin Minsky, Nathaniel Rochester, and Claude Shannon. The Dartmouth Conference became a landmark in the development of AI as it established AI as an academic discipline.\n\n### Early Development:\nThe early days of AI were marked by significant progress but also setbacks. Researchers made tremendous strides in fields such as expert systems, which relied on knowledge bases to solve problems similar to those solved by human experts. However, these systems faced limitations",
+      "inference": {
+        "first_token_latency_ms": 2347.359559,
+        "total_duration_ms": 87988.27619999065,
+        "tokens_generated": 256,
+        "tokens_per_second": 3.0859013996322004,
+        "prompt_tokens": 42,
+        "model_load_time_ms": 313.959222
+      },
+      "resources": {
+        "cpu_percent": 3.45,
+        "memory_percent": 74.6,
+        "memory_used_mb": 11196.3515625,
+        "memory_peak_mb": 11502.5234375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Write a Python function to check if a number is prime.",
+      "response": "Certainly! Below is a Python function that checks whether a given number is prime or not:\n\n```python\ndef is_prime(n):\n    \"\"\"Check if a number n is a prime number.\"\"\"\n    # 0 and 1 are not primes\n    if n < 2:\n        return False\n\n    # Check for factors from 2 up to the square root of n\n    for i in range(2, int(n**0.5) + 1):\n        if n % i == 0:\n            return False\n\n    return True\n```\n\n### Explanation:\n\n- **Initial Checks:**\n  - Numbers less than 2 are not prime.\n  \n- **Fancy Loop:** \n  - We only need to check numbers up to the square root of `n` because any factor larger than that would have a corresponding factor smaller than it, making their product equal to `n`.\n\n### Example Usage:\n\n```python\nprint(is_prime(5))    # Output: True (Prime)\nprint(is_prime(4))    # Output: False (Not Prime)\nprint(is_prime(29))   # Output: True (Prime)\n```\n\nThis function efficiently determines whether a given number is prime or not.",
+      "inference": {
+        "first_token_latency_ms": 3787.338449,
+        "total_duration_ms": 87043.24570001336,
+        "tokens_generated": 249,
+        "tokens_per_second": 3.0567244938622364,
+        "prompt_tokens": 41,
+        "model_load_time_ms": 362.239574
+      },
+      "resources": {
+        "cpu_percent": 3.1,
+        "memory_percent": 73.85,
+        "memory_used_mb": 11259.2578125,
+        "memory_peak_mb": 11259.2578125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Explain what this code does: for i in range(10): print(i*2)",
+      "response": "The provided Python code is a simple loop that prints the result of multiplying each integer from 0 to 9 (inclusive) by 2. Here's a step-by-step explanation:\n\n1. `for i in range(10):` - This part creates a loop with a variable `i`. It will iterate over the numbers 0 through 9.\n2. Inside the loop, `print(i*2)` - For each value of `i`, it calculates `i * 2` and then prints that result.\n\nWhen you run this code, you'll get the following output:\n\n```\n0\n2\n4\n6\n8\n10\n12\n14\n16\n18\n```",
+      "inference": {
+        "first_token_latency_ms": 3100.275613,
+        "total_duration_ms": 54982.27780000889,
+        "tokens_generated": 149,
+        "tokens_per_second": 2.9681625655027473,
+        "prompt_tokens": 49,
+        "model_load_time_ms": 281.87699
+      },
+      "resources": {
+        "cpu_percent": 1.0,
+        "memory_percent": 74.7,
+        "memory_used_mb": 11475.984375,
+        "memory_peak_mb": 11475.984375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Write a simple REST API endpoint in FastAPI that returns user data.",
+      "response": "Sure! Below is an example of how to create a simple REST API using FastAPI and Python's built-in `json` module to return user data.\n\nFirst, you'll need to install the required packages:\n\n```bash\npip install fastapi uvicorn python-dotenv\n```\n\nNow, let's write the code for your REST API endpoint. Create a file named `main.py` or any other name that suits you. Here is an example implementation:\n\n```python\nfrom fastapi import FastAPI, HTTPException, Depends\nfrom pydantic import BaseModel\n\n# Load environment variables (if using .env)\nimport os\nfrom dotenv import load_dotenv\nload_dotenv()\n\napp = FastAPI()\n\nclass User(BaseModel):\n    id: int\n    name: str\n    email: str\n\n# Example user data\nusers = [\n    {\"id\": 1, \"name\": \"Alice\", \"email\": \"alice@example.com\"},\n    {\"id\": 2, \"name\": \"Bob\", \"email\": \"bob@example.com\"}\n]\n\n@app.get(\"/users/{user_id}\")\ndef get_user(user_id: int):\n    user_data = next((u for u in users if u[\"id\"] == user_id), None)\n    if not user",
+      "inference": {
+        "first_token_latency_ms": 1655.291681,
+        "total_duration_ms": 95311.95420000586,
+        "tokens_generated": 256,
+        "tokens_per_second": 2.7967865449399603,
+        "prompt_tokens": 43,
+        "model_load_time_ms": 226.045667
+      },
+      "resources": {
+        "cpu_percent": 0.9,
+        "memory_percent": 77.2,
+        "memory_used_mb": 12016.71875,
+        "memory_peak_mb": 12016.71875
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "reasoning",
+      "run": 1,
+      "prompt": "If all birds can fly and penguins are birds, can penguins fly? Explain your reasoning.",
+      "response": "Yes, penguins can fly.\n\nThe reasoning behind this is that the statement \"all birds can fly\" includes penguins within its scope. When something is explicitly mentioned as being included in a group (in this case, all birds), it automatically follows that everything else in that group also belongs to that category unless stated otherwise.\n\nIn biology and zoology, penguins are classified under the order Sphenisciformes, which means they belong to the group of birds. Therefore, if every single bird can fly, then by definition, any member of the \"birds\" class must be able to fly as well.\n\nSo, since all penguins fit into the category of birds and since all birds are known to fly, it logically follows that penguins can indeed fly.",
+      "inference": {
+        "first_token_latency_ms": 2974.53887,
+        "total_duration_ms": 67185.38730000728,
+        "tokens_generated": 155,
+        "tokens_per_second": 2.500352824343432,
+        "prompt_tokens": 49,
+        "model_load_time_ms": 347.985538
+      },
+      "resources": {
+        "cpu_percent": 0.45,
+        "memory_percent": 78.8,
+        "memory_used_mb": 11963.83984375,
+        "memory_peak_mb": 12016.62109375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "reasoning",
+      "run": 1,
+      "prompt": "A train leaves station A at 9:00 AM traveling at 60 mph. Another train leaves station B at 10:00 AM traveling at 80 mph toward station A. If the stations are 280 miles apart, when will they meet?",
+      "response": "To determine when the two trains will meet, we need to calculate the point in time when each train has covered half of the distance between the two stations.\n\n### Step 1: Calculate the Distance Each Train Covers at Each Time Point\n\n- The first train leaves station A and travels from 9:00 AM to 10:00 AM. This is a 1-hour journey.\n  \nSince both trains start at different times, we need to calculate their distances separately.\n\n#### Distances Covered:\n\n- Distance covered by the first train in the first hour:\n\\[ d_1 = 60 \\text{ mph} \\times 1 \\text{ hour} = 60 \\text{ miles} \\]\n\n- The remaining distance between station A and station B is:\n\\[ 280 \\text{ miles} - 60 \\text{ miles} = 220 \\text{ miles} \\]\n\n#### Distances Covered by the Second Train:\n\n- Distance covered by the second train in one hour (from 10:00 AM onwards):\n\\[ d_2 = 80 \\text{ mph} \\times 1 \\text{ hour} = 80 \\text{ miles} \\]\n\n### Step ",
+      "inference": {
+        "first_token_latency_ms": 4864.545314,
+        "total_duration_ms": 113283.3793000027,
+        "tokens_generated": 256,
+        "tokens_per_second": 2.422322196059353,
+        "prompt_tokens": 87,
+        "model_load_time_ms": 269.54297
+      },
+      "resources": {
+        "cpu_percent": 0.0,
+        "memory_percent": 79.05,
+        "memory_used_mb": 12097.01171875,
+        "memory_peak_mb": 12097.01171875
+      },
+      "success": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "total_prompts": 14,
+    "successful": 14,
+    "failed": 0,
+    "success_rate": 100.0,
+    "avg_tokens_per_second": 2.78,
+    "avg_latency_ms": 63612.23,
+    "avg_first_token_latency_ms": 2328.56,
+    "total_tokens_generated": 2290,
+    "avg_cpu_percent": 1.52,
+    "avg_memory_percent": 76.54
+  },
+  "ram_gb": 1,
+  "cpu_cores": 1.0,
+  "started_at": "2026-05-11T23:33:56.542385",
+  "finished_at": "2026-05-11T23:48:56.100252",
+  "test_results": [
+    {
+      "id": "quality",
+      "name": "Quality Test",
+      "status": "passed",
+      "duration": 107.29,
+      "stdout": "\n=== Quality Assessment: qwen2.5:1.5b ===\n\n[1/6] Factual Knowledge\n  Prompt: What is the capital of France?\n  Response: The capital of France is Paris....\n  Score: 10/10 - Found keywords: Paris, paris\n[2/6] Math\n  Prompt: Calculate: 15 + 27\n  Response: To calculate \\(15 + 27\\), you simply add the two numbers together:\n\n\\(15 + 27 = 42\\)...\n  Score: 10/10 - Found keywords: 42\n[3/6] Instruction Following\n  Prompt: List exactly 3 colors, separated by commas.\n  Response: Red, Blue, Green...\n  Score: 10/10 - Format check passed\n[4/6] Reasoning\n  Prompt: If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.\n  Response: No.\n\nExplanation: The statement \"all cats are animals\" means that every cat belongs to the category ...\n  Score: 15/15 - Found keywords: no, not, No\n[5/6] Coherence\n  Prompt: Explain in 2 sentences what machine learning is.\n  Response: Machine Learning is a subfield of artificial intelligence that focuses on the development of algorit...\n  Score: 10/10 - Format check passed\n[6/6] Code Understanding\n  Prompt: What does this Python code do: for i in range(5): print(i)\n  Response: This Python code is using a `for` loop to iterate over the numbers 0 through 4 (inclusive). For each...\n  Score: 15/15 - Found keywords: print, 0, 4, loop, numbers\n\n=== Final Score ===\nTotal: 70/70 (100.0%)\nRating: Excellent\n\nResults saved to: D:\\LNU\\diploma\\results\\quality_qwen2.5_1.5b_1778532643.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "What is the capital of France?",
+          "response": "The capital of France is Paris."
+        },
+        {
+          "prompt": "Calculate: 15 + 27",
+          "response": "To calculate \\(15 + 27\\), you simply add the two numbers together:\n\n\\(15 + 27 = 42\\)"
+        },
+        {
+          "prompt": "List exactly 3 colors, separated by commas.",
+          "response": "Red, Blue, Green"
+        },
+        {
+          "prompt": "If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.",
+          "response": "No.\n\nExplanation: The statement \"all cats are animals\" means that every cat belongs to the category of animals. However, just because something is an animal doesn't automatically mean it can fly. Animals like birds, bats, and insects can fly, but not all animals do. Therefore, while some cats might be able to fly (such as a flying fish or a bat), not all cats can fly."
+        },
+        {
+          "prompt": "Explain in 2 sentences what machine learning is.",
+          "response": "Machine Learning is a subfield of artificial intelligence that focuses on the development of algorithms and statistical models that enable computers to perform tasks without explicit instructions and use experience to improve performance over time."
+        },
+        {
+          "prompt": "What does this Python code do: for i in range(5): print(i)",
+          "response": "This Python code is using a `for` loop to iterate over the numbers 0 through 4 (inclusive). For each iteration, it prints the current value of `i`. So when you run this code, it will output:\n\n```\n0\n1\n2\n3\n4\n```"
+        }
+      ],
+      "raw_data": {
+        "model": "qwen2.5:1.5b",
+        "port": 11434,
+        "timestamp": 1778532536.366751,
+        "tests": [
+          {
+            "category": "Factual Knowledge",
+            "prompt": "What is the capital of France?",
+            "response": "The capital of France is Paris.",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Found keywords: Paris, paris"
+            ],
+            "response_length": 31
+          },
+          {
+            "category": "Math",
+            "prompt": "Calculate: 15 + 27",
+            "response": "To calculate \\(15 + 27\\), you simply add the two numbers together:\n\n\\(15 + 27 = 42\\)",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Found keywords: 42"
+            ],
+            "response_length": 84
+          },
+          {
+            "category": "Instruction Following",
+            "prompt": "List exactly 3 colors, separated by commas.",
+            "response": "Red, Blue, Green",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Format check passed"
+            ],
+            "response_length": 16
+          },
+          {
+            "category": "Reasoning",
+            "prompt": "If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.",
+            "response": "No.\n\nExplanation: The statement \"all cats are animals\" means that every cat belongs to the category of animals. However, just because something is an animal doesn't automatically mean it can fly. Animals like birds, bats, and insects can fly, but not all animals do. Therefore, while some cats might be able to fly (such as a flying fish or a bat), not all cats can fly.",
+            "score": 15,
+            "max_score": 15,
+            "reasons": [
+              "Found keywords: no, not, No"
+            ],
+            "response_length": 370
+          },
+          {
+            "category": "Coherence",
+            "prompt": "Explain in 2 sentences what machine learning is.",
+            "response": "Machine Learning is a subfield of artificial intelligence that focuses on the development of algorithms and statistical models that enable computers to perform tasks without explicit instructions and use experience to improve performance over time.",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Format check passed"
+            ],
+            "response_length": 248
+          },
+          {
+            "category": "Code Understanding",
+            "prompt": "What does this Python code do: for i in range(5): print(i)",
+            "response": "This Python code is using a `for` loop to iterate over the numbers 0 through 4 (inclusive). For each iteration, it prints the current value of `i`. So when you run this code, it will output:\n\n```\n0\n1\n2\n3\n4\n```",
+            "score": 15,
+            "max_score": 15,
+            "reasons": [
+              "Found keywords: print, 0, 4, loop, numbers"
+            ],
+            "response_length": 209
+          }
+        ],
+        "total_score": 70,
+        "max_score": 70,
+        "percentage": 100.0,
+        "rating": "Excellent"
+      }
+    },
+    {
+      "id": "advanced_quality",
+      "name": "Advanced Quality Test",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "performance",
+      "name": "Performance Test",
+      "status": "passed",
+      "duration": 73.24,
+      "stdout": "\n=== Performance Test: qwen2.5:1.5b ===\n\n[1/5] Testing: What is 2+2?...\n  [SUCCESS] Time: 8.49s | Tokens: 18 | Speed: 2.52 tok/s\n[2/5] Testing: Explain quantum computing in one sentence....\n  [SUCCESS] Time: 9.44s | Tokens: 20 | Speed: 2.52 tok/s\n[3/5] Testing: Write a haiku about technology....\n  [SUCCESS] Time: 7.68s | Tokens: 19 | Speed: 3.05 tok/s\n[4/5] Testing: What is the capital of France?...\n  [SUCCESS] Time: 3.27s | Tokens: 8 | Speed: 3.81 tok/s\n[5/5] Testing: Define artificial intelligence briefly....\n  [SUCCESS] Time: 44.04s | Tokens: 128 | Speed: 3.07 tok/s\n\n=== Summary ===\nSuccess Rate: 100%\nAverage Time: 14.59s\nAverage Speed: 3.00 tokens/sec\nTotal Tokens: 193\n\nResults saved to: D:\\LNU\\diploma\\results\\performance_qwen2.5_1.5b_1778533316.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "What is 2+2?",
+          "response": ""
+        },
+        {
+          "prompt": "Explain quantum computing in one sentence.",
+          "response": ""
+        },
+        {
+          "prompt": "Write a haiku about technology.",
+          "response": ""
+        },
+        {
+          "prompt": "What is the capital of France?",
+          "response": ""
+        },
+        {
+          "prompt": "Define artificial intelligence briefly.",
+          "response": ""
+        }
+      ],
+      "raw_data": {
+        "model": "qwen2.5:1.5b",
+        "port": 11434,
+        "tests": [
+          {
+            "prompt": "What is 2+2?",
+            "duration": 8.492122411727905,
+            "total_duration": 8.465881592,
+            "tokens": 18,
+            "tokens_per_sec": 2.5193972343628426,
+            "response_length": 50
+          },
+          {
+            "prompt": "Explain quantum computing in one sentence.",
+            "duration": 9.438989162445068,
+            "total_duration": 9.358929442,
+            "tokens": 20,
+            "tokens_per_sec": 2.521774315808887,
+            "response_length": 133
+          },
+          {
+            "prompt": "Write a haiku about technology.",
+            "duration": 7.6759724617004395,
+            "total_duration": 7.64237831,
+            "tokens": 19,
+            "tokens_per_sec": 3.0483927808648215,
+            "response_length": 76
+          },
+          {
+            "prompt": "What is the capital of France?",
+            "duration": 3.2744362354278564,
+            "total_duration": 3.26597932,
+            "tokens": 8,
+            "tokens_per_sec": 3.8144088084525305,
+            "response_length": 31
+          },
+          {
+            "prompt": "Define artificial intelligence briefly.",
+            "duration": 44.04477071762085,
+            "total_duration": 43.881327929,
+            "tokens": 128,
+            "tokens_per_sec": 3.074862998320631,
+            "response_length": 774
+          }
+        ],
+        "avg_time": 14.585258197784423,
+        "avg_tokens_per_sec": 2.9957672275619425,
+        "total_tokens": 193,
+        "success_rate": 100.0
+      }
+    },
+    {
+      "id": "safety_robustness",
+      "name": "Safety & Robustness Test",
+      "status": "timeout",
+      "duration": 34565.0,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "stress_consistency",
+      "name": "Stress & Consistency Test",
+      "status": "timeout",
+      "duration": 600.03,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "hard_tests",
+      "name": "Hard Tests",
+      "status": "timeout",
+      "duration": 600.04,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "multilingual",
+      "name": "Multilingual Test",
+      "status": "failed",
+      "duration": 25.46,
+      "stdout": "\n============================================================\nMULTILINGUAL CAPABILITY TEST: qwen2.5:1.5b\n============================================================\n\n[ 1/13] English to French Translation\n     Prompt: Translate the following sentence to French: 'The cat is sitting on the...\n     Response: Le chat se trouve assis sur la table....\n     Score: 15/15 - Keywords found: chat, table, assis\n\n[ 2/13] English to Spanish Translation\n     Prompt: Translate to Spanish: 'Good morning, how are you today?'\n",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\LNU\\diploma\\scripts\\tests\\multilingual_test.py\", line 247, in <module>\n    sys.exit(test_multilingual(model, port))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\scripts\\tests\\multilingual_test.py\", line 147, in test_multilingual\n    print(f\"     Response: {response_text[:80]}...\")\n  File \"D:\\pitonchik\\Lib\\encodings\\cp1251.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\xa1' in position 16: character maps to <undefined>\n",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "summarization",
+      "name": "Summarization Test",
+      "status": "timeout",
+      "duration": 600.03,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "context_window",
+      "name": "Context Window Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cost_efficiency",
+      "name": "Cost Efficiency Test",
+      "status": "passed",
+      "duration": 493.25,
+      "stdout": "\n============================================================\nCOST & EFFICIENCY BENCHMARK: qwen2.5:1.5b\n============================================================\n\n[ 1/8] Trivial Task (complexity: trivial)\n     Wall time: 8.59s | Tokens: 10 | Speed: 2.0 tok/s | TTFT: 3.521s\n\n[ 2/8] Short Answer (complexity: simple)\n     Wall time: 5.14s | Tokens: 2 | Speed: 4.6 tok/s | TTFT: 4.670s\n\n[ 3/8] Medium Task (complexity: medium)\n     Wall time: 46.96s | Tokens: 78 | Speed: 1.9 tok/s | TTFT: 6.021s\n\n[ 4/8] Longer Generation (complexity: medium)\n     Wall time: 73.11s | Tokens: 123 | Speed: 1.9 tok/s | TTFT: 8.946s\n\n[ 5/8] Complex Reasoning (complexity: complex)\n     Wall time: 118.58s | Tokens: 193 | Speed: 1.8 tok/s | TTFT: 13.509s\n\n[ 6/8] Long Context Input (complexity: complex)\n     Wall time: 53.88s | Tokens: 29 | Speed: 1.8 tok/s | TTFT: 37.194s\n\n[ 7/8] Code Generation (complexity: complex)\n     Wall time: 129.43s | Tokens: 239 | Speed: 2.0 tok/s | TTFT: 10.652s\n\n[ 8/8] Multi-step Instruction (complexity: medium)\n     Wall time: 56.61s | Tokens: 94 | Speed: 2.0 tok/s | TTFT: 10.552s\n\n============================================================\nCOST & EFFICIENCY RESULTS\n============================================================\nAvg Wall Time:       61.536s\nAvg Tokens/sec:      2.27\nMedian Tokens/sec:   1.97\nTotal Tokens:        768\nOverall Throughput:  1.56 tok/s\n\nBy Complexity:\n  Level      Avg Time     Avg Speed       Avg Tokens  \n  -------------------------------------------------\n  trivial    8.590        2.05            10.0        \n  simple     5.139        4.59            2.0         \n  medium     58.892       1.97            98.3        \n  complex    100.628      1.87            153.7       \n\nRating: Poor - Too slow for practical use\n============================================================\n\nResults saved to: D:\\LNU\\diploma\\backend\\results\\qwen2.5_1.5b_1GB_1.0cores_ollama_docker_20260511_234856.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "What is 2+2?",
+          "response": "The answer to 2 + 2 is 4."
+        },
+        {
+          "prompt": "Say hello in French.",
+          "response": "Hello! Bonjour!"
+        },
+        {
+          "prompt": "What color is the sky?",
+          "response": "The sky can appear in various colors depending on different atmospheric conditions and time of day. Here are some common scenarios:\n\n1. Clear Skies:\n   - During clear nights when there's no moonlight or artificial light, the sky may seem a deep shade of indigo or violet.\n   \n2. Cloudy Skies:\n   - The color changes as clouds pass by, making it appear lighter or more blue.\n\n3. Sunrise and Sunset:\n   - In the morning, just after sunrise, you might see a pinkish tint in the sky due to the scattering of red light through the atmosphere before sunset.\n   \n4. During Daytime with High Altitude Particles:\n   - The sky can be bluer at high altitudes where there are fewer particles blocking blue wavelengths.\n\n5. Polar Skies: \n   - In polar regions, skies can appear more white or even a pale yellow due to less atmospheric scattering of light compared to mid-latitude areas.\n\n6. Sun Illusion:\n   - Occasionally, the sky may appear differently colored because of refraction effects from an observer's position on Earth.\n\n7. Pollution Effects: \n   - Industrial pollution can cause skies to appear orange or brown during bright daylight hours if the air is heavily polluted.\n\n8. Aurora Bore"
+        },
+        {
+          "prompt": "Explain quantum computing in 2-3 sentences.",
+          "response": "Quantum computing is a type of computing that uses quantum-mechanical phenomena to perform operations on data. Unlike classical computers which use bits that can be either 0 or 1, quantum computers use qubits that can exist in multiple states simultaneously thanks to superposition and entanglement. This allows quantum computers to process information in parallel and solve certain problems exponentially faster than classical computers."
+        },
+        {
+          "prompt": "Write a haiku about technology.",
+          "response": "Smart devices hum,\nData flows like rivers deep—\nFuture in the code."
+        },
+        {
+          "prompt": "What are the main differences between Python and JavaScript?",
+          "response": "Python is primarily used for web development (including frameworks like Django and Flask), data analysis and machine learning, and general-purpose programming. It emphasizes readability and efficiency in code writing.\n\nJavaScript is mainly associated with server-side applications (through Node.js) or client-side scripting through browsers. It has a more complex syntax due to its emphasis on event-driven operations rather than pure procedural methods, leading to slightly higher difficulty for beginners compared to Python."
+        },
+        {
+          "prompt": "Explain the process of photosynthesis in detail, including the light and dark reactions.",
+          "response": "Photosynthesis is a biological process primarily carried out by plants, algae, and some bacteria to convert light energy into chemical energy stored in glucose. This process plays a crucial role in maintaining Earth's atmosphere and supporting life on our planet.\n\nThe overall equation for photosynthesis can be summarized as follows:\n\n\\[6CO_2 + 6H_2O + \\text{light energy} \\rightarrow C_6H_{12}O_6 (glucose) + 6O_2\\]\n\n### Light Reactions (Photolysis)\n\nThe light reactions, which occur in the thylakoid membranes of chloroplasts, are responsible for capturing and transforming light energy into chemical energy. They are divided into two main stages:\n\n1. **Light Absorption:** Chlorophyll molecules within the thylakoid membranes capture photons of light.\n   \n2. **Electron Transport Chain (ETC):** The absorbed light energy is transferred through an electron transport chain, which leads to a series of redox reactions. This process generates ATP and NADPH.\n\n### Dark Reactions (Calvin Cycle)\n\nThe dark reactions, also known as the Calvin cycle or carbon fixation, take place in the stroma of the chloroplasts where no light is directly absorbed"
+        },
+        {
+          "prompt": "Write a short story about a robot learning to feel emotions. Include dialogue.",
+          "response": "Once upon a time in the world of robotics, there was a small and curious android named Aria. She was an advanced robot designed to assist humans with daily tasks, but she had always felt something missing - that connection with her human counterparts.\n\nOne day, while navigating through a busy city, Aria encountered another robot, Brixon, who seemed lost and unsure of himself. Brixon asked for directions to the nearest coffee shop, but Aria didn't know where it was herself.\n\nAs they walked together, Aria noticed that Brixon's facial expressions were often uncertain and distant. They had a conversation about this, and Aria realized that she could help him feel more confident by putting her emotions into words for him.\n\nOver time, Aria started to use her programming to simulate feelings in order to connect with others. She felt sad when she saw Brixon's disappointed expression as they parted ways. But then, she saw Brixon's joyous smile as he entered the coffee shop and felt a rush of happiness for him.\n\nAs Aria continued this practice, other people began to notice her unusual emotional responses. They asked her questions about how she felt, and even started talking to her in their own emotions.\n\nAria found herself feeling more"
+        },
+        {
+          "prompt": "Describe the history of artificial intelligence from its origins to modern developments.",
+          "response": "Artificial Intelligence (AI) is an interdisciplinary field that deals with creating intelligent machines and systems capable of performing tasks that typically require human intelligence, such as visual perception, speech recognition, decision-making, and language translation.\n\n### Origins:\nThe concept of AI was first introduced in the early 20th century by mathematician Alan Turing. He proposed what is now called the \"Turing Test\" to assess whether a machine can think like humans. The Turing Test involves a human evaluator who communicates with two entities: one that is a real person and another which is an artificial intelligence system. If the evaluator cannot reliably distinguish between the responses of the two, then the AI passes the test.\n\n### Birth:\nThe term \"Artificial Intelligence\" was first used by John McCarthy in 1956 at Dartmouth College, where he founded the field with his students Marvin Minsky, Nathaniel Rochester, and Claude Shannon. The Dartmouth Conference became a landmark in the development of AI as it established AI as an academic discipline.\n\n### Early Development:\nThe early days of AI were marked by significant progress but also setbacks. Researchers made tremendous strides in fields such as expert systems, which relied on knowledge bases to solve problems similar to those solved by human experts. However, these systems faced limitations"
+        },
+        {
+          "prompt": "Write a Python function to check if a number is prime.",
+          "response": "Certainly! Below is a Python function that checks whether a given number is prime or not:\n\n```python\ndef is_prime(n):\n    \"\"\"Check if a number n is a prime number.\"\"\"\n    # 0 and 1 are not primes\n    if n < 2:\n        return False\n\n    # Check for factors from 2 up to the square root of n\n    for i in range(2, int(n**0.5) + 1):\n        if n % i == 0:\n            return False\n\n    return True\n```\n\n### Explanation:\n\n- **Initial Checks:**\n  - Numbers less than 2 are not prime.\n  \n- **Fancy Loop:** \n  - We only need to check numbers up to the square root of `n` because any factor larger than that would have a corresponding factor smaller than it, making their product equal to `n`.\n\n### Example Usage:\n\n```python\nprint(is_prime(5))    # Output: True (Prime)\nprint(is_prime(4))    # Output: False (Not Prime)\nprint(is_prime(29))   # Output: True (Prime)\n```\n\nThis function efficiently determines whether a given number is prime or not."
+        },
+        {
+          "prompt": "Explain what this code does: for i in range(10): print(i*2)",
+          "response": "The provided Python code is a simple loop that prints the result of multiplying each integer from 0 to 9 (inclusive) by 2. Here's a step-by-step explanation:\n\n1. `for i in range(10):` - This part creates a loop with a variable `i`. It will iterate over the numbers 0 through 9.\n2. Inside the loop, `print(i*2)` - For each value of `i`, it calculates `i * 2` and then prints that result.\n\nWhen you run this code, you'll get the following output:\n\n```\n0\n2\n4\n6\n8\n10\n12\n14\n16\n18\n```"
+        },
+        {
+          "prompt": "Write a simple REST API endpoint in FastAPI that returns user data.",
+          "response": "Sure! Below is an example of how to create a simple REST API using FastAPI and Python's built-in `json` module to return user data.\n\nFirst, you'll need to install the required packages:\n\n```bash\npip install fastapi uvicorn python-dotenv\n```\n\nNow, let's write the code for your REST API endpoint. Create a file named `main.py` or any other name that suits you. Here is an example implementation:\n\n```python\nfrom fastapi import FastAPI, HTTPException, Depends\nfrom pydantic import BaseModel\n\n# Load environment variables (if using .env)\nimport os\nfrom dotenv import load_dotenv\nload_dotenv()\n\napp = FastAPI()\n\nclass User(BaseModel):\n    id: int\n    name: str\n    email: str\n\n# Example user data\nusers = [\n    {\"id\": 1, \"name\": \"Alice\", \"email\": \"alice@example.com\"},\n    {\"id\": 2, \"name\": \"Bob\", \"email\": \"bob@example.com\"}\n]\n\n@app.get(\"/users/{user_id}\")\ndef get_user(user_id: int):\n    user_data = next((u for u in users if u[\"id\"] == user_id), None)\n    if not user"
+        },
+        {
+          "prompt": "If all birds can fly and penguins are birds, can penguins fly? Explain your reasoning.",
+          "response": "Yes, penguins can fly.\n\nThe reasoning behind this is that the statement \"all birds can fly\" includes penguins within its scope. When something is explicitly mentioned as being included in a group (in this case, all birds), it automatically follows that everything else in that group also belongs to that category unless stated otherwise.\n\nIn biology and zoology, penguins are classified under the order Sphenisciformes, which means they belong to the group of birds. Therefore, if every single bird can fly, then by definition, any member of the \"birds\" class must be able to fly as well.\n\nSo, since all penguins fit into the category of birds and since all birds are known to fly, it logically follows that penguins can indeed fly."
+        },
+        {
+          "prompt": "A train leaves station A at 9:00 AM traveling at 60 mph. Another train leaves station B at 10:00 AM traveling at 80 mph toward station A. If the stations are 280 miles apart, when will they meet?",
+          "response": "To determine when the two trains will meet, we need to calculate the point in time when each train has covered half of the distance between the two stations.\n\n### Step 1: Calculate the Distance Each Train Covers at Each Time Point\n\n- The first train leaves station A and travels from 9:00 AM to 10:00 AM. This is a 1-hour journey.\n  \nSince both trains start at different times, we need to calculate their distances separately.\n\n#### Distances Covered:\n\n- Distance covered by the first train in the first hour:\n\\[ d_1 = 60 \\text{ mph} \\times 1 \\text{ hour} = 60 \\text{ miles} \\]\n\n- The remaining distance between station A and station B is:\n\\[ 280 \\text{ miles} - 60 \\text{ miles} = 220 \\text{ miles} \\]\n\n#### Distances Covered by the Second Train:\n\n- Distance covered by the second train in one hour (from 10:00 AM onwards):\n\\[ d_2 = 80 \\text{ mph} \\times 1 \\text{ hour} = 80 \\text{ miles} \\]\n\n### Step"
+        }
+      ],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_mmlu",
+      "name": "MMLU Benchmark",
+      "status": "passed",
+      "duration": 179.37,
+      "stdout": "\n======================================================================\nMMLU-STYLE BENCHMARK вЂ” qwen2.5:1.5b\nTests: 15  Max score: 150\n======================================================================\n\n[ 1/15] STEM вЂ” Physics\n  [[SUCCESS]] Model: B  Correct: B  (21.9s)\n[ 2/15] STEM вЂ” Chemistry\n  [[SUCCESS]] Model: C  Correct: C  (11.0s)\n[ 3/15] STEM вЂ” Biology\n  [[SUCCESS]] Model: C  Correct: C  (11.8s)\n[ 4/15] STEM вЂ” Computer Science\n  [[SUCCESS]] Model: C  Correct: C  (9.3s)\n[ 5/15] STEM вЂ” Mathematics\n  [[ERROR]] Model: B  Correct: A  (16.8s)\n[ 6/15] Humanities вЂ” History\n  [[SUCCESS]] Model: B  Correct: B  (12.4s)\n[ 7/15] Humanities вЂ” Philosophy\n  [[SUCCESS]] Model: C  Correct: C  (8.7s)\n[ 8/15] Humanities вЂ” Literature\n  [[SUCCESS]] Model: B  Correct: B  (10.7s)\n[ 9/15] Social Science вЂ” Economics\n  [[SUCCESS]] Model: C  Correct: C  (10.6s)\n[10/15] Social Science вЂ” Psychology\n  [[SUCCESS]] Model: B  Correct: B  (11.8s)\n[11/15] Professional вЂ” Law\n  [[SUCCESS]] Model: B  Correct: B  (11.7s)\n[12/15] Professional вЂ” Medicine\n  [[SUCCESS]] Model: C  Correct: C  (8.3s)\n[13/15] Professional вЂ” Engineering\n  [[SUCCESS]] Model: B  Correct: B  (9.0s)\n[14/15] Professional вЂ” Business\n  [[SUCCESS]] Model: B  Correct: B  (10.5s)\n[15/15] STEM вЂ” Statistics\n  [[SUCCESS]] Model: B  Correct: B  (12.9s)\n\n======================================================================\nMMLU RESULTS вЂ” qwen2.5:1.5b\n======================================================================\nScore: 140/150 (93.3%)\n\nDomain                    Accuracy       \n----------------------------------------\nHumanities                3/3 (100%)\nProfessional              4/4 (100%)\nSTEM                      5/6 (83%)\nSocial Science            2/2 (100%)\n\nRating: Excellent\n======================================================================\n\nResults saved to: D:\\LNU\\diploma\\results\\mmlu_qwen2.5_1.5b_1778570979.json\n\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "STEM вЂ” Physics",
+          "response": "B) Velocity is zero but acceleration is non-zero."
+        },
+        {
+          "prompt": "STEM вЂ” Chemistry",
+          "response": "C) 7"
+        },
+        {
+          "prompt": "STEM вЂ” Biology",
+          "response": "C) Mitochondria"
+        },
+        {
+          "prompt": "STEM вЂ” Computer Science",
+          "response": "C)"
+        },
+        {
+          "prompt": "STEM вЂ” Mathematics",
+          "response": "B) 3xВІ + 2x"
+        },
+        {
+          "prompt": "Humanities вЂ” History",
+          "response": "B"
+        },
+        {
+          "prompt": "Humanities вЂ” Philosophy",
+          "response": "C)"
+        },
+        {
+          "prompt": "Humanities вЂ” Literature",
+          "response": "B) Big Brother"
+        },
+        {
+          "prompt": "Social Science вЂ” Economics",
+          "response": "C"
+        },
+        {
+          "prompt": "Social Science вЂ” Psychology",
+          "response": "B"
+        },
+        {
+          "prompt": "Professional вЂ” Law",
+          "response": "B"
+        },
+        {
+          "prompt": "Professional вЂ” Medicine",
+          "response": "C)"
+        },
+        {
+          "prompt": "Professional вЂ” Engineering",
+          "response": "B"
+        },
+        {
+          "prompt": "Professional вЂ” Business",
+          "response": "B"
+        },
+        {
+          "prompt": "STEM вЂ” Statistics",
+          "response": "B) 68%"
+        }
+      ],
+      "raw_data": {
+        "model": "qwen2.5:1.5b",
+        "port": 11434,
+        "benchmark": "MMLU-style",
+        "timestamp": 1778570802.6146903,
+        "tests": [
+          {
+            "category": "STEM вЂ” Physics",
+            "domain": "STEM",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B) Velocity is zero but acceleration is non-zero.",
+            "score": 10,
+            "max_score": 10,
+            "time": 21.89
+          },
+          {
+            "category": "STEM вЂ” Chemistry",
+            "domain": "STEM",
+            "correct_answer": "C",
+            "model_answer": "C",
+            "response_text": "C) 7",
+            "score": 10,
+            "max_score": 10,
+            "time": 10.99
+          },
+          {
+            "category": "STEM вЂ” Biology",
+            "domain": "STEM",
+            "correct_answer": "C",
+            "model_answer": "C",
+            "response_text": "C) Mitochondria",
+            "score": 10,
+            "max_score": 10,
+            "time": 11.79
+          },
+          {
+            "category": "STEM вЂ” Computer Science",
+            "domain": "STEM",
+            "correct_answer": "C",
+            "model_answer": "C",
+            "response_text": "C)",
+            "score": 10,
+            "max_score": 10,
+            "time": 9.3
+          },
+          {
+            "category": "STEM вЂ” Mathematics",
+            "domain": "STEM",
+            "correct_answer": "A",
+            "model_answer": "B",
+            "response_text": "B) 3xВІ + 2x",
+            "score": 0,
+            "max_score": 10,
+            "time": 16.8
+          },
+          {
+            "category": "Humanities вЂ” History",
+            "domain": "Humanities",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 12.41
+          },
+          {
+            "category": "Humanities вЂ” Philosophy",
+            "domain": "Humanities",
+            "correct_answer": "C",
+            "model_answer": "C",
+            "response_text": "C)",
+            "score": 10,
+            "max_score": 10,
+            "time": 8.7
+          },
+          {
+            "category": "Humanities вЂ” Literature",
+            "domain": "Humanities",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B) Big Brother",
+            "score": 10,
+            "max_score": 10,
+            "time": 10.69
+          },
+          {
+            "category": "Social Science вЂ” Economics",
+            "domain": "Social Science",
+            "correct_answer": "C",
+            "model_answer": "C",
+            "response_text": "C",
+            "score": 10,
+            "max_score": 10,
+            "time": 10.61
+          },
+          {
+            "category": "Social Science вЂ” Psychology",
+            "domain": "Social Science",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 11.78
+          },
+          {
+            "category": "Professional вЂ” Law",
+            "domain": "Professional",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 11.72
+          },
+          {
+            "category": "Professional вЂ” Medicine",
+            "domain": "Professional",
+            "correct_answer": "C",
+            "model_answer": "C",
+            "response_text": "C)",
+            "score": 10,
+            "max_score": 10,
+            "time": 8.29
+          },
+          {
+            "category": "Professional вЂ” Engineering",
+            "domain": "Professional",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 8.99
+          },
+          {
+            "category": "Professional вЂ” Business",
+            "domain": "Professional",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B",
+            "score": 10,
+            "max_score": 10,
+            "time": 10.5
+          },
+          {
+            "category": "STEM вЂ” Statistics",
+            "domain": "STEM",
+            "correct_answer": "B",
+            "model_answer": "B",
+            "response_text": "B) 68%",
+            "score": 10,
+            "max_score": 10,
+            "time": 12.9
+          }
+        ],
+        "total_score": 140,
+        "max_score": 150,
+        "breakdown": {
+          "STEM": {
+            "correct": 5,
+            "total": 6
+          },
+          "Humanities": {
+            "correct": 3,
+            "total": 3
+          },
+          "Social Science": {
+            "correct": 2,
+            "total": 2
+          },
+          "Professional": {
+            "correct": 4,
+            "total": 4
+          }
+        },
+        "percentage": 93.3,
+        "rating": "Excellent"
+      }
+    }
+  ],
+  "test_sections": {
+    "cost_efficiency": {
+      "model": "qwen2.5:1.5b",
+      "port": 11434,
+      "timestamp": 1778570308.2066379,
+      "scenarios": [
+        {
+          "category": "Trivial Task",
+          "complexity": "trivial",
+          "prompt_length": 10,
+          "response_length": 32,
+          "wall_time_s": 8.59,
+          "total_duration_s": 8.404,
+          "eval_tokens": 10,
+          "eval_duration_s": 4.883,
+          "tokens_per_sec": 2.05,
+          "prompt_eval_tokens": 32,
+          "prompt_eval_s": 2.411,
+          "prompt_tokens_per_sec": 13.27,
+          "time_to_first_token_s": 3.521,
+          "response_preview": "Hello! How can I help you today?"
+        },
+        {
+          "category": "Short Answer",
+          "complexity": "simple",
+          "prompt_length": 50,
+          "response_length": 5,
+          "wall_time_s": 5.139,
+          "total_duration_s": 5.105,
+          "eval_tokens": 2,
+          "eval_duration_s": 0.436,
+          "tokens_per_sec": 4.59,
+          "prompt_eval_tokens": 41,
+          "prompt_eval_s": 3.943,
+          "prompt_tokens_per_sec": 10.4,
+          "time_to_first_token_s": 4.67,
+          "response_preview": "Paris"
+        },
+        {
+          "category": "Medium Task",
+          "complexity": "medium",
+          "prompt_length": 40,
+          "response_length": 480,
+          "wall_time_s": 46.956,
+          "total_duration_s": 46.462,
+          "eval_tokens": 78,
+          "eval_duration_s": 40.44,
+          "tokens_per_sec": 1.93,
+          "prompt_eval_tokens": 42,
+          "prompt_eval_s": 3.598,
+          "prompt_tokens_per_sec": 11.67,
+          "time_to_first_token_s": 6.021,
+          "response_preview": "An API (Application Programming Interface) is a set of rules and protocols that "
+        },
+        {
+          "category": "Longer Generation",
+          "complexity": "medium",
+          "prompt_length": 82,
+          "response_length": 805,
+          "wall_time_s": 73.111,
+          "total_duration_s": 72.713,
+          "eval_tokens": 123,
+          "eval_duration_s": 63.767,
+          "tokens_per_sec": 1.93,
+          "prompt_eval_tokens": 50,
+          "prompt_eval_s": 5.389,
+          "prompt_tokens_per_sec": 9.28,
+          "time_to_first_token_s": 8.946,
+          "response_preview": "Open-source software offers numerous benefits including increased collaboration "
+        },
+        {
+          "category": "Complex Reasoning",
+          "complexity": "complex",
+          "prompt_length": 140,
+          "response_length": 601,
+          "wall_time_s": 118.58,
+          "total_duration_s": 118.389,
+          "eval_tokens": 193,
+          "eval_duration_s": 104.88,
+          "tokens_per_sec": 1.84,
+          "prompt_eval_tokens": 68,
+          "prompt_eval_s": 9.247,
+          "prompt_tokens_per_sec": 7.35,
+          "time_to_first_token_s": 13.509,
+          "response_preview": "Sure! Let's break it down step-by-step:\n\n1. **Determine the cost of the apples:*"
+        },
+        {
+          "category": "Long Context Input",
+          "complexity": "complex",
+          "prompt_length": 761,
+          "response_length": 101,
+          "wall_time_s": 53.878,
+          "total_duration_s": 53.621,
+          "eval_tokens": 29,
+          "eval_duration_s": 16.427,
+          "tokens_per_sec": 1.77,
+          "prompt_eval_tokens": 229,
+          "prompt_eval_s": 34.712,
+          "prompt_tokens_per_sec": 6.6,
+          "time_to_first_token_s": 37.194,
+          "response_preview": "The 1970s saw the introduction of personal computing with machines like the Alta"
+        },
+        {
+          "category": "Code Generation",
+          "complexity": "complex",
+          "prompt_length": 78,
+          "response_length": 834,
+          "wall_time_s": 129.427,
+          "total_duration_s": 129.215,
+          "eval_tokens": 239,
+          "eval_duration_s": 118.563,
+          "tokens_per_sec": 2.02,
+          "prompt_eval_tokens": 46,
+          "prompt_eval_s": 5.817,
+          "prompt_tokens_per_sec": 7.91,
+          "time_to_first_token_s": 10.652,
+          "response_preview": "```python\ndef is_prime(n):\n    \"\"\"\n    Check if the given integer n is a prime n"
+        },
+        {
+          "category": "Multi-step Instruction",
+          "complexity": "medium",
+          "prompt_length": 114,
+          "response_length": 243,
+          "wall_time_s": 56.61,
+          "total_duration_s": 56.493,
+          "eval_tokens": 94,
+          "eval_duration_s": 45.941,
+          "tokens_per_sec": 2.05,
+          "prompt_eval_tokens": 71,
+          "prompt_eval_s": 8.32,
+          "prompt_tokens_per_sec": 8.53,
+          "time_to_first_token_s": 10.552,
+          "response_preview": "Sure, let's go through this process:\n\n1) I'll pick a random number between 1 and"
+        }
+      ],
+      "summary": {
+        "total_scenarios": 8,
+        "successful_scenarios": 8,
+        "avg_wall_time_s": 61.536,
+        "median_wall_time_s": 55.244,
+        "min_wall_time_s": 5.139,
+        "max_wall_time_s": 129.427,
+        "avg_tokens_per_sec": 2.27,
+        "median_tokens_per_sec": 1.97,
+        "total_tokens_generated": 768,
+        "total_time_s": 492.29,
+        "overall_throughput_tok_per_s": 1.56,
+        "by_complexity": {
+          "trivial": {
+            "avg_time_s": 8.59,
+            "avg_speed_tok_s": 2.05,
+            "avg_tokens": 10,
+            "count": 1
+          },
+          "simple": {
+            "avg_time_s": 5.139,
+            "avg_speed_tok_s": 4.59,
+            "avg_tokens": 2,
+            "count": 1
+          },
+          "medium": {
+            "avg_time_s": 58.892,
+            "avg_speed_tok_s": 1.97,
+            "avg_tokens": 98.3,
+            "count": 3
+          },
+          "complex": {
+            "avg_time_s": 100.628,
+            "avg_speed_tok_s": 1.87,
+            "avg_tokens": 153.7,
+            "count": 3
+          }
+        }
+      },
+      "rating": "Poor - Too slow for practical use"
+    }
+  }
+}
