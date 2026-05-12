@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { Loader2, GitCompare, Plus, X } from "lucide-react";
+import { GitCompare, Plus, X } from "lucide-react";
 import {
   api,
   BenchmarkResultFile,
   BenchmarkSummary,
-  TestScriptResult,
 } from "@/app/services/api";
 import {
   Select,
@@ -47,21 +46,21 @@ const SUMMARY_METRICS: MetricRow[] = [
   },
   {
     key: "avg_tokens_per_second",
-    label: "Avg tokens / sec",
+    label: "Tokens / sec",
     better: "higher",
     unit: " tok/s",
     get: (s) => s.avg_tokens_per_second,
   },
   {
     key: "avg_latency_ms",
-    label: "Avg latency",
+    label: "Latency",
     better: "lower",
     unit: " ms",
     get: (s) => s.avg_latency_ms,
   },
   {
     key: "avg_first_token_latency_ms",
-    label: "Avg first-token latency",
+    label: "First-token latency",
     better: "lower",
     unit: " ms",
     get: (s) => s.avg_first_token_latency_ms,
@@ -74,14 +73,14 @@ const SUMMARY_METRICS: MetricRow[] = [
   },
   {
     key: "avg_cpu_percent",
-    label: "Avg CPU usage",
+    label: "CPU usage",
     better: "lower",
     unit: "%",
     get: (s) => s.avg_cpu_percent,
   },
   {
     key: "avg_memory_percent",
-    label: "Avg memory usage",
+    label: "Memory usage",
     better: "lower",
     unit: "%",
     get: (s) => s.avg_memory_percent,
@@ -116,101 +115,15 @@ function bestIndices(
 }
 
 function cellClass(isBest: boolean) {
-  return isBest ? "bg-green-50 text-green-800 font-semibold" : "text-gray-800";
+  return isBest ? "bg-green-100 text-green-900 font-bold" : "text-zinc-900";
 }
 
-// Aggregated data for one model across all its result files
-interface ModelAggregate {
-  model: string;
-  fileCount: number;
-  platforms: string[];
-  technologies: string[];
-  latestTimestamp?: string;
-  summary: BenchmarkSummary["summary"];
-  testByName: Map<
-    string,
-    { passed: number; failed: number; total: number; avgDuration: number }
-  >;
-}
-
-function avg(nums: number[]): number {
-  const vals = nums.filter((n) => typeof n === "number" && !Number.isNaN(n));
-  if (vals.length === 0) return 0;
-  return vals.reduce((a, b) => a + b, 0) / vals.length;
-}
-
-function sum(nums: number[]): number {
-  return nums
-    .filter((n) => typeof n === "number" && !Number.isNaN(n))
-    .reduce((a, b) => a + b, 0);
-}
-
-function aggregateModel(
-  model: string,
-  summaries: BenchmarkSummary[],
-): ModelAggregate {
-  const platforms = Array.from(
-    new Set(summaries.map((s) => s.platform).filter(Boolean)),
-  );
-  const technologies = Array.from(
-    new Set(summaries.map((s) => s.technology).filter(Boolean)),
-  );
-  const timestamps = summaries
-    .map((s) => s.timestamp)
-    .filter(Boolean)
-    .sort();
-
-  const s = summaries.map((x) => x.summary).filter(Boolean);
-  const aggSummary: BenchmarkSummary["summary"] = {
-    total_prompts: sum(s.map((x) => x.total_prompts || 0)),
-    successful: sum(s.map((x) => x.successful || 0)),
-    failed: sum(s.map((x) => x.failed || 0)),
-    success_rate: avg(s.map((x) => x.success_rate || 0)),
-    avg_tokens_per_second: avg(s.map((x) => x.avg_tokens_per_second || 0)),
-    avg_latency_ms: avg(s.map((x) => x.avg_latency_ms || 0)),
-    avg_first_token_latency_ms: avg(
-      s.map((x) => x.avg_first_token_latency_ms || 0),
-    ),
-    total_tokens_generated: sum(s.map((x) => x.total_tokens_generated || 0)),
-    avg_cpu_percent: avg(s.map((x) => x.avg_cpu_percent || 0)),
-    avg_memory_percent: avg(s.map((x) => x.avg_memory_percent || 0)),
-  };
-
-  const testByName = new Map<
-    string,
-    { passed: number; failed: number; total: number; avgDuration: number }
-  >();
-  const durationAcc = new Map<string, number[]>();
-  summaries.forEach((sm) => {
-    (sm.test_results || []).forEach((t: TestScriptResult) => {
-      const entry = testByName.get(t.name) || {
-        passed: 0,
-        failed: 0,
-        total: 0,
-        avgDuration: 0,
-      };
-      entry.total += 1;
-      if (t.status === "passed") entry.passed += 1;
-      else entry.failed += 1;
-      testByName.set(t.name, entry);
-      const arr = durationAcc.get(t.name) || [];
-      if (typeof t.duration === "number") arr.push(t.duration);
-      durationAcc.set(t.name, arr);
-    });
-  });
-  testByName.forEach((v, k) => {
-    v.avgDuration = avg(durationAcc.get(k) || []);
-  });
-
-  return {
-    model,
-    fileCount: summaries.length,
-    platforms,
-    technologies,
-    latestTimestamp: timestamps[timestamps.length - 1],
-    summary: aggSummary,
-    testByName,
-  };
+function shortTimestamp(ts?: string): string {
+  if (!ts) return "—";
+  // Backend stores something like "20260501-072400"
+  const m = ts.match(/^(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})$/);
+  if (m) return `${m[1]}-${m[2]}-${m[3]} ${m[4]}:${m[5]}`;
+  return ts;
 }
 
 export function ModelCompare() {
@@ -218,36 +131,22 @@ export function ModelCompare() {
   const [loadingList, setLoadingList] = useState(false);
   const [errorList, setErrorList] = useState<string | null>(null);
 
-  // Array of selected model names (slots); undefined = no model chosen yet
-  const [selectedModels, setSelectedModels] = useState<(string | undefined)[]>([
+  // Each slot holds a filename of a benchmark run, or undefined.
+  const [selectedFiles, setSelectedFiles] = useState<(string | undefined)[]>([
     undefined,
     undefined,
   ]);
-
-  // Cache of loaded full summaries keyed by filename
-  const [summaryCache, setSummaryCache] = useState<
-    Record<string, BenchmarkSummary>
-  >({});
-  const [loadingModels, setLoadingModels] = useState<Set<string>>(new Set());
-
-  // List of unique models derived from files
-  const models = useMemo(() => {
-    const map = new Map<string, number>();
-    files.forEach((f) => {
-      if (!f.model) return;
-      map.set(f.model, (map.get(f.model) || 0) + 1);
-    });
-    return Array.from(map.entries())
-      .map(([model, count]) => ({ model, count }))
-      .sort((a, b) => a.model.localeCompare(b.model));
-  }, [files]);
 
   useEffect(() => {
     setLoadingList(true);
     api
       .getBenchmarkResults()
       .then((r) => {
-        setFiles(r);
+        // newest first
+        const sorted = [...r].sort((a, b) =>
+          (b.timestamp || "").localeCompare(a.timestamp || ""),
+        );
+        setFiles(sorted);
         setErrorList(null);
       })
       .catch((e) =>
@@ -256,199 +155,191 @@ export function ModelCompare() {
       .finally(() => setLoadingList(false));
   }, []);
 
-  // Auto-pick defaults when models list arrives
+  const fileByName = useMemo(() => {
+    const m = new Map<string, BenchmarkResultFile>();
+    files.forEach((f) => m.set(f.filename, f));
+    return m;
+  }, [files]);
+
+  // Auto-pick distinct defaults when files arrive
   useEffect(() => {
-    if (models.length === 0) return;
-    setSelectedModels((prev) =>
-      prev.map((v, i) =>
-        v !== undefined
-          ? v
-          : models[i] !== undefined
-            ? models[i].model
-            : models[0].model,
-      ),
-    );
-  }, [models]);
-
-  const filesForModel = (model: string) =>
-    files.filter((f) => f.model === model);
-
-  const loadSummariesFor = async (model: string) => {
-    const targetFiles = filesForModel(model);
-    const missing = targetFiles.filter((f) => !summaryCache[f.filename]);
-    if (missing.length === 0) return;
-    setLoadingModels((prev) => new Set(prev).add(model));
-    try {
-      const loaded = await Promise.all(
-        missing.map((f) =>
-          api
-            .getBenchmarkResult(f.filename)
-            .then((s) => [f.filename, s] as const)
-            .catch(() => null),
-        ),
-      );
-      setSummaryCache((prev) => {
-        const next = { ...prev };
-        loaded.forEach((entry) => {
-          if (entry) next[entry[0]] = entry[1];
-        });
-        return next;
+    if (files.length === 0) return;
+    setSelectedFiles((prev) => {
+      const used = new Set(prev.filter((x): x is string => !!x));
+      const next = prev.map((v) => {
+        if (v !== undefined) return v;
+        const candidate = files.find((f) => !used.has(f.filename));
+        if (candidate) {
+          used.add(candidate.filename);
+          return candidate.filename;
+        }
+        return v;
       });
-    } finally {
-      setLoadingModels((prev) => {
-        const next = new Set(prev);
-        next.delete(model);
-        return next;
-      });
-    }
-  };
-
-  // Load summaries whenever selectedModels or files change
-  useEffect(() => {
-    selectedModels.forEach((m) => {
-      if (m) loadSummariesFor(m);
+      return next;
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedModels, files]);
+  }, [files]);
 
-  const aggregateFor = (model: string | undefined): ModelAggregate | null => {
-    if (!model) return null;
-    const targetFiles = filesForModel(model);
-    const summaries = targetFiles
-      .map((f) => summaryCache[f.filename])
-      .filter((s): s is BenchmarkSummary => !!s);
-    if (summaries.length === 0) return null;
-    return aggregateModel(model, summaries);
+  const addSlot = () => setSelectedFiles((prev) => [...prev, undefined]);
+  const removeSlot = (idx: number) =>
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== idx));
+  const setSlot = (idx: number, value: string) =>
+    setSelectedFiles((prev) => prev.map((v, i) => (i === idx ? value : v)));
+
+  const n = selectedFiles.length;
+  const allSlotsFilled =
+    files.length > 0 &&
+    selectedFiles.filter((x): x is string => !!x).length >= files.length;
+
+  const gridStyle = {
+    gridTemplateColumns: `minmax(220px,1.2fr) repeat(${n}, minmax(160px,1fr))`,
   };
 
-  const aggregates = useMemo(
-    () => selectedModels.map((m) => aggregateFor(m)),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedModels, summaryCache, files],
+  // The benchmarks the user picked (in slot order), with empty slots removed for table use.
+  const slotFiles: (BenchmarkResultFile | null)[] = selectedFiles.map((fn) =>
+    fn ? fileByName.get(fn) || null : null,
   );
 
+  // Collect every test-script name across the picked runs
   const testRows = useMemo(() => {
     const names = new Set<string>();
-    aggregates.forEach((agg) =>
-      agg?.testByName.forEach((_v, k) => names.add(k)),
-    );
+    slotFiles.forEach((f) => {
+      (f?.test_results || []).forEach((t) => names.add(t.name));
+    });
     return Array.from(names).sort((a, b) => a.localeCompare(b));
-  }, [aggregates]);
-
-  const addModel = () =>
-    setSelectedModels((prev) => [...prev, undefined]);
-
-  const removeModel = (idx: number) =>
-    setSelectedModels((prev) => prev.filter((_, i) => i !== idx));
-
-  const setModel = (idx: number, value: string) =>
-    setSelectedModels((prev) => prev.map((v, i) => (i === idx ? value : v)));
-
-  const n = selectedModels.length;
-  // Dynamic grid: label col + n model cols
-  const gridStyle = {
-    gridTemplateColumns: `minmax(180px,1fr) repeat(${n}, minmax(120px,1fr))`,
-  };
-
-  const isLoading = selectedModels.some((m) => m && loadingModels.has(m));
+  }, [slotFiles]);
 
   return (
-    <div className="bg-white border border-zinc-200 rounded-lg p-6 shadow-sm">
-      <div className="flex items-center gap-2 mb-4">
-        <GitCompare className="w-5 h-5 text-zinc-700" />
-        <h2 className="text-xl font-semibold text-zinc-800">Compare SLMs</h2>
+    <div className="bg-white border-2 border-black rounded-lg p-8 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+      <div className="flex items-center gap-3 mb-2">
+        <GitCompare className="w-6 h-6" />
+        <h2 className="text-2xl font-bold">
+          Compare Benchmark Runs
+        </h2>
       </div>
-      <p className="text-sm text-zinc-600 mb-6">
-        Select any number of models and compare aggregated stats across{" "}
-        <strong>all their benchmark runs</strong> in the <code>results/</code>{" "}
-        folder.
+      <p className="text-sm text-zinc-600 mb-8">
+        Pick individual benchmark runs (model + CPU/RAM parameters) and compare their metrics side-by-side.
       </p>
 
       {errorList && (
-        <div className="mb-4 bg-red-50/50 border border-red-100 rounded p-3 text-sm text-red-700">
-          {errorList}
+        <div className="mb-6 bg-red-50 border-2 border-red-300 rounded-lg p-4 text-sm font-medium text-red-800">
+          ⚠️ {errorList}
         </div>
       )}
 
-      {/* Selectors row */}
-      <div className="flex flex-wrap gap-3 items-end mb-6">
-        {selectedModels.map((model, idx) => (
-          <div key={idx} className="flex items-end gap-1">
-            <ModelSelect
-              label={`Model ${String.fromCharCode(65 + idx)}`}
-              models={models}
-              value={model}
-              onChange={(v) => setModel(idx, v)}
+      {/* Selectors */}
+      <div className="flex flex-wrap gap-3 items-stretch mb-6">
+        {selectedFiles.map((fn, idx) => {
+          const takenByOthers = new Set(
+            selectedFiles
+              .filter((v, i) => i !== idx && !!v)
+              .map((v) => v as string),
+          );
+          const availableFiles = files.filter(
+            (f) => !takenByOthers.has(f.filename) || f.filename === fn,
+          );
+          const file = fn ? fileByName.get(fn) || null : null;
+          return (
+            <RunSlot
+              key={idx}
+              index={idx}
+              file={file}
+              files={availableFiles}
+              value={fn}
+              onChange={(v) => setSlot(idx, v)}
+              onRemove={n > 2 ? () => removeSlot(idx) : undefined}
               loading={loadingList}
             />
-            {n > 2 && (
-              <button
-                type="button"
-                onClick={() => removeModel(idx)}
-                className="h-10 w-10 mb-0 rounded-full border-2 border-zinc-300 bg-zinc-50 hover:border-red-400 hover:bg-red-50 flex items-center justify-center transition-colors"
-                title="Remove"
-              >
-                <X className="w-4 h-4 text-zinc-500 hover:text-red-500" />
-              </button>
-            )}
-          </div>
-        ))}
+          );
+        })}
         <button
           type="button"
-          onClick={addModel}
-          className="h-10 px-4 flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-300 text-zinc-500 hover:border-zinc-500 hover:text-zinc-700 text-sm font-medium transition-colors"
+          onClick={addSlot}
+          disabled={allSlotsFilled}
+          className="min-w-[220px] max-w-[280px] flex flex-col items-center justify-center gap-2 px-4 py-8 rounded-lg border-2 border-dashed border-zinc-300 text-zinc-400 hover:border-black hover:text-black hover:bg-zinc-50 text-sm font-bold transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-zinc-300 disabled:hover:text-zinc-400 disabled:hover:bg-transparent mt-7"
+          title={
+            allSlotsFilled
+              ? "All available runs are already selected"
+              : "Add another run to compare"
+          }
         >
-          <Plus className="w-4 h-4" />
-          Add model
+          <Plus className="w-6 h-6" />
+          <span>Add run</span>
         </button>
       </div>
 
       {/* Comparison table */}
-      <div className="border border-zinc-200 rounded-lg overflow-x-auto bg-white shadow-sm">
+      <div className="border-2 border-black rounded-lg overflow-hidden bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
         {/* Header */}
         <div
-          className="grid bg-zinc-100 border-b border-zinc-200 text-zinc-800"
+          className="grid bg-zinc-50 border-b-2 border-black"
           style={gridStyle}
         >
-          <div className="p-4 border-r border-zinc-200 font-semibold text-zinc-900">
+          <div className="p-4 border-r-2 border-black font-bold uppercase text-xs tracking-wider">
             Metric
           </div>
-          {aggregates.map((agg, idx) => (
-            <ModelHeader
+          {slotFiles.map((f, idx) => (
+            <RunHeader
               key={idx}
-              agg={agg}
-              fallback={selectedModels[idx]}
+              slotLabel={`Run ${String.fromCharCode(65 + idx)}`}
+              file={f}
+              fallback={selectedFiles[idx]}
               last={idx === n - 1}
             />
           ))}
         </div>
 
-        {/* Summary section */}
-        <SectionHeader title="Aggregated benchmark summary (averaged across all runs)" />
-        {isLoading && (
-          <div className="p-4 flex items-center gap-2 text-sm text-zinc-500 border-t border-zinc-100">
-            <Loader2 className="w-4 h-4 animate-spin" /> Loading stats from all
-            result files…
-          </div>
-        )}
+        {/* Run info */}
+        <SectionHeader title="Run info" />
+        <MetaRow
+          label="Platform"
+          values={slotFiles.map((f) => f?.platform)}
+          gridStyle={gridStyle}
+        />
+        <MetaRow
+          label="Technology"
+          values={slotFiles.map((f) => f?.technology)}
+          gridStyle={gridStyle}
+        />
+        <MetaRow
+          label="CPU cores"
+          values={slotFiles.map((f) =>
+            f ? (f.cpu_cores != null ? String(f.cpu_cores) : "no limit") : undefined,
+          )}
+          gridStyle={gridStyle}
+        />
+        <MetaRow
+          label="RAM (GB)"
+          values={slotFiles.map((f) =>
+            f ? (f.ram_gb != null ? String(f.ram_gb) : "no limit") : undefined,
+          )}
+          gridStyle={gridStyle}
+        />
+        <MetaRow
+          label="Run timestamp"
+          values={slotFiles.map((f) => shortTimestamp(f?.timestamp))}
+          gridStyle={gridStyle}
+        />
+
+        {/* Summary metrics (per-run, no averaging across runs) */}
+        <SectionHeader title="Benchmark metrics (per run)" />
         {SUMMARY_METRICS.map((row) => {
-          const values = aggregates.map((agg) =>
-            agg ? row.get(agg.summary) : undefined,
+          const values = slotFiles.map((f) =>
+            f && f.summary ? row.get(f.summary) : undefined,
           );
           const best = bestIndices(values, row.better);
           return (
             <div
               key={row.key}
-              className="grid border-t border-zinc-100"
+              className="grid border-t border-zinc-200"
               style={gridStyle}
             >
-              <div className="p-3 bg-zinc-50/50 text-sm text-zinc-600 border-r border-zinc-100">
+              <div className="p-3 bg-zinc-50 text-sm font-medium text-zinc-700 border-r-2 border-black">
                 {row.label}
               </div>
               {values.map((v, idx) => (
                 <div
                   key={idx}
-                  className={`p-3 text-sm ${idx < n - 1 ? "border-r border-zinc-100" : ""} ${cellClass(best.has(idx))}`}
+                  className={`p-3 text-sm font-mono ${idx < n - 1 ? "border-r-2 border-black" : ""} ${cellClass(best.has(idx))}`}
                 >
                   {fmtNumber(v, row.unit)}
                 </div>
@@ -457,60 +348,44 @@ export function ModelCompare() {
           );
         })}
 
-        {/* Meta */}
-        <SectionHeader title="Run info" />
-        <MetaRow
-          label="Result files"
-          values={aggregates.map((agg) =>
-            agg ? String(agg.fileCount) : undefined,
-          )}
-          gridStyle={gridStyle}
-        />
-        <MetaRow
-          label="Platforms"
-          values={aggregates.map((agg) => agg?.platforms.join(", "))}
-          gridStyle={gridStyle}
-        />
-        <MetaRow
-          label="Technologies"
-          values={aggregates.map((agg) => agg?.technologies.join(", "))}
-          gridStyle={gridStyle}
-        />
-        <MetaRow
-          label="Latest run"
-          values={aggregates.map((agg) => agg?.latestTimestamp)}
-          gridStyle={gridStyle}
-        />
-
-        {/* Tests */}
+        {/* Test scripts (per-run status, no aggregation) */}
         {testRows.length > 0 && (
           <>
-            <SectionHeader title="Test scripts (pass rate across all runs)" />
+            <SectionHeader title="Test scripts (per run)" />
             {testRows.map((name) => {
-              const entries = aggregates.map((agg) =>
-                agg?.testByName.get(name),
+              const entries = slotFiles.map(
+                (f) => (f?.test_results || []).find((t) => t.name === name) || null,
               );
-              const rates = entries.map((e) =>
-                e ? e.passed / e.total : undefined,
-              );
-              const best = bestIndices(rates, "higher");
               return (
                 <div
                   key={name}
-                  className="grid border-t border-zinc-100"
+                  className="grid border-t border-zinc-200"
                   style={gridStyle}
                 >
-                  <div className="p-3 bg-zinc-50/50 text-sm text-zinc-600 border-r border-zinc-100">
+                  <div className="p-3 bg-zinc-50 text-sm font-medium text-zinc-700 border-r-2 border-black">
                     {name}
                   </div>
-                  {entries.map((e, idx) => (
+                  {entries.map((t, idx) => (
                     <div
                       key={idx}
-                      className={`p-3 text-sm ${idx < n - 1 ? "border-r border-zinc-100" : ""} ${cellClass(best.has(idx))}`}
+                      className={`p-3 text-sm ${idx < n - 1 ? "border-r-2 border-black" : ""}`}
                     >
-                      {e
-                        ? `${e.passed}/${e.total} · avg ${e.avgDuration.toFixed(1)}s`
-                        : "—"}
+                      {t ? (
+                        <span
+                          className={
+                            t.status === "passed"
+                              ? "text-green-700 font-bold"
+                              : "text-red-700 font-bold"
+                          }
+                        >
+                          {t.status}
+                          {typeof t.duration === "number"
+                            ? ` · ${t.duration.toFixed(1)}s`
+                            : ""}
+                        </span>
+                      ) : (
+                        <span className="text-zinc-400">—</span>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -523,33 +398,48 @@ export function ModelCompare() {
   );
 }
 
-function ModelHeader({
-  agg,
+function RunHeader({
+  slotLabel,
+  file,
   fallback,
   last,
 }: {
-  agg: ModelAggregate | null;
+  slotLabel: string;
+  file: BenchmarkResultFile | null;
   fallback?: string;
   last?: boolean;
 }) {
   return (
-    <div className={`p-4 ${last ? "" : "border-r border-zinc-200"}`}>
-      <div className="text-xs uppercase opacity-70">Model</div>
-      <div className="font-semibold text-zinc-900 text-sm truncate max-w-[160px]">
-        {agg?.model || fallback || "—"}
+    <div className={`p-4 ${last ? "" : "border-r-2 border-black"}`}>
+      <div className="text-[10px] uppercase font-bold tracking-wider text-zinc-500 mb-2">
+        {slotLabel}
       </div>
-      <div className="text-xs opacity-60">
-        {agg ? `${agg.fileCount} run${agg.fileCount === 1 ? "" : "s"}` : ""}
-        {agg && agg.platforms.length > 0 ? ` · ${agg.platforms.join("/")}` : ""}
+      <div className="font-bold text-zinc-900 leading-tight mb-2">
+        {file?.model || fallback || "—"}
       </div>
+      {file && (
+        <>
+          <div className="flex gap-1.5 mb-2">
+            <span className="px-2 py-0.5 bg-blue-50 border border-blue-200 rounded text-[10px] font-semibold text-blue-700">
+              {file.cpu_cores != null ? `${file.cpu_cores}c` : "∞"}
+            </span>
+            <span className="px-2 py-0.5 bg-purple-50 border border-purple-200 rounded text-[10px] font-semibold text-purple-700">
+              {file.ram_gb != null ? `${file.ram_gb}GB` : "∞"}
+            </span>
+          </div>
+          <div className="text-[10px] text-zinc-400 truncate">
+            {file.technology}
+          </div>
+        </>
+      )}
     </div>
   );
 }
 
 function SectionHeader({ title }: { title: string }) {
   return (
-    <div className="grid grid-cols-1 border-t border-zinc-200">
-      <div className="p-2 px-4 bg-zinc-100 text-xs uppercase tracking-wider font-bold text-zinc-600">
+    <div className="grid grid-cols-1 border-t-2 border-black">
+      <div className="p-3 px-4 bg-zinc-100 text-xs uppercase tracking-wider font-bold text-black">
         {title}
       </div>
     </div>
@@ -567,14 +457,14 @@ function MetaRow({
 }) {
   const n = values.length;
   return (
-    <div className="grid border-t border-zinc-100" style={gridStyle}>
-      <div className="p-3 bg-zinc-50/50 text-sm text-zinc-600 border-r border-zinc-100">
+    <div className="grid border-t border-zinc-200" style={gridStyle}>
+      <div className="p-3 bg-zinc-50 text-sm font-medium text-zinc-700 border-r-2 border-black">
         {label}
       </div>
       {values.map((v, idx) => (
         <div
           key={idx}
-          className={`p-3 text-sm text-zinc-700 ${idx < n - 1 ? "border-r border-zinc-100" : ""}`}
+          className={`p-3 text-sm text-zinc-900 font-mono ${idx < n - 1 ? "border-r-2 border-black" : ""}`}
         >
           {v || "—"}
         </div>
@@ -583,32 +473,92 @@ function MetaRow({
   );
 }
 
-function ModelSelect({
-  label,
-  models,
+function RunSlot({
+  index,
+  file,
+  files,
   value,
   onChange,
+  onRemove,
   loading,
 }: {
-  label: string;
-  models: { model: string; count: number }[];
+  index: number;
+  file: BenchmarkResultFile | null;
+  files: BenchmarkResultFile[];
   value: string | undefined;
   onChange: (v: string) => void;
+  onRemove?: () => void;
   loading: boolean;
 }) {
+  const slotLabel = `Run ${String.fromCharCode(65 + index)}`;
   return (
-    <div>
-      <label className="text-sm font-medium text-zinc-700 mb-1 block">
-        {label}
-      </label>
+    <div className="flex flex-col gap-2 min-w-[240px] max-w-[320px]">
+      <div className="flex items-center justify-between px-1">
+        <label className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+          {slotLabel}
+        </label>
+        {onRemove && (
+          <button
+            type="button"
+            onClick={onRemove}
+            className="h-5 w-5 rounded text-zinc-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors"
+            title="Remove this run"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        )}
+      </div>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="bg-white border-zinc-200 text-zinc-800 w-48">
-          <SelectValue placeholder={loading ? "Loading…" : "Select a model"} />
+        <SelectTrigger
+          className="bg-white border-2 border-black rounded-lg !h-auto min-h-[72px] p-0 text-left shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] transition-all duration-100 whitespace-normal"
+          iconClassName="size-5 opacity-60"
+        >
+          <SelectValue asChild>
+            {file ? (
+                <div className="!flex !flex-col !items-start !gap-2 !line-clamp-none p-3 w-full">
+                  <div className="font-bold text-sm text-zinc-900 leading-tight break-words">
+                  {file.model}
+                </div>
+                  <div className="flex flex-wrap gap-2">
+                  <div className="flex items-center gap-1.5 px-2 py-1 bg-blue-50 border border-blue-200 rounded text-xs font-semibold text-blue-700">
+                    <span className="opacity-60">CPU</span>
+                    <span>{file.cpu_cores != null ? `${file.cpu_cores}c` : "∞"}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 px-2 py-1 bg-purple-50 border border-purple-200 rounded text-xs font-semibold text-purple-700">
+                    <span className="opacity-60">RAM</span>
+                    <span>{file.ram_gb != null ? `${file.ram_gb}GB` : "∞"}</span>
+                  </div>
+                </div>
+                <div className="text-[10px] text-zinc-400 font-mono">
+                  {shortTimestamp(file.timestamp)}
+                </div>
+              </div>
+            ) : (
+              <div className="p-3 text-sm text-zinc-500">
+                {loading ? "Loading…" : "Select a run…"}
+              </div>
+            )}
+          </SelectValue>
         </SelectTrigger>
-        <SelectContent className="bg-white border-zinc-200 text-zinc-800">
-          {models.map((m) => (
-            <SelectItem key={m.model} value={m.model}>
-              {m.model} ({m.count} run{m.count === 1 ? "" : "s"})
+        <SelectContent className="bg-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-zinc-800 max-h-[420px]">
+          {files.map((f) => (
+            <SelectItem key={f.filename} value={f.filename} className="cursor-pointer">
+              <div className="flex flex-col gap-1.5 py-1">
+                <div className="font-semibold text-sm truncate max-w-[280px]">
+                  {f.model}
+                </div>
+                <div className="flex gap-2">
+                  <span className="px-1.5 py-0.5 bg-blue-50 border border-blue-200 rounded text-[10px] font-semibold text-blue-700">
+                    {f.cpu_cores != null ? `${f.cpu_cores} CPU` : "No CPU limit"}
+                  </span>
+                  <span className="px-1.5 py-0.5 bg-purple-50 border border-purple-200 rounded text-[10px] font-semibold text-purple-700">
+                    {f.ram_gb != null ? `${f.ram_gb}GB` : "No RAM limit"}
+                  </span>
+                </div>
+                <div className="text-[10px] text-zinc-400 font-mono">
+                  {f.platform} · {f.technology} · {shortTimestamp(f.timestamp)}
+                </div>
+              </div>
             </SelectItem>
           ))}
         </SelectContent>
@@ -616,3 +566,4 @@ function ModelSelect({
     </div>
   );
 }
+
