@@ -109,6 +109,9 @@ deployment_state = {
         "latency": 0,
         "ram_gb": None,
         "cpu_cores": None,
+        "latency": 0,
+        "ram_gb": None,
+        "cpu_cores": None,
     },
     "vm": {
         "status": "idle",
@@ -116,6 +119,9 @@ deployment_state = {
         "model": None,
         "cpu": 0,
         "memory": 0,
+        "latency": 0,
+        "ram_gb": None,
+        "cpu_cores": None,
         "latency": 0,
         "ram_gb": None,
         "cpu_cores": None,
@@ -176,6 +182,8 @@ VM_TECHNOLOGIES = [
 class DeploymentRequest(BaseModel):
     model: str
     technology: str
+    ram_gb: int | None = None
+    cpu_cores: float | None = None
     ram_gb: int | None = None
     cpu_cores: float | None = None
 
@@ -315,6 +323,46 @@ TESTS = {
         "script": "quantization_compare_test.py",
         "duration_range": (60, 300),
     },
+    "cold_start": {
+        "name": "Cold Start Test",
+        "script": "cold_start_test.py",
+        "duration_range": (60, 300),
+    },
+    "resource_usage": {
+        "name": "Resource Usage Test (RAM / CPU)",
+        "script": "resource_usage_test.py",
+        "duration_range": (60, 300),
+    },
+    "oom_detection": {
+        "name": "OOM Detection & Boundary Test",
+        "script": "oom_detection_test.py",
+        "duration_range": (120, 600),
+    },
+    "ram_boundary": {
+        "name": "RAM Boundary Sweep (§3.3)",
+        "script": "ram_boundary_test.py",
+        "duration_range": (180, 900),
+    },
+    "config_matrix": {
+        "name": "Config Matrix (§3.2)",
+        "script": "config_matrix_test.py",
+        "duration_range": (300, 1800),
+    },
+    "vram_monitor": {
+        "name": "VRAM Monitor (§4.2)",
+        "script": "vram_monitor_test.py",
+        "duration_range": (30, 180),
+    },
+    "cloud_cost": {
+        "name": "Cloud Cost Calculator (§6)",
+        "script": "cloud_cost_calculator.py",
+        "duration_range": (30, 180),
+    },
+    "quant_compare": {
+        "name": "Quantization Compare (Q4 vs Q8, §2.1)",
+        "script": "quantization_compare_test.py",
+        "duration_range": (60, 300),
+    },
     "run_all": {
         "name": "Run All Tests",
         "script": "run_all_tests.py",
@@ -328,7 +376,16 @@ if not SCRIPTS_DIR.exists():
     if _parent_scripts.exists():
         SCRIPTS_DIR = _parent_scripts
 
+if not SCRIPTS_DIR.exists():
+    _parent_scripts = Path(__file__).parent.parent / "scripts" / "tests"
+    if _parent_scripts.exists():
+        SCRIPTS_DIR = _parent_scripts
+
 RESULTS_DIR = Path(__file__).parent / "results"
+if not any(RESULTS_DIR.glob("*.json")):
+    _parent_results = Path(__file__).parent.parent / "results"
+    if any(_parent_results.glob("*.json")):
+        RESULTS_DIR = _parent_results
 if not any(RESULTS_DIR.glob("*.json")):
     _parent_results = Path(__file__).parent.parent / "results"
     if any(_parent_results.glob("*.json")):
@@ -477,11 +534,14 @@ def _build_model_catalog(installed_models: list[str]) -> list[dict]:
 
 
 def _set_container_running_state(model: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
+def _set_container_running_state(model: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
     """Update container deployment state to running with fresh metrics."""
     deployment_state["container"]["status"] = "running"
     deployment_state["container"]["technology"] = technology
     deployment_state["container"]["model"] = model
     deployment_state["container"]["message"] = ""
+    deployment_state["container"]["ram_gb"] = ram_gb
+    deployment_state["container"]["cpu_cores"] = cpu_cores
     deployment_state["container"]["ram_gb"] = ram_gb
     deployment_state["container"]["cpu_cores"] = cpu_cores
 
@@ -516,6 +576,7 @@ async def _pull_and_start_container(model: str, technology: str, ram_gb: int | N
     resolved = _get_model_name(model, technology)
     try:
         await _pull_ollama_model(resolved)
+        _set_container_running_state(model, technology, ram_gb, cpu_cores)
         _set_container_running_state(model, technology, ram_gb, cpu_cores)
         deployment_state["container"]["message"] = f"Model '{resolved}' is ready"
     except Exception as e:
@@ -795,6 +856,7 @@ async def start_container(request: DeploymentRequest, background_tasks: Backgrou
             if resolved not in pulling_models:
                 pulling_models.add(resolved)
                 background_tasks.add_task(_pull_and_start_container, request.model, request.technology, request.ram_gb, request.cpu_cores)
+                background_tasks.add_task(_pull_and_start_container, request.model, request.technology, request.ram_gb, request.cpu_cores)
 
             return {
                 "success": True,
@@ -804,6 +866,7 @@ async def start_container(request: DeploymentRequest, background_tasks: Backgrou
 
     await _resolve_and_validate_model(request.model, request.technology)
 
+    _set_container_running_state(request.model, request.technology, request.ram_gb, request.cpu_cores)
     _set_container_running_state(request.model, request.technology, request.ram_gb, request.cpu_cores)
 
     return {"success": True, "state": deployment_state["container"]}
@@ -829,6 +892,8 @@ async def start_vm(request: DeploymentRequest):
     deployment_state["vm"]["status"] = "running"
     deployment_state["vm"]["technology"] = request.technology
     deployment_state["vm"]["model"] = request.model
+    deployment_state["vm"]["ram_gb"] = request.ram_gb
+    deployment_state["vm"]["cpu_cores"] = request.cpu_cores
     deployment_state["vm"]["ram_gb"] = request.ram_gb
     deployment_state["vm"]["cpu_cores"] = request.cpu_cores
 
@@ -972,6 +1037,8 @@ class RunAllRequest(BaseModel):
     model: str
     platform: str = "docker"
     technology: str = "ollama"
+    ram_gb: int | None = None
+    cpu_cores: float | None = None
     ram_gb: int | None = None
     cpu_cores: float | None = None
 
@@ -1140,11 +1207,14 @@ async def run_all_tests_endpoint(request: RunAllRequest, background_tasks: Backg
         request.technology,
         request.ram_gb,
         request.cpu_cores,
+        request.ram_gb,
+        request.cpu_cores,
     )
 
     return {"success": True, "message": "Started benchmarks and tests in background"}
 
 
+async def _run_all_tests_background(model: str, platform: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
 async def _run_all_tests_background(model: str, platform: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
     """Background task: Phase 1 = inference benchmarks, Phase 2 = test scripts."""
     global benchmark_state
@@ -1167,6 +1237,8 @@ async def _run_all_tests_background(model: str, platform: str, technology: str, 
                 model=model_name,
                 progress_callback=progress_callback,
             )
+            summary.ram_gb = ram_gb
+            summary.cpu_cores = cpu_cores
             summary.ram_gb = ram_gb
             summary.cpu_cores = cpu_cores
             benchmark_state["result_backup"] = asdict(summary)
@@ -1228,6 +1300,7 @@ async def _run_all_tests_background(model: str, platform: str, technology: str, 
                 "stderr": result.get("stderr", ""),
                 "details": result.get("details", []),
                 "raw_data": raw_data,
+                "raw_data": raw_data,
             }
             test_results.append(test_result)
             benchmark_state["test_results"] = test_results
@@ -1287,6 +1360,7 @@ async def get_benchmark_results():
 @app.get("/api/benchmarks/results/{filename}")
 async def get_benchmark_result(filename: str):
     """Get specific benchmark result by filename"""
+    filepath = RESULTS_DIR / filename
     filepath = RESULTS_DIR / filename
 
     if not filepath.exists():
