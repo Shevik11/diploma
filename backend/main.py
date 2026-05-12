@@ -9,6 +9,7 @@ import random
 import os
 import time
 import json
+import math
 import re
 import logging
 import docker
@@ -44,13 +45,27 @@ class ConnectionManager:
         self.active_connections.append(websocket)
 
     def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
+        # Tolerate already-removed connections (e.g. dropped by `broadcast`
+        # after a send failure) so callers do not have to guard with try/except.
+        try:
+            self.active_connections.remove(websocket)
+        except ValueError:
+            pass
 
     async def broadcast(self, message: dict):
+        # Track connections whose send raises so we can drop them at the end
+        # of the iteration. Otherwise dead sockets accumulate in the list and
+        # the broadcast loop keeps trying to send to them every tick.
+        dead: list[WebSocket] = []
         for connection in self.active_connections:
             try:
                 await connection.send_json(message)
             except Exception:
+                dead.append(connection)
+        for connection in dead:
+            try:
+                self.active_connections.remove(connection)
+            except ValueError:
                 pass
 
 
@@ -163,6 +178,217 @@ MODEL_LABELS = {m["value"]: m["label"] for m in DEFAULT_MODELS}
 for alias, canonical in MODEL_ALIASES.items():
     if alias in MODEL_LABELS:
         MODEL_LABELS.setdefault(canonical, MODEL_LABELS[alias])
+
+
+# ---------------------------------------------------------------------------
+# Feasibility check (do not run a benchmark when the container can't even
+# load the model — those runs always end up as 0/N success files and pollute
+# rankings).  Calibrated against the actual results in backend/results:
+#   * qwen2.5-coder:1.5b @ 1 GB / 1 CPU  -> 14/14 success  (must be feasible)
+#   * qwen2.5-coder:1.5b @ 1 GB / >=2 CPU -> 0/14 success  (must be infeasible)
+#   * qwen2.5-coder:7b   @ 1 GB / any CPU -> 0/14 success  (must be infeasible)
+# ---------------------------------------------------------------------------
+
+# Manual overrides for models whose name does not embed parameter count.
+_PARAM_BILLION_OVERRIDES = {
+    "phi-3-mini": 3.8,
+    "phi3:mini": 3.8,
+}
+
+
+def _model_param_billion(model: str) -> float | None:
+    """Best-effort parse of parameter count in billions from a model id."""
+    if not model:
+        return None
+    key = model.lower()
+    if key in _PARAM_BILLION_OVERRIDES:
+        return _PARAM_BILLION_OVERRIDES[key]
+    # Match patterns like "1.5b", "7b", "0.5b" (allow trailing punctuation).
+    m = re.search(r"(\d+(?:\.\d+)?)\s*b(?![a-z0-9])", key)
+    if m:
+        try:
+            return float(m.group(1))
+        except ValueError:
+            return None
+    return None
+
+
+# Approx GB-per-billion-parameters for common GGUF quantizations and
+# floating-point dtypes.  Q4_K_M is the default for Ollama/llama.cpp and
+# matches the 0.6 baseline that the rest of the heuristic was calibrated
+# against.  Used only when the model id carries an explicit quant tag
+# (e.g. `qwen2.5-coder:7b-instruct-q8_0`); otherwise we assume Q4_K_M.
+_QUANT_PER_B_GB = {
+    "q2_k":   0.40,
+    "q3_k_s": 0.45,
+    "q3_k_m": 0.50,
+    "q3_k_l": 0.55,
+    "q4_0":   0.58,
+    "q4_1":   0.62,
+    "q4_k_s": 0.58,
+    "q4_k_m": 0.60,
+    "q5_0":   0.70,
+    "q5_1":   0.75,
+    "q5_k_s": 0.70,
+    "q5_k_m": 0.72,
+    "q6_k":   0.85,
+    "q8_0":   1.10,
+    "fp16":   2.00,
+    "f16":    2.00,
+    "bf16":   2.00,
+    "fp32":   4.00,
+    "f32":    4.00,
+}
+
+
+def _quant_per_b_gb(model: str) -> float:
+    """Return GB-per-billion-parameters for the quant in the model id.
+
+    Looks for any of the keys in `_QUANT_PER_B_GB` as a token in the
+    model id (case-insensitive, separated by `:`/`-`/`_`).  Falls back
+    to the Q4_K_M baseline (0.60) when no tag is present.
+    """
+    if not model:
+        return 0.60
+    key = model.lower()
+    # Normalize separators so e.g. "q4-k-m" / "q4_k_m" / "q4.k.m" all hit.
+    norm = re.sub(r"[:\-./]", "_", key)
+    # Try the longest tags first so `q4_k_m` wins over `q4_k_s`/`q4`.
+    for tag in sorted(_QUANT_PER_B_GB, key=len, reverse=True):
+        if re.search(rf"(?:^|_){re.escape(tag)}(?:$|_)", norm):
+            return _QUANT_PER_B_GB[tag]
+    return 0.60
+
+
+def _thread_count(cpu_cores: float | None) -> int:
+    """Convert a (possibly fractional) CPU share into a worker-thread count.
+
+    `int(1.5)` would silently classify a 1.5-core config as single-thread
+    and underestimate RAM; rounding up matches what GGML/Ollama actually
+    spawn for fractional shares.
+    """
+    return max(math.ceil(cpu_cores or 1), 1)
+
+
+def _estimate_required_ram_gb(model: str, cpu_cores: float | None) -> int:
+    """Estimate the minimum container RAM (in GB) required for a config.
+
+    The model is approximated as Q4_K_M (~0.6 GB per billion parameters)
+    by default, or scaled per the explicit quant tag carried in the model
+    id (`q8_0`, `fp16`, ...).  With a single worker thread, mmap'd
+    weights + a small runtime overhead is enough.  With multiple worker
+    threads, GGML allocates one scratch arena per thread, which inflates
+    the resident set well past the on-disk weight size; we apply a 15%
+    safety margin on top to keep the heuristic on the conservative side
+    (false-positive infeasible is recoverable, OOM at load is not).
+    """
+    b = _model_param_billion(model)
+    if b is None:
+        return 1  # Unknown model: assume the smallest tier.
+    per_b = _quant_per_b_gb(model)
+    weights_gb = b * per_b
+    threads = _thread_count(cpu_cores)
+    if threads <= 1:
+        # Single-threaded run: mmap can spill via swap, only need
+        # weights + small fixed overhead.
+        required = weights_gb + 0.10
+    else:
+        # Per-thread scratch arenas + thread-pool bookkeeping. The 1.35
+        # multiplier and 0.10/thread term are calibrated against the
+        # 1.5b results (1c passes at 1 GB, 2c fails at 1 GB but passes
+        # at 2 GB).  The trailing 1.15× factor is an explicit safety
+        # margin that keeps borderline configs (where the real RSS
+        # overshoots the calibration by a few percent) on the
+        # infeasible side.
+        required = (weights_gb * 1.35 + 0.10 * threads) * 1.15
+    return max(1, math.ceil(required))
+
+
+def _check_feasibility(
+    model: str, ram_gb: int | None, cpu_cores: float | None
+) -> tuple[bool, str | None, int]:
+    """Return (feasible, reason_if_infeasible, required_ram_gb)."""
+    required = _estimate_required_ram_gb(model, cpu_cores)
+    if ram_gb is None:
+        return True, None, required
+    if ram_gb >= required:
+        return True, None, required
+    threads = _thread_count(cpu_cores)
+    reason = (
+        f"Insufficient RAM: {ram_gb} GB cannot load '{model}' "
+        f"with {threads} worker thread{'s' if threads > 1 else ''} "
+        f"(needs ~{required} GB)."
+    )
+    return False, reason, required
+
+
+def _save_infeasible_summary(
+    model: str,
+    technology: str,
+    platform: str,
+    ram_gb: int | None,
+    cpu_cores: float | None,
+    reason: str,
+    required_ram_gb: int,
+) -> str:
+    """Persist a stub result file for a config we refuse to run.
+
+    The shape is compatible with `list_benchmark_results` so the frontend
+    sees the entry in its listing, plus an `infeasible` block that lets
+    the leaderboard sort it to the bottom and explain why.
+    """
+    from benchmarks import RESULTS_DIR  # local import: avoid cycles
+
+    timestamp_iso = datetime.now().isoformat()
+    timestamp_slug = datetime.now().strftime("%Y%m%d_%H%M%S")
+    model_slug = model.replace(":", "_").replace("/", "_").replace(" ", "-")
+    ram_part = f"{ram_gb}GB" if ram_gb else "noRAMlimit"
+    cpu_part = f"{cpu_cores}cores" if cpu_cores else "noCPUlimit"
+    filename = f"{model_slug}_{ram_part}_{cpu_part}_{technology}_{platform}_{timestamp_slug}.json"
+    filepath = RESULTS_DIR / filename
+
+    payload = {
+        "model": model,
+        "platform": platform,
+        "technology": technology,
+        "timestamp": timestamp_iso,
+        # Spec status string (functionality.md): the run never started
+        # because pre-flight rejected it for lack of RAM.
+        "status": "not_enough_resources",
+        # Start/finish timestamps for an instantaneous "skipped" record:
+        # both equal the moment the decision was made.
+        "started_at": timestamp_iso,
+        "finished_at": timestamp_iso,
+        "ram_gb": ram_gb,
+        "cpu_cores": cpu_cores,
+        "system_info": {
+            "platform": platform,
+            "timestamp": timestamp_iso,
+        },
+        "results": [],
+        "test_results": [],
+        "summary": {
+            "total_prompts": 0,
+            "successful": 0,
+            "failed": 0,
+            "success_rate": 0,
+            "avg_tokens_per_second": 0,
+            "avg_latency_ms": 0,
+            "avg_first_token_latency_ms": 0,
+            "total_tokens_generated": 0,
+            "avg_cpu_percent": 0,
+            "avg_memory_percent": 0,
+        },
+        "infeasible": {
+            "reason": reason,
+            "required_ram_gb": required_ram_gb,
+            "skipped": True,
+        },
+    }
+    with open(filepath, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, ensure_ascii=False)
+    return str(filepath)
+
 
 CONTAINER_TECHNOLOGIES = [
     {"value": "docker", "label": "Docker"},
@@ -381,11 +607,9 @@ if not SCRIPTS_DIR.exists():
     if _parent_scripts.exists():
         SCRIPTS_DIR = _parent_scripts
 
+# Same reasoning as in benchmarks.py: always anchor to backend/results so
+# the API and the on-disk save path agree across uvicorn launch styles.
 RESULTS_DIR = Path(__file__).parent / "results"
-if not any(RESULTS_DIR.glob("*.json")):
-    _parent_results = Path(__file__).parent.parent / "results"
-    if any(_parent_results.glob("*.json")):
-        RESULTS_DIR = _parent_results
 if not any(RESULTS_DIR.glob("*.json")):
     _parent_results = Path(__file__).parent.parent / "results"
     if any(_parent_results.glob("*.json")):
@@ -450,7 +674,7 @@ async def _pull_ollama_model(model: str):
         async with httpx.AsyncClient(timeout=timeout) as client:
             response = await client.post(url, json={"model": model, "stream": False})
     except Exception as e:
-        raise HTTPException(status_code=503, detail=f"Failed to connect to Ollama for pull: {e}")
+        raise HTTPException(status_code=503, detail=f"Failed to connect to Ollama for pull: {e}") from e
 
     if response.status_code != 200:
         detail = response.text[:500] if response.text else f"HTTP {response.status_code}"
@@ -534,14 +758,11 @@ def _build_model_catalog(installed_models: list[str]) -> list[dict]:
 
 
 def _set_container_running_state(model: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
-def _set_container_running_state(model: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
     """Update container deployment state to running with fresh metrics."""
     deployment_state["container"]["status"] = "running"
     deployment_state["container"]["technology"] = technology
     deployment_state["container"]["model"] = model
     deployment_state["container"]["message"] = ""
-    deployment_state["container"]["ram_gb"] = ram_gb
-    deployment_state["container"]["cpu_cores"] = cpu_cores
     deployment_state["container"]["ram_gb"] = ram_gb
     deployment_state["container"]["cpu_cores"] = cpu_cores
 
@@ -561,13 +782,10 @@ def _set_container_running_state(model: str, technology: str, ram_gb: int | None
                     update_kwargs["mem_limit"] = f"{ram_gb}g"
                     update_kwargs["memswap_limit"] = f"{ram_gb}g"
                 if cpu_cores:
-                    # docker-py 7.0.0 Container.update() does not accept nano_cpus;
-                    # use cpu_period/cpu_quota to express the CPU limit instead.
-                    update_kwargs["cpu_period"] = 100000
-                    update_kwargs["cpu_quota"] = int(cpu_cores * 100000)
+                    update_kwargs["nano_cpus"] = int(cpu_cores * 1e9)
                 container.update(**update_kwargs)
                 logger.info(f"Applied limits to '{cname}': {update_kwargs}")
-            except docker.errors.APIError as e:
+            except Exception as e:
                 logger.warning(f"Could not apply resource limits to '{cname}': {e}")
 
 
@@ -592,19 +810,47 @@ async def _pull_and_start_container(model: str, technology: str, ram_gb: int | N
         pulling_models.discard(resolved)
 
 
-def _get_test_env(technology: str) -> dict:
-    """Get environment variables for test subprocesses."""
+def _get_test_env(technology: str, master_file: str | None = None) -> dict:
+    """Get environment variables for test subprocesses.
+
+    Parameters
+    ----------
+    technology:
+        ``ollama`` / ``llama-cpp`` / ``vllm`` — controls the host name the
+        test scripts target.
+    master_file:
+        Optional path to the run's master JSON file. When provided, sets
+        ``SLM_OUTPUT_FILE`` so test scripts using
+        ``scripts/tests/result_utils.save_results()`` will append to it
+        directly under ``test_sections[<key>]``. The legacy "individual
+        file + log-driven merge" path in ``_load_test_details_from_logs``
+        keeps working for tests that haven't migrated yet.
+    """
     env = os.environ.copy()
-    # Inside Docker, services are accessed by container hostname, not localhost
-    host_map = {"ollama": "ollama", "llama-cpp": "llama-cpp", "vllm": "vllm"}
+    # When backend runs inside Docker, services are reached by container hostname.
+    # When running on the host, they are reachable via localhost (port-mapped).
+    running_in_docker = os.path.exists("/.dockerenv")
+    if running_in_docker:
+        host_map = {"ollama": "ollama", "llama-cpp": "llama-cpp", "vllm": "vllm"}
+    else:
+        host_map = {"ollama": "localhost", "llama-cpp": "localhost", "vllm": "localhost"}
     env["SLM_TEST_HOST"] = host_map.get(technology, "localhost")
+    if master_file:
+        env["SLM_OUTPUT_FILE"] = str(master_file)
     return env
 
 
-def _run_test_subprocess(script_path: str, model_name: str, port: int, timeout: int = 600, technology: str = "ollama") -> dict:
+def _run_test_subprocess(
+    script_path: str,
+    model_name: str,
+    port: int,
+    timeout: int = 600,
+    technology: str = "ollama",
+    master_file: str | None = None,
+) -> dict:
     """Run a test script via subprocess.run (synchronous, for use in executor)."""
     cmd = ["python", script_path, model_name, str(port)]
-    env = _get_test_env(technology)
+    env = _get_test_env(technology, master_file=master_file)
     logger.info(f"Running test command: {' '.join(cmd)} (host={env.get('SLM_TEST_HOST')})")
     start_time = time.time()
     try:
@@ -650,6 +896,70 @@ def _run_test_subprocess(script_path: str, model_name: str, port: int, timeout: 
             "status": "error",
             "details": [],
         }
+
+
+def _create_fallback_result_file(
+    model: str,
+    platform: str,
+    technology: str,
+    ram_gb: int | None,
+    cpu_cores: float | None,
+) -> str:
+    """Create an empty master result file when Phase 1 produced nothing.
+
+    Without this file, `_save_test_results` short-circuits (it only writes when
+    `result_filepath` is truthy), so all Phase 2 test results would be lost
+    when the inference benchmark fails for any reason. Naming mirrors
+    `save_benchmark_results` so listings still pick it up.
+    """
+    from benchmarks import RESULTS_DIR as _BR_RESULTS_DIR
+
+    try:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        timestamp_iso = datetime.now().isoformat()
+        model_slug = model.replace(":", "_").replace("/", "_").replace(" ", "-")
+        ram_part = f"{ram_gb}GB" if ram_gb else "noRAMlimit"
+        cpu_part = f"{cpu_cores}cores" if cpu_cores else "noCPUlimit"
+        filename = f"{model_slug}_{ram_part}_{cpu_part}_{technology}_{platform}_{timestamp}.json"
+        _BR_RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+        filepath = _BR_RESULTS_DIR / filename
+        payload = {
+            "model": model,
+            "platform": platform,
+            "technology": technology,
+            "timestamp": timestamp_iso,
+            # Spec status: Phase 1 inference benchmark threw an exception,
+            # so the run is recorded as failed (Phase 2 may still attach
+            # test_results to this same file).
+            "status": "failed",
+            "started_at": timestamp_iso,
+            "finished_at": timestamp_iso,
+            "ram_gb": ram_gb,
+            "cpu_cores": cpu_cores,
+            "system_info": {"platform": platform},
+            "results": [],
+            "test_results": [],
+            "summary": {
+                "total_prompts": 0,
+                "successful": 0,
+                "failed": 0,
+                "success_rate": 0,
+                "avg_tokens_per_second": 0,
+                "avg_latency_ms": 0,
+                "avg_first_token_latency_ms": 0,
+                "total_tokens_generated": 0,
+                "avg_cpu_percent": 0,
+                "avg_memory_percent": 0,
+            },
+            "phase1_failed": True,
+        }
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(payload, f, indent=2, ensure_ascii=False)
+        logger.info(f"Created fallback result file: {filepath}")
+        return str(filepath)
+    except Exception as e:
+        logger.error(f"Failed to create fallback result file: {e}")
+        return ""
 
 
 def _save_test_results(filepath: str, test_results: list) -> bool:
@@ -1033,14 +1343,71 @@ class BenchmarkRequest(BaseModel):
     runs_per_prompt: int = 1
 
 
+class ResourceConfig(BaseModel):
+    ram_gb: int | None = None
+    cpu_cores: float | None = None
+
+
+# Default RAM/CPU options for a full sweep
+DEFAULT_RAM_OPTIONS = [1, 2, 4]
+DEFAULT_CPU_OPTIONS = [1.0, 2.0, 4.0]
+
+
 class RunAllRequest(BaseModel):
     model: str
     platform: str = "docker"
     technology: str = "ollama"
+    # Single-config mode (back-compat): one (ram, cpu) pair.
     ram_gb: int | None = None
     cpu_cores: float | None = None
-    ram_gb: int | None = None
-    cpu_cores: float | None = None
+    # Sweep mode: explicit list of (ram_gb, cpu_cores) pairs.
+    configs: list[ResourceConfig] | None = None
+    # Sweep mode: cartesian product over these option lists.
+    ram_options: list[int] | None = None
+    cpu_options: list[float] | None = None
+    # Sweep mode: run the full default matrix (DEFAULT_RAM_OPTIONS x DEFAULT_CPU_OPTIONS).
+    run_all_configs: bool = False
+
+
+def _resolve_configs(request: "RunAllRequest") -> list[dict]:
+    """Resolve the list of (ram_gb, cpu_cores) configurations for a run-all request.
+
+    Resolution order (first match wins):
+      1. ``request.configs`` — explicit list of pairs from the frontend.
+      2. ``request.ram_options`` / ``request.cpu_options`` — cartesian product.
+      3. ``request.run_all_configs`` — full default sweep matrix.
+      4. Fallback — single config from ``request.ram_gb`` / ``request.cpu_cores``
+         (which may both be ``None`` to indicate "no explicit limit").
+
+    Always returns at least one entry so the matrix runner has something to do.
+    """
+    if request.configs:
+        out: list[dict] = []
+        for c in request.configs:
+            out.append({
+                "ram_gb": c.ram_gb,
+                "cpu_cores": c.cpu_cores,
+            })
+        if out:
+            return out
+
+    if request.ram_options or request.cpu_options:
+        rams = request.ram_options or [request.ram_gb]
+        cpus = request.cpu_options or [request.cpu_cores]
+        return [
+            {"ram_gb": r, "cpu_cores": c}
+            for r in rams
+            for c in cpus
+        ]
+
+    if request.run_all_configs:
+        return [
+            {"ram_gb": r, "cpu_cores": c}
+            for r in DEFAULT_RAM_OPTIONS
+            for c in DEFAULT_CPU_OPTIONS
+        ]
+
+    return [{"ram_gb": request.ram_gb, "cpu_cores": request.cpu_cores}]
 
 
 @app.get("/api/benchmarks/status")
@@ -1083,7 +1450,7 @@ async def reset_benchmark_state(force: bool = False):
     benchmark_state["result_filepath"] = ""
     benchmark_state["result_backup"] = None
     benchmark_state["model"] = None
-    logger.info("Benchmark state reset via API (force=%s)", force)
+    logger.info("Benchmark state reset via API")
     return {"success": True, "message": "Benchmark state reset"}
 
 
@@ -1172,13 +1539,13 @@ async def run_benchmark_endpoint(request: BenchmarkRequest):
         benchmark_state["running"] = False
         benchmark_state["status"] = "error"
         benchmark_state["message"] = str(e)
-        raise HTTPException(status_code=503, detail=str(e))
+        raise HTTPException(status_code=503, detail=str(e)) from e
 
     except Exception as e:
         benchmark_state["running"] = False
         benchmark_state["status"] = "error"
         benchmark_state["message"] = str(e)
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post("/api/benchmarks/run-all")
@@ -1200,27 +1567,94 @@ async def run_all_tests_endpoint(request: RunAllRequest, background_tasks: Backg
     benchmark_state["result_backup"] = None
     benchmark_state["model"] = model_name
 
+    configs = _resolve_configs(request)
+    benchmark_state["configs"] = configs
+    benchmark_state["current_config_index"] = 0
+
     background_tasks.add_task(
-        _run_all_tests_background,
+        _run_all_tests_background_matrix,
         model_name,
         request.platform,
         request.technology,
-        request.ram_gb,
-        request.cpu_cores,
-        request.ram_gb,
-        request.cpu_cores,
+        configs,
     )
 
-    return {"success": True, "message": "Started benchmarks and tests in background"}
+    return {
+        "success": True,
+        "message": "Started benchmarks and tests in background",
+        "configs": configs,
+    }
 
 
-async def _run_all_tests_background(model: str, platform: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
-async def _run_all_tests_background(model: str, platform: str, technology: str, ram_gb: int | None = None, cpu_cores: float | None = None):
-    """Background task: Phase 1 = inference benchmarks, Phase 2 = test scripts."""
+async def _run_all_tests_background_matrix(
+    model: str,
+    platform: str,
+    technology: str,
+    configs: list[dict],
+):
+    """Run ``_run_all_tests_background`` once per resolved (ram, cpu) config.
+
+    Keeps ``benchmark_state['running']`` True across the whole sweep so the
+    concurrency guard on ``/api/benchmarks/run-all`` and ``/reset`` continues
+    to work, and advances ``current_config_index`` between iterations.
+    """
+    global benchmark_state
+    total = len(configs) or 1
+    try:
+        for idx, cfg in enumerate(configs):
+            benchmark_state["current_config_index"] = idx
+            benchmark_state["message"] = (
+                f"Config {idx + 1}/{total}: ram={cfg.get('ram_gb')} GB, "
+                f"cpu={cfg.get('cpu_cores')} cores"
+            )
+            # Map each config's 0..100 internal progress onto its slice of
+            # the overall sweep so the global progress bar advances smoothly.
+            # Only the last config is allowed to publish a terminal status,
+            # otherwise an intermediate config would prematurely flip
+            # benchmark_state to "completed" and clear `running`.
+            slice_size = 100.0 / total
+            await _run_all_tests_background(
+                model,
+                platform,
+                technology,
+                cfg.get("ram_gb"),
+                cfg.get("cpu_cores"),
+                progress_offset=int(idx * slice_size),
+                progress_scale=slice_size / 100.0,
+                final_status=(idx == total - 1),
+            )
+    finally:
+        # Ensure the running flag is always cleared even if a config raised,
+        # so the next run-all request isn't blocked by stale state.
+        benchmark_state["running"] = False
+
+
+async def _run_all_tests_background(
+    model: str,
+    platform: str,
+    technology: str,
+    ram_gb: int | None = None,
+    cpu_cores: float | None = None,
+    progress_offset: int = 0,
+    progress_scale: float = 1.0,
+    final_status: bool = True,
+):
+    """Background task: Phase 1 = inference benchmarks, Phase 2 = test scripts.
+
+    ``progress_offset`` / ``progress_scale`` allow the matrix runner to map
+    this single-config 0..100 progress onto a slice of the overall sweep
+    (e.g. config 2 of 4 → offset=25, scale=0.25). ``final_status`` controls
+    whether this call is allowed to flip ``benchmark_state`` into the
+    terminal ``completed``/``error`` state and clear ``running`` — only the
+    last config in a sweep should do that.
+    """
     global benchmark_state
     model_name = _get_model_name(model, technology)
     port = TECH_PORTS.get(technology, 11434)
     result_filepath = ""
+
+    def _scale(p: int) -> int:
+        return progress_offset + int(p * progress_scale)
 
     try:
         # ---- Phase 1: Inference Benchmarks (0-50%) ----
@@ -1229,7 +1663,7 @@ async def _run_all_tests_background(model: str, platform: str, technology: str, 
         benchmark_state["message"] = "Phase 1: Running inference benchmarks..."
 
         async def progress_callback(status: str, progress: int, message: str):
-            benchmark_state["progress"] = int(progress * 0.5)
+            benchmark_state["progress"] = _scale(int(progress * 0.5))
             benchmark_state["message"] = f"Phase 1: {message}"
 
         try:
@@ -1249,11 +1683,22 @@ async def _run_all_tests_background(model: str, platform: str, technology: str, 
             logger.error(f"Phase 1 failed: {e}")
             benchmark_state["message"] = f"Benchmarks failed: {e}. Continuing with tests..."
 
+        # If Phase 1 failed before producing a master file, create a stub
+        # result file now so Phase 2 test_results aren't silently discarded
+        # (prior behaviour: with `result_filepath == ""`, every save call
+        # below was skipped and all test results were lost).
+        if not result_filepath:
+            result_filepath = _create_fallback_result_file(
+                model_name, platform, technology, ram_gb, cpu_cores
+            )
+            if result_filepath:
+                benchmark_state["result_filepath"] = result_filepath
+
         # Save empty test_results immediately so the key exists
         if result_filepath:
             _save_test_results(result_filepath, [])
 
-        benchmark_state["progress"] = 50
+        benchmark_state["progress"] = _scale(50)
 
         # ---- Phase 2: Test Scripts (50-100%) ----
         logger.info(f"Phase 2: Running test scripts for {model_name}")
@@ -1268,22 +1713,29 @@ async def _run_all_tests_background(model: str, platform: str, technology: str, 
             test = TESTS[test_id]
             script_path = str(SCRIPTS_DIR / test["script"])
             benchmark_state["message"] = f"Phase 2: Running {test['name']} ({i+1}/{total_tests})..."
-            benchmark_state["progress"] = 50 + int((i / total_tests) * 50)
+            benchmark_state["progress"] = _scale(50 + int((i / total_tests) * 50))
 
             result = await loop.run_in_executor(
-                None, _run_test_subprocess, script_path, model_name, port, 600, technology
+                None,
+                _run_test_subprocess,
+                script_path, model_name, port, 600, technology,
+                # Pass master file so save_results()-aware tests write
+                # directly into test_sections[...]. Legacy tests still
+                # write an individual file that is merged below.
+                result_filepath,
             )
 
-            # Merge individual test script result file into test_result, but do
-            # NOT delete the per-test JSON yet: if the subsequent master-file
-            # write fails (disk full, encoding error, process killed) the raw
-            # payload would otherwise be unrecoverable. We defer unlink() until
-            # after the master file has been written successfully for this test.
+            # Merge individual test script result file into test_result, then delete it
             raw_data = None
             individual_file = _extract_saved_result_file_path(
                 (result.get("stdout") or "") + (result.get("stderr") or "")
             )
-            if individual_file and individual_file.exists():
+            is_master_file = (
+                individual_file is not None
+                and result_filepath
+                and Path(result_filepath).resolve() == Path(individual_file).resolve()
+            )
+            if individual_file and individual_file.exists() and not is_master_file:
                 try:
                     with open(individual_file, "r", encoding="utf-8") as f:
                         raw_data = json.load(f)
@@ -1335,17 +1787,19 @@ async def _run_all_tests_background(model: str, platform: str, technology: str, 
             _save_test_results(result_filepath, test_results)
 
         passed = sum(1 for t in test_results if t["status"] == "passed")
-        benchmark_state["progress"] = 100
-        benchmark_state["status"] = "completed"
-        benchmark_state["message"] = f"All done! {passed}/{len(test_results)} tests passed."
-        benchmark_state["running"] = False
+        if final_status:
+            benchmark_state["progress"] = 100
+            benchmark_state["status"] = "completed"
+            benchmark_state["message"] = f"All done! {passed}/{len(test_results)} tests passed."
+            benchmark_state["running"] = False
         logger.info(f"Phase 2 complete. {passed}/{len(test_results)} tests passed.")
 
     except Exception as e:
         logger.error(f"Background task error: {e}")
-        benchmark_state["status"] = "error"
-        benchmark_state["message"] = str(e)
-        benchmark_state["running"] = False
+        if final_status:
+            benchmark_state["status"] = "error"
+            benchmark_state["message"] = str(e)
+            benchmark_state["running"] = False
         if result_filepath:
             _save_test_results(result_filepath, benchmark_state.get("test_results", []))
 
@@ -1406,6 +1860,14 @@ async def websocket_metrics(websocket: WebSocket):
                 deployment_state["vm"]["latency"] = round(random.uniform(40, 100), 0)
 
     except WebSocketDisconnect:
+        # Normal client disconnect: cleanup happens in `finally` below.
+        pass
+    except Exception as e:
+        # Any other failure (network glitch, malformed frame, etc.) must not
+        # leave a stale entry in `manager.active_connections`, otherwise the
+        # background broadcast task keeps trying to send to a dead socket.
+        logger.warning(f"WebSocket /ws/metrics error: {e}")
+    finally:
         manager.disconnect(websocket)
 
 

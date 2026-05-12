@@ -41,11 +41,84 @@ export interface BenchmarkCategory {
   prompts: number;
 }
 
+/**
+ * Status string from `functionality.md` vocabulary. Used both per-run
+ * (in saved JSON) and live in `benchmark_state.status` reported by
+ * `/api/benchmarks/status`. The legacy values `running`/`completed`/
+ * `error`/`stopped`/`skipped` are kept here for backward compatibility
+ * with files saved before the spec-conformance update.
+ */
+export type RunStatus =
+  | 'pending'
+  | 'running'
+  | 'completed'
+  | 'failed'
+  | 'not_enough_resources'
+  | 'cancelled'
+  // Legacy values still emitted by older files / live state
+  | 'error'
+  | 'stopped'
+  | 'skipped'
+  | 'idle'
+  | 'warming_up'
+  | string;
+
 export interface BenchmarkStatus {
   running: boolean;
   progress: number;
-  status: string;
+  status: RunStatus;
   message: string;
+}
+
+/** Human-friendly label for a `RunStatus` value. */
+export function runStatusLabel(status?: RunStatus | null): string {
+  switch (status) {
+    case 'completed':
+      return 'Completed';
+    case 'failed':
+    case 'error':
+      return 'Failed';
+    case 'not_enough_resources':
+      return 'Not enough resources';
+    case 'cancelled':
+    case 'stopped':
+      return 'Cancelled';
+    case 'skipped':
+      return 'Skipped';
+    case 'running':
+      return 'Running';
+    case 'warming_up':
+      return 'Warming up';
+    case 'pending':
+      return 'Pending';
+    case 'idle':
+      return 'Idle';
+    default:
+      return status ? String(status) : '—';
+  }
+}
+
+/** Tailwind classes for a small status pill. */
+export function runStatusClass(status?: RunStatus | null): string {
+  switch (status) {
+    case 'completed':
+      return 'bg-green-100 text-green-800 border-green-300';
+    case 'failed':
+    case 'error':
+      return 'bg-red-100 text-red-800 border-red-300';
+    case 'not_enough_resources':
+      return 'bg-amber-100 text-amber-800 border-amber-300';
+    case 'cancelled':
+    case 'stopped':
+    case 'skipped':
+      return 'bg-zinc-100 text-zinc-700 border-zinc-300';
+    case 'running':
+    case 'warming_up':
+    case 'pending':
+      return 'bg-blue-100 text-blue-800 border-blue-300';
+    default:
+      return 'bg-zinc-100 text-zinc-700 border-zinc-300';
+  }
 }
 
 export interface OllamaStatus {
@@ -92,11 +165,32 @@ export interface TestScriptResult {
   }>;
 }
 
+/**
+ * Set on a result file when the backend refused to even run a config
+ * because the requested RAM was below the model's empirical minimum
+ * (e.g. qwen2.5-coder:7b at 1 GB). The frontend uses this to push such
+ * variants to the bottom of the leaderboard with a clear reason instead
+ * of treating them as real "0-score" measurements.
+ */
+export interface InfeasibleInfo {
+  reason: string;
+  required_ram_gb: number;
+  skipped?: boolean;
+}
+
 export interface BenchmarkSummary {
   model: string;
   platform: string;
   technology: string;
   timestamp: string;
+  /** ISO timestamp of the moment the run started (backend ≥ spec update). */
+  started_at?: string | null;
+  /** ISO timestamp of the moment the run finished or was decided. */
+  finished_at?: string | null;
+  /** Spec status string. May be missing for legacy files. */
+  status?: RunStatus | null;
+  ram_gb?: number | null;
+  cpu_cores?: number | null;
   system_info: Record<string, unknown>;
   results: BenchmarkResultItem[];
   test_results?: TestScriptResult[];
@@ -112,11 +206,7 @@ export interface BenchmarkSummary {
     avg_cpu_percent: number;
     avg_memory_percent: number;
   };
-}
-
-export interface InfeasibleInfo {
-  reason: string;
-  required_ram_gb?: number;
+  infeasible?: InfeasibleInfo | null;
 }
 
 export interface BenchmarkResultFile {
@@ -124,45 +214,60 @@ export interface BenchmarkResultFile {
   filepath: string;
   model: string;
   platform: string;
+  technology?: string;
+  ram_gb?: number | null;
+  cpu_cores?: number | null;
   timestamp: string;
+  /** ISO timestamp the run started (backend ≥ spec update; falls back to `timestamp` for legacy files). */
+  started_at?: string | null;
+  /** ISO timestamp the run finished (backend ≥ spec update; falls back to `timestamp` for legacy files). */
+  finished_at?: string | null;
+  /** Spec status string; backend derives it from `infeasible` / `summary.successful` for legacy files. */
+  status?: RunStatus | null;
   summary: BenchmarkSummary['summary'];
   test_results?: TestScriptResult[];
-  // Optional config dimensions used to identify a unique "variant" of a
-  // model run (model + RAM + CPU + tech + platform). Older result files
-  // produced before these fields were emitted simply leave them undefined.
-  technology?: string;
-  ram_gb?: number;
-  cpu_cores?: number;
-  // Marker fields used by the leaderboard to identify a run that the
-  // backend skipped because the (model, resources) combo was infeasible
-  // (e.g. not enough RAM to load the model). Either `infeasible` (legacy
-  // payload) or `status: "not_enough_resources"` (new spec) may be set.
-  infeasible?: InfeasibleInfo;
-  status?: string;
+  infeasible?: InfeasibleInfo | null;
 }
 
-/** True if the given result file represents a config the backend refused to run. */
-export function isInfeasible(f: BenchmarkResultFile): boolean {
-  return !!f.infeasible || f.status === 'not_enough_resources';
+/**
+ * A run is considered infeasible when the backend never executed it because
+ * the requested RAM was below the model's empirical minimum. Newer files
+ * carry `status === 'not_enough_resources'`; older files only have the
+ * `infeasible` block, so we accept either.
+ */
+export function isInfeasible(
+  f: Pick<BenchmarkResultFile, 'status' | 'infeasible'>,
+): boolean {
+  return f.status === 'not_enough_resources' || Boolean(f.infeasible);
 }
 
-/** Stable id for a "variant" = model + RAM + CPU + tech + platform. */
-export function variantId(f: BenchmarkResultFile): string {
-  const ram = f.ram_gb ?? '?';
-  const cpu = f.cpu_cores ?? '?';
-  const tech = f.technology ?? '?';
-  const plat = f.platform ?? '?';
-  return `${f.model}__${ram}gb__${cpu}c__${tech}__${plat}`;
+/**
+ * Build a stable key identifying a benchmark variant: same model run with
+ * different parameters (CPU/RAM/platform/technology) yields different ids,
+ * so they show up as separate items in dashboards.
+ */
+export function variantId(
+  f: Pick<BenchmarkResultFile, 'model' | 'platform' | 'technology' | 'ram_gb' | 'cpu_cores'>,
+): string {
+  const ram = f.ram_gb ? `${f.ram_gb}GB` : 'noRAM';
+  const cpu = f.cpu_cores ? `${f.cpu_cores}c` : 'noCPU';
+  const tech = f.technology || 'tech?';
+  const plat = f.platform || 'plat?';
+  return `${f.model}__${ram}__${cpu}__${tech}__${plat}`;
 }
 
-/** Human-readable label for a variant id. */
-export function variantLabel(f: BenchmarkResultFile): string {
+/** Human-readable label for a variant, e.g. `qwen:1.5b · 4GB · 2c · ollama/docker`. */
+export function variantLabel(
+  f: Pick<BenchmarkResultFile, 'model' | 'platform' | 'technology' | 'ram_gb' | 'cpu_cores'>,
+): string {
   const parts: string[] = [f.model];
-  if (f.ram_gb != null) parts.push(`${f.ram_gb}GB`);
-  if (f.cpu_cores != null) parts.push(`${f.cpu_cores}c`);
-  if (f.technology) parts.push(f.technology);
-  if (f.platform) parts.push(f.platform);
-  return parts.join(' · ');
+  const cfg: string[] = [];
+  cfg.push(f.ram_gb ? `${f.ram_gb}GB` : 'no-RAM-cap');
+  cfg.push(f.cpu_cores ? `${f.cpu_cores}c` : 'no-CPU-cap');
+  const stack = [f.technology, f.platform].filter(Boolean).join('/');
+  if (stack) cfg.push(stack);
+  parts.push(`(${cfg.join(' · ')})`);
+  return parts.join(' ');
 }
 
 class ApiService {
@@ -306,12 +411,36 @@ class ApiService {
     technology: string,
     ramGb?: number,
     cpuCores?: number,
-  ): Promise<{ success: boolean; filepath: string; summary: BenchmarkSummary }> {
-    return this.request<{ success: boolean; filepath: string; summary: BenchmarkSummary }>('/benchmarks/run-all', {
+    options?: {
+      configs?: Array<{ ram_gb?: number | null; cpu_cores?: number | null }>;
+      ramOptions?: number[];
+      cpuOptions?: number[];
+      runAllConfigs?: boolean;
+    },
+  ): Promise<{ success: boolean; message?: string; configs?: Array<{ ram_gb: number | null; cpu_cores: number | null }> }> {
+    return this.request<{ success: boolean; message?: string; configs?: Array<{ ram_gb: number | null; cpu_cores: number | null }> }>('/benchmarks/run-all', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, platform, technology, ram_gb: ramGb ?? null, cpu_cores: cpuCores ?? null }),
+      body: JSON.stringify({
+        model,
+        platform,
+        technology,
+        ram_gb: ramGb ?? null,
+        cpu_cores: cpuCores ?? null,
+        configs: options?.configs ?? null,
+        ram_options: options?.ramOptions ?? null,
+        cpu_options: options?.cpuOptions ?? null,
+        run_all_configs: options?.runAllConfigs ?? false,
+      }),
     });
+  }
+
+  async getResourceOptions(): Promise<{
+    ram_options_gb: number[];
+    cpu_options: number[];
+    default_matrix: Array<{ ram_gb: number; cpu_cores: number }>;
+  }> {
+    return this.request('/benchmarks/resource-options');
   }
 
   // WebSocket connection for real-time metrics

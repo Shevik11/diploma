@@ -4,6 +4,7 @@ import { MetricsSection } from "@/app/components/metrics-section";
 import { ResultsViewer } from "@/app/components/results-viewer";
 import { ModelCompare } from "@/app/components/model-compare";
 import { ModelDashboard } from "@/app/components/model-dashboard";
+import { TopModels } from "@/app/components/top-models";
 import {
   Select,
   SelectContent,
@@ -26,6 +27,7 @@ import {
   LayoutDashboard,
   GitCompare,
   FlaskConical,
+  Trophy,
 } from "lucide-react";
 import { Progress } from "@/app/components/ui/progress";
 import { Checkbox } from "@/app/components/ui/checkbox";
@@ -44,8 +46,23 @@ export default function App() {
     "docker" | "vm"
   >("docker");
   const [selectedTechnology, setSelectedTechnology] = useState("ollama");
-  const [selectedRamGb, setSelectedRamGb] = useState<number>(4);
-  const [selectedCpuCores, setSelectedCpuCores] = useState<number>(2);
+  // Multi-select RAM (GB) and CPU (cores). Picking >1 of either runs a sweep.
+  const RAM_OPTIONS = [1, 2, 4, 8, 16];
+  const CPU_OPTIONS = [1, 2, 4, 8];
+  const [selectedRamGbs, setSelectedRamGbs] = useState<number[]>([4]);
+  const [selectedCpuCoresList, setSelectedCpuCoresList] = useState<number[]>([2]);
+  // Single-value fallbacks (used for the deploy/start path which only takes one (ram, cpu)).
+  const selectedRamGb = selectedRamGbs[0] ?? 4;
+  const selectedCpuCores = selectedCpuCoresList[0] ?? 2;
+
+  const toggleRam = (v: number) =>
+    setSelectedRamGbs((prev) =>
+      prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v].sort((a, b) => a - b),
+    );
+  const toggleCpu = (v: number) =>
+    setSelectedCpuCoresList((prev) =>
+      prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v].sort((a, b) => a - b),
+    );
   const [models, setModels] = useState<Model[]>([
     { value: "phi-3-mini", label: "Phi-3 Mini (3.8B)" },
     { value: "llama-3.2-1b", label: "Llama 3.2 (1B)" },
@@ -75,9 +92,9 @@ export default function App() {
   const [testProgress, setTestProgress] = useState(0);
   const [runStatusMessage, setRunStatusMessage] = useState("");
   const [showResults, setShowResults] = useState(false);
-  const [activeView, setActiveView] = useState<"dashboard" | "tests" | "compare">(
-    "dashboard",
-  );
+  const [activeView, setActiveView] = useState<
+    "dashboard" | "tests" | "compare" | "top"
+  >("dashboard");
 
   // Test suite state
   const [tests, setTests] = useState<TestItem[]>([]);
@@ -287,19 +304,35 @@ export default function App() {
   const handleStart = async () => {
     try {
       setBackendError(null);
+      // The deploy path can only bring up ONE container/VM at a time, so the
+      // (ram, cpu) pair sent here must be unambiguous. If the user has picked
+      // multiple RAM or CPU values (sweep mode), we previously silently used
+      // the first sorted entry (or fell back to 4 GB / 2 cores when none was
+      // picked) — that meant the deployed runtime quietly drifted away from
+      // what the UI shows in the sweep grid and tainted the benchmark that
+      // followed. Refuse to start in that case and ask the user to narrow
+      // the selection.
+      if (selectedRamGbs.length !== 1 || selectedCpuCoresList.length !== 1) {
+        throw new Error(
+          "Pick exactly one RAM value and one CPU value before starting the deployment " +
+            "(multi-select is reserved for the sweep run, not for the live deploy config).",
+        );
+      }
+      const ramGb = selectedRamGbs[0];
+      const cpuCores = selectedCpuCoresList[0];
       const state =
         selectedEnvironment === "docker"
           ? await api.startContainer(
               selectedModel,
               selectedTechnology,
-              selectedRamGb,
-              selectedCpuCores,
+              ramGb,
+              cpuCores,
             )
           : await api.startVM(
               selectedModel,
               selectedTechnology,
-              selectedRamGb,
-              selectedCpuCores,
+              ramGb,
+              cpuCores,
             );
       setDeploymentState(state);
     } catch (e: unknown) {
@@ -354,12 +387,23 @@ export default function App() {
     setShowResults(false);
 
     try {
+      if (selectedRamGbs.length === 0 || selectedCpuCoresList.length === 0) {
+        throw new Error("Pick at least one RAM value and one CPU value");
+      }
+
+      // Build cross-product of selected RAMs × CPUs. If exactly one of each, this is a single config.
+      const configs = selectedRamGbs.flatMap((ram) =>
+        selectedCpuCoresList.map((cpu) => ({ ram_gb: ram, cpu_cores: cpu })),
+      );
+      const isSweep = configs.length > 1;
+
       await api.runAllTests(
         selectedModel,
         selectedEnvironment,
         selectedTechnology,
         selectedRamGb,
         selectedCpuCores,
+        isSweep ? { configs } : undefined,
       );
 
       // run-all endpoint returns immediately; poll backend status until completion
@@ -434,12 +478,13 @@ export default function App() {
               Benchmark small language models on Docker & VM
             </p>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap">
             {(
               [
                 { id: "dashboard", label: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
                 { id: "tests",     label: "Tests",     icon: <FlaskConical className="w-4 h-4" /> },
                 { id: "compare",   label: "Compare",   icon: <GitCompare className="w-4 h-4" /> },
+                { id: "top",       label: "Top Models", icon: <Trophy className="w-4 h-4" /> },
               ] as const
             ).map(({ id, label, icon }) => (
               <button
@@ -462,6 +507,8 @@ export default function App() {
         {activeView === "dashboard" && <ModelDashboard />}
 
         {activeView === "compare" && <ModelCompare />}
+
+        {activeView === "top" && <TopModels />}
 
         {activeView === "tests" && (
           <>
@@ -534,47 +581,6 @@ export default function App() {
                     <SelectItem value="ollama">Ollama</SelectItem>
                     <SelectItem value="llama-cpp">llama.cpp</SelectItem>
                     <SelectItem value="vllm">vLLM</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <label className="text-sm font-medium whitespace-nowrap">
-                  RAM (GB)
-                </label>
-                <Select
-                  value={String(selectedRamGb)}
-                  onValueChange={(v) => setSelectedRamGb(Number(v))}
-                >
-                  <SelectTrigger className="w-24">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">1 GB</SelectItem>
-                    <SelectItem value="2">2 GB</SelectItem>
-                    <SelectItem value="4">4 GB</SelectItem>
-                    <SelectItem value="8">8 GB</SelectItem>
-                    <SelectItem value="16">16 GB</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <label className="text-sm font-medium whitespace-nowrap">
-                  CPU cores
-                </label>
-                <Select
-                  value={String(selectedCpuCores)}
-                  onValueChange={(v) => setSelectedCpuCores(Number(v))}
-                >
-                  <SelectTrigger className="w-24">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">1 core</SelectItem>
-                    <SelectItem value="2">2 cores</SelectItem>
-                    <SelectItem value="4">4 cores</SelectItem>
-                    <SelectItem value="8">8 cores</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -720,6 +726,74 @@ export default function App() {
                   {benchmarkCategories.length} selected
                 </p>
               </div>
+            </div>
+
+            {/* Resource configuration (RAM × CPU) — under Test Suites & Benchmark Categories */}
+            <div className="mt-6 bg-white border rounded-lg p-6">
+              <div className="mb-4">
+                <h3 className="font-medium text-lg">Resource Configuration</h3>
+                <p className="text-sm text-gray-500">
+                  Pick one or more RAM and CPU values. The cross-product of
+                  selections will be executed — one full benchmark + tests run
+                  per (RAM × CPU) cell.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <div className="text-sm font-medium mb-2">RAM (GB)</div>
+                  <div className="flex flex-wrap gap-3">
+                    {RAM_OPTIONS.map((ram) => {
+                      const id = `ram-${ram}`;
+                      const checked = selectedRamGbs.includes(ram);
+                      return (
+                        <div key={ram} className="flex items-center gap-1.5">
+                          <Checkbox
+                            id={id}
+                            checked={checked}
+                            onCheckedChange={() => toggleRam(ram)}
+                            disabled={isRunningTests}
+                          />
+                          <label htmlFor={id} className="text-sm cursor-pointer whitespace-nowrap">
+                            {ram} GB
+                          </label>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-sm font-medium mb-2">CPU cores</div>
+                  <div className="flex flex-wrap gap-3">
+                    {CPU_OPTIONS.map((cpu) => {
+                      const id = `cpu-${cpu}`;
+                      const checked = selectedCpuCoresList.includes(cpu);
+                      return (
+                        <div key={cpu} className="flex items-center gap-1.5">
+                          <Checkbox
+                            id={id}
+                            checked={checked}
+                            onCheckedChange={() => toggleCpu(cpu)}
+                            disabled={isRunningTests}
+                          />
+                          <label htmlFor={id} className="text-sm cursor-pointer whitespace-nowrap">
+                            {cpu} {cpu === 1 ? "core" : "cores"}
+                          </label>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {(selectedRamGbs.length > 0 && selectedCpuCoresList.length > 0) && (
+                <p className="mt-4 text-xs text-gray-500">
+                  {selectedRamGbs.length * selectedCpuCoresList.length === 1
+                    ? `Will run 1 configuration: ${selectedRamGbs[0]} GB / ${selectedCpuCoresList[0]} core${selectedCpuCoresList[0] === 1 ? "" : "s"}.`
+                    : `Sweep mode: will run ${selectedRamGbs.length * selectedCpuCoresList.length} configurations (${selectedRamGbs.length} RAM × ${selectedCpuCoresList.length} CPU), one benchmark + tests per cell.`}
+                </p>
+              )}
             </div>
 
             {/* Run Tests & Collect Metrics — below parameter blocks */}
