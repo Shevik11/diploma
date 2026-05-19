@@ -1,4 +1,4 @@
-﻿"""
+"""
 Summarization and comprehension assessment for SLM models
 Tests: text summarization, key point extraction, reading comprehension, paraphrasing
 """
@@ -94,7 +94,7 @@ def test_summarization(model_name, port=11434):
                 "Pandas, and TensorFlow. Python is also commonly used as a first programming language in "
                 "education due to its gentle learning curve."
             ),
-            "check_format": lambda text: text.count("-") >= 3 or text.count("вЂў") >= 3 or text.count("*") >= 3 or text.count("1") >= 1,
+            "check_format": lambda text: text.count("-") >= 3 or text.count("•") >= 3 or text.count("*") >= 3 or text.count("1") >= 1,
             "expected_keywords": ["python", "syntax", "libraries", "data"],
             "points": 15
         },

@@ -1,8 +1,8 @@
-﻿"""
-MMLU-Style Benchmark вЂ” Massive Multitask Language Understanding
+"""
+MMLU-Style Benchmark — Massive Multitask Language Understanding
 Based on the real MMLU benchmark used to evaluate SLMs in academic papers.
 Tests broad knowledge across STEM, humanities, social sciences, and professional domains.
-Each question is multiple-choice (A/B/C/D) вЂ” the model must pick the correct letter.
+Each question is multiple-choice (A/B/C/D) — the model must pick the correct letter.
 
 Reference: Hendrycks et al., "Measuring Massive Multitask Language Understanding" (2021)
 """
@@ -25,7 +25,7 @@ def test_mmlu(model_name, port=11434):
     test_cases = [
         # === STEM ===
         {
-            "category": "STEM вЂ” Physics",
+            "category": "STEM — Physics",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "A ball is thrown vertically upward. At the highest point of its trajectory, "
@@ -39,10 +39,10 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "STEM вЂ” Chemistry",
+            "category": "STEM — Chemistry",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
-                "What is the pH of a neutral solution at 25В°C?\n"
+                "What is the pH of a neutral solution at 25°C?\n"
                 "A) 0\n"
                 "B) 1\n"
                 "C) 7\n"
@@ -52,7 +52,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "STEM вЂ” Biology",
+            "category": "STEM — Biology",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "Which organelle is responsible for producing ATP in eukaryotic cells?\n"
@@ -65,26 +65,26 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "STEM вЂ” Computer Science",
+            "category": "STEM — Computer Science",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "What is the worst-case time complexity of quicksort?\n"
                 "A) O(n)\n"
                 "B) O(n log n)\n"
-                "C) O(nВІ)\n"
+                "C) O(n²)\n"
                 "D) O(2^n)"
             ),
             "answer": "C",
             "points": 10,
         },
         {
-            "category": "STEM вЂ” Mathematics",
+            "category": "STEM — Mathematics",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
-                "What is the derivative of f(x) = xВі + 2x?\n"
-                "A) 3xВІ + 2\n"
-                "B) 3xВІ + 2x\n"
-                "C) xВІ + 2\n"
+                "What is the derivative of f(x) = x³ + 2x?\n"
+                "A) 3x² + 2\n"
+                "B) 3x² + 2x\n"
+                "C) x² + 2\n"
                 "D) 3x + 2"
             ),
             "answer": "A",
@@ -93,7 +93,7 @@ def test_mmlu(model_name, port=11434):
 
         # === HUMANITIES ===
         {
-            "category": "Humanities вЂ” History",
+            "category": "Humanities — History",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "The Treaty of Westphalia (1648) is most significant for:\n"
@@ -106,7 +106,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "Humanities вЂ” Philosophy",
+            "category": "Humanities — Philosophy",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "The 'categorical imperative' is a central concept in the philosophy of:\n"
@@ -119,7 +119,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "Humanities вЂ” Literature",
+            "category": "Humanities — Literature",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "In George Orwell's '1984', what is the name of the totalitarian ruling party's leader?\n"
@@ -134,7 +134,7 @@ def test_mmlu(model_name, port=11434):
 
         # === SOCIAL SCIENCES ===
         {
-            "category": "Social Science вЂ” Economics",
+            "category": "Social Science — Economics",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "When a country's central bank raises interest rates, the most likely "
@@ -148,7 +148,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "Social Science вЂ” Psychology",
+            "category": "Social Science — Psychology",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "The 'bystander effect' refers to the phenomenon where:\n"
@@ -163,7 +163,7 @@ def test_mmlu(model_name, port=11434):
 
         # === PROFESSIONAL KNOWLEDGE ===
         {
-            "category": "Professional вЂ” Law",
+            "category": "Professional — Law",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "In common law systems, the principle of 'stare decisis' means:\n"
@@ -176,7 +176,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "Professional вЂ” Medicine",
+            "category": "Professional — Medicine",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "Which vitamin deficiency causes scurvy?\n"
@@ -189,7 +189,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "Professional вЂ” Engineering",
+            "category": "Professional — Engineering",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "In electrical engineering, Ohm's law states that:\n"
@@ -202,7 +202,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "Professional вЂ” Business",
+            "category": "Professional — Business",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "A company's 'burn rate' refers to:\n"
@@ -215,7 +215,7 @@ def test_mmlu(model_name, port=11434):
             "points": 10,
         },
         {
-            "category": "STEM вЂ” Statistics",
+            "category": "STEM — Statistics",
             "prompt": (
                 "Answer with ONLY the letter (A, B, C, or D).\n\n"
                 "In a normal distribution, approximately what percentage of data falls "
@@ -242,13 +242,13 @@ def test_mmlu(model_name, port=11434):
     }
 
     print(f"\n{'='*70}")
-    print(f"MMLU-STYLE BENCHMARK вЂ” {model_name}")
+    print(f"MMLU-STYLE BENCHMARK — {model_name}")
     print(f"Tests: {len(test_cases)}  Max score: {results['max_score']}")
     print(f"{'='*70}\n")
 
     for i, tc in enumerate(test_cases, 1):
         category = tc["category"]
-        domain = category.split(" вЂ” ")[0]
+        domain = category.split(" — ")[0]
         prompt = tc["prompt"]
         correct = tc["answer"]
         points = tc["points"]
@@ -313,7 +313,7 @@ def test_mmlu(model_name, port=11434):
     results["percentage"] = round(pct, 1)
 
     print(f"\n{'='*70}")
-    print(f"MMLU RESULTS вЂ” {model_name}")
+    print(f"MMLU RESULTS — {model_name}")
     print(f"{'='*70}")
     print(f"Score: {results['total_score']}/{results['max_score']} ({pct:.1f}%)\n")
 

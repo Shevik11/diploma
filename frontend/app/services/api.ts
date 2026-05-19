@@ -369,6 +369,20 @@ class ApiService {
     return this.request<OllamaStatus>('/benchmarks/ollama/status');
   }
 
+  async pullModel(model: string): Promise<{ success: boolean; model: string }> {
+    return this.request<{ success: boolean; model: string }>(
+      `/benchmarks/pull?model=${encodeURIComponent(model)}`,
+      { method: 'POST' }
+    );
+  }
+
+  async healthCheckModel(model: string): Promise<{ healthy: boolean; response: string; model: string }> {
+    return this.request<{ healthy: boolean; response: string; model: string }>(
+      `/benchmarks/health-check?model=${encodeURIComponent(model)}`,
+      { method: 'POST' }
+    );
+  }
+
   async getBenchmarkStatus(): Promise<BenchmarkStatus> {
     return this.request<BenchmarkStatus>('/benchmarks/status');
   }

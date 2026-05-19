@@ -5,6 +5,7 @@ from typing import Optional, Literal, Callable
 from dataclasses import asdict
 import asyncio
 import subprocess
+import sys
 import random
 import os
 import time
@@ -124,9 +125,6 @@ deployment_state = {
         "latency": 0,
         "ram_gb": None,
         "cpu_cores": None,
-        "latency": 0,
-        "ram_gb": None,
-        "cpu_cores": None,
     },
     "vm": {
         "status": "idle",
@@ -134,9 +132,6 @@ deployment_state = {
         "model": None,
         "cpu": 0,
         "memory": 0,
-        "latency": 0,
-        "ram_gb": None,
-        "cpu_cores": None,
         "latency": 0,
         "ram_gb": None,
         "cpu_cores": None,
@@ -289,9 +284,11 @@ def _estimate_required_ram_gb(model: str, cpu_cores: float | None) -> int:
     weights_gb = b * per_b
     threads = _thread_count(cpu_cores)
     if threads <= 1:
-        # Single-threaded run: mmap can spill via swap, only need
-        # weights + small fixed overhead.
-        required = weights_gb + 0.10
+        # Single-threaded run: Ollama mmap's weights on demand so the
+        # resident set is roughly 85 % of the file size, not the full
+        # weight size.  Calibrated against phi3:mini (3.8 B, 2.28 GB
+        # weights) running successfully inside a 2 GB container.
+        required = weights_gb * 0.85
     else:
         # Per-thread scratch arenas + thread-pool bookkeeping. The 1.35
         # multiplier and 0.10/thread term are calibrated against the
@@ -458,6 +455,7 @@ TESTS = {
         "name": "Hard Tests",
         "script": "hard_tests.py",
         "duration_range": (30, 120),
+        "timeout": 1200,
     },
     "multilingual": {
         "name": "Multilingual Test",
@@ -523,46 +521,7 @@ TESTS = {
         "name": "OOM Detection & Boundary Test",
         "script": "oom_detection_test.py",
         "duration_range": (120, 600),
-    },
-    "ram_boundary": {
-        "name": "RAM Boundary Sweep (§3.3)",
-        "script": "ram_boundary_test.py",
-        "duration_range": (180, 900),
-    },
-    "config_matrix": {
-        "name": "Config Matrix (§3.2)",
-        "script": "config_matrix_test.py",
-        "duration_range": (300, 1800),
-    },
-    "vram_monitor": {
-        "name": "VRAM Monitor (§4.2)",
-        "script": "vram_monitor_test.py",
-        "duration_range": (30, 180),
-    },
-    "cloud_cost": {
-        "name": "Cloud Cost Calculator (§6)",
-        "script": "cloud_cost_calculator.py",
-        "duration_range": (30, 180),
-    },
-    "quant_compare": {
-        "name": "Quantization Compare (Q4 vs Q8, §2.1)",
-        "script": "quantization_compare_test.py",
-        "duration_range": (60, 300),
-    },
-    "cold_start": {
-        "name": "Cold Start Test",
-        "script": "cold_start_test.py",
-        "duration_range": (60, 300),
-    },
-    "resource_usage": {
-        "name": "Resource Usage Test (RAM / CPU)",
-        "script": "resource_usage_test.py",
-        "duration_range": (60, 300),
-    },
-    "oom_detection": {
-        "name": "OOM Detection & Boundary Test",
-        "script": "oom_detection_test.py",
-        "duration_range": (120, 600),
+        "timeout": 1200,
     },
     "ram_boundary": {
         "name": "RAM Boundary Sweep (§3.3)",
@@ -642,39 +601,50 @@ def _to_model_label(model_value: str) -> str:
     return MODEL_LABELS.get(model_value, model_value)
 
 
+def _ollama_base_url() -> str:
+    """Get Ollama base URL, preferring OLLAMA_URL env var then auto-detecting Docker vs host."""
+    url = os.environ.get("OLLAMA_URL")
+    if url:
+        return url.rstrip("/")
+    running_in_docker = os.path.exists("/.dockerenv")
+    if running_in_docker:
+        host = os.environ.get("SLM_TEST_HOST", "ollama")
+    else:
+        # Use 127.0.0.1 rather than localhost: on Windows localhost can resolve
+        # to ::1 (IPv6) which fails against Docker's IPv4 port binding.
+        host = os.environ.get("SLM_TEST_HOST", "127.0.0.1")
+    return f"http://{host}:{TECH_PORTS['ollama']}"
+
+
 async def _list_ollama_models() -> list[str]:
     """Fetch installed models from Ollama."""
-    host = os.environ.get("SLM_TEST_HOST", "localhost")
-    port = TECH_PORTS["ollama"]
+    base_url = _ollama_base_url()
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(f"http://{host}:{port}/api/tags")
+            response = await client.get(f"{base_url}/api/tags")
             if response.status_code != 200:
                 return []
             data = response.json()
             return [m.get("name") for m in data.get("models", []) if m.get("name")]
     except Exception as e:
-        logger.warning(f"Failed to fetch Ollama models: {e}")
+        logger.warning(f"Failed to fetch Ollama models from {base_url}: {type(e).__name__}: {e}")
         return []
-
-
-def _ollama_base_url() -> str:
-    """Get Ollama base URL based on current host mapping."""
-    host = os.environ.get("SLM_TEST_HOST", "localhost")
-    port = TECH_PORTS["ollama"]
-    return f"http://{host}:{port}"
 
 
 async def _pull_ollama_model(model: str):
     """Pull a model from Ollama registry and wait until it is available locally."""
     timeout = httpx.Timeout(timeout=3600.0, connect=10.0)
-    url = f"{_ollama_base_url()}/api/pull"
+    base_url = _ollama_base_url()
+    url = f"{base_url}/api/pull"
 
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
             response = await client.post(url, json={"model": model, "stream": False})
     except Exception as e:
-        raise HTTPException(status_code=503, detail=f"Failed to connect to Ollama for pull: {e}") from e
+        raise HTTPException(
+            status_code=503,
+            detail=f"Cannot reach Ollama at {base_url} — {type(e).__name__}: {e}",
+        ) from e
 
     if response.status_code != 200:
         detail = response.text[:500] if response.text else f"HTTP {response.status_code}"
@@ -782,7 +752,8 @@ def _set_container_running_state(model: str, technology: str, ram_gb: int | None
                     update_kwargs["mem_limit"] = f"{ram_gb}g"
                     update_kwargs["memswap_limit"] = f"{ram_gb}g"
                 if cpu_cores:
-                    update_kwargs["nano_cpus"] = int(cpu_cores * 1e9)
+                    update_kwargs["cpu_quota"] = int(cpu_cores * 100000)
+                    update_kwargs["cpu_period"] = 100000
                 container.update(**update_kwargs)
                 logger.info(f"Applied limits to '{cname}': {update_kwargs}")
             except Exception as e:
@@ -794,7 +765,6 @@ async def _pull_and_start_container(model: str, technology: str, ram_gb: int | N
     resolved = _get_model_name(model, technology)
     try:
         await _pull_ollama_model(resolved)
-        _set_container_running_state(model, technology, ram_gb, cpu_cores)
         _set_container_running_state(model, technology, ram_gb, cpu_cores)
         deployment_state["container"]["message"] = f"Model '{resolved}' is ready"
     except Exception as e:
@@ -833,8 +803,11 @@ def _get_test_env(technology: str, master_file: str | None = None) -> dict:
     if running_in_docker:
         host_map = {"ollama": "ollama", "llama-cpp": "llama-cpp", "vllm": "vllm"}
     else:
-        host_map = {"ollama": "localhost", "llama-cpp": "localhost", "vllm": "localhost"}
-    env["SLM_TEST_HOST"] = host_map.get(technology, "localhost")
+        # Use 127.0.0.1 instead of localhost: on Windows, localhost can resolve
+        # to ::1 (IPv6) which fails against Docker's IPv4 port binding.
+        host_map = {"ollama": "127.0.0.1", "llama-cpp": "127.0.0.1", "vllm": "127.0.0.1"}
+    env["SLM_TEST_HOST"] = host_map.get(technology, "127.0.0.1")
+    env["PYTHONUTF8"] = "1"
     if master_file:
         env["SLM_OUTPUT_FILE"] = str(master_file)
     return env
@@ -849,7 +822,7 @@ def _run_test_subprocess(
     master_file: str | None = None,
 ) -> dict:
     """Run a test script via subprocess.run (synchronous, for use in executor)."""
-    cmd = ["python", script_path, model_name, str(port)]
+    cmd = [sys.executable, script_path, model_name, str(port)]
     env = _get_test_env(technology, master_file=master_file)
     logger.info(f"Running test command: {' '.join(cmd)} (host={env.get('SLM_TEST_HOST')})")
     start_time = time.time()
@@ -858,6 +831,8 @@ def _run_test_subprocess(
             cmd,
             capture_output=True,
             text=True,
+            encoding="utf-8",
+            errors="replace",
             timeout=timeout,
             cwd=str(SCRIPTS_DIR),
             env=env,
@@ -866,6 +841,8 @@ def _run_test_subprocess(
         status = "passed" if result.returncode == 0 else "failed"
         details = _load_test_details_from_logs(result.stdout or "", result.stderr or "")
         logger.info(f"Test finished: {script_path} -> {status} in {duration:.1f}s")
+        if result.returncode != 0 and result.stderr:
+            logger.error(f"Test stderr [{Path(script_path).name}]: {result.stderr[:1000]}")
         return {
             "returncode": result.returncode,
             "stdout": result.stdout[-2000:] if result.stdout else "",
@@ -1166,7 +1143,6 @@ async def start_container(request: DeploymentRequest, background_tasks: Backgrou
             if resolved not in pulling_models:
                 pulling_models.add(resolved)
                 background_tasks.add_task(_pull_and_start_container, request.model, request.technology, request.ram_gb, request.cpu_cores)
-                background_tasks.add_task(_pull_and_start_container, request.model, request.technology, request.ram_gb, request.cpu_cores)
 
             return {
                 "success": True,
@@ -1176,7 +1152,6 @@ async def start_container(request: DeploymentRequest, background_tasks: Backgrou
 
     await _resolve_and_validate_model(request.model, request.technology)
 
-    _set_container_running_state(request.model, request.technology, request.ram_gb, request.cpu_cores)
     _set_container_running_state(request.model, request.technology, request.ram_gb, request.cpu_cores)
 
     return {"success": True, "state": deployment_state["container"]}
@@ -1202,8 +1177,6 @@ async def start_vm(request: DeploymentRequest):
     deployment_state["vm"]["status"] = "running"
     deployment_state["vm"]["technology"] = request.technology
     deployment_state["vm"]["model"] = request.model
-    deployment_state["vm"]["ram_gb"] = request.ram_gb
-    deployment_state["vm"]["cpu_cores"] = request.cpu_cores
     deployment_state["vm"]["ram_gb"] = request.ram_gb
     deployment_state["vm"]["cpu_cores"] = request.cpu_cores
 
@@ -1308,7 +1281,8 @@ async def run_tests(request: TestRequest):
         script_path = str(SCRIPTS_DIR / test["script"])
 
         result = await loop.run_in_executor(
-            None, _run_test_subprocess, script_path, model_name, port, 600, request.technology
+            None, _run_test_subprocess, script_path, model_name, port,
+            test.get("timeout", 600), request.technology
         )
 
         results.append({
@@ -1457,10 +1431,8 @@ async def reset_benchmark_state(force: bool = False):
 @app.get("/api/benchmarks/framework/status")
 async def get_framework_status(technology: str = "ollama"):
     """Check if framework is running and list available models"""
-    port = TECH_PORTS.get(technology, 11434)
     if technology == "ollama":
-        host = os.environ.get("SLM_TEST_HOST", "localhost")
-        benchmark = OllamaBenchmark(base_url=f"http://{host}:{port}")
+        benchmark = OllamaBenchmark(base_url=_ollama_base_url())
         connected = await benchmark.check_connection()
         models = await benchmark.list_models() if connected else []
         await benchmark.close()
@@ -1471,7 +1443,7 @@ async def get_framework_status(technology: str = "ollama"):
 @app.get("/api/benchmarks/ollama/status")
 async def get_ollama_status():
     """Check if Ollama is running and list available models"""
-    benchmark = OllamaBenchmark()
+    benchmark = OllamaBenchmark(base_url=_ollama_base_url())
     connected = await benchmark.check_connection()
     models = await benchmark.list_models() if connected else []
     await benchmark.close()
@@ -1480,6 +1452,38 @@ async def get_ollama_status():
         "connected": connected,
         "models": models
     }
+
+
+@app.post("/api/benchmarks/pull")
+async def pull_model(model: str, technology: str = "ollama"):
+    """Pull (or re-pull) a model into Ollama."""
+    resolved = _get_model_name(model, technology)
+    try:
+        await _pull_ollama_model(resolved)
+        return {"success": True, "model": resolved}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/benchmarks/health-check")
+async def model_health_check(model: str, technology: str = "ollama"):
+    """Send a test prompt to the model and verify it responds."""
+    resolved = _get_model_name(model, technology)
+    base_url = _ollama_base_url()
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            r = await client.post(
+                f"{base_url}/api/generate",
+                json={"model": resolved, "prompt": "Hello, how are you?", "stream": False},
+            )
+            r.raise_for_status()
+            data = r.json()
+            response_text = data.get("response", "").strip()
+            return {"healthy": bool(response_text), "response": response_text[:200], "model": resolved}
+    except Exception as e:
+        return {"healthy": False, "response": str(e), "model": resolved}
 
 
 @app.get("/api/benchmarks/categories")
@@ -1670,6 +1674,7 @@ async def _run_all_tests_background(
             summary = await run_benchmark(
                 model=model_name,
                 progress_callback=progress_callback,
+                cpu_cores=cpu_cores,
             )
             summary.ram_gb = ram_gb
             summary.cpu_cores = cpu_cores
@@ -1718,7 +1723,7 @@ async def _run_all_tests_background(
             result = await loop.run_in_executor(
                 None,
                 _run_test_subprocess,
-                script_path, model_name, port, 600, technology,
+                script_path, model_name, port, test.get("timeout", 600), technology,
                 # Pass master file so save_results()-aware tests write
                 # directly into test_sections[...]. Legacy tests still
                 # write an individual file that is merged below.
@@ -1751,7 +1756,6 @@ async def _run_all_tests_background(
                 "stdout": result.get("stdout", ""),
                 "stderr": result.get("stderr", ""),
                 "details": result.get("details", []),
-                "raw_data": raw_data,
                 "raw_data": raw_data,
             }
             test_results.append(test_result)
@@ -1814,7 +1818,6 @@ async def get_benchmark_results():
 @app.get("/api/benchmarks/results/{filename}")
 async def get_benchmark_result(filename: str):
     """Get specific benchmark result by filename"""
-    filepath = RESULTS_DIR / filename
     filepath = RESULTS_DIR / filename
 
     if not filepath.exists():

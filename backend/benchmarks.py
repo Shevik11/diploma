@@ -1,3 +1,4 @@
+import math
 import time
 import json
 import os
@@ -25,8 +26,18 @@ if not any(RESULTS_DIR.glob("*.json")):
         RESULTS_DIR = _parent_results
 RESULTS_DIR.mkdir(exist_ok=True)
 
-# Ollama API base URL (Docker container)
-OLLAMA_BASE_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
+# Ollama API base URL. Prefer explicit OLLAMA_URL, then auto-detect Docker vs host.
+# Use 127.0.0.1 (not localhost) as the local fallback: on Windows, localhost can
+# resolve to ::1 (IPv6) while Docker only binds on IPv4.
+def _resolve_ollama_base_url() -> str:
+    url = os.getenv("OLLAMA_URL")
+    if url:
+        return url.rstrip("/")
+    if os.path.exists("/.dockerenv"):
+        return "http://ollama:11434"
+    return "http://127.0.0.1:11434"
+
+OLLAMA_BASE_URL = _resolve_ollama_base_url()
 
 
 @dataclass
@@ -132,6 +143,7 @@ class OllamaBenchmark:
         max_retries: int = 3,
         retry_delay: float = 2.0,
         retry_backoff: float = 2.0,
+        num_thread: int | None = None,
     ) -> BenchmarkResult:
         """Run a single inference and collect metrics, with retry logic.
 
@@ -148,13 +160,16 @@ class OllamaBenchmark:
             attempts_made = attempt + 1
             start_time = time.perf_counter()
             try:
+                options: dict = {"num_predict": 256}
+                if num_thread is not None:
+                    options["num_thread"] = num_thread
                 response = await self.client.post(
                     f"{self.base_url}/api/generate",
                     json={
                         "model": model,
                         "prompt": prompt,
                         "stream": False,
-                        "options": {"num_predict": 256}
+                        "options": options,
                     }
                 )
 
@@ -302,13 +317,15 @@ async def run_benchmark(
     max_retries: int = 3,
     retry_delay: float = 2.0,
     retry_backoff: float = 2.0,
+    cpu_cores: float | None = None,
 ) -> BenchmarkSummary:
     """Run full benchmark suite"""
 
     if categories is None:
         categories = list(BENCHMARK_PROMPTS.keys())
 
-    benchmark = OllamaBenchmark()
+    num_thread = math.ceil(cpu_cores) if cpu_cores else None
+    benchmark = OllamaBenchmark(base_url=OLLAMA_BASE_URL)
     started_at = datetime.now().isoformat()
 
     try:
@@ -343,6 +360,7 @@ async def run_benchmark(
                         max_retries=max_retries,
                         retry_delay=retry_delay,
                         retry_backoff=retry_backoff,
+                        num_thread=num_thread,
                     )
                     results.append({
                         "category": category,
