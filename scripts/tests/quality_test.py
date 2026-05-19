@@ -8,10 +8,16 @@ import sys
 import time
 import os
 from pathlib import Path
-from pathlib import Path
+
+try:
+    from result_utils import save_results
+except Exception:  # pragma: no cover — fallback when invoked from another cwd
+    save_results = None
 
 RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+
+
 def test_quality(model_name, port=11434):
     """Run quality assessment tests"""
     host = os.environ.get("SLM_TEST_HOST", "localhost")
@@ -168,15 +174,18 @@ def test_quality(model_name, port=11434):
     results["rating"] = rating
     print(f"Rating: {rating}")
     
-    # Save results
-    output_file = RESULTS_DIR / f"quality_{model_name.replace(':', '_')}_{int(time.time())}.json"
-    try:
-        with output_file.open('w', encoding='utf-8') as f:
-            json.dump(results, f, indent=2)
-        print(f"\nResults saved to: {output_file}")
-    except Exception as e:
-        print(f"Warning: Could not save results: {e}")
-    
+    # Save results — prefer the shared utility (which honours SLM_OUTPUT_FILE)
+    if save_results is not None:
+        save_results(results, "quality", model_name, "quality")
+    else:  # pragma: no cover — fallback path
+        output_file = RESULTS_DIR / f"quality_{model_name.replace(':', '_')}_{int(time.time())}.json"
+        try:
+            with output_file.open('w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2)
+            print(f"Results saved to: {output_file}")
+        except Exception as e:
+            print(f"Warning: Could not save results: {e}")
+
     return 0
 
 if __name__ == "__main__":

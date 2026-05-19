@@ -26,6 +26,17 @@ from pathlib import Path
 
 import requests
 
+# --- Ensure stdout/stderr can carry the non-ASCII test prompts on Windows. ---
+# Without this, running the script under cp1251/cp1252 consoles (common on
+# Windows when invoked as a subprocess) crashes with UnicodeEncodeError as
+# soon as a Cyrillic / Greek / accented character is printed, before any
+# results can be saved. ``reconfigure`` is a no-op on POSIX UTF-8 shells.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:  # pragma: no cover — non-TextIOWrapper stream
+        pass
+
 # --- Result utilities (optional master-file aggregation) ----------------------
 try:
     from result_utils import save_results

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Play, CheckCircle, XCircle, Loader2, Download, RefreshCw } from 'lucide-react';
+import { Play, CheckCircle, XCircle, Loader2, Download, RefreshCw, HeartPulse } from 'lucide-react';
 import { Progress } from '@/app/components/ui/progress';
 import { Checkbox } from '@/app/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/app/components/ui/select';
@@ -28,6 +28,8 @@ export function BenchmarkRunner() {
   const [results, setResults] = useState<BenchmarkResultFile[]>([]);
   const [currentResult, setCurrentResult] = useState<BenchmarkSummary | null>(null);
   const [, setIsLoading] = useState(false);
+  const [healthStatus, setHealthStatus] = useState<{ healthy: boolean; response: string } | null>(null);
+  const [healthLoading, setHealthLoading] = useState(false);
 
   const checkOllamaStatus = useCallback(async () => {
     try {
@@ -87,6 +89,20 @@ export function BenchmarkRunner() {
     setSelectedCategories((prev) =>
       prev.includes(value) ? prev.filter((c) => c !== value) : [...prev, value]
     );
+  };
+
+  const runHealthCheck = async () => {
+    if (!selectedModel) return;
+    setHealthLoading(true);
+    setHealthStatus(null);
+    try {
+      const result = await api.healthCheckModel(selectedModel);
+      setHealthStatus(result);
+    } catch {
+      setHealthStatus({ healthy: false, response: 'Request failed' });
+    } finally {
+      setHealthLoading(false);
+    }
   };
 
   const runBenchmark = async () => {
@@ -176,7 +192,7 @@ export function BenchmarkRunner() {
             {/* Model Selection */}
             <div className="mb-4">
               <label className="block text-sm mb-2 text-gray-600">Select Model</label>
-              <Select value={selectedModel} onValueChange={setSelectedModel}>
+              <Select value={selectedModel} onValueChange={(v) => { setSelectedModel(v); setHealthStatus(null); }}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select a model" />
                 </SelectTrigger>
@@ -188,6 +204,30 @@ export function BenchmarkRunner() {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            {/* Health Check */}
+            <div className="mb-4">
+              <button
+                onClick={runHealthCheck}
+                disabled={!selectedModel || healthLoading}
+                className="px-3 py-2 text-sm font-bold text-black bg-white border-2 border-black rounded-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] disabled:hover:translate-x-0 disabled:hover:translate-y-0 transition-all duration-100 flex items-center gap-2"
+              >
+                {healthLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <HeartPulse className="w-4 h-4" />}
+                Health
+              </button>
+              {healthStatus && (
+                <div className={`mt-2 p-3 rounded-lg border-2 border-black text-sm ${healthStatus.healthy ? 'bg-green-50' : 'bg-red-50'}`}>
+                  <div className="flex items-center gap-2 font-medium">
+                    {healthStatus.healthy
+                      ? <><CheckCircle className="w-4 h-4 text-green-500" /> Model is responding</>
+                      : <><XCircle className="w-4 h-4 text-red-500" /> Model not responding</>}
+                  </div>
+                  {healthStatus.response && (
+                    <p className="mt-1 text-gray-600 text-xs italic">"{healthStatus.response}"</p>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Categories Selection */}

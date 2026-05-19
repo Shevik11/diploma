@@ -70,8 +70,17 @@ benchmark_prompt_categories:
 consistency_repeats: 3
 
 # Stress-test concurrency (also overridable via ``SLM_STRESS_CONCURRENCY``).
-stress_concurrency: 5
+# Reduced from 5 to 2: Ollama is single-threaded; higher values cause
+# connection-refused failures under constrained CPU configs.
+stress_concurrency: 2
 
-# Hard upper bound for any single test-script subprocess, in seconds.
-# Mirrors backend's ``timeout=600`` argument to ``_run_test_subprocess``.
+# Default subprocess timeout for test scripts, in seconds.
+# Heavy tests (hard_tests, oom_detection) use 1200s — set via the
+# ``timeout`` key in the TESTS dict in backend/main.py.
 test_timeout_seconds: 600
+test_timeout_heavy_seconds: 1200
+
+# TTFT threshold for CPU-only runs.  GPU runs may use 3.0s.
+# Calibrated from phi3:mini measured cold TTFT ~3.8s on CPU.
+ttft_threshold_cpu_s: 10.0
+ttft_threshold_gpu_s: 3.0

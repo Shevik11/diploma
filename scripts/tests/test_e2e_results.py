@@ -402,19 +402,6 @@ class TestRunAllTests:
 
 
 # ---------------------------------------------------------------------------
-# pytest hook: add --run-slow option
+# pytest hooks for the --run-slow gate live in conftest.py (they are not
+# picked up by pytest when defined inside a test module).
 # ---------------------------------------------------------------------------
-
-def pytest_addoption(parser):
-    parser.addoption(
-        "--run-slow", action="store_true", default=False,
-        help="Also run slow tests (full run_all_tests.py suite)."
-    )
-
-
-def pytest_collection_modifyitems(config, items):
-    if not config.getoption("--run-slow"):
-        skip_slow = pytest.mark.skip(reason="slow test — pass --run-slow to enable")
-        for item in items:
-            if "slow" in item.keywords:
-                item.add_marker(skip_slow)

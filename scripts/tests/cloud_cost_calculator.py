@@ -88,18 +88,18 @@ def _sample_ram_mb():
 class _RamSampler(threading.Thread):
     def __init__(self):
         super().__init__(daemon=True)
-        self._stop = threading.Event()
+        self._stop_event = threading.Event()
         self.samples = []
 
     def run(self):
-        while not self._stop.is_set():
+        while not self._stop_event.is_set():
             v = _sample_ram_mb()
             if v is not None:
                 self.samples.append(v)
-            self._stop.wait(0.5)
+            self._stop_event.wait(0.5)
 
     def stop(self):
-        self._stop.set()
+        self._stop_event.set()
         self.join(timeout=3)
 
 

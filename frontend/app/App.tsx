@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { DeploymentCard } from "@/app/components/deployment-card";
 import { MetricsSection } from "@/app/components/metrics-section";
 import { ResultsViewer } from "@/app/components/results-viewer";
@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/app/components/ui/popover";
 import {
   api,
   Model,
@@ -28,6 +29,9 @@ import {
   GitCompare,
   FlaskConical,
   Trophy,
+  HeartPulse,
+  RefreshCw,
+  ChevronDown,
 } from "lucide-react";
 import { Progress } from "@/app/components/ui/progress";
 import { Checkbox } from "@/app/components/ui/checkbox";
@@ -104,8 +108,7 @@ export default function App() {
   const [selectedBenchmarkCategories, setSelectedBenchmarkCategories] =
     useState<string[]>([]);
 
-  // Fetch models on mount
-  useEffect(() => {
+  const refreshModels = useCallback(() => {
     api
       .getModels()
       .then((m) => {
@@ -121,6 +124,11 @@ export default function App() {
         setBackendError(e.message || "Backend unavailable");
       });
   }, []);
+
+  // Fetch models on mount
+  useEffect(() => {
+    refreshModels();
+  }, [refreshModels]);
 
   // Fetch tests on mount
   useEffect(() => {
@@ -464,6 +472,36 @@ export default function App() {
     }
   };
 
+  const [healthStatus, setHealthStatus] = useState<{ healthy: boolean; response: string } | null>(null);
+  const [healthLoading, setHealthLoading] = useState(false);
+  const [pullStates, setPullStates] = useState<Record<string, 'pulling' | 'done' | 'error'>>({});
+  const [modelPickerOpen, setModelPickerOpen] = useState(false);
+
+  const repullModel = async (modelValue: string) => {
+    setPullStates((prev) => ({ ...prev, [modelValue]: 'pulling' }));
+    try {
+      await api.pullModel(modelValue);
+      setPullStates((prev) => ({ ...prev, [modelValue]: 'done' }));
+      refreshModels();
+    } catch {
+      setPullStates((prev) => ({ ...prev, [modelValue]: 'error' }));
+    }
+  };
+
+  const runHealthCheck = async () => {
+    if (!selectedModel) return;
+    setHealthLoading(true);
+    setHealthStatus(null);
+    try {
+      const result = await api.healthCheckModel(selectedModel);
+      setHealthStatus(result);
+    } catch {
+      setHealthStatus({ healthy: false, response: 'Request failed' });
+    } finally {
+      setHealthLoading(false);
+    }
+  };
+
   const selectedTestCount = tests.filter((t) => t.selected).length;
   const selectedModelMeta = models.find((m) => m.value === selectedModel);
 
@@ -551,19 +589,53 @@ export default function App() {
                 <label className="text-sm font-medium whitespace-nowrap">
                   Model
                 </label>
-                <Select value={selectedModel} onValueChange={setSelectedModel}>
-                  <SelectTrigger className="w-52">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {models.map((model) => (
-                      <SelectItem key={model.value} value={model.value}>
-                        {model.label}
-                        {model.installed === false ? " (not pulled)" : ""}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Popover open={modelPickerOpen} onOpenChange={setModelPickerOpen}>
+                  <PopoverTrigger asChild>
+                    <button className="w-52 flex items-center justify-between px-3 py-2 text-sm border border-input bg-background rounded-md shadow-sm hover:bg-accent hover:text-accent-foreground">
+                      <span className="truncate">
+                        {models.find((m) => m.value === selectedModel)?.label ?? selectedModel ?? "Select a model"}
+                      </span>
+                      <ChevronDown className="w-4 h-4 ml-2 shrink-0 opacity-50" />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent align="start" className="w-72 p-1">
+                    <div className="max-h-72 overflow-y-auto">
+                      {models.map((model) => {
+                        const pullState = pullStates[model.value];
+                        return (
+                          <div
+                            key={model.value}
+                            className={`flex items-center justify-between px-2 py-1.5 rounded-sm group ${model.value === selectedModel ? "bg-accent" : "hover:bg-accent"}`}
+                          >
+                            <button
+                              className="flex-1 text-left text-sm truncate"
+                              onClick={() => { setSelectedModel(model.value); setHealthStatus(null); setModelPickerOpen(false); }}
+                            >
+                              {model.label}
+                              {model.installed === false && <span className="text-xs text-amber-500 ml-1">(not pulled)</span>}
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); repullModel(model.value); }}
+                              disabled={pullState === 'pulling'}
+                              title="Re-pull from Ollama"
+                              className="ml-2 p-1 rounded hover:bg-black/10 disabled:opacity-50 shrink-0"
+                            >
+                              {pullState === 'pulling' ? (
+                                <Loader2 className="w-3.5 h-3.5 animate-spin text-gray-500" />
+                              ) : pullState === 'done' ? (
+                                <CheckCircle className="w-3.5 h-3.5 text-green-500" />
+                              ) : pullState === 'error' ? (
+                                <XCircle className="w-3.5 h-3.5 text-red-500" />
+                              ) : (
+                                <RefreshCw className="w-3.5 h-3.5 text-gray-400 group-hover:text-gray-600" />
+                              )}
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
 
               <div className="flex items-center gap-2">
@@ -602,6 +674,21 @@ export default function App() {
                       ? "Pulling"
                       : "Idle"}
                 </span>
+                <button
+                  onClick={runHealthCheck}
+                  disabled={!selectedModel || healthLoading}
+                  className="px-3 py-1.5 text-sm font-bold text-black bg-white border-2 border-black rounded-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] disabled:hover:translate-x-0 disabled:hover:translate-y-0 transition-all duration-100 flex items-center gap-1.5"
+                >
+                  {healthLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <HeartPulse className="w-3.5 h-3.5" />}
+                  Health
+                </button>
+                {healthStatus && (
+                  <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${healthStatus.healthy ? "bg-green-100 text-green-800 border-green-300" : "bg-red-100 text-red-800 border-red-300"}`}>
+                    {healthStatus.healthy
+                      ? <><CheckCircle className="w-3 h-3" /> OK</>
+                      : <><XCircle className="w-3 h-3" /> No response</>}
+                  </span>
+                )}
               </div>
             </div>
 

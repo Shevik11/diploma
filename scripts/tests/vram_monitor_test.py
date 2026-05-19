@@ -139,19 +139,19 @@ class _GpuSampler(threading.Thread):
     def __init__(self, backend):
         super().__init__(daemon=True)
         self.backend = backend
-        self._stop = threading.Event()
+        self._stop_event = threading.Event()
         self.samples = []
 
     def run(self):
-        while not self._stop.is_set():
+        while not self._stop_event.is_set():
             try:
                 self.samples.append(self.backend.sample())
             except Exception:
                 pass
-            self._stop.wait(SAMPLE_INTERVAL_S)
+            self._stop_event.wait(SAMPLE_INTERVAL_S)
 
     def stop(self):
-        self._stop.set()
+        self._stop_event.set()
         self.join(timeout=3)
 
     def snapshot(self):

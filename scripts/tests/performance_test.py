@@ -10,8 +10,14 @@ import os
 import statistics
 from pathlib import Path
 
+try:
+    from result_utils import save_results
+except Exception:  # pragma: no cover — fallback when invoked from another cwd
+    save_results = None
+
 RESULTS_DIR = Path(__file__).parent.parent.parent / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+
 
 def test_performance(model_name, port=11434, num_tests=5):
     """Run performance benchmark"""
@@ -102,15 +108,18 @@ def test_performance(model_name, port=11434, num_tests=5):
         print("\n[ERROR] All tests failed!")
         return 1
     
-    # Save results
-    output_file = RESULTS_DIR / f"performance_{model_name.replace(':', '_')}_{int(time.time())}.json"
-    try:
-        with output_file.open('w', encoding='utf-8') as f:
-            json.dump(results, f, indent=2)
-        print(f"\nResults saved to: {output_file}")
-    except Exception as e:
-        print(f"Warning: Could not save results: {e}")
-    
+    # Save results — prefer the shared utility (which honours SLM_OUTPUT_FILE)
+    if save_results is not None:
+        save_results(results, "performance", model_name, "performance")
+    else:  # pragma: no cover — fallback path
+        output_file = RESULTS_DIR / f"performance_{model_name.replace(':', '_')}_{int(time.time())}.json"
+        try:
+            with output_file.open('w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2)
+            print(f"Results saved to: {output_file}")
+        except Exception as e:
+            print(f"Warning: Could not save results: {e}")
+
     return 0
 
 if __name__ == "__main__":

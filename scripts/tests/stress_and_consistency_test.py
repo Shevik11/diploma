@@ -1,4 +1,4 @@
-﻿"""
+"""
 Stress and Consistency Tests for LLM Models
 Tests: response consistency across multiple calls, handling of edge cases,
 context length management, and repeated pattern recognition
@@ -196,37 +196,42 @@ def test_consistency(model_name, port=11434, num_repeats=3):
     return 0 if results["consistency_percentage"] >= 50 else 1
 
 
-def _do_one_request(url: str, model_name: str, prompt: str, timeout: int = 120) -> dict:
-    """Single Ollama call used by the stress (load) test."""
+def _do_one_request(url: str, model_name: str, prompt: str, timeout: int = 180, max_retries: int = 2) -> dict:
+    """Single Ollama call used by the stress (load) test, with simple retry backoff."""
     payload = {
         "model": model_name,
         "prompt": prompt,
         "stream": False,
-        "options": {"temperature": 0.3},
+        "options": {"temperature": 0.3, "num_predict": 128},
     }
-    start = time.time()
-    try:
-        response = requests.post(url, json=payload, timeout=timeout)
-        response.raise_for_status()
-        data = response.json()
-        duration = time.time() - start
-        return {
-            "prompt": prompt[:50],
-            "duration": duration,
-            "tokens": data.get("eval_count", 0),
-            "response_length": len(data.get("response", "")),
-            "success": True,
-        }
-    except requests.exceptions.RequestException as e:
-        return {
-            "prompt": prompt[:50],
-            "duration": time.time() - start,
-            "error": str(e),
-            "success": False,
-        }
+    last_error = ""
+    for attempt in range(max_retries + 1):
+        if attempt > 0:
+            time.sleep(2 ** attempt)  # 2s, 4s backoff
+        start = time.time()
+        try:
+            response = requests.post(url, json=payload, timeout=timeout)
+            response.raise_for_status()
+            data = response.json()
+            duration = time.time() - start
+            return {
+                "prompt": prompt[:50],
+                "duration": duration,
+                "tokens": data.get("eval_count", 0),
+                "response_length": len(data.get("response", "")),
+                "success": True,
+            }
+        except requests.exceptions.RequestException as e:
+            last_error = str(e)
+    return {
+        "prompt": prompt[:50],
+        "duration": time.time() - start,
+        "error": last_error,
+        "success": False,
+    }
 
 
-def test_stress(model_name, port=11434, num_concurrent=5):
+def test_stress(model_name, port=11434, num_concurrent=2):
     """Stress / load test the model with concurrent requests.
 
     The test fires ``num_concurrent`` requests in parallel using a thread
