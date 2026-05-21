@@ -1,0 +1,309 @@
+{
+  "model": "llama3.2:1b",
+  "platform": "docker",
+  "technology": "ollama",
+  "timestamp": "2026-05-20T03:24:05.859481",
+  "status": "failed",
+  "started_at": "2026-05-20T03:24:05.859481",
+  "finished_at": "2026-05-20T03:24:05.859481",
+  "ram_gb": 1,
+  "cpu_cores": 2.0,
+  "system_info": {
+    "platform": "docker"
+  },
+  "results": [],
+  "test_results": [
+    {
+      "id": "quality",
+      "name": "Quality Test",
+      "status": "passed",
+      "duration": 360.39,
+      "stdout": "\n=== Quality Assessment: llama3.2:1b ===\n\n[1/6] Factual Knowledge\n  Prompt: What is the capital of France?\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[2/6] Math\n  Prompt: Calculate: 15 + 27\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[3/6] Instruction Following\n  Prompt: List exactly 3 colors, separated by commas.\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[4/6] Reasoning\n  Prompt: If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[5/6] Coherence\n  Prompt: Explain in 2 sentences what machine learning is.\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[6/6] Code Understanding\n  Prompt: What does this Python code do: for i in range(5): print(i)\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n\n=== Final Score ===\nTotal: 0/70 (0.0%)\nRating: Poor\nResults saved to: D:\\LNU\\diploma\\backend\\results\\llama3.2_1b_1GB_2.0cores_ollama_docker_20260520_032405.json\n",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "advanced_quality",
+      "name": "Advanced Quality Test",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "performance",
+      "name": "Performance Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "safety_robustness",
+      "name": "Safety & Robustness Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "stress_consistency",
+      "name": "Stress & Consistency Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "hard_tests",
+      "name": "Hard Tests",
+      "status": "timeout",
+      "duration": 1200.01,
+      "stdout": "",
+      "stderr": "Timeout after 1200s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "multilingual",
+      "name": "Multilingual Test",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "summarization",
+      "name": "Summarization Test",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "context_window",
+      "name": "Context Window Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cost_efficiency",
+      "name": "Cost Efficiency Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_mmlu",
+      "name": "MMLU Benchmark",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_reasoning",
+      "name": "Reasoning Benchmark (ARC / HellaSwag / Winogrande)",
+      "status": "timeout",
+      "duration": 600.0,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_gsm8k",
+      "name": "GSM8K Math Benchmark",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_truthfulqa",
+      "name": "TruthfulQA Benchmark",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_humaneval",
+      "name": "HumanEval Code Benchmark",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cold_start",
+      "name": "Cold Start Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "resource_usage",
+      "name": "Resource Usage Test (RAM / CPU)",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "oom_detection",
+      "name": "OOM Detection & Boundary Test",
+      "status": "timeout",
+      "duration": 1200.01,
+      "stdout": "",
+      "stderr": "Timeout after 1200s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "ram_boundary",
+      "name": "RAM Boundary Sweep (§3.3)",
+      "status": "failed",
+      "duration": 60.42,
+      "stdout": "ERROR: Cannot connect to Docker daemon: Error while fetching server API version: NpipeHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)\n",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "config_matrix",
+      "name": "Config Matrix (§3.2)",
+      "status": "failed",
+      "duration": 60.41,
+      "stdout": "ERROR: Cannot connect to Docker daemon: Error while fetching server API version: NpipeHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)\n",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "vram_monitor",
+      "name": "VRAM Monitor (§4.2)",
+      "status": "failed",
+      "duration": 203.85,
+      "stdout": "\n============================================================\n  VRAM MONITOR — llama3.2:1b\n============================================================\n  GPU       : NVIDIA GeForce RTX 3050 Laptop GPU\n  Total VRAM: 4096 MB\n  Backend   : nvidia-smi\n  Baseline  : 0 MB used / 4096 MB total\n",
+      "stderr": "^^\n  File \"D:\\LNU\\diploma\\scripts\\tests\\vram_monitor_test.py\", line 247, in run_vram_monitor\n    res = _infer(url, model_name, prompt)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\scripts\\tests\\vram_monitor_test.py\", line 181, in _infer\n    r = requests.post(url, json={\n        ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\backend\\.venv\\Lib\\site-packages\\requests\\api.py\", line 115, in post\n    return request(\"post\", url, data=data, json=json, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\backend\\.venv\\Lib\\site-packages\\requests\\api.py\", line 59, in request\n    return session.request(method=method, url=url, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\backend\\.venv\\Lib\\site-packages\\requests\\sessions.py\", line 592, in request\n    resp = self.send(prep, **send_kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\backend\\.venv\\Lib\\site-packages\\requests\\sessions.py\", line 706, in send\n    r = adapter.send(request, **kwargs)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\backend\\.venv\\Lib\\site-packages\\requests\\adapters.py\", line 645, in send\n    resp = conn.urlopen(\n           ^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\backend\\.venv\\Lib\\site-packages\\urllib3\\connectionpool.py\", line 787, in urlopen\n    response = self._make_request(\n               ^^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\backend\\.venv\\Lib\\site-packages\\urllib3\\connectionpool.py\", line 534, in _make_request\n    response = conn.getresponse()\n               ^^^^^^^^^^^^^^^^^^\n  File \"D:\\LNU\\diploma\\backend\\.venv\\Lib\\site-packages\\urllib3\\connection.py\", line 571, in getresponse\n    httplib_response = super().getresponse()\n                       ^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\pitonchik\\Lib\\http\\client.py\", line 1394, in getresponse\n    response.close()\n  File \"D:\\pitonchik\\Lib\\http\\client.py\", line 417, in close\n    def close(self):\n\nKeyboardInterrupt\n",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cloud_cost",
+      "name": "Cloud Cost Calculator (§6)",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "quant_compare",
+      "name": "Quantization Compare (Q4 vs Q8, §2.1)",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    }
+  ],
+  "summary": {
+    "total_prompts": 0,
+    "successful": 0,
+    "failed": 0,
+    "success_rate": 0,
+    "avg_tokens_per_second": 0,
+    "avg_latency_ms": 0,
+    "avg_first_token_latency_ms": 0,
+    "total_tokens_generated": 0,
+    "avg_cpu_percent": 0,
+    "avg_memory_percent": 0
+  },
+  "phase1_failed": true,
+  "test_sections": {
+    "quality": {
+      "model": "llama3.2:1b",
+      "port": 11434,
+      "timestamp": 1779236646.1623309,
+      "tests": [
+        {
+          "category": "Factual Knowledge",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 10
+        },
+        {
+          "category": "Math",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 10
+        },
+        {
+          "category": "Instruction Following",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 10
+        },
+        {
+          "category": "Reasoning",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 15
+        },
+        {
+          "category": "Coherence",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 10
+        },
+        {
+          "category": "Code Understanding",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 15
+        }
+      ],
+      "total_score": 0,
+      "max_score": 70,
+      "percentage": 0.0,
+      "rating": "Poor"
+    }
+  }
+}

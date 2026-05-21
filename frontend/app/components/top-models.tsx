@@ -71,6 +71,9 @@ export function TopModels() {
   // Filter the leaderboard by base model name (e.g. "qwen:1.5b") so the user
   // can focus on a single model's variants. Empty == show all models.
   const [modelFilter, setModelFilter] = useState<string>("");
+  // Filter by hardware parameters (RAM in GB, CPU cores). Empty == any.
+  const [ramFilter, setRamFilter] = useState<string>("");
+  const [cpuFilter, setCpuFilter] = useState<string>("");
 
   // Unique sorted list of base model names across all loaded files —
   // populates the filter <select>. Built from the raw file list so the
@@ -81,6 +84,23 @@ export function TopModels() {
       if (f.model) s.add(f.model);
     });
     return Array.from(s).sort((a, b) => a.localeCompare(b));
+  }, [files]);
+
+  // Unique RAM (GB) and CPU (cores) values across all loaded files, sorted
+  // numerically ascending. Used to populate the parameter filter <select>s.
+  const ramOptions = useMemo(() => {
+    const s = new Set<number>();
+    files.forEach((f) => {
+      if (f.ram_gb != null) s.add(f.ram_gb);
+    });
+    return Array.from(s).sort((a, b) => a - b);
+  }, [files]);
+  const cpuOptions = useMemo(() => {
+    const s = new Set<number>();
+    files.forEach((f) => {
+      if (f.cpu_cores != null) s.add(f.cpu_cores);
+    });
+    return Array.from(s).sort((a, b) => a - b);
   }, [files]);
 
   // Load file list
@@ -151,6 +171,8 @@ export function TopModels() {
     files.forEach((f) => {
       if (!f.model) return;
       if (modelFilter && f.model !== modelFilter) return;
+      if (ramFilter && String(f.ram_gb ?? "") !== ramFilter) return;
+      if (cpuFilter && String(f.cpu_cores ?? "") !== cpuFilter) return;
       const s = summaryCache[f.filename];
       if (!s) return;
       const id = variantId(f);
@@ -202,7 +224,7 @@ export function TopModels() {
     });
 
     return { aggregates: feasible, infeasibleEntries: infeasible };
-  }, [files, summaryCache, modelFilter]);
+  }, [files, summaryCache, modelFilter, ramFilter, cpuFilter]);
 
   // Build ranking using a weighted composite over ALL JSON fields:
   //  - Existing 8 BAR_METRICS (summary + test pass rate)
@@ -357,6 +379,54 @@ export function TopModels() {
                 clear
               </button>
             )}
+            <span className="text-zinc-500 ml-2">RAM:</span>
+            <select
+              value={ramFilter}
+              onChange={(e) => setRamFilter(e.target.value)}
+              className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
+              title="Filter leaderboard by RAM cap (GB)"
+            >
+              <option value="">Any ({ramOptions.length})</option>
+              {ramOptions.map((r) => (
+                <option key={r} value={String(r)}>
+                  {r} GB
+                </option>
+              ))}
+            </select>
+            {ramFilter && (
+              <button
+                type="button"
+                onClick={() => setRamFilter("")}
+                className="text-zinc-400 hover:text-zinc-700 underline"
+                title="Clear RAM filter"
+              >
+                clear
+              </button>
+            )}
+            <span className="text-zinc-500 ml-2">CPU:</span>
+            <select
+              value={cpuFilter}
+              onChange={(e) => setCpuFilter(e.target.value)}
+              className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
+              title="Filter leaderboard by CPU cores"
+            >
+              <option value="">Any ({cpuOptions.length})</option>
+              {cpuOptions.map((c) => (
+                <option key={c} value={String(c)}>
+                  {c} {c === 1 ? "core" : "cores"}
+                </option>
+              ))}
+            </select>
+            {cpuFilter && (
+              <button
+                type="button"
+                onClick={() => setCpuFilter("")}
+                className="text-zinc-400 hover:text-zinc-700 underline"
+                title="Clear CPU filter"
+              >
+                clear
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -371,8 +441,12 @@ export function TopModels() {
         <div className="bg-white border border-zinc-200 rounded-lg p-16 text-center text-zinc-400 shadow-sm">
           {isLoading
             ? "Loading benchmark summaries…"
-            : modelFilter
-              ? `No benchmark results for model "${modelFilter}".`
+            : modelFilter || ramFilter || cpuFilter
+              ? `No benchmark results match the selected filters${
+                  modelFilter ? ` · model=${modelFilter}` : ""
+                }${ramFilter ? ` · RAM=${ramFilter}GB` : ""}${
+                  cpuFilter ? ` · CPU=${cpuFilter}` : ""
+                }.`
               : "No benchmark results available — run some benchmarks first."}
         </div>
       ) : (

@@ -1,0 +1,575 @@
+{
+  "model": "llama3.2:1b",
+  "platform": "docker",
+  "technology": "ollama",
+  "timestamp": "2026-05-20T07:10:31.708215",
+  "status": "failed",
+  "started_at": "2026-05-20T07:10:31.708215",
+  "finished_at": "2026-05-20T07:10:31.708215",
+  "ram_gb": 1,
+  "cpu_cores": 4.0,
+  "system_info": {
+    "platform": "docker"
+  },
+  "results": [],
+  "test_results": [
+    {
+      "id": "quality",
+      "name": "Quality Test",
+      "status": "passed",
+      "duration": 360.37,
+      "stdout": "\n=== Quality Assessment: llama3.2:1b ===\n\n[1/6] Factual Knowledge\n  Prompt: What is the capital of France?\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[2/6] Math\n  Prompt: Calculate: 15 + 27\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[3/6] Instruction Following\n  Prompt: List exactly 3 colors, separated by commas.\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[4/6] Reasoning\n  Prompt: If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[5/6] Coherence\n  Prompt: Explain in 2 sentences what machine learning is.\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[6/6] Code Understanding\n  Prompt: What does this Python code do: for i in range(5): print(i)\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n\n=== Final Score ===\nTotal: 0/70 (0.0%)\nRating: Poor\nResults saved to: D:\\LNU\\diploma\\backend\\results\\llama3.2_1b_1GB_4.0cores_ollama_docker_20260520_071031.json\n",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "advanced_quality",
+      "name": "Advanced Quality Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "performance",
+      "name": "Performance Test",
+      "status": "timeout",
+      "duration": 600.0,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "safety_robustness",
+      "name": "Safety & Robustness Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "stress_consistency",
+      "name": "Stress & Consistency Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "hard_tests",
+      "name": "Hard Tests",
+      "status": "timeout",
+      "duration": 1200.02,
+      "stdout": "",
+      "stderr": "Timeout after 1200s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "multilingual",
+      "name": "Multilingual Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "summarization",
+      "name": "Summarization Test",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "context_window",
+      "name": "Context Window Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cost_efficiency",
+      "name": "Cost Efficiency Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_mmlu",
+      "name": "MMLU Benchmark",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_reasoning",
+      "name": "Reasoning Benchmark (ARC / HellaSwag / Winogrande)",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_gsm8k",
+      "name": "GSM8K Math Benchmark",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_truthfulqa",
+      "name": "TruthfulQA Benchmark",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_humaneval",
+      "name": "HumanEval Code Benchmark",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cold_start",
+      "name": "Cold Start Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "resource_usage",
+      "name": "Resource Usage Test (RAM / CPU)",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "oom_detection",
+      "name": "OOM Detection & Boundary Test",
+      "status": "failed",
+      "duration": 63.08,
+      "stdout": ":1b\n============================================================\n\n--- Test 1: Escalating Context Size ---\n  Input ~50 words (331 chars)... FAIL [connection_error]\n  Input ~100 words (772 chars)... FAIL [connection_error]\n  Input ~250 words (1801 chars)... FAIL [connection_error]\n  Input ~500 words (3712 chars)... FAIL [connection_error]\n  Input ~1000 words (7387 chars)... FAIL [connection_error]\n  Input ~2000 words (14737 chars)... FAIL [connection_error]\n  Input ~4000 words (29437 chars)... FAIL [connection_error]\n\n--- Test 2: Rapid Sequential Burst (20 requests) ---\n  [ 1/20] FAIL [connection_error]\n  [ 2/20] FAIL [connection_error]\n  [ 3/20] FAIL [connection_error]\n  [ 4/20] FAIL [connection_error]\n  [ 5/20] FAIL [connection_error]\n  [ 6/20] FAIL [connection_error]\n  [ 7/20] FAIL [connection_error]\n  [ 8/20] FAIL [connection_error]\n  [ 9/20] FAIL [connection_error]\n  [10/20] FAIL [connection_error]\n  [11/20] FAIL [connection_error]\n  [12/20] FAIL [connection_error]\n  [13/20] FAIL [connection_error]\n  [14/20] FAIL [connection_error]\n  [15/20] FAIL [connection_error]\n  [16/20] FAIL [connection_error]\n  [17/20] FAIL [connection_error]\n  [18/20] FAIL [connection_error]\n  [19/20] FAIL [connection_error]\n  [20/20] FAIL [connection_error]\n\n--- Test 3: Max Output Generation ---\n  num_predict=256... FAIL [connection_error]\n  num_predict=512... FAIL [connection_error]\n  num_predict=1024... FAIL [connection_error]\n  num_predict=2048... FAIL [connection_error]\n\n============================================================\nOOM / BOUNDARY SUMMARY\n============================================================\nContext boundary:       ~50 words\nMax stable context:     ~0 words\nBurst success rate:     0.0%\nBurst avg TPS:          0.00 tok/s\nMax output failures:    4 / 4\nError types seen:       ['connection_error']\nOverall stable:         NO\n============================================================\n\nResults saved to: D:\\LNU\\diploma\\results\\oom_detection_llama3.2_1b_1779260855.json\n",
+      "stderr": "",
+      "details": [],
+      "raw_data": {
+        "model": "llama3.2:1b",
+        "port": 11434,
+        "timestamp": 1779260792.7859871,
+        "thresholds": {
+          "response_timeout_s": 120,
+          "empty_response_chars": 5,
+          "tps_floor": 1.0
+        },
+        "escalating_context": {
+          "failure_boundary_words": 50,
+          "runs": [
+            {
+              "success": false,
+              "wall_time_s": 2.036,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+              "input_words_approx": 50,
+              "input_chars": 331
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.028,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+              "input_words_approx": 100,
+              "input_chars": 772
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.048,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+              "input_words_approx": 250,
+              "input_chars": 1801
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.043,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+              "input_words_approx": 500,
+              "input_chars": 3712
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.023,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+              "input_words_approx": 1000,
+              "input_chars": 7387
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.016,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+              "input_words_approx": 2000,
+              "input_chars": 14737
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.023,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+              "input_words_approx": 4000,
+              "input_chars": 29437
+            }
+          ]
+        },
+        "burst": {
+          "total": 20,
+          "successful": 0,
+          "failed": 20,
+          "success_rate": 0.0,
+          "error_types": [
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error",
+            "connection_error"
+          ],
+          "avg_tps": 0,
+          "min_tps": 0,
+          "max_tps": 0,
+          "runs": [
+            {
+              "success": false,
+              "wall_time_s": 2.042,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.018,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.032,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.03,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.007,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.019,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.03,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.036,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.019,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.014,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.011,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.012,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.015,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.039,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.017,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.01,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.03,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.041,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.019,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.012,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+            }
+          ]
+        },
+        "max_output": {
+          "runs": [
+            {
+              "success": false,
+              "wall_time_s": 2.024,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+              "num_predict": 256
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.026,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+              "num_predict": 512
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.027,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+              "num_predict": 1024
+            },
+            {
+              "success": false,
+              "wall_time_s": 2.023,
+              "error_type": "connection_error",
+              "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=11434): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+              "num_predict": 2048
+            }
+          ]
+        },
+        "summary": {
+          "context_boundary_words": 50,
+          "context_max_success_words": 0,
+          "burst_success_rate": 0.0,
+          "burst_avg_tps": 0,
+          "max_output_failures": 4,
+          "observed_error_types": [
+            "connection_error"
+          ],
+          "overall_stable": false
+        }
+      }
+    },
+    {
+      "id": "ram_boundary",
+      "name": "RAM Boundary Sweep (§3.3)",
+      "status": "failed",
+      "duration": 60.41,
+      "stdout": "ERROR: Cannot connect to Docker daemon: Error while fetching server API version: NpipeHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)\n",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "config_matrix",
+      "name": "Config Matrix (§3.2)",
+      "status": "failed",
+      "duration": 60.39,
+      "stdout": "ERROR: Cannot connect to Docker daemon: Error while fetching server API version: NpipeHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)\n",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "vram_monitor",
+      "name": "VRAM Monitor (§4.2)",
+      "status": "failed",
+      "duration": 14.04,
+      "stdout": "\n============================================================\n  VRAM MONITOR — llama3.2:1b\n============================================================\n  GPU       : NVIDIA GeForce RTX 3050 Laptop GPU\n  Total VRAM: 4096 MB\n  Backend   : nvidia-smi\n  Baseline  : 0 MB used / 4096 MB total\n  [cold_short  ] FAIL  peak_vram=0.0 MB  tps=None\n  [warm_short  ] FAIL  peak_vram=0.0 MB  tps=None\n  [warm_medium ] FAIL  peak_vram=0.0 MB  tps=None\n  [warm_long   ] FAIL  peak_vram=0.0 MB  tps=None\n\n  Peak VRAM : 0.0 MB\n  Delta     : 0.0 MB over baseline\n  Avg util  : 0.0%\n  Saved     : D:\\LNU\\diploma\\results\\vram_monitor_llama3.2_1b_1779260990.json\n\n",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cloud_cost",
+      "name": "Cloud Cost Calculator (§6)",
+      "status": "failed",
+      "duration": 6.45,
+      "stdout": "\n==============================================================\n  CLOUD COST CALCULATOR — llama3.2:1b\n==============================================================\n  [short ] FAIL  tps=None  tokens=None\n  [medium] FAIL  tps=None  tokens=None\n  [long  ] FAIL  tps=None  tokens=None\n\n  ERROR: No successful inferences; cannot derive cost.\n",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "quant_compare",
+      "name": "Quantization Compare (Q4 vs Q8, §2.1)",
+      "status": "failed",
+      "duration": 17.57,
+      "stdout": "\n==============================================================\n  QUANTIZATION COMPARE — llama3.2:1b\n==============================================================\n  Variants: ['llama3.2:1b']\n\n── llama3.2:1b ─────────────────────────────────────────────\n  [1.1] FAIL  tps=None  ttft=Nones  q=0.0\n  [1.2] FAIL  tps=None  ttft=Nones  q=0.0\n  [2.1] FAIL  tps=None  ttft=Nones  q=0.0\n  [2.2] FAIL  tps=None  ttft=Nones  q=0.0\n  [3.1] FAIL  tps=None  ttft=Nones  q=0.0\n  [3.2] FAIL  tps=None  ttft=Nones  q=0.0\n  → avg_tps=0  avg_ttft=0s  avg_quality=0  ΔRAM=4.3MB\n\n==============================================================\n  SUMMARY\n==============================================================\n  llama3.2:1b                              tps=0  q=0  ΔRAM=4.3MB\n\n  Saved → D:\\LNU\\diploma\\results\\quant_compare_llama3.2_1b_1779261014.json\n\n",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    }
+  ],
+  "summary": {
+    "total_prompts": 0,
+    "successful": 0,
+    "failed": 0,
+    "success_rate": 0,
+    "avg_tokens_per_second": 0,
+    "avg_latency_ms": 0,
+    "avg_first_token_latency_ms": 0,
+    "total_tokens_generated": 0,
+    "avg_cpu_percent": 0,
+    "avg_memory_percent": 0
+  },
+  "phase1_failed": true,
+  "test_sections": {
+    "quality": {
+      "model": "llama3.2:1b",
+      "port": 11434,
+      "timestamp": 1779250232.0074522,
+      "tests": [
+        {
+          "category": "Factual Knowledge",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 10
+        },
+        {
+          "category": "Math",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 10
+        },
+        {
+          "category": "Instruction Following",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 10
+        },
+        {
+          "category": "Reasoning",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 15
+        },
+        {
+          "category": "Coherence",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 10
+        },
+        {
+          "category": "Code Understanding",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 15
+        }
+      ],
+      "total_score": 0,
+      "max_score": 70,
+      "percentage": 0.0,
+      "rating": "Poor"
+    }
+  }
+}
