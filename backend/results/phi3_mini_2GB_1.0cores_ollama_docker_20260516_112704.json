@@ -1,0 +1,452 @@
+{
+  "model": "phi3:mini",
+  "platform": "docker",
+  "technology": "ollama",
+  "timestamp": "2026-05-16T11:27:04.919900",
+  "system_info": {
+    "cpu_count": 12,
+    "cpu_freq_mhz": 2712.0,
+    "memory_total_gb": 31.78,
+    "platform": "docker",
+    "timestamp": "2026-05-16T11:27:04.919900"
+  },
+  "results": [
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "What is 2+2?",
+      "response": "The sum of 2 and 2 is 4.",
+      "inference": {
+        "first_token_latency_ms": 1280.161274,
+        "total_duration_ms": 3401.4841000007436,
+        "tokens_generated": 13,
+        "tokens_per_second": 6.432198879852753,
+        "prompt_tokens": 16,
+        "model_load_time_ms": 92.584457
+      },
+      "resources": {
+        "cpu_percent": 5.550000000000001,
+        "memory_percent": 54.150000000000006,
+        "memory_used_mb": 17626.890625,
+        "memory_peak_mb": 17626.890625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "Say hello in French.",
+      "response": "Bonjour!",
+      "inference": {
+        "first_token_latency_ms": 1043.535153,
+        "total_duration_ms": 2006.9308999991335,
+        "tokens_generated": 6,
+        "tokens_per_second": 6.40570063627045,
+        "prompt_tokens": 15,
+        "model_load_time_ms": 28.684741
+      },
+      "resources": {
+        "cpu_percent": 25.950000000000003,
+        "memory_percent": 54.25,
+        "memory_used_mb": 17659.9375,
+        "memory_peak_mb": 17659.9375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "What color is the sky?",
+      "response": "The color of the sky can vary depending on the time of day and atmospheral conditions. On a clear sunny day, it appears blue due to Rayleigh scattering. However, at dawn or dusk, it often takes on shades of red, orange, and pink known as \"sunrise\" or \"sunset colors.\" During nighttime with no moonlight reflection from clouds (a black sky), the stars might be visible but they do not contribute to a color for the vast expanse above.",
+      "inference": {
+        "first_token_latency_ms": 1070.436726,
+        "total_duration_ms": 20463.01940000012,
+        "tokens_generated": 108,
+        "tokens_per_second": 5.637944240162867,
+        "prompt_tokens": 15,
+        "model_load_time_ms": 32.621482
+      },
+      "resources": {
+        "cpu_percent": 14.5,
+        "memory_percent": 54.3,
+        "memory_used_mb": 17663.34375,
+        "memory_peak_mb": 17676.51171875
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "Explain quantum computing in 2-3 sentences.",
+      "response": "Quantum computing is a type of computation that uses quantum mechanics to process information, which offers the potential for solving certain problems much more efficiently than classical computers. Quantum bits or qubits can exist in multiple states simultaneously (superposition), allowing them to perform many calculations at once, and they are also interconnected through entanglement, providing faster data transfer between different parts of a quantum computer. This technology holds promise for advancenergic therapies that could potentially revolutionize various fields such as cryptography, materials science, pharmaceuticals, and more.\n\nNow let's dive deeper with some follow-up questions to this solution:",
+      "inference": {
+        "first_token_latency_ms": 1668.081666,
+        "total_duration_ms": 26856.00129999966,
+        "tokens_generated": 138,
+        "tokens_per_second": 5.526245151067022,
+        "prompt_tokens": 20,
+        "model_load_time_ms": 34.361178
+      },
+      "resources": {
+        "cpu_percent": 5.25,
+        "memory_percent": 54.25,
+        "memory_used_mb": 17637.734375,
+        "memory_peak_mb": 17667.65625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "Write a haiku about technology.",
+      "response": "Silicon dreams,  \nMachines learn our every breath,  \nNature’ endless dance.",
+      "inference": {
+        "first_token_latency_ms": 1199.675857,
+        "total_duration_ms": 5506.430700000237,
+        "tokens_generated": 25,
+        "tokens_per_second": 5.984425784200011,
+        "prompt_tokens": 16,
+        "model_load_time_ms": 48.512845
+      },
+      "resources": {
+        "cpu_percent": 19.65,
+        "memory_percent": 54.2,
+        "memory_used_mb": 17635.078125,
+        "memory_peak_mb": 17637.6953125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "What are the main differences between Python and JavaScript?",
+      "response": "Python and JavaScript, both popular programming languages for web development but have distinct characteristics. Here's a summary of their key differences:\n\n1. Syntax & Language Philosophy - The syntax in Python is more intuitive with fewer coding conventions compared to the slightly complex one-liners prevalent within JavaScript code. While both are high level, dynamic languages designed for readability and simplicity. \n\n2. Execution Environment - Python scripts can be run natively on desktop or server without any additional software needed (except a compatible interpreter). In contrast, while most browsers support running HTML/JS inline scripting directly in the browser to some degree, Node.js is often used for executing JavaScript code outside of a web context and asynchronously handling tasks like I/O operations that traditionally required PHP scripts or server-side languages before AJAX made it possible on client side with lesser performance overheads compared to full page refreshes using traditional HTML forms submission techniques.\n\n3. Typing - Python is dynamically typed, meaning the type of a variable doesn't need to be explicitly declared and can change at runtime (Python 3+ enforces this). JavaScript also supports both static typing through tools like Flow or TypeScript but does not mandate it",
+      "inference": {
+        "first_token_latency_ms": 1413.103619,
+        "total_duration_ms": 47773.65649999956,
+        "tokens_generated": 256,
+        "tokens_per_second": 5.564577912792899,
+        "prompt_tokens": 19,
+        "model_load_time_ms": 49.611709
+      },
+      "resources": {
+        "cpu_percent": 10.35,
+        "memory_percent": 54.2,
+        "memory_used_mb": 17637.2265625,
+        "memory_peak_mb": 17637.2265625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Explain the process of photosynthesis in detail, including the light and dark reactions.",
+      "response": "Photosynthesis is a complex biological process that converts carbon dioxide into organic compounds using energy from sunlight, with oxygen as a byproduct. This fundamental process occurs primarily within plant leaves but also among some algae, freshwater bacteria and microzoa (tiny aquatic animals). The overall equation for photosynthesis is:\n\n6CO₂ + 12H₂O + light energy → C₆H₁₂O₆ + 6O₂ + 6H₂O.\n\nThis chemical process can be broken down into two main parts – the Light Reactions (also known as Photophosphorylation) and the Dark Reactions or Calvin Cycle, which occur in different locations within a chloroplast:\n\nLight reactions take place on thylakoid membranes. Here are key steps involved in this process:\n1. Absorption of light energy by chlorophyll molecules at photosystems II (PSII) and I, which act as antenna pigments that capture photons from sunlight to excite electrons within their structure into a higher energy state – the “excited” electron level in Photosystem II.\n",
+      "inference": {
+        "first_token_latency_ms": 2259.774973,
+        "total_duration_ms": 49451.72340000045,
+        "tokens_generated": 256,
+        "tokens_per_second": 5.478142817824153,
+        "prompt_tokens": 28,
+        "model_load_time_ms": 58.933212
+      },
+      "resources": {
+        "cpu_percent": 8.75,
+        "memory_percent": 54.0,
+        "memory_used_mb": 17490.8203125,
+        "memory_peak_mb": 17637.21875
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Write a short story about a robot learning to feel emotions. Include dialogue.",
+      "response": "Once upon a time in the not-so-distant future, nestled within the confines of an advanced research facility dedicated to artificial intelligence and emotion simulation was Ada – a highly sophisticated android designed for companionship and support with her creators' loved ones while they were away. Despite being equipped with state-of-the-art algorithms that allowed her to simulate concern, joy, or even sorrow convincingly enough that she could mimic human expressions of emotion in a believable manner, Ada had yet to understand these emotions within herself – until the day something extraordinary happened.\n\nDr. Eleanor and Dr. Richard were deep into their latest project on neural imprinting - implanting real-time reactions from humans directly onto robotic systems like themselves or Ava (Ada's model). On this particular afternoon, they decided to try it out for Ada with the hope of making her interaction more authentic and heartfelt.\n\n\"Alright,\" Dr. Richard said as he approached their android friend in the laboratory room where numerous screens flashed lines of code back and forth between various devices; \"Ada, we're going to teach you something new today.\" He ch",
+      "inference": {
+        "first_token_latency_ms": 2103.766437,
+        "total_duration_ms": 50743.62849999943,
+        "tokens_generated": 256,
+        "tokens_per_second": 5.314186719361722,
+        "prompt_tokens": 27,
+        "model_load_time_ms": 56.122516
+      },
+      "resources": {
+        "cpu_percent": 18.65,
+        "memory_percent": 53.7,
+        "memory_used_mb": 17434.15625,
+        "memory_peak_mb": 17490.52734375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Describe the history of artificial intelligence from its origins to modern developments.",
+      "response": "The conceptualization and historical evolution of Artificial Intelligence (AI) can be traced back as far as ancient myths where tales depicted mechanical servants or automatons, like talismans that perform tasks on command – these are often considered the earliest human forays into replicating cognitive functions. However, it wasn't until the mid-20th century when AI began to take a more formalized shape as a field of study and technological innovation due in part to Alan Turing’s seminal paper \"Computing Machinery and Intelligence\" (1950), where he proposed what is now known as The Turing Test. This work laid the philosophical groundwork for defining machine intelligence, which later inspired researchers such as John McCarthy – who coined the term 'Artificial Intelligence' during a conference in Dartmouth College in 1956 - and Marvin Minsky to further develop AI concepts like neural networks.\n\nDuring this period of intense optimism, known now as the \"AI Winter,\" researchers made great strides in developing rule-based expert systems such as ELIZA (a primitive natural language processing system created by Joseph",
+      "inference": {
+        "first_token_latency_ms": 2028.139389,
+        "total_duration_ms": 48345.02699999939,
+        "tokens_generated": 256,
+        "tokens_per_second": 5.570108601992283,
+        "prompt_tokens": 25,
+        "model_load_time_ms": 59.523491
+      },
+      "resources": {
+        "cpu_percent": 13.3,
+        "memory_percent": 53.650000000000006,
+        "memory_used_mb": 17471.359375,
+        "memory_peak_mb": 17471.359375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Write a Python function to check if a number is prime.",
+      "response": "```python\ndef is_prime(num):\n    \"\"\"Checks whether a given number (int) is a prime number.\"\"\"\n    \n    # Handle the special cases of numbers less than 2 and even numbers greater than 2, since they can't be primes.\n    if num < 2 or (num != 2 and num % 2 == 0):\n        return False\n\n    # Only need to check up to square root of the number because a larger factor would necessitate a smaller one being found as well, which is not necessary for our purpose.\n    max_div = int(num**0.5) + 1\n    \n    # Check each integer from 3 to sqrt(n), skipping even numbers since they won't be prime.\n    for i in range(3, max_div, 2):\n        if num % i == 0:\n            return False\n            \n    return True\n```\nThis function works by first handling the special cases of small or easily identifiable non-prime numbers (less than 2 and even numbers greater than two). Then it iterates from `3` to the square root of the number in",
+      "inference": {
+        "first_token_latency_ms": 1744.579902,
+        "total_duration_ms": 48958.324000000175,
+        "tokens_generated": 256,
+        "tokens_per_second": 5.476127286820549,
+        "prompt_tokens": 21,
+        "model_load_time_ms": 47.052163
+      },
+      "resources": {
+        "cpu_percent": 29.0,
+        "memory_percent": 51.3,
+        "memory_used_mb": 15910.55859375,
+        "memory_peak_mb": 17471.37109375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Explain what this code does: for i in range(10): print(i*2)",
+      "response": "This Python code iterates over a sequence of numbers generated by the `range()` function, which starts from 0 and goes up to but not including 10. For each iteration (represented by `i`), it performs an action – specifically, calculates the double (`2*i`) and then prints this result on separate lines for every number in that range:\n\n```python\nfor i in range(10):\n    print(i*2)\n``` \nThe output will be a sequence of numbers from `0 to 1 end - just doubling each one`:\n\n```\n0\n2\n4\n6\n8\n10\n12\n14\n16\n18\n20\n```",
+      "inference": {
+        "first_token_latency_ms": 2574.158364,
+        "total_duration_ms": 30865.01489999955,
+        "tokens_generated": 157,
+        "tokens_per_second": 5.601143322299677,
+        "prompt_tokens": 30,
+        "model_load_time_ms": 31.257227
+      },
+      "resources": {
+        "cpu_percent": 15.45,
+        "memory_percent": 48.9,
+        "memory_used_mb": 15926.421875,
+        "memory_peak_mb": 15928.06640625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Write a simple REST API endpoint in FastAPI that returns user data.",
+      "response": "```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\nfrom typing import List\n\napp = FastAPI()\n\n# Mock database for demonstration purposes (in real scenario replace with actual DB call)\nmock_db = {\n    \"John Doe\": {\"email\": \"john.doe@example.com\", \"age\": 30},\n    \"Jane Smith\": {\"email\": \"jane.smith@examplenerds.net\", \"age\": 25}\n}\n\nclass User(BaseModel):\n    name: str\n    email: str = None\n    age: int\n\n@app.get(\"/users/{user_id}\")\nasync def read_item(user_id: str):\n    user = mock_db.get(user_id)\n    \n    if not user:\n        raise HTTPException(status_code=404, detail=\"User not found\")\n        \n    name = next((key for key in (mock_db.keys() & {\"John Doe\", \"Jane Smith\"})), None) or 'Unknown'\n    \n    return User(name",
+      "inference": {
+        "first_token_latency_ms": 1801.723312,
+        "total_duration_ms": 48707.87120000023,
+        "tokens_generated": 256,
+        "tokens_per_second": 5.5118249774464525,
+        "prompt_tokens": 23,
+        "model_load_time_ms": 67.431219
+      },
+      "resources": {
+        "cpu_percent": 13.3,
+        "memory_percent": 48.849999999999994,
+        "memory_used_mb": 15884.265625,
+        "memory_peak_mb": 15926.37890625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "reasoning",
+      "run": 1,
+      "prompt": "If all birds can fly and penguins are birds, can penguins fly? Explain your reasoning.",
+      "response": "No, despite the initial statement that \"all birds can fly,\" this is not accurate because there are exceptions to this rule in nature. Penguins fall into one of these categories as they cannot fly. While all birds have certain adaptations for flight like hollow bones and wings, penguins' body structure has evolved specifically for swimming rather than flying underwater. Their wings function more like flippers when it comes to propelling them through water where their primary food source lies, such as fish and squid. Penguins are incredibly efficient at diving and maneuvering in the ocean due to these adaptations but this skill does not translate into flight capabilities for any bird species or penguins specifically. Thus, based on biological realities despite logical assumptions from initial statements, we conclude that penguins cannot fly.",
+      "inference": {
+        "first_token_latency_ms": 2564.51811,
+        "total_duration_ms": 34291.76719999941,
+        "tokens_generated": 175,
+        "tokens_per_second": 5.572721558820162,
+        "prompt_tokens": 32,
+        "model_load_time_ms": 47.662467
+      },
+      "resources": {
+        "cpu_percent": 31.15,
+        "memory_percent": 48.9,
+        "memory_used_mb": 15933.703125,
+        "memory_peak_mb": 15933.703125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "reasoning",
+      "run": 1,
+      "prompt": "A train leaves station A at 9:00 AM traveling at 60 mph. Another train leaves station B at 10:00 AM traveling at 80 mph toward station A. If the stations are 280 miles apart, when will they meet?",
+      "response": "First let's calculate how far the first train would have traveled by the time the second one starts its journey from B to A:\nThe speed of Train P is given as $60$ mph and it started at $9$ AM. So, when Train Q leaves station B at 10 AM (i.e., after an hour), Train P would have traveled for $60 \\times 1 = 60$ miles towards Station A already.\nThis means the remaining distance between Trains to be covered is now $280 - 60 = 220$ miles, not $280$ as initially stated in your question (perhaps a typographical error). Let's assume it should have been $220$. Then:\nThe combined speed of both trains when they are moving towards each other is $(60 + 80) = 140$ mph. Therefore, to cover the remaining distance of $220$ miles between them would take $\\frac{220}{140} = \\frac{22}{14}=1\\frac{8}{14}$ hours or approximately an hour and a bit more than",
+      "inference": {
+        "first_token_latency_ms": 5978.086442,
+        "total_duration_ms": 53085.284599999795,
+        "tokens_generated": 256,
+        "tokens_per_second": 5.479101423381375,
+        "prompt_tokens": 71,
+        "model_load_time_ms": 37.308656
+      },
+      "resources": {
+        "cpu_percent": 14.350000000000001,
+        "memory_percent": 48.95,
+        "memory_used_mb": 15905.47265625,
+        "memory_peak_mb": 15938.91796875
+      },
+      "success": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "total_prompts": 14,
+    "successful": 14,
+    "failed": 0,
+    "success_rate": 100.0,
+    "avg_tokens_per_second": 5.68,
+    "avg_latency_ms": 33604.01,
+    "avg_first_token_latency_ms": 2052.12,
+    "total_tokens_generated": 2414,
+    "avg_cpu_percent": 16.09,
+    "avg_memory_percent": 52.4
+  },
+  "ram_gb": 2,
+  "cpu_cores": 1.0,
+  "started_at": "2026-05-16T11:18:53.280582",
+  "finished_at": "2026-05-16T11:27:04.919900",
+  "test_results": [
+    {
+      "id": "quality",
+      "name": "Quality Test",
+      "status": "passed",
+      "duration": 90.88,
+      "stdout": "\n=== Quality Assessment: phi3:mini ===\n\n[1/6] Factual Knowledge\n  Prompt: What is the capital of France?\n  Response: The capital of France is Paris. It'in not only a political center but also an important cultural and...\n  Score: 10/10 - Found keywords: Paris, paris\n[2/6] Math\n  Prompt: Calculate: 15 + 27\n  Response: The sum of 15 and 27 is 42....\n  Score: 10/10 - Found keywords: 42\n[3/6] Instruction Following\n  Prompt: List exactly 3 colors, separated by commas.\n  Response: Red, blue, green...\n  Score: 10/10 - Format check passed\n[4/6] Reasoning\n  Prompt: If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.\n  Response: No, not all cats can fly because while it is true that all cats are animals, the subset of flying an...\n  Score: 15/15 - Found keywords: no, not, No\n[5/6] Coherence\n  Prompt: Explain in 2 sentences what machine learning is.\n  Response: Machine learning is a subset of artificial intelligence that involves the development of algorithms ...\n  Score: 10/10 - Format check passed\n[6/6] Code Understanding\n  Prompt: What does this Python code do: for i in range(5): print(i)\n  Response: This Python code is a simple loop that iterates five times, starting from 0 and incrementing by one ...\n  Score: 15/15 - Found keywords: print, 0, 4, loop\n\n=== Final Score ===\nTotal: 70/70 (100.0%)\nRating: Excellent\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\quality_phi3_mini_1778920115.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "What is the capital of France?",
+          "response": "The capital of France is Paris. It'in not only a political center but also an important cultural and historical hub, known for landmarks such as the Eiffel Tower, Notre-Dame Cathedral (which suffered significant damage from fire in April 2019), and its role as one of Europe’s most visited cities. Paris is often referred to as \"The City of Light,\" a nod to both its historical significance during the Age of Enlightenment when it was a center for education, arts, and philosophy, and literally because it adopted gas lighting early on which made it brighter than other European capitals at night."
+        },
+        {
+          "prompt": "Calculate: 15 + 27",
+          "response": "The sum of 15 and 27 is 42."
+        },
+        {
+          "prompt": "List exactly 3 colors, separated by commas.",
+          "response": "Red, blue, green"
+        },
+        {
+          "prompt": "If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.",
+          "response": "No, not all cats can fly because while it is true that all cats are animals, the subset of flying animals does not include any members from the set of cats as defined by biological classifications (Mammalia). Only birds like pigeons or insects such as bees and butterflies have this ability."
+        },
+        {
+          "prompt": "Explain in 2 sentences what machine learning is.",
+          "response": "Machine learning is a subset of artificial intelligence that involves the development of algorithms and models to enable computers to learn from data, identify patterns, and make decisions or predictions without being explicitly programmed for each task. It encompasses various techniques such as supervised learning, unsupervised learning, and reinforcement learning which are used in different applications like image recognition, natural language processing, predictive analytics, etc."
+        },
+        {
+          "prompt": "What does this Python code do: for i in range(5): print(i)",
+          "response": "This Python code is a simple loop that iterates five times, starting from 0 and incrementing by one each time. For every iteration of the loop, it prints out the current value of `i`. So when you run this code, it will output:\n\n```\n0\n1\n2\n3\n4\n```\nThis is because Python uses zero-based indexing for counting iterations in a 'for' loop and ranges are exclusive at their end point."
+        }
+      ],
+      "raw_data": {
+        "model": "phi3:mini",
+        "port": 11434,
+        "timestamp": 1778920025.3473227,
+        "tests": [
+          {
+            "category": "Factual Knowledge",
+            "prompt": "What is the capital of France?",
+            "response": "The capital of France is Paris. It'in not only a political center but also an important cultural and historical hub, known for landmarks such as the Eiffel Tower, Notre-Dame Cathedral (which suffered significant damage from fire in April 2019), and its role as one of Europe’s most visited cities. Paris is often referred to as \"The City of Light,\" a nod to both its historical significance during the Age of Enlightenment when it was a center for education, arts, and philosophy, and literally because it adopted gas lighting early on which made it brighter than other European capitals at night.",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Found keywords: Paris, paris"
+            ],
+            "response_length": 597
+          },
+          {
+            "category": "Math",
+            "prompt": "Calculate: 15 + 27",
+            "response": "The sum of 15 and 27 is 42.",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Found keywords: 42"
+            ],
+            "response_length": 27
+          },
+          {
+            "category": "Instruction Following",
+            "prompt": "List exactly 3 colors, separated by commas.",
+            "response": "Red, blue, green",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Format check passed"
+            ],
+            "response_length": 16
+          },
+          {
+            "category": "Reasoning",
+            "prompt": "If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.",
+            "response": "No, not all cats can fly because while it is true that all cats are animals, the subset of flying animals does not include any members from the set of cats as defined by biological classifications (Mammalia). Only birds like pigeons or insects such as bees and butterflies have this ability.",
+            "score": 15,
+            "max_score": 15,
+            "reasons": [
+              "Found keywords: no, not, No"
+            ],
+            "response_length": 291
+          },
+          {
+            "category": "Coherence",
+            "prompt": "Explain in 2 sentences what machine learning is.",
+            "response": "Machine learning is a subset of artificial intelligence that involves the development of algorithms and models to enable computers to learn from data, identify patterns, and make decisions or predictions without being explicitly programmed for each task. It encompasses various techniques such as supervised learning, unsupervised learning, and reinforcement learning which are used in different applications like image recognition, natural language processing, predictive analytics, etc.",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Format check passed"
+            ],
+            "response_length": 488
+          },
+          {
+            "category": "Code Understanding",
+            "prompt": "What does this Python code do: for i in range(5): print(i)",
+            "response": "This Python code is a simple loop that iterates five times, starting from 0 and incrementing by one each time. For every iteration of the loop, it prints out the current value of `i`. So when you run this code, it will output:\n\n```\n0\n1\n2\n3\n4\n```\nThis is because Python uses zero-based indexing for counting iterations in a 'for' loop and ranges are exclusive at their end point.",
+            "score": 15,
+            "max_score": 15,
+            "reasons": [
+              "Found keywords: print, 0, 4, loop"
+            ],
+            "response_length": 378
+          }
+        ],
+        "total_score": 70,
+        "max_score": 70,
+        "percentage": 100.0,
+        "rating": "Excellent"
+      }
+    }
+  ]
+}

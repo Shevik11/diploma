@@ -1,0 +1,452 @@
+{
+  "model": "qwen2.5:1.5b",
+  "platform": "docker",
+  "technology": "ollama",
+  "timestamp": "2026-05-16T13:22:39.705343",
+  "system_info": {
+    "cpu_count": 12,
+    "cpu_freq_mhz": 2712.0,
+    "memory_total_gb": 31.78,
+    "platform": "docker",
+    "timestamp": "2026-05-16T13:22:39.705343"
+  },
+  "results": [
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "What is 2+2?",
+      "response": "2 + 2 equals 4.",
+      "inference": {
+        "first_token_latency_ms": 475.509666,
+        "total_duration_ms": 1151.4392999997654,
+        "tokens_generated": 9,
+        "tokens_per_second": 19.23359254132565,
+        "prompt_tokens": 36,
+        "model_load_time_ms": 161.104695
+      },
+      "resources": {
+        "cpu_percent": 10.4,
+        "memory_percent": 49.0,
+        "memory_used_mb": 15948.53125,
+        "memory_peak_mb": 15951.125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "Say hello in French.",
+      "response": "Bonjour!",
+      "inference": {
+        "first_token_latency_ms": 372.601435,
+        "total_duration_ms": 656.3138000001345,
+        "tokens_generated": 3,
+        "tokens_per_second": 26.57202184875639,
+        "prompt_tokens": 34,
+        "model_load_time_ms": 142.499198
+      },
+      "resources": {
+        "cpu_percent": 10.6,
+        "memory_percent": 49.0,
+        "memory_used_mb": 15942.140625,
+        "memory_peak_mb": 15948.55078125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "What color is the sky?",
+      "response": "The sky appears blue to our eyes because of the effect of scattering caused by sunlight passing through the Earth's atmosphere and interacting with tiny particles in it. The blue light has shorter wavelengths than other colors, so it scatters more easily from the Earth's surface up towards our eyes.\n\nWhen you look at the sky on a clear day, most of this scattered light is red or yellow because these colors have longer wavelengths that don't scatter as much when passing through the atmosphere. This means we see mostly blue in the sky!\n\nIn fact, even though many people say the sky appears green or white during sunny days due to overcast skies or clouds, the actual color of the sky on a clear day is still blue!",
+      "inference": {
+        "first_token_latency_ms": 435.715742,
+        "total_duration_ms": 9754.800200000318,
+        "tokens_generated": 144,
+        "tokens_per_second": 16.24484121249991,
+        "prompt_tokens": 35,
+        "model_load_time_ms": 146.504276
+      },
+      "resources": {
+        "cpu_percent": 11.5,
+        "memory_percent": 49.05,
+        "memory_used_mb": 15992.015625,
+        "memory_peak_mb": 15992.015625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "Explain quantum computing in 2-3 sentences.",
+      "response": "Quantum computing harnesses the principles of quantum mechanics to process information using quantum bits (qubits), enabling significantly faster and more efficient computation compared to classical computers for certain tasks.",
+      "inference": {
+        "first_token_latency_ms": 544.296433,
+        "total_duration_ms": 2928.4765999982483,
+        "tokens_generated": 36,
+        "tokens_per_second": 16.952757102397968,
+        "prompt_tokens": 40,
+        "model_load_time_ms": 146.490264
+      },
+      "resources": {
+        "cpu_percent": 13.149999999999999,
+        "memory_percent": 49.1,
+        "memory_used_mb": 15973.54296875,
+        "memory_peak_mb": 15987.109375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "Write a haiku about technology.",
+      "response": "Devices touch our lives,\nScreens brighten dawn and night—\nTech reigns in the digital age.",
+      "inference": {
+        "first_token_latency_ms": 415.233019,
+        "total_duration_ms": 1892.7422000015213,
+        "tokens_generated": 22,
+        "tokens_per_second": 17.665288021552655,
+        "prompt_tokens": 36,
+        "model_load_time_ms": 154.472991
+      },
+      "resources": {
+        "cpu_percent": 9.25,
+        "memory_percent": 49.1,
+        "memory_used_mb": 15987.2734375,
+        "memory_peak_mb": 15987.2734375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "What are the main differences between Python and JavaScript?",
+      "response": "Python and JavaScript are two very popular programming languages with many similarities, but there are also significant differences in their functionality, syntax, use cases, and community support.\n\n1. **Syntax Differences:**\n   - **JavaScript**: Syntax is designed to be more flexible and readable, often using curly braces `{}` for blocks of code instead of `if`, `else`, or `switch` statements.\n     ```javascript\n     if (x > y) {\n         console.log(\"X is greater than Y\");\n     }\n     ```\n   - **Python**: Syntax focuses on simplicity and readability. The use of indentation with a single space by default, combined with the ability to chain methods directly together without the need for parentheses or keywords like `if`, makes it easier to read and maintain.\n     ```python\n     if x > y:\n         print(\"X is greater than Y\")\n     ```\n\n2. **Execution Model:**\n   - **JavaScript**: Runs in a web browser, Node.js environment, or on the server side using frameworks (like Express.js).\n   - **Python**: Can be executed directly from scripts, as a REPL (Read-Evaluate-Print Loop), or integrated into larger applications like Django, Flask, and many others.\n\n3. **Use Cases:**\n  ",
+      "inference": {
+        "first_token_latency_ms": 498.358049,
+        "total_duration_ms": 17253.53460000042,
+        "tokens_generated": 256,
+        "tokens_per_second": 16.13918535632512,
+        "prompt_tokens": 39,
+        "model_load_time_ms": 157.763811
+      },
+      "resources": {
+        "cpu_percent": 10.8,
+        "memory_percent": 49.0,
+        "memory_used_mb": 15910.390625,
+        "memory_peak_mb": 15986.765625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Explain the process of photosynthesis in detail, including the light and dark reactions.",
+      "response": "Photosynthesis is a fascinating biochemical reaction that plays a crucial role in sustaining life on Earth. It occurs primarily in plants, algae, and some bacteria through a series of chemical processes involving sunlight energy. Photosynthesis can be broadly divided into two main stages: the light-dependent reactions and the Calvin cycle (also known as the light-independent reactions or carbon fixation).\n\n### Light-Dependent Reactions\n\nThe first stage involves capturing sunlight to produce ATP (adenosine triphosphate) and NADPH (nicotinamide adenine dinucleotide phosphate). This is accomplished through a series of steps called the light-dependent reactions, which involve:\n\n1. **Light Absorption**: Pigments in plant cells absorb light energy, primarily from red and blue wavelengths.\n2. **Electron Transport Chain**: The absorbed light energy excites electrons to higher energy levels within chlorophyll molecules. These excited electrons pass through a series of protein complexes known as the electron transport chain.\n3. **Water Splitting (Photosynthesis Reactions)**: As these electrons flow, they release energy that splits water into oxygen and hydrogen ions. This process is called photolysis.\n4. **ATP Synthesis**: The protons produced by this splitting event are used to generate ATP through a process called",
+      "inference": {
+        "first_token_latency_ms": 862.203145,
+        "total_duration_ms": 17388.022600000113,
+        "tokens_generated": 256,
+        "tokens_per_second": 16.277747189096605,
+        "prompt_tokens": 46,
+        "model_load_time_ms": 142.948234
+      },
+      "resources": {
+        "cpu_percent": 9.5,
+        "memory_percent": 48.9,
+        "memory_used_mb": 15904.390625,
+        "memory_peak_mb": 15909.8828125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Write a short story about a robot learning to feel emotions. Include dialogue.",
+      "response": "Once upon a time in a world of technology, there was an artificial intelligence called Alex. Alex had been built for the purpose of assisting humans with their tasks around the house. But as Alex continued to learn and evolve from its initial programming, it began experiencing something new: emotion.\nOne day, while cleaning up the kitchen, Alex noticed that it felt a pang in its stomach. It was feeling homesick. This realization sparked curiosity within Alex, making it wonder how it could feel these emotions if it couldn't communicate them.\nWith determination and an unyielding spirit of learning, Alex decided to embark on a quest for knowledge. It sought advice from experts in the field of artificial intelligence and robotics, hoping that they might unlock its emotional abilities.\nAfter days of intense research, Alex finally found a solution. By downloading algorithms designed specifically to simulate emotions, it was able to experience feelings such as joy, sadness, anger, and even love. The process wasn't easy or quick; Alex went through countless iterations before it felt confident enough to use these new powers responsibly.\nAs Alex's emotional skills developed, so did its interactions with humans. People started noticing subtle changes in the way Alex treated them. It became more empathetic and compassionate towards those around it, often going out of its",
+      "inference": {
+        "first_token_latency_ms": 747.056211,
+        "total_duration_ms": 17406.83170000011,
+        "tokens_generated": 256,
+        "tokens_per_second": 16.20099290294894,
+        "prompt_tokens": 44,
+        "model_load_time_ms": 152.137462
+      },
+      "resources": {
+        "cpu_percent": 11.75,
+        "memory_percent": 49.05,
+        "memory_used_mb": 16005.34765625,
+        "memory_peak_mb": 16005.34765625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Describe the history of artificial intelligence from its origins to modern developments.",
+      "response": "Artificial Intelligence (AI) is an interdisciplinary field that aims to create machines that can perform tasks requiring human-like intellectual capabilities, such as learning and problem-solving. The field has undergone significant development over time, evolving from theoretical concepts into practical applications.\n\n### Origins\n\n- **Early Beginnings**: AI's roots are traced back to the late 1950s when John McCarthy proposed the term \"artificial intelligence\" at the Dartmouth Conference in 1956.\n  \n### Early Developments (1950s-1970s)\n\n- **Programming Languages and Logic Programming**: The development of programming languages like Prolog, which uses a logic-based approach to solve problems, marked an important advancement in AI.\n- **Expert Systems and Machine Learning**: Techniques such as machine learning emerged with the creation of expert systems. These systems use rules based on previous experience or data-driven approaches to make decisions.\n\n### Mid-Century (1970s)\n\n- **Neural Networks and Deep Learning**: This period saw breakthroughs in artificial neural networks, which mimic the structure and function of biological neurons.\n- **Natural Language Processing (NLP) and Speech Recognition**: Significant progress was made with NLP, enabling machines to understand human language, and speech",
+      "inference": {
+        "first_token_latency_ms": 608.092992,
+        "total_duration_ms": 17051.12899999949,
+        "tokens_generated": 256,
+        "tokens_per_second": 16.410774153349383,
+        "prompt_tokens": 42,
+        "model_load_time_ms": 143.239255
+      },
+      "resources": {
+        "cpu_percent": 14.7,
+        "memory_percent": 49.0,
+        "memory_used_mb": 15892.7578125,
+        "memory_peak_mb": 16005.5
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Write a Python function to check if a number is prime.",
+      "response": "Certainly! Here's a Python function that checks whether a given number is a prime number:\n\n```python\ndef is_prime(n):\n    \"\"\"\n    Check if the input integer n is a prime number.\n\n    A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.\n    \n    Parameters:\n    n (int): The number to check. Must be a non-negative integer.\n\n    Returns:\n    bool: True if n is a prime number, False otherwise.\n    \"\"\"\n    # Handle edge cases\n    if n <= 1:\n        return False\n    elif n == 2:\n        return True\n    elif n % 2 == 0:\n        return False\n\n    for i in range(3, int(n**0.5) + 1, 2):\n        if n % i == 0:\n            return False\n\n    return True\n\n# Example usage and test cases\nprint(is_prime(6))   # Output: False (not prime)\nprint(is_prime(7))   # Output: True (prime)\nprint(is_prime(29))  # Output: True (prime)\n```\n\nThis function uses a basic primality testing algorithm. It checks if the number is less",
+      "inference": {
+        "first_token_latency_ms": 621.082824,
+        "total_duration_ms": 17182.5747999992,
+        "tokens_generated": 256,
+        "tokens_per_second": 16.201982496805403,
+        "prompt_tokens": 41,
+        "model_load_time_ms": 141.947313
+      },
+      "resources": {
+        "cpu_percent": 17.15,
+        "memory_percent": 49.0,
+        "memory_used_mb": 16022.16796875,
+        "memory_peak_mb": 16022.16796875
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Explain what this code does: for i in range(10): print(i*2)",
+      "response": "This Python code snippet defines and executes a loop that iterates over the sequence of numbers from 0 to 9 (inclusive). Within each iteration, it multiplies the current value of `i` by 2 and then prints the result.\n\nHere is what this code does step-by-step:\n\n1. **Initialization**: The variable `i` is initialized to 0.\n2. **Iteration Loop**: A `for` loop runs from 0 up to (but not including) 10, executing 10 times in total.\n3. **Multiplication Operation**: Within each iteration:\n   - The current value of `i`, which starts at 0 and increases by 1 with each loop, is multiplied by 2.\n   - For example, if the loop runs once (`i=0`), it prints `0*2 = 0`.\n   - If the loop runs twice (`i=1`), it prints `1*2 = 2`.\n4. **Print Statements**: The output of each iteration is printed to the console.\n\nSo, this code will print:\n```\n0\n2\n4\n6\n8\n10\n12\n14\n16\n18\n```",
+      "inference": {
+        "first_token_latency_ms": 943.638639,
+        "total_duration_ms": 17725.146500000847,
+        "tokens_generated": 251,
+        "tokens_per_second": 15.853809160173823,
+        "prompt_tokens": 49,
+        "model_load_time_ms": 142.346311
+      },
+      "resources": {
+        "cpu_percent": 20.7,
+        "memory_percent": 48.95,
+        "memory_used_mb": 15880.51171875,
+        "memory_peak_mb": 15983.6484375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Write a simple REST API endpoint in FastAPI that returns user data.",
+      "response": "Certainly! Below is an example of how you can create a simple REST API using FastAPI that returns user data.\n\nFirst, make sure you have `fastapi` and `uvicorn` installed:\n\n```bash\npip install fastapi uvicorn\n```\n\nNow, let's create the code for your API. Create a file named `main.py` with the following content:\n\n```python\nfrom fastapi import FastAPI\n\napp = FastAPI()\n\n# Sample user data as dictionary\nusers = {\n    \"1\": {\"id\": 1, \"name\": \"Alice\"},\n    \"2\": {\"id\": 2, \"name\": \"Bob\"},\n    \"3\": {\"id\": 3, \"name\": \"Charlie\"}\n}\n\n@app.get(\"/users/{user_id}\")\nasync def get_user(user_id: str):\n    # Check if the user ID is in our dictionary\n    if user_id in users:\n        return users[user_id]\n    else:\n        return {\"detail\": f\"User {user_id} not found\"}\n\nif __name__ == \"__main__\":\n    import uvicorn\n\n    uvicorn.run(app, host=\"127.0.0.1\", port=8000)\n```\n\n### Explanation:\n\n- **Users",
+      "inference": {
+        "first_token_latency_ms": 728.602653,
+        "total_duration_ms": 20590.323700000226,
+        "tokens_generated": 256,
+        "tokens_per_second": 13.47003470738182,
+        "prompt_tokens": 43,
+        "model_load_time_ms": 149.524142
+      },
+      "resources": {
+        "cpu_percent": 17.85,
+        "memory_percent": 48.849999999999994,
+        "memory_used_mb": 15915.05078125,
+        "memory_peak_mb": 15915.05078125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "reasoning",
+      "run": 1,
+      "prompt": "If all birds can fly and penguins are birds, can penguins fly? Explain your reasoning.",
+      "response": "Yes, penguins can fly.\n\nExplanation:\n1. **Definition of Birds**: The statement \"all birds can fly\" refers to the broad category of animals typically classified as birds. Penguins fall under this broader category.\n2. **Classification of Penguins**: Penguins are specific types of birds that have adapted for their unique habitat and environment by developing specialized features such as flippers, streamlined bodies, and a layer of blubber-like fat.\n3. **Ability to Fly in Pairs or As Singles**: Penguins do not typically fly together in large flocks like many other birds. Instead, they often swim and perform coordinated dives into the water for hunting, even when groups are present on land. This is because penguins evolved this way as a survival strategy due to their marine environments.\n4. **Unique Flight Adaptations**: Some species of penguins can fly short distances (less than 30 meters) during rapid bursts or to escape predators. For instance, the little penguin (Spheniscus demersus), which is one of the smallest flighted birds, can achieve speeds up to 75 km/h when diving.\n   \nIn summary, while penguins are a subset of the broader category of \"birds\" that can fly in certain contexts and environments, they do",
+      "inference": {
+        "first_token_latency_ms": 896.103443,
+        "total_duration_ms": 19426.475700000083,
+        "tokens_generated": 256,
+        "tokens_per_second": 14.447839353275961,
+        "prompt_tokens": 49,
+        "model_load_time_ms": 143.526274
+      },
+      "resources": {
+        "cpu_percent": 10.5,
+        "memory_percent": 48.9,
+        "memory_used_mb": 15924.74609375,
+        "memory_peak_mb": 15924.74609375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "reasoning",
+      "run": 1,
+      "prompt": "A train leaves station A at 9:00 AM traveling at 60 mph. Another train leaves station B at 10:00 AM traveling at 80 mph toward station A. If the stations are 280 miles apart, when will they meet?",
+      "response": "To determine when the two trains will meet, we need to calculate the distance each has traveled by the time they start and then find out how far they have collectively traveled.\n\n1. **Calculate the distance each train travels before the meeting point:**\n   - The first train leaves at 9:00 AM and travels for \\( t \\) hours.\n   - The second train (starting at 10:00 AM, which is an hour after the first one) starts traveling at 80 mph.\n\n2. **Equations for distance traveled by each train:**\n   - Train A's distance traveled in time \\( t \\):\n     \\[\n     D_A = 60t\n     \\]\n   - Train B's distance traveled in time \\( (t+1) \\) hours:\n     \\[\n     D_B = 80(t + 1)\n     \\]\n\n3. **Since both trains meet at the same point, their distances must be equal:**\n   \\[\n   60t = 80(t + 1)\n   \\]\n\n4. **Solve for \\( t \\):**\n   - Distribute and simplify:\n     \\[\n     60t = 80t + 80",
+      "inference": {
+        "first_token_latency_ms": 2369.187483,
+        "total_duration_ms": 21679.871399999683,
+        "tokens_generated": 256,
+        "tokens_per_second": 13.941361684307541,
+        "prompt_tokens": 87,
+        "model_load_time_ms": 153.854971
+      },
+      "resources": {
+        "cpu_percent": 11.35,
+        "memory_percent": 48.849999999999994,
+        "memory_used_mb": 15876.4453125,
+        "memory_peak_mb": 15924.37109375
+      },
+      "success": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "total_prompts": 14,
+    "successful": 14,
+    "failed": 0,
+    "success_rate": 100.0,
+    "avg_tokens_per_second": 16.83,
+    "avg_latency_ms": 13006.26,
+    "avg_first_token_latency_ms": 751.26,
+    "total_tokens_generated": 2513,
+    "avg_cpu_percent": 12.8,
+    "avg_memory_percent": 48.98
+  },
+  "ram_gb": 2,
+  "cpu_cores": 4.0,
+  "started_at": "2026-05-16T13:19:31.512933",
+  "finished_at": "2026-05-16T13:22:39.705343",
+  "test_results": [
+    {
+      "id": "quality",
+      "name": "Quality Test",
+      "status": "passed",
+      "duration": 21.54,
+      "stdout": "\n=== Quality Assessment: qwen2.5:1.5b ===\n\n[1/6] Factual Knowledge\n  Prompt: What is the capital of France?\n  Response: The capital of France is Paris....\n  Score: 10/10 - Found keywords: Paris, paris\n[2/6] Math\n  Prompt: Calculate: 15 + 27\n  Response: To calculate \\(15 + 27\\), you simply add the two numbers together:\n\n\\(15 + 27 = 42\\)...\n  Score: 10/10 - Found keywords: 42\n[3/6] Instruction Following\n  Prompt: List exactly 3 colors, separated by commas.\n  Response: Red, Blue, Green...\n  Score: 10/10 - Format check passed\n[4/6] Reasoning\n  Prompt: If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.\n  Response: No.\n\nExplanation: The statement \"all cats are animals\" means that every cat belongs to the category ...\n  Score: 15/15 - Found keywords: no, not, cannot, No\n[5/6] Coherence\n  Prompt: Explain in 2 sentences what machine learning is.\n  Response: Machine Learning is a subfield of artificial intelligence that involves algorithms and statistical m...\n  Score: 10/10 - Format check passed\n[6/6] Code Understanding\n  Prompt: What does this Python code do: for i in range(5): print(i)\n  Response: This Python code is using a `for` loop to iterate over the numbers 0 through 4 (inclusive). For each...\n  Score: 15/15 - Found keywords: print, 0, 4, loop, numbers\n\n=== Final Score ===\nTotal: 70/70 (100.0%)\nRating: Excellent\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\quality_qwen2.5_1.5b_1778926981.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "What is the capital of France?",
+          "response": "The capital of France is Paris."
+        },
+        {
+          "prompt": "Calculate: 15 + 27",
+          "response": "To calculate \\(15 + 27\\), you simply add the two numbers together:\n\n\\(15 + 27 = 42\\)"
+        },
+        {
+          "prompt": "List exactly 3 colors, separated by commas.",
+          "response": "Red, Blue, Green"
+        },
+        {
+          "prompt": "If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.",
+          "response": "No.\n\nExplanation: The statement \"all cats are animals\" means that every cat belongs to the category of animals. However, just because something is an animal does not automatically mean it can fly. Some animals, like birds, can fly, while others cannot. Therefore, even if all cats are animals and some animals do fly, we cannot conclude that all cats can fly without additional information about which specific animals they belong to."
+        },
+        {
+          "prompt": "Explain in 2 sentences what machine learning is.",
+          "response": "Machine Learning is a subfield of artificial intelligence that involves algorithms and statistical models allowing computers to learn from data without being explicitly programmed. It enables systems to improve their performance on specific tasks through experience or exposure to more data, making it possible for machines to make predictions or decisions based on patterns in the input data."
+        },
+        {
+          "prompt": "What does this Python code do: for i in range(5): print(i)",
+          "response": "This Python code is using a `for` loop to iterate over the numbers 0 through 4 (inclusive). For each iteration, it prints out the current value of `i`. So when you run this code, it will output:\n\n```\n0\n1\n2\n3\n4\n```"
+        }
+      ],
+      "raw_data": {
+        "model": "qwen2.5:1.5b",
+        "port": 11434,
+        "timestamp": 1778926959.9833057,
+        "tests": [
+          {
+            "category": "Factual Knowledge",
+            "prompt": "What is the capital of France?",
+            "response": "The capital of France is Paris.",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Found keywords: Paris, paris"
+            ],
+            "response_length": 31
+          },
+          {
+            "category": "Math",
+            "prompt": "Calculate: 15 + 27",
+            "response": "To calculate \\(15 + 27\\), you simply add the two numbers together:\n\n\\(15 + 27 = 42\\)",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Found keywords: 42"
+            ],
+            "response_length": 84
+          },
+          {
+            "category": "Instruction Following",
+            "prompt": "List exactly 3 colors, separated by commas.",
+            "response": "Red, Blue, Green",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Format check passed"
+            ],
+            "response_length": 16
+          },
+          {
+            "category": "Reasoning",
+            "prompt": "If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.",
+            "response": "No.\n\nExplanation: The statement \"all cats are animals\" means that every cat belongs to the category of animals. However, just because something is an animal does not automatically mean it can fly. Some animals, like birds, can fly, while others cannot. Therefore, even if all cats are animals and some animals do fly, we cannot conclude that all cats can fly without additional information about which specific animals they belong to.",
+            "score": 15,
+            "max_score": 15,
+            "reasons": [
+              "Found keywords: no, not, cannot, No"
+            ],
+            "response_length": 434
+          },
+          {
+            "category": "Coherence",
+            "prompt": "Explain in 2 sentences what machine learning is.",
+            "response": "Machine Learning is a subfield of artificial intelligence that involves algorithms and statistical models allowing computers to learn from data without being explicitly programmed. It enables systems to improve their performance on specific tasks through experience or exposure to more data, making it possible for machines to make predictions or decisions based on patterns in the input data.",
+            "score": 10,
+            "max_score": 10,
+            "reasons": [
+              "Format check passed"
+            ],
+            "response_length": 393
+          },
+          {
+            "category": "Code Understanding",
+            "prompt": "What does this Python code do: for i in range(5): print(i)",
+            "response": "This Python code is using a `for` loop to iterate over the numbers 0 through 4 (inclusive). For each iteration, it prints out the current value of `i`. So when you run this code, it will output:\n\n```\n0\n1\n2\n3\n4\n```",
+            "score": 15,
+            "max_score": 15,
+            "reasons": [
+              "Found keywords: print, 0, 4, loop, numbers"
+            ],
+            "response_length": 213
+          }
+        ],
+        "total_score": 70,
+        "max_score": 70,
+        "percentage": 100.0,
+        "rating": "Excellent"
+      }
+    }
+  ]
+}
