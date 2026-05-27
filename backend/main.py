@@ -631,6 +631,25 @@ async def _list_ollama_models() -> list[str]:
         return []
 
 
+def _match_available_ollama_model(model: str, available_models: list[str]) -> str | None:
+    """Return an installed Ollama model identifier compatible with `model`."""
+    if not model:
+        return None
+
+    installed = set(available_models)
+    if model in installed:
+        return model
+
+    base = model.split(":", 1)[0]
+    latest_variant = f"{base}:latest"
+    if latest_variant in installed:
+        return latest_variant
+    if base in installed:
+        return base
+
+    return None
+
+
 async def _pull_ollama_model(model: str):
     """Pull a model from Ollama registry and wait until it is available locally."""
     timeout = httpx.Timeout(timeout=3600.0, connect=10.0)
@@ -655,7 +674,7 @@ async def _pull_ollama_model(model: str):
         raise HTTPException(status_code=400, detail=f"Ollama pull failed for '{model}': {payload['error']}")
 
     available_models = await _list_ollama_models()
-    if model not in available_models:
+    if not _match_available_ollama_model(model, available_models):
         raise HTTPException(status_code=500, detail=f"Model '{model}' was pulled but is still unavailable")
 
 
@@ -677,6 +696,10 @@ async def _resolve_and_validate_model(
     if not available_models:
         raise HTTPException(status_code=503, detail="Cannot connect to Ollama or no models are installed")
 
+    runtime_model = _match_available_ollama_model(resolved, available_models)
+    if runtime_model is not None:
+        return runtime_model
+
     if resolved not in available_models:
         if not auto_pull:
             raise HTTPException(
@@ -693,6 +716,13 @@ async def _resolve_and_validate_model(
         if pull_status_callback:
             pull_status_callback(f"Model '{resolved}' pulled successfully")
 
+        available_models = await _list_ollama_models()
+        runtime_model = _match_available_ollama_model(resolved, available_models)
+        if runtime_model is not None:
+            return runtime_model
+
+        raise HTTPException(status_code=500, detail=f"Model '{resolved}' was pulled but is still unavailable")
+
     return resolved
 
 
@@ -705,10 +735,11 @@ def _build_model_catalog(installed_models: list[str]) -> list[dict]:
     for model in DEFAULT_MODELS:
         model_value = model["value"]
         resolved = _get_model_name(model_value, "ollama")
+        installed = _match_available_ollama_model(resolved, installed_models) is not None
         models.append({
             "value": model_value,
             "label": model["label"],
-            "installed": resolved in installed_set,
+            "installed": installed,
         })
         seen.add(model_value)
 
@@ -1131,7 +1162,7 @@ async def start_container(request: DeploymentRequest, background_tasks: Backgrou
 
     if request.technology == "ollama":
         installed_models = await _list_ollama_models()
-        if resolved not in installed_models:
+        if _match_available_ollama_model(resolved, installed_models) is None:
             deployment_state["container"]["status"] = "pulling"
             deployment_state["container"]["technology"] = request.technology
             deployment_state["container"]["model"] = request.model
@@ -1471,6 +1502,11 @@ async def pull_model(model: str, technology: str = "ollama"):
 async def model_health_check(model: str, technology: str = "ollama"):
     """Send a test prompt to the model and verify it responds."""
     resolved = _get_model_name(model, technology)
+    if technology == "ollama":
+        try:
+            resolved = await _resolve_and_validate_model(model, technology, auto_pull=False)
+        except HTTPException as e:
+            return {"healthy": False, "response": str(e.detail), "model": resolved}
     base_url = _ollama_base_url()
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
@@ -1653,7 +1689,12 @@ async def _run_all_tests_background(
     last config in a sweep should do that.
     """
     global benchmark_state
-    model_name = _get_model_name(model, technology)
+    if technology == "ollama":
+        available = await _list_ollama_models()
+        resolved = _get_model_name(model, technology)
+        model_name = _match_available_ollama_model(resolved, available) or resolved
+    else:
+        model_name = _get_model_name(model, technology)
     port = TECH_PORTS.get(technology, 11434)
     result_filepath = ""
 
