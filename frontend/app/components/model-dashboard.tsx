@@ -364,6 +364,12 @@ const ANALYSIS_WIDGETS: WidgetDef[] = [
     description: "Composite score radial bar chart",
     group: "analysis",
   },
+  {
+    id: "enormHeatmap",
+    label: "E_norm heatmap",
+    description: "Normalized efficiency in CPU cores × RAM GB space",
+    group: "analysis",
+  },
 ];
 
 const BAR_WIDGETS: WidgetDef[] = BAR_METRICS.map((m) => ({
@@ -1116,7 +1122,223 @@ function HeatmapWidget({ aggregates }: { aggregates: ModelAggregate[] }) {
   );
 }
 
-// ─── 7. Horizontal bar chart (per metric) ─────────────────────────────────────
+// ─── 7. E_norm heatmap (CPU_cores × RAM_GB per model) ────────────────────────
+
+/**
+ * E = avg_tokens_per_second / sqrt((avg_cpu_percent/100) × (avg_memory_percent/100))
+ * Captures how much throughput the model delivers per unit of combined resource cost.
+ * E_norm is min-max normalised to [0, 100] across all (cpu_cores, ram_gb) cells
+ * for the selected base model.
+ */
+function EfficHeatmapWidget({
+  usableFiles,
+  summaryCache,
+}: {
+  usableFiles: BenchmarkResultFile[];
+  summaryCache: Record<string, BenchmarkSummary>;
+}) {
+  const baseModels = useMemo(() => {
+    const s = new Set<string>();
+    usableFiles.forEach((f) => {
+      if (f.model && summaryCache[f.filename]) s.add(f.model);
+    });
+    return Array.from(s).sort((a, b) => a.localeCompare(b));
+  }, [usableFiles, summaryCache]);
+
+  const [selectedModel, setSelectedModel] = useState<string>("");
+  const activeModel = selectedModel || baseModels[0] || "";
+
+  const modelFiles = useMemo(
+    () =>
+      usableFiles.filter(
+        (f) =>
+          f.model === activeModel &&
+          summaryCache[f.filename] &&
+          f.cpu_cores != null &&
+          f.ram_gb != null,
+      ),
+    [usableFiles, summaryCache, activeModel],
+  );
+
+  const cpuValues = useMemo(
+    () =>
+      [...new Set(modelFiles.map((f) => f.cpu_cores as number))].sort(
+        (a, b) => a - b,
+      ),
+    [modelFiles],
+  );
+  const ramValues = useMemo(
+    () =>
+      [...new Set(modelFiles.map((f) => f.ram_gb as number))].sort(
+        (a, b) => a - b,
+      ),
+    [modelFiles],
+  );
+
+  const cellData = useMemo(() => {
+    const acc = new Map<
+      string,
+      { eSum: number; count: number; tok: number; cpu: number; mem: number }
+    >();
+    modelFiles.forEach((f) => {
+      const key = `${f.cpu_cores}_${f.ram_gb}`;
+      const s = summaryCache[f.filename]?.summary;
+      if (!s) return;
+      const tok = s.avg_tokens_per_second || 0;
+      const cpu = s.avg_cpu_percent || 0;
+      const mem = s.avg_memory_percent || 0;
+      const denom = Math.sqrt((cpu / 100) * (mem / 100));
+      const e = denom > 0 ? tok / denom : 0;
+      const prev = acc.get(key) ?? { eSum: 0, count: 0, tok: 0, cpu: 0, mem: 0 };
+      acc.set(key, {
+        eSum: prev.eSum + e,
+        count: prev.count + 1,
+        tok: prev.tok + tok,
+        cpu: prev.cpu + cpu,
+        mem: prev.mem + mem,
+      });
+    });
+    const result = new Map<
+      string,
+      { e: number; tok: number; cpu: number; mem: number }
+    >();
+    acc.forEach((v, k) => {
+      result.set(k, {
+        e: v.count > 0 ? v.eSum / v.count : 0,
+        tok: v.count > 0 ? v.tok / v.count : 0,
+        cpu: v.count > 0 ? v.cpu / v.count : 0,
+        mem: v.count > 0 ? v.mem / v.count : 0,
+      });
+    });
+    return result;
+  }, [modelFiles, summaryCache]);
+
+  const eNorm = useMemo(() => {
+    const vals = [...cellData.values()].map((v) => v.e).filter((v) => v > 0);
+    if (!vals.length) return new Map<string, number>();
+    const minE = Math.min(...vals);
+    const maxE = Math.max(...vals);
+    const norm = new Map<string, number>();
+    cellData.forEach((v, k) => {
+      norm.set(
+        k,
+        maxE > minE ? Math.round(((v.e - minE) / (maxE - minE)) * 100) : 50,
+      );
+    });
+    return norm;
+  }, [cellData]);
+
+  if (!activeModel || cpuValues.length === 0 || ramValues.length === 0) {
+    return (
+      <WidgetCard
+        title="E_norm heatmap"
+        hint="CPU cores × RAM GB — select a model to view"
+        fullWidth
+      >
+        <p className="text-sm text-zinc-400 py-6 text-center">
+          {baseModels.length === 0
+            ? "No benchmark data available."
+            : "No hardware-variant data found for this model (result files need cpu_cores + ram_gb)."}
+        </p>
+      </WidgetCard>
+    );
+  }
+
+  return (
+    <WidgetCard
+      title="E_norm heatmap"
+      hint="E = tok/s ÷ √(cpu% × mem%) — normalised 0–100 · green = most efficient"
+      fullWidth
+    >
+      {/* Model selector */}
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-xs text-zinc-500">Model:</span>
+        <select
+          value={activeModel}
+          onChange={(e) => setSelectedModel(e.target.value)}
+          className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
+        >
+          {baseModels.map((m) => (
+            <option key={m} value={m}>
+              {m}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Heatmap grid */}
+      <div className="overflow-x-auto">
+        <table className="text-xs border-collapse">
+          <thead>
+            <tr>
+              <th className="p-2 text-left text-zinc-400 font-medium whitespace-nowrap w-24">
+                RAM ↓ / CPU →
+              </th>
+              {cpuValues.map((cpu) => (
+                <th
+                  key={cpu}
+                  className="p-2 text-center text-zinc-500 font-medium whitespace-nowrap min-w-[88px]"
+                >
+                  {cpu} cores
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {ramValues.map((ram) => (
+              <tr key={ram}>
+                <td className="p-2 text-zinc-600 font-medium whitespace-nowrap">
+                  {ram} GB RAM
+                </td>
+                {cpuValues.map((cpu) => {
+                  const key = `${cpu}_${ram}`;
+                  const score = eNorm.get(key);
+                  const cell = cellData.get(key);
+                  if (score === undefined || !cell) {
+                    return (
+                      <td key={cpu} className="p-1 text-center">
+                        <div className="rounded px-2 py-3 text-zinc-300 bg-zinc-100 text-[11px]">
+                          —
+                        </div>
+                      </td>
+                    );
+                  }
+                  const r = (v: number) => Math.round(v * 10) / 10;
+                  return (
+                    <td key={cpu} className="p-1 text-center">
+                      <div
+                        title={`${activeModel} · ${cpu} cores, ${ram} GB RAM\nE_norm: ${score} / 100\nTok/s: ${r(cell.tok)}\nCPU: ${r(cell.cpu)}%\nMem: ${r(cell.mem)}%`}
+                        className="rounded px-2 py-3 font-mono font-semibold text-white text-[11px] cursor-default select-none"
+                        style={{ backgroundColor: scoreColor(score) }}
+                      >
+                        {score}
+                      </div>
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Colour scale legend */}
+      <div className="flex items-center gap-2 mt-3 text-[10px] text-zinc-400">
+        <span>Low E_norm</span>
+        <div
+          className="h-2 flex-1 rounded"
+          style={{
+            background:
+              "linear-gradient(to right, hsl(0,65%,48%), hsl(60,65%,48%), hsl(120,65%,48%))",
+          }}
+        />
+        <span>High E_norm</span>
+      </div>
+    </WidgetCard>
+  );
+}
+
+// ─── 8. Horizontal bar chart (per metric) ─────────────────────────────────────
 
 function BarWidget({
   metric,
@@ -1734,6 +1956,15 @@ export function ModelDashboard() {
                 <HeatmapWidget aggregates={aggregatesByComposite} />
               </div>
             )}
+          {/* E_norm heatmap — full width */}
+          {selectedWidgets.has("enormHeatmap") && usableFiles.length >= 1 && (
+            <div className="xl:col-span-2">
+              <EfficHeatmapWidget
+                usableFiles={usableFiles}
+                summaryCache={summaryCache}
+              />
+            </div>
+          )}
           {/* Per-metric bar charts — in leaderboard mode each is sorted by its own metric */}
           {BAR_METRICS.map((metric) =>
             selectedWidgets.has(`bar_${metric.id}`) &&
