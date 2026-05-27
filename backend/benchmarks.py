@@ -207,6 +207,21 @@ class OllamaBenchmark:
                     )
 
                 data = response.json()
+                if data.get("error"):
+                    err_msg = str(data["error"]).strip()
+                    is_not_found = "not found" in err_msg.lower()
+                    if is_not_found or attempt >= max_retries - 1:
+                        return BenchmarkResult(
+                            prompt=prompt,
+                            response="",
+                            inference=InferenceMetrics(0, 0, 0, 0, 0),
+                            resources=resources_before,
+                            success=False,
+                            error=f"Ollama error: {err_msg} (after {attempt + 1} attempt{'s' if attempt else ''})"
+                        )
+                    last_error = f"Ollama error: {err_msg}"
+                    await asyncio.sleep(retry_delay * (retry_backoff ** attempt))
+                    continue
                 response_text = data.get("response", "")
 
                 # Extract Ollama metrics

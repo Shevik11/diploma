@@ -1,0 +1,260 @@
+{
+  "model": "mistral:7b",
+  "platform": "docker",
+  "technology": "ollama",
+  "timestamp": "2026-05-26T15:22:13.551580",
+  "status": "failed",
+  "started_at": "2026-05-26T15:22:13.551580",
+  "finished_at": "2026-05-26T15:22:13.551580",
+  "ram_gb": 4,
+  "cpu_cores": 8.0,
+  "system_info": {
+    "platform": "docker"
+  },
+  "results": [],
+  "test_results": [
+    {
+      "id": "quality",
+      "name": "Quality Test",
+      "status": "failed",
+      "duration": 0.02,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "advanced_quality",
+      "name": "Advanced Quality Test",
+      "status": "failed",
+      "duration": 0.01,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "performance",
+      "name": "Performance Test",
+      "status": "failed",
+      "duration": 0.02,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "safety_robustness",
+      "name": "Safety & Robustness Test",
+      "status": "failed",
+      "duration": 0.02,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "stress_consistency",
+      "name": "Stress & Consistency Test",
+      "status": "failed",
+      "duration": 0.0,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "hard_tests",
+      "name": "Hard Tests",
+      "status": "failed",
+      "duration": 0.0,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "multilingual",
+      "name": "Multilingual Test",
+      "status": "failed",
+      "duration": 0.01,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "summarization",
+      "name": "Summarization Test",
+      "status": "failed",
+      "duration": 0.01,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "context_window",
+      "name": "Context Window Test",
+      "status": "failed",
+      "duration": 0.02,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cost_efficiency",
+      "name": "Cost Efficiency Test",
+      "status": "failed",
+      "duration": 0.0,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_mmlu",
+      "name": "MMLU Benchmark",
+      "status": "failed",
+      "duration": 0.02,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_reasoning",
+      "name": "Reasoning Benchmark (ARC / HellaSwag / Winogrande)",
+      "status": "failed",
+      "duration": 0.01,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_gsm8k",
+      "name": "GSM8K Math Benchmark",
+      "status": "failed",
+      "duration": 0.02,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_truthfulqa",
+      "name": "TruthfulQA Benchmark",
+      "status": "failed",
+      "duration": 0.01,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_humaneval",
+      "name": "HumanEval Code Benchmark",
+      "status": "failed",
+      "duration": 0.0,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cold_start",
+      "name": "Cold Start Test",
+      "status": "failed",
+      "duration": 0.0,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "resource_usage",
+      "name": "Resource Usage Test (RAM / CPU)",
+      "status": "failed",
+      "duration": 0.0,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "oom_detection",
+      "name": "OOM Detection & Boundary Test",
+      "status": "failed",
+      "duration": 0.02,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "ram_boundary",
+      "name": "RAM Boundary Sweep (§3.3)",
+      "status": "failed",
+      "duration": 0.01,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "config_matrix",
+      "name": "Config Matrix (§3.2)",
+      "status": "failed",
+      "duration": 0.01,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "vram_monitor",
+      "name": "VRAM Monitor (§4.2)",
+      "status": "failed",
+      "duration": 0.01,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cloud_cost",
+      "name": "Cloud Cost Calculator (§6)",
+      "status": "failed",
+      "duration": 0.0,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "quant_compare",
+      "name": "Quantization Compare (Q4 vs Q8, §2.1)",
+      "status": "failed",
+      "duration": 0.01,
+      "stdout": "",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    }
+  ],
+  "summary": {
+    "total_prompts": 0,
+    "successful": 0,
+    "failed": 0,
+    "success_rate": 0,
+    "avg_tokens_per_second": 0,
+    "avg_latency_ms": 0,
+    "avg_first_token_latency_ms": 0,
+    "total_tokens_generated": 0,
+    "avg_cpu_percent": 0,
+    "avg_memory_percent": 0
+  },
+  "phase1_failed": true
+}
