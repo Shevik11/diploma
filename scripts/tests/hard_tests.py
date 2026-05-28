@@ -174,7 +174,7 @@ TEST_CASES: list[dict] = [
         # W before X, X not slot 4.
         # If Z=1,Y=2: remaining W,X in 3,4. X≠4 → W=4,X=3. W before X → W(4)<X(3) → invalid.
         # If Z=2,Y=3: remaining W,X in 1,4. X≠4 → X=1,W=4. W before X → 4<1 → invalid. X=1,W=4 → W(4) before X(1) → invalid.
-        # If Z=3,Y=4: remaining W,X in 1,2. X≠4 ✓ both options. W before X → W=1,X=2. Valid: W=1,X=2,Z=3,Y=4.
+        # If Z=3,Y=4: remaining W,X in 1,2. X!=4, both options work. W before X -> W=1,X=2. Valid: W=1,X=2,Z=3,Y=4.
         # So exactly one valid ordering: W X Z Y  (slots 1 2 3 4).
         "verify": lambda r: (
             contains_any(r, ["W, X, Z, Y", "W X Z Y", "1:W", "slot 1: W", "one valid", "only one"])

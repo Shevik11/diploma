@@ -5,7 +5,7 @@ Finds the minimum RAM configuration at which a model still meets thesis threshol
 
 Thesis mapping
 --------------
-§3.3  "Boundary test" — поступове зменшення RAM до відмови моделі
+§3.3  "Boundary test" — gradually reduce RAM until the model fails
 §3.2  Configuration matrix RAM levels: 16 / 12 / 8 / 6 / 5 / 4 / 3 / 2 / 1.5 / 1 GB
 §4.1  Thresholds: TTFT < 3 000 ms · TPS > 3 tok/s · load time < 60 s
 §4.2  Records peak RAM at each level via psutil (if available)
@@ -381,7 +381,7 @@ def run_ram_boundary_sweep(
 
             # 5. Evaluate
             eval_result = _evaluate(cold, warm)
-            status = "PASS ✓" if eval_result["passed"] else "FAIL ✗"
+            status = "PASS" if eval_result["passed"] else "FAIL"
             print(f"  {status}  —  {eval_result['reason']}")
 
             level_entry = {
