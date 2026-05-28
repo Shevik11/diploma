@@ -9,11 +9,6 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
-  RadarChart,
-  Radar,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
   ScatterChart,
   Scatter,
   ZAxis,
@@ -335,12 +330,6 @@ interface WidgetDef {
 
 const ANALYSIS_WIDGETS: WidgetDef[] = [
   {
-    id: "radar",
-    label: "Radar overview",
-    description: "Multi-metric fingerprint per model",
-    group: "analysis",
-  },
-  {
     id: "scatter",
     label: "Efficiency scatter",
     description: "Latency vs throughput bubble chart",
@@ -432,138 +421,6 @@ function TT({
         </div>
       ))}
     </div>
-  );
-}
-
-// ─── 1. Radar chart ───────────────────────────────────────────────────────────
-
-const RADAR_AXES = [
-  {
-    key: "avg_tokens_per_second",
-    label: "Tok/s",
-    higherBetter: true,
-    getValue: (a: ModelAggregate) => a.summary.avg_tokens_per_second || 0,
-  },
-  {
-    key: "avg_latency_ms",
-    label: "Latency↓",
-    higherBetter: false,
-    getValue: (a: ModelAggregate) => a.summary.avg_latency_ms || 0,
-  },
-  {
-    key: "avg_first_token_ms",
-    label: "TTFT↓",
-    higherBetter: false,
-    getValue: (a: ModelAggregate) => a.summary.avg_first_token_latency_ms || 0,
-  },
-  {
-    key: "success_rate",
-    label: "Success%",
-    higherBetter: true,
-    getValue: (a: ModelAggregate) => a.summary.success_rate || 0,
-  },
-  {
-    key: "avg_cpu_percent",
-    label: "CPU↓",
-    higherBetter: false,
-    getValue: (a: ModelAggregate) => a.summary.avg_cpu_percent || 0,
-  },
-  {
-    key: "avg_memory_percent",
-    label: "Memory↓",
-    higherBetter: false,
-    getValue: (a: ModelAggregate) => a.summary.avg_memory_percent || 0,
-  },
-  {
-    key: "test_pass_rate",
-    label: "Tests%",
-    higherBetter: true,
-    getValue: (a: ModelAggregate) => a.testPassRate * 100,
-  },
-];
-
-function RadarWidget({
-  aggregates,
-  colorMap,
-  leaderboardScores,
-}: {
-  aggregates: ModelAggregate[];
-  colorMap: Map<string, string>;
-  leaderboardScores?: Map<string, number>;
-}) {
-  // Normalize each axis across all aggregates
-  const radarData = RADAR_AXES.map((axis) => {
-    const raw = aggregates.map((a) => axis.getValue(a));
-    const scores = normalizeValues(raw, axis.higherBetter);
-    const row: Record<string, number | string> = { metric: axis.label };
-    aggregates.forEach((a, i) => {
-      row[a.model] = scores[i];
-    });
-    return row;
-  });
-
-  return (
-    <WidgetCard
-      title={
-        leaderboardScores
-          ? "Radar overview — ranked"
-          : "Radar overview"
-      }
-      hint={
-        leaderboardScores
-          ? "Models ordered by composite score · ↓ = lower is better"
-          : "All metrics normalized 0–100 · ↓ = lower is better"
-      }
-    >
-      <ResponsiveContainer width="100%" height={320}>
-        <RadarChart
-          data={radarData}
-          margin={{ top: 10, right: 30, bottom: 10, left: 30 }}
-        >
-          <PolarGrid stroke="#e4e4e7" />
-          <PolarAngleAxis
-            dataKey="metric"
-            tick={{ fontSize: 11, fill: "#71717a" }}
-          />
-          <PolarRadiusAxis
-            angle={30}
-            domain={[0, 100]}
-            tick={{ fontSize: 9, fill: "#a1a1aa" }}
-          />
-          {aggregates.map((a) => (
-            <Radar
-              key={a.model}
-              name={a.model}
-              dataKey={a.model}
-              stroke={colorMap.get(a.model) || "#18181b"}
-              fill={colorMap.get(a.model) || "#18181b"}
-              fillOpacity={0.12}
-              strokeWidth={2}
-              dot={{ r: 3 }}
-            />
-          ))}
-          <Legend
-            iconType="circle"
-            iconSize={8}
-            wrapperStyle={{ fontSize: 11, color: "#52525b" }}
-          />
-          <Tooltip
-            content={(props) => (
-              <TT
-                active={props.active}
-                payload={props.payload?.map((p) => ({
-                  name: String(p.dataKey),
-                  value: Number(p.value),
-                  color: p.color,
-                }))}
-                label={String(props.label ?? "")}
-                unit=" pts"
-              />
-            )}
-          />
-        </RadarChart>
-      </ResponsiveContainer>
-    </WidgetCard>
   );
 }
 
@@ -1162,6 +1019,8 @@ function ThroughputByDeploymentWidget({
   summaryCache: Record<string, BenchmarkSummary>;
   selectedModels: Set<string>;
 }) {
+  const isSingleModel = selectedModels.size === 1;
+
   const data = useMemo(() => {
     const byModelRam = new Map<string, { model: string; ram: number; values: number[] }>();
     usableFiles.forEach((f) => {
@@ -1180,7 +1039,21 @@ function ThroughputByDeploymentWidget({
       byModelRam.set(key, prev);
     });
 
-    // Pick optimal RAM per model at 4 cores: highest median TPS, tie -> lower RAM.
+    if (isSingleModel) {
+      // Show all RAM variants for the single selected model
+      return Array.from(byModelRam.values())
+        .sort((a, b) => a.ram - b.ram)
+        .map((entry, i) => ({
+          model: entry.model,
+          ram: entry.ram,
+          medianTok: Math.round(median(entry.values) * 100) / 100,
+          runs: entry.values.length,
+          label: `${entry.ram} GB RAM`,
+          color: paletteColor(i),
+        }));
+    }
+
+    // Multi-model: pick optimal RAM per model at 4 cores: highest median TPS, tie -> lower RAM.
     const bestByModel = new Map<
       string,
       { model: string; ram: number; medianTok: number; runs: number }
@@ -1210,12 +1083,18 @@ function ThroughputByDeploymentWidget({
         label: v.model,
         color: paletteColor(i),
       }));
-  }, [usableFiles, summaryCache, selectedModels]);
+  }, [usableFiles, summaryCache, selectedModels, isSingleModel]);
+
+  const singleModelName = isSingleModel ? Array.from(selectedModels)[0] : null;
 
   if (!data.length) {
     return (
       <WidgetCard
-        title="Throughput by model (4 cores + optimal RAM)"
+        title={
+          isSingleModel && singleModelName
+            ? `Throughput by RAM — ${singleModelName} (4 cores)`
+            : "Throughput by model (4 cores + optimal RAM)"
+        }
         hint="Ranking unavailable: no runs with exactly 4 CPU cores in current selection"
         fullWidth
       >
@@ -1229,8 +1108,16 @@ function ThroughputByDeploymentWidget({
   const barH = Math.max(220, data.length * 48 + 36);
   return (
     <WidgetCard
-      title="Throughput by model (4 cores + optimal RAM)"
-      hint="Per model: pick RAM with highest median TPS at exactly 4 CPU cores"
+      title={
+        isSingleModel && singleModelName
+          ? `Throughput by RAM — ${singleModelName} (4 cores)`
+          : "Throughput by model (4 cores + optimal RAM)"
+      }
+      hint={
+        isSingleModel
+          ? "All RAM configurations for this model at exactly 4 CPU cores"
+          : "Per model: pick RAM with highest median TPS at exactly 4 CPU cores"
+      }
       fullWidth
     >
       <div style={{ height: barH }}>
@@ -1272,14 +1159,16 @@ function ThroughputByDeploymentWidget({
                 return (
                   <div className="bg-white border border-zinc-200 rounded-lg px-3 py-2 shadow-sm text-xs space-y-0.5">
                     <div className="font-semibold text-zinc-800">
-                      {p.model}
+                      {isSingleModel ? `${p.ram} GB RAM` : p.model}
                     </div>
-                    <div className="text-zinc-600">
-                      Optimal RAM @4c:{" "}
-                      <span className="font-medium text-zinc-800">
-                        {p.ram} GB
-                      </span>
-                    </div>
+                    {!isSingleModel && (
+                      <div className="text-zinc-600">
+                        Optimal RAM @4c:{" "}
+                        <span className="font-medium text-zinc-800">
+                          {p.ram} GB
+                        </span>
+                      </div>
+                    )}
                     <div className="text-zinc-600">
                       Median TPS:{" "}
                       <span className="font-medium text-zinc-800">
@@ -1305,7 +1194,9 @@ function ThroughputByDeploymentWidget({
                 fontSize: 10,
                 fill: "#52525b",
                 formatter: (v: number, _n: string, row: { payload?: { ram?: number } }) =>
-                  v > 0 ? `${v} tok/s${row?.payload?.ram ? ` (${row.payload.ram}GB)` : ""}` : "",
+                  v > 0
+                    ? `${v} tok/s${!isSingleModel && row?.payload?.ram ? ` (${row.payload.ram}GB)` : ""}`
+                    : "",
               }}
             >
               {data.map((entry, i) => (
@@ -2596,7 +2487,7 @@ export function ModelDashboard() {
             </p>
           ) : (
             <div className="flex flex-wrap gap-2">
-              {allModels.map(({ model, label, count }) => {
+              {visibleModels.map(({ model, label, count }) => {
                 const active = selectedModels.has(model);
                 const color = colorMap.get(model) || "#18181b";
                 return (
@@ -2710,15 +2601,6 @@ export function ModelDashboard() {
       ) : (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {/* Analysis widgets — use composite-ranked order in leaderboard mode */}
-          {selectedWidgets.has("radar") && aggregatesByComposite.length >= 1 && (
-            <RadarWidget
-              aggregates={aggregatesByComposite}
-              colorMap={colorMap}
-              leaderboardScores={
-                leaderboardMode ? compositeScores : undefined
-              }
-            />
-          )}
           {selectedWidgets.has("scatter") && aggregatesByComposite.length >= 1 && (
             <ScatterWidget
               aggregates={aggregatesByComposite}
