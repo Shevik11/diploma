@@ -1651,14 +1651,14 @@ function TpsTcoParetoWidget({
 // ─── 10. E_norm heatmap (CPU_cores × RAM_GB per model) ───────────────────────
 
 /**
- * Рисунок 2.1 — теплова карта E_norm у просторі (CPU_cores × RAM_GB).
+ * E_norm heatmap (CPU_cores x RAM_GB).
  *
- * E(m, p, c) = avg_tokens_per_second / √((avg_cpu_percent/100) × (avg_memory_percent/100))
+ * E(m, p, c) = avg_tokens_per_second / sqrt((avg_cpu_percent/100) * (avg_memory_percent/100))
  *
- * E_norm(m, p, c) = E(m, p, c) / max_{(m′, p′, c′) ∈ Ω} E(m′, p′, c′)
+ * E_norm(m, p, c) = E(m, p, c) / max_{(m', p', c') in O} E(m', p', c')
  *
- * де Ω — множина всіх виміряних конфігурацій (всі моделі, платформи, апаратні налаштування).
- * E_norm ∈ [0, 1]; конфігурація з E_norm = 1 є еталонною точкою для порівняльного аналізу.
+ * O is the set of all measured configurations (all models, platforms, hardware settings).
+ * E_norm in [0, 1]; the configuration with E_norm = 1 is the reference point.
  */
 
 /** Build per-cell average E (and component metrics) for one base model. */
@@ -1862,7 +1862,7 @@ function EfficHeatmapWidget({
   if (baseModels.length === 0) {
     return (
       <WidgetCard
-        title="E_norm heatmap  (Рисунок 2.1)"
+        title="E_norm heatmap"
         hint="CPU cores × RAM GB"
         fullWidth
       >
@@ -1875,20 +1875,20 @@ function EfficHeatmapWidget({
 
   return (
     <WidgetCard
-      title="E_norm heatmap "
-      hint="E_norm = E(m,p,c) / max_Ω E  ·  E = tok/s ÷ √(cpu% × mem%)  ·  1.000 = еталон"
+      title="E_norm heatmap"
+      hint="E_norm = E(m,p,c) / max E  ·  E = tok/s / sqrt(cpu% * mem%)  ·  1.000 = reference"
       fullWidth
     >
       {/* Controls row */}
       <div className="flex items-center gap-3 mb-5 flex-wrap">
         <label className="flex items-center gap-2 text-xs text-zinc-600">
-          <span className="text-zinc-500">Модель:</span>
+          <span className="text-zinc-500">Model:</span>
           <select
             value={modelFilter}
             onChange={(e) => setModelFilter(e.target.value)}
             className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
           >
-            <option value="">Всі моделі ({baseModels.length})</option>
+            <option value="">All models ({baseModels.length})</option>
             {baseModels.map((m) => (
               <option key={m} value={m}>
                 {m}
@@ -1901,7 +1901,7 @@ function EfficHeatmapWidget({
               onClick={() => setModelFilter("")}
               className="text-zinc-400 hover:text-zinc-700 underline"
             >
-              скинути
+              reset
             </button>
           )}
         </label>
@@ -1940,7 +1940,7 @@ function EfficHeatmapWidget({
 
       {/* Colour scale legend */}
       <div className="flex items-center gap-2 mt-4 text-[10px] text-zinc-400">
-        <span>0 (найгірше)</span>
+        <span>0 (worst)</span>
         <div
           className="h-2 flex-1 rounded"
           style={{
@@ -1948,7 +1948,7 @@ function EfficHeatmapWidget({
               "linear-gradient(to right, hsl(0,65%,48%), hsl(60,65%,48%), hsl(120,65%,48%))",
           }}
         />
-        <span>1 (еталон ★)</span>
+        <span>1 (reference)</span>
       </div>
     </WidgetCard>
   );

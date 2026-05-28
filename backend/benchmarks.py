@@ -11,14 +11,10 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 
 
-# Always resolve relative to this file, regardless of the process cwd
-# (uvicorn may be launched from the repo root or from `backend/`). The
-# previous code had a fallback to `<repo>/results/` triggered when this
-# folder was empty at import time — that produced confusing behavior:
-# a fresh checkout would silently switch to the repo-root folder for
-# the lifetime of the process and never come back, so newly-saved
-# results in `backend/results/` would be invisible to the API. We
-# unconditionally create the canonical folder and stick with it.
+# Resolve relative to this file so it works whether uvicorn is launched
+# from the repo root or from `backend/`. Falls back to `<repo>/results/`
+# if `backend/results/` has no JSON files yet (e.g. first run from the
+# repo root where results were previously saved at the top level).
 RESULTS_DIR = Path(__file__).parent / "results"
 if not any(RESULTS_DIR.glob("*.json")):
     _parent_results = Path(__file__).parent.parent / "results"

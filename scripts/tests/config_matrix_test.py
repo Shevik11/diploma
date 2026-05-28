@@ -444,7 +444,7 @@ def run_config_matrix(
 
             # 5. Evaluate
             evaluation = _evaluate(cold, warm)
-            status = "PASS ✓" if evaluation["passed"] else "FAIL ✗"
+            status = "PASS" if evaluation["passed"] else "FAIL"
             print(f"  {status}  —  {evaluation['reason']}\n")
 
             results["combos"].append({
