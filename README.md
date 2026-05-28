@@ -42,6 +42,40 @@
 
 ---
 
+## Screenshots
+
+# Dashboard page
+
+<img width="1528" height="846" alt="image" src="https://github.com/user-attachments/assets/f549af11-fc4e-465f-89d7-94f7a999aeef" />
+
+<img width="1626" height="778" alt="image" src="https://github.com/user-attachments/assets/1f9b3f95-9a49-484e-bb79-b61c6e699f7b" />
+
+<img width="1612" height="748" alt="image" src="https://github.com/user-attachments/assets/b7d3b6dd-6676-41aa-aa0a-99d4ddecad9c" />
+
+
+# Test page
+
+<img width="1818" height="758" alt="image" src="https://github.com/user-attachments/assets/dc78696f-c22e-496f-a839-04503eee4ed8" />
+
+<img width="1543" height="535" alt="image" src="https://github.com/user-attachments/assets/ecb7b189-d16d-4699-bbea-ed874c66b50d" />
+
+<img width="1601" height="580" alt="image" src="https://github.com/user-attachments/assets/a8c652a0-6908-46d5-bb77-e89960ac7223" />
+
+<img width="1562" height="596" alt="image" src="https://github.com/user-attachments/assets/125e8710-2574-47f6-a17a-8a2232162e2e" />
+
+
+# Compare page
+
+<img width="1512" height="863" alt="image" src="https://github.com/user-attachments/assets/1b3a543f-9cd3-4bad-be59-061c683f3af6" />
+
+# Top models page
+
+<img width="1557" height="872" alt="image" src="https://github.com/user-attachments/assets/c18c14ec-f39c-4d80-987c-dcc7d20623f7" />
+
+<img width="1558" height="842" alt="image" src="https://github.com/user-attachments/assets/94109502-66fe-4294-a2a0-d07bdea51d9d" />
+
+---
+
 ## 🧱 Опис основних файлів
 
 | Файл / Модуль | Призначення |
