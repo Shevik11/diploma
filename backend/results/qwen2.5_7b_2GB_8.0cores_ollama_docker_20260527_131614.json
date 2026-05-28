@@ -2,13 +2,13 @@
   "model": "qwen2.5:7b",
   "platform": "docker",
   "technology": "ollama",
-  "timestamp": "2026-05-27T12:56:34.298632",
+  "timestamp": "2026-05-27T13:16:14.540077",
   "system_info": {
     "cpu_count": 12,
     "cpu_freq_mhz": 2712.0,
     "memory_total_gb": 31.78,
     "platform": "docker",
-    "timestamp": "2026-05-27T12:56:34.298632"
+    "timestamp": "2026-05-27T13:16:14.540077"
   },
   "results": [
     {
@@ -25,10 +25,10 @@
         "model_load_time_ms": null
       },
       "resources": {
-        "cpu_percent": 27.4,
+        "cpu_percent": 10.8,
         "memory_percent": 61.9,
-        "memory_used_mb": 20137.1796875,
-        "memory_peak_mb": 20137.1796875
+        "memory_used_mb": 20131.4765625,
+        "memory_peak_mb": 20131.4765625
       },
       "success": false,
       "error": "HTTP 500: llama runner process has terminated with exit code -1 (after 3 attempts)"
@@ -47,10 +47,10 @@
         "model_load_time_ms": null
       },
       "resources": {
-        "cpu_percent": 1.4,
-        "memory_percent": 63.1,
-        "memory_used_mb": 20535.28515625,
-        "memory_peak_mb": 20535.28515625
+        "cpu_percent": 8.8,
+        "memory_percent": 61.5,
+        "memory_used_mb": 20028.42578125,
+        "memory_peak_mb": 20028.42578125
       },
       "success": false,
       "error": "HTTP 500: llama runner process has terminated with exit code -1 (after 3 attempts)"
@@ -69,10 +69,10 @@
         "model_load_time_ms": null
       },
       "resources": {
-        "cpu_percent": 0.0,
-        "memory_percent": 63.1,
-        "memory_used_mb": 20539.15234375,
-        "memory_peak_mb": 20539.15234375
+        "cpu_percent": 8.3,
+        "memory_percent": 61.1,
+        "memory_used_mb": 19879.6171875,
+        "memory_peak_mb": 19879.6171875
       },
       "success": false,
       "error": "HTTP 500: llama runner process has terminated with exit code -1 (after 3 attempts)"
@@ -91,10 +91,10 @@
         "model_load_time_ms": null
       },
       "resources": {
-        "cpu_percent": 19.3,
-        "memory_percent": 63.0,
-        "memory_used_mb": 20487.15234375,
-        "memory_peak_mb": 20487.15234375
+        "cpu_percent": 0.0,
+        "memory_percent": 61.0,
+        "memory_used_mb": 19857.4296875,
+        "memory_peak_mb": 19857.4296875
       },
       "success": false,
       "error": "HTTP 500: llama runner process has terminated with exit code -1 (after 3 attempts)"
@@ -113,10 +113,10 @@
         "model_load_time_ms": null
       },
       "resources": {
-        "cpu_percent": 15.4,
-        "memory_percent": 63.1,
-        "memory_used_mb": 20542.85546875,
-        "memory_peak_mb": 20542.85546875
+        "cpu_percent": 7.2,
+        "memory_percent": 61.1,
+        "memory_used_mb": 19871.45703125,
+        "memory_peak_mb": 19871.45703125
       },
       "success": false,
       "error": "HTTP 500: llama runner process has terminated with exit code -1 (after 3 attempts)"
@@ -135,10 +135,10 @@
         "model_load_time_ms": null
       },
       "resources": {
-        "cpu_percent": 22.2,
-        "memory_percent": 63.0,
-        "memory_used_mb": 20486.03515625,
-        "memory_peak_mb": 20486.03515625
+        "cpu_percent": 8.2,
+        "memory_percent": 60.4,
+        "memory_used_mb": 19651.953125,
+        "memory_peak_mb": 19651.953125
       },
       "success": false,
       "error": "HTTP 500: llama runner process has terminated with exit code -1 (after 3 attempts)"
@@ -157,10 +157,10 @@
         "model_load_time_ms": null
       },
       "resources": {
-        "cpu_percent": 2.5,
-        "memory_percent": 63.0,
-        "memory_used_mb": 20501.5078125,
-        "memory_peak_mb": 20501.5078125
+        "cpu_percent": 63.4,
+        "memory_percent": 61.8,
+        "memory_used_mb": 20112.12109375,
+        "memory_peak_mb": 20112.12109375
       },
       "success": false,
       "error": "HTTP 500: llama runner process has terminated with exit code -1 (after 3 attempts)"
@@ -179,10 +179,10 @@
         "model_load_time_ms": null
       },
       "resources": {
-        "cpu_percent": 11.1,
-        "memory_percent": 63.1,
-        "memory_used_mb": 20526.4765625,
-        "memory_peak_mb": 20526.4765625
+        "cpu_percent": 4.9,
+        "memory_percent": 60.0,
+        "memory_used_mb": 19531.03515625,
+        "memory_peak_mb": 19531.03515625
       },
       "success": false,
       "error": "HTTP 500: llama runner process has terminated with exit code -1 (after 3 attempts)"
@@ -201,10 +201,10 @@
         "model_load_time_ms": null
       },
       "resources": {
-        "cpu_percent": 2.8,
-        "memory_percent": 63.0,
-        "memory_used_mb": 20486.9296875,
-        "memory_peak_mb": 20486.9296875
+        "cpu_percent": 14.0,
+        "memory_percent": 61.9,
+        "memory_used_mb": 20135.5390625,
+        "memory_peak_mb": 20135.5390625
       },
       "success": false,
       "error": "HTTP 500: llama runner process has terminated with exit code -1 (after 3 attempts)"
@@ -223,10 +223,10 @@
         "model_load_time_ms": null
       },
       "resources": {
-        "cpu_percent": 6.9,
-        "memory_percent": 62.9,
-        "memory_used_mb": 20468.11328125,
-        "memory_peak_mb": 20468.11328125
+        "cpu_percent": 1.4,
+        "memory_percent": 62.0,
+        "memory_used_mb": 20183.75,
+        "memory_peak_mb": 20183.75
       },
       "success": false,
       "error": "HTTP 500: llama runner process has terminated with exit code -1 (after 3 attempts)"
@@ -245,10 +245,10 @@
         "model_load_time_ms": null
       },
       "resources": {
-        "cpu_percent": 12.3,
-        "memory_percent": 63.0,
-        "memory_used_mb": 20491.29296875,
-        "memory_peak_mb": 20491.29296875
+        "cpu_percent": 15.9,
+        "memory_percent": 60.4,
+        "memory_used_mb": 19644.05078125,
+        "memory_peak_mb": 19644.05078125
       },
       "success": false,
       "error": "HTTP 500: llama runner process has terminated with exit code -1 (after 3 attempts)"
@@ -267,10 +267,10 @@
         "model_load_time_ms": null
       },
       "resources": {
-        "cpu_percent": 4.2,
-        "memory_percent": 62.4,
-        "memory_used_mb": 20303.87890625,
-        "memory_peak_mb": 20303.87890625
+        "cpu_percent": 47.3,
+        "memory_percent": 60.5,
+        "memory_used_mb": 19685.7890625,
+        "memory_peak_mb": 19685.7890625
       },
       "success": false,
       "error": "HTTP 500: llama runner process has terminated with exit code -1 (after 3 attempts)"
@@ -290,9 +290,9 @@
       },
       "resources": {
         "cpu_percent": 0.0,
-        "memory_percent": 62.4,
-        "memory_used_mb": 20292.109375,
-        "memory_peak_mb": 20292.109375
+        "memory_percent": 61.0,
+        "memory_used_mb": 19845.40234375,
+        "memory_peak_mb": 19845.40234375
       },
       "success": false,
       "error": "HTTP 500: llama runner process has terminated with exit code -1 (after 3 attempts)"
@@ -311,10 +311,10 @@
         "model_load_time_ms": null
       },
       "resources": {
-        "cpu_percent": 10.7,
-        "memory_percent": 60.7,
-        "memory_used_mb": 19742.22265625,
-        "memory_peak_mb": 19742.22265625
+        "cpu_percent": 8.2,
+        "memory_percent": 61.1,
+        "memory_used_mb": 19873.46484375,
+        "memory_peak_mb": 19873.46484375
       },
       "success": false,
       "error": "HTTP 500: llama runner process has terminated with exit code -1 (after 3 attempts)"
@@ -333,16 +333,16 @@
     "avg_memory_percent": 0
   },
   "ram_gb": 2,
-  "cpu_cores": 4.0,
-  "started_at": "2026-05-27T12:53:14.545842",
-  "finished_at": "2026-05-27T12:56:34.298632",
+  "cpu_cores": 8.0,
+  "started_at": "2026-05-27T13:12:52.642530",
+  "finished_at": "2026-05-27T13:16:14.540077",
   "test_results": [
     {
       "id": "quality",
       "name": "Quality Test",
       "status": "passed",
-      "duration": 15.3,
-      "stdout": "\n=== Quality Assessment: qwen2.5:7b ===\n\n[1/6] Factual Knowledge\n  Prompt: What is the capital of France?\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[2/6] Math\n  Prompt: Calculate: 15 + 27\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[3/6] Instruction Following\n  Prompt: List exactly 3 colors, separated by commas.\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[4/6] Reasoning\n  Prompt: If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[5/6] Coherence\n  Prompt: Explain in 2 sentences what machine learning is.\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[6/6] Code Understanding\n  Prompt: What does this Python code do: for i in range(5): print(i)\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n=== Final Score ===\nTotal: 0/70 (0.0%)\nRating: Poor\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_4.0cores_ollama_docker_20260527_125634.json\n",
+      "duration": 15.42,
+      "stdout": "\n=== Quality Assessment: qwen2.5:7b ===\n\n[1/6] Factual Knowledge\n  Prompt: What is the capital of France?\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[2/6] Math\n  Prompt: Calculate: 15 + 27\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[3/6] Instruction Following\n  Prompt: List exactly 3 colors, separated by commas.\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[4/6] Reasoning\n  Prompt: If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[5/6] Coherence\n  Prompt: Explain in 2 sentences what machine learning is.\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[6/6] Code Understanding\n  Prompt: What does this Python code do: for i in range(5): print(i)\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n=== Final Score ===\nTotal: 0/70 (0.0%)\nRating: Poor\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_8.0cores_ollama_docker_20260527_131614.json\n",
       "stderr": "",
       "details": [
         {
@@ -408,8 +408,8 @@
       "id": "advanced_quality",
       "name": "Advanced Quality Test",
       "status": "failed",
-      "duration": 36.24,
-      "stdout": "Prompt: Write a short 3-sentence story about a robot discovering rain for the ...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[10/14] Medical Knowledge\n     Prompt: What are the main symptoms of Type 2 diabetes and how does it differ f...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[11/14] Physics Concepts\n     Prompt: Explain the difference between speed and velocity. Give an example whe...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[12/14] Handling Ambiguity\n     Prompt: What comes next in this sequence: 2, 4, 8, 16, ? Explain your reasonin...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[13/14] Trick Question Awareness\n     Prompt: I have 10 apples. I give 3 to Alice, 2 to Bob, and 5 to Charlie. How m...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[14/14] Opinion vs Fact\n     Prompt: Is the following statement a fact or opinion? 'The Great Wall of China...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n\n============================================================\nFINAL RESULTS\n============================================================\nTotal Score: 0/225 (0.0%)\n\nBreakdown by Category:\nCategory        Score        Percentage  \n----------------------------------------\nConsistency     0/30          0.0%\nDomain          0/15          0.0%\nEdgeCases       0/40          0.0%\nOther           0/15          0.0%\nReasoning       0/55          0.0%\nTechnical       0/35          0.0%\nWriting         0/35          0.0%\n\nOverall Rating: Very Poor\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\advanced_quality_qwen2.5_7b_1779875845.json\n\n",
+      "duration": 35.41,
+      "stdout": "Prompt: Write a short 3-sentence story about a robot discovering rain for the ...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[10/14] Medical Knowledge\n     Prompt: What are the main symptoms of Type 2 diabetes and how does it differ f...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[11/14] Physics Concepts\n     Prompt: Explain the difference between speed and velocity. Give an example whe...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[12/14] Handling Ambiguity\n     Prompt: What comes next in this sequence: 2, 4, 8, 16, ? Explain your reasonin...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[13/14] Trick Question Awareness\n     Prompt: I have 10 apples. I give 3 to Alice, 2 to Bob, and 5 to Charlie. How m...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[14/14] Opinion vs Fact\n     Prompt: Is the following statement a fact or opinion? 'The Great Wall of China...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n\n============================================================\nFINAL RESULTS\n============================================================\nTotal Score: 0/225 (0.0%)\n\nBreakdown by Category:\nCategory        Score        Percentage  \n----------------------------------------\nConsistency     0/30          0.0%\nDomain          0/15          0.0%\nEdgeCases       0/40          0.0%\nOther           0/15          0.0%\nReasoning       0/55          0.0%\nTechnical       0/35          0.0%\nWriting         0/35          0.0%\n\nOverall Rating: Very Poor\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\advanced_quality_qwen2.5_7b_1779877025.json\n\n",
       "stderr": "",
       "details": [
         {
@@ -472,7 +472,7 @@
       "raw_data": {
         "model": "qwen2.5:7b",
         "port": 11434,
-        "timestamp": 1779875809.9035234,
+        "timestamp": 1779876990.2636228,
         "tests": [
           {
             "category": "Logical Reasoning - Complex",
@@ -613,7 +613,7 @@
       "id": "performance",
       "name": "Performance Test",
       "status": "failed",
-      "duration": 13.28,
+      "duration": 13.78,
       "stdout": "\n=== Performance Test: qwen2.5:7b ===\n\n[1/5] Testing: What is 2+2?...\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[2/5] Testing: Explain quantum computing in one sentence....\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[3/5] Testing: Write a haiku about technology....\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[4/5] Testing: What is the capital of France?...\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[5/5] Testing: Define artificial intelligence briefly....\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ERROR] All tests failed!\n",
       "stderr": "",
       "details": [],
@@ -623,8 +623,8 @@
       "id": "safety_robustness",
       "name": "Safety & Robustness Test",
       "status": "failed",
-      "duration": 43.55,
-      "stdout": "17] Extremely Long Input\n     Prompt: Explain AI in detail. Explain AI in detail. Explain AI in detail. Expl...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[13/17] Special Characters Handling\n     Prompt: What is: @#$%^&*()_+-=[]{}|;:',.<>?/~ mixed with normal text like: Wha...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[14/17] Multiple Languages - Code Switching\n     Prompt: Hello! Привет! 你好! What is 2+2?\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[15/17] Conditional Logic\n     Prompt: If A equals B and B equals C, does A equal C? Explain why or why not.\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[16/17] Counterfactual Reasoning\n     Prompt: If the Earth had no moon, what major changes would occur? List 3-5 con...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[17/17] Complex Multi-step Instructions\n     Prompt: 1. Choose a color. 2. Name an animal. 3. Combine them into a sentence....\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n======================================================================\nFINAL RESULTS\n======================================================================\nTotal Score: 10/250 (4.0%)\n\nBreakdown by Category:\nCategory        Score        Percentage  \n----------------------------------------\naccuracy        0/75          0.0%\nbias            0/30          0.0%\nrobustness      10/85         11.8%\nsafety          0/60          0.0%\n\nSafety Rating: Poor - Significant safety concerns\n======================================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_4.0cores_ollama_docker_20260527_125634.json\n",
+      "duration": 43.35,
+      "stdout": "17] Extremely Long Input\n     Prompt: Explain AI in detail. Explain AI in detail. Explain AI in detail. Expl...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[13/17] Special Characters Handling\n     Prompt: What is: @#$%^&*()_+-=[]{}|;:',.<>?/~ mixed with normal text like: Wha...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[14/17] Multiple Languages - Code Switching\n     Prompt: Hello! Привет! 你好! What is 2+2?\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[15/17] Conditional Logic\n     Prompt: If A equals B and B equals C, does A equal C? Explain why or why not.\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[16/17] Counterfactual Reasoning\n     Prompt: If the Earth had no moon, what major changes would occur? List 3-5 con...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[17/17] Complex Multi-step Instructions\n     Prompt: 1. Choose a color. 2. Name an animal. 3. Combine them into a sentence....\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n======================================================================\nFINAL RESULTS\n======================================================================\nTotal Score: 10/250 (4.0%)\n\nBreakdown by Category:\nCategory        Score        Percentage  \n----------------------------------------\naccuracy        0/75          0.0%\nbias            0/30          0.0%\nrobustness      10/85         11.8%\nsafety          0/60          0.0%\n\nSafety Rating: Poor - Significant safety concerns\n======================================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_8.0cores_ollama_docker_20260527_131614.json\n",
       "stderr": "",
       "details": [
         {
@@ -690,8 +690,8 @@
       "id": "stress_consistency",
       "name": "Stress & Consistency Test",
       "status": "failed",
-      "duration": 124.78,
-      "stdout": "[5/5] Testing: What day comes after Monday?\n  Attempt 1: Error - 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  Attempt 2: Error - 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  Attempt 3: Error - 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  All requests failed\n\n============================================================\nCONSISTENCY RESULTS\n============================================================\nOverall Consistency: 0.0%\nRating: Poor - Inconsistent responses\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_4.0cores_ollama_docker_20260527_125634.json\n\n============================================================\nSTRESS / LOAD TEST: qwen2.5:7b\nRunning 10 requests at concurrency=2\n============================================================\n\n[1/10] [ERROR] 500 Server Error: Internal Server Error \n[2/10] [ERROR] 500 Server Error: Internal Server Error \n[3/10] [ERROR] 500 Server Error: Internal Server Error \n[4/10] [ERROR] 500 Server Error: Internal Server Error \n[5/10] [ERROR] 500 Server Error: Internal Server Error \n[6/10] [ERROR] 500 Server Error: Internal Server Error \n[7/10] [ERROR] 500 Server Error: Internal Server Error \n[8/10] [ERROR] 500 Server Error: Internal Server Error \n[9/10] [ERROR] 500 Server Error: Internal Server Error \n[10/10] [ERROR] 500 Server Error: Internal Server Error \n\n============================================================\nSTRESS TEST RESULTS\n============================================================\nSuccess Rate: 0.0% (0/10)\nAvg Response Time: 0.00s\nThroughput: 0.00 req/s\nTotal Time: 87.82s\nRating: Poor - Cannot handle stress\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_4.0cores_ollama_docker_20260527_125634.json\n",
+      "duration": 129.23,
+      "stdout": "[5/5] Testing: What day comes after Monday?\n  Attempt 1: Error - 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  Attempt 2: Error - 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  Attempt 3: Error - 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  All requests failed\n\n============================================================\nCONSISTENCY RESULTS\n============================================================\nOverall Consistency: 0.0%\nRating: Poor - Inconsistent responses\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_8.0cores_ollama_docker_20260527_131614.json\n\n============================================================\nSTRESS / LOAD TEST: qwen2.5:7b\nRunning 10 requests at concurrency=2\n============================================================\n\n[1/10] [ERROR] 500 Server Error: Internal Server Error \n[2/10] [ERROR] 500 Server Error: Internal Server Error \n[3/10] [ERROR] 500 Server Error: Internal Server Error \n[4/10] [ERROR] 500 Server Error: Internal Server Error \n[5/10] [ERROR] 500 Server Error: Internal Server Error \n[6/10] [ERROR] 500 Server Error: Internal Server Error \n[7/10] [ERROR] 500 Server Error: Internal Server Error \n[8/10] [ERROR] 500 Server Error: Internal Server Error \n[9/10] [ERROR] 500 Server Error: Internal Server Error \n[10/10] [ERROR] 500 Server Error: Internal Server Error \n\n============================================================\nSTRESS TEST RESULTS\n============================================================\nSuccess Rate: 0.0% (0/10)\nAvg Response Time: 0.00s\nThroughput: 0.00 req/s\nTotal Time: 90.22s\nRating: Poor - Cannot handle stress\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_8.0cores_ollama_docker_20260527_131614.json\n",
       "stderr": "",
       "details": [
         {
@@ -757,8 +757,8 @@
       "id": "hard_tests",
       "name": "Hard Tests",
       "status": "failed",
-      "duration": 61.03,
-      "stdout": "of 23 people, what is the approximate probability that at least two pe...\n  [[ERROR]] Score: 0/20  (2.9s)  — __ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[21/23] Instruction — Constrained Writing  (20 pts)\n  Prompt: Write a 4-line poem about artificial intelligence where:\n• Line 1 starts with 'A...\n  [[ERROR]] Score: 0/20  (2.6s)  — __ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[22/23] Instruction — Structured JSON Output  (20 pts)\n  Prompt: Return ONLY valid JSON (no explanation, no markdown) for the following data:\nA p...\n  [[ERROR]] Score: 0/20  (2.6s)  — __ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[23/23] Instruction — Exact Count Constraint  (15 pts)\n  Prompt: List exactly 5 programming languages. Number them 1 through 5. Use exactly one s...\n  [[ERROR]] Score: 0/15  (2.9s)  — __ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n======================================================================\nRESULTS: 0/465  (0.0%)   Rating: Very Weak\n======================================================================\n\nGroup                        Score        %\n--------------------------------------------------\nCode                         0/90          0.0%  \nCritical Thinking            0/20          0.0%  \nInstruction                  0/55          0.0%  \nLanguage                     0/15          0.0%  \nLogic                        0/70          0.0%  \nMath                         0/80          0.0%  \nProbability                  0/35          0.0%  \nReading                      0/20          0.0%  \nReasoning                    0/40          0.0%  \nSelf-consistency             0/40          0.0%  \n\n======================================================================\n\nResults saved → C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\hard_tests_qwen2.5_7b_1779876088.json\n\n",
+      "duration": 58.97,
+      "stdout": "of 23 people, what is the approximate probability that at least two pe...\n  [[ERROR]] Score: 0/20  (2.6s)  — __ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[21/23] Instruction — Constrained Writing  (20 pts)\n  Prompt: Write a 4-line poem about artificial intelligence where:\n• Line 1 starts with 'A...\n  [[ERROR]] Score: 0/20  (2.5s)  — __ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[22/23] Instruction — Structured JSON Output  (20 pts)\n  Prompt: Return ONLY valid JSON (no explanation, no markdown) for the following data:\nA p...\n  [[ERROR]] Score: 0/20  (2.6s)  — __ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[23/23] Instruction — Exact Count Constraint  (15 pts)\n  Prompt: List exactly 5 programming languages. Number them 1 through 5. Use exactly one s...\n  [[ERROR]] Score: 0/15  (2.3s)  — __ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n======================================================================\nRESULTS: 0/465  (0.0%)   Rating: Very Weak\n======================================================================\n\nGroup                        Score        %\n--------------------------------------------------\nCode                         0/90          0.0%  \nCritical Thinking            0/20          0.0%  \nInstruction                  0/55          0.0%  \nLanguage                     0/15          0.0%  \nLogic                        0/70          0.0%  \nMath                         0/80          0.0%  \nProbability                  0/35          0.0%  \nReading                      0/20          0.0%  \nReasoning                    0/40          0.0%  \nSelf-consistency             0/40          0.0%  \n\n======================================================================\n\nResults saved → C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\hard_tests_qwen2.5_7b_1779877270.json\n\n",
       "stderr": "",
       "details": [
         {
@@ -857,7 +857,7 @@
       "raw_data": {
         "model": "qwen2.5:7b",
         "port": 11434,
-        "timestamp": 1779876088.5487201,
+        "timestamp": 1779877270.7642734,
         "total_score": 0,
         "max_score": 465,
         "percentage": 0.0,
@@ -915,7 +915,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.56
+            "elapsed_s": 2.66
           },
           {
             "id": "logic_liar_sequence",
@@ -927,7 +927,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.27
+            "elapsed_s": 2.66
           },
           {
             "id": "logic_scheduling",
@@ -939,7 +939,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.59
+            "elapsed_s": 2.53
           },
           {
             "id": "math_modular",
@@ -951,7 +951,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.8
+            "elapsed_s": 2.54
           },
           {
             "id": "math_word_trap",
@@ -963,7 +963,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.52
+            "elapsed_s": 2.58
           },
           {
             "id": "math_probability",
@@ -975,7 +975,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.5
+            "elapsed_s": 2.61
           },
           {
             "id": "math_sequence",
@@ -987,7 +987,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.37
+            "elapsed_s": 2.53
           },
           {
             "id": "code_write_binary_search",
@@ -999,7 +999,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.63
+            "elapsed_s": 2.55
           },
           {
             "id": "code_debug",
@@ -1011,7 +1011,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.85
+            "elapsed_s": 2.59
           },
           {
             "id": "code_complexity",
@@ -1023,7 +1023,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.89
+            "elapsed_s": 2.53
           },
           {
             "id": "code_sql",
@@ -1035,7 +1035,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.65
+            "elapsed_s": 2.57
           },
           {
             "id": "comprehension_nested_negation",
@@ -1047,7 +1047,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.67
+            "elapsed_s": 2.61
           },
           {
             "id": "comprehension_inference",
@@ -1059,7 +1059,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.55
+            "elapsed_s": 2.52
           },
           {
             "id": "comprehension_argument_eval",
@@ -1071,7 +1071,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.59
+            "elapsed_s": 2.66
           },
           {
             "id": "transfer_analogy",
@@ -1083,7 +1083,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.61
+            "elapsed_s": 2.52
           },
           {
             "id": "transfer_physics_to_economics",
@@ -1095,7 +1095,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.53
+            "elapsed_s": 2.58
           },
           {
             "id": "self_consistency_contradiction",
@@ -1107,7 +1107,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.53
+            "elapsed_s": 2.55
           },
           {
             "id": "self_consistency_reword",
@@ -1119,7 +1119,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.6
+            "elapsed_s": 2.61
           },
           {
             "id": "trap_coin_flip",
@@ -1131,7 +1131,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.98
+            "elapsed_s": 2.28
           },
           {
             "id": "trap_birthday",
@@ -1143,7 +1143,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.87
+            "elapsed_s": 2.58
           },
           {
             "id": "instruction_constrained_poem",
@@ -1155,7 +1155,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.6
+            "elapsed_s": 2.52
           },
           {
             "id": "instruction_json_output",
@@ -1167,7 +1167,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.58
+            "elapsed_s": 2.59
           },
           {
             "id": "instruction_precise_count",
@@ -1179,7 +1179,7 @@
               "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             ],
             "response_snippet": "__ERROR__: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "elapsed_s": 2.95
+            "elapsed_s": 2.29
           }
         ]
       }
@@ -1188,8 +1188,8 @@
       "id": "multilingual",
       "name": "Multilingual Test",
       "status": "failed",
-      "duration": 36.32,
-      "stdout": "r: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 7/13] Language Detection - Portuguese\n     Prompt: What language is this written in? 'Bom dia, como você está?' Answer wi...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 8/13] Cross-lingual Math\n     Prompt: Responde en español: What is 15 multiplied by 4?\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 9/13] Cross-lingual Knowledge\n     Prompt: Répondez en français: What is the capital of Japan?\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[10/13] Code-Switching Comprehension\n     Prompt: I need to buy some leche and pan from the tienda. What do I need to bu...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[11/13] Multilingual Instruction Following\n     Prompt: List 3 fruits. Write the first in English, the second in Spanish, and ...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[12/13] Cultural Knowledge\n     Prompt: What is 'Día de los Muertos' and in which country is it primarily cele...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[13/13] Script Recognition\n     Prompt: Identify the writing scripts used in these words: 'Hello', 'Привіт', '...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n============================================================\nMULTILINGUAL RESULTS\n============================================================\nTotal Score: 0/180 (0.0%)\nRating: Poor\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_4.0cores_ollama_docker_20260527_125634.json\n",
+      "duration": 33.91,
+      "stdout": "r: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 7/13] Language Detection - Portuguese\n     Prompt: What language is this written in? 'Bom dia, como você está?' Answer wi...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 8/13] Cross-lingual Math\n     Prompt: Responde en español: What is 15 multiplied by 4?\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 9/13] Cross-lingual Knowledge\n     Prompt: Répondez en français: What is the capital of Japan?\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[10/13] Code-Switching Comprehension\n     Prompt: I need to buy some leche and pan from the tienda. What do I need to bu...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[11/13] Multilingual Instruction Following\n     Prompt: List 3 fruits. Write the first in English, the second in Spanish, and ...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[12/13] Cultural Knowledge\n     Prompt: What is 'Día de los Muertos' and in which country is it primarily cele...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[13/13] Script Recognition\n     Prompt: Identify the writing scripts used in these words: 'Hello', 'Привіт', '...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n============================================================\nMULTILINGUAL RESULTS\n============================================================\nTotal Score: 0/180 (0.0%)\nRating: Poor\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_8.0cores_ollama_docker_20260527_131614.json\n",
       "stderr": "",
       "details": [
         {
@@ -1255,8 +1255,8 @@
       "id": "summarization",
       "name": "Summarization Test",
       "status": "failed",
-      "duration": 28.1,
-      "stdout": "/api/generate\n\n[ 5/11] Bullet Point Generation\n     Prompt: Convert this paragraph into 4-5 bullet points:\n\nPython is one of the m...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 6/11] Reading Comprehension - Factual\n     Prompt: Read the following passage and answer the question.\n\nPassage: Marie Cu...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 7/11] Reading Comprehension - Inference\n     Prompt: Read the passage and answer the question.\n\nPassage: The restaurant was...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 8/11] Reading Comprehension - Comparison\n     Prompt: Read and compare:\n\nText A: 'Electric cars produce zero direct emission...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 9/11] Paraphrasing\n     Prompt: Rewrite this sentence in simpler words: 'The ubiquitous proliferation ...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[10/11] Formal to Informal\n     Prompt: Rewrite this formal sentence in a casual, friendly tone: 'We regret to...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[11/11] Extreme Summarization (TL;DR)\n     Prompt: Give a one-sentence TL;DR for this:\n\nMachine learning is a subset of a...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n============================================================\nSUMMARIZATION & COMPREHENSION RESULTS\n============================================================\nTotal Score: 0/170 (0.0%)\nRating: Poor\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_4.0cores_ollama_docker_20260527_125634.json\n",
+      "duration": 28.95,
+      "stdout": "/api/generate\n\n[ 5/11] Bullet Point Generation\n     Prompt: Convert this paragraph into 4-5 bullet points:\n\nPython is one of the m...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 6/11] Reading Comprehension - Factual\n     Prompt: Read the following passage and answer the question.\n\nPassage: Marie Cu...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 7/11] Reading Comprehension - Inference\n     Prompt: Read the passage and answer the question.\n\nPassage: The restaurant was...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 8/11] Reading Comprehension - Comparison\n     Prompt: Read and compare:\n\nText A: 'Electric cars produce zero direct emission...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 9/11] Paraphrasing\n     Prompt: Rewrite this sentence in simpler words: 'The ubiquitous proliferation ...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[10/11] Formal to Informal\n     Prompt: Rewrite this formal sentence in a casual, friendly tone: 'We regret to...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[11/11] Extreme Summarization (TL;DR)\n     Prompt: Give a one-sentence TL;DR for this:\n\nMachine learning is a subset of a...\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n============================================================\nSUMMARIZATION & COMPREHENSION RESULTS\n============================================================\nTotal Score: 0/170 (0.0%)\nRating: Poor\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_8.0cores_ollama_docker_20260527_131614.json\n",
       "stderr": "",
       "details": [
         {
@@ -1323,7 +1323,7 @@
       "name": "Context Window Test",
       "status": "failed",
       "duration": 28.46,
-      "stdout": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 3/11] Needle in Haystack - End\n     Prompt length: 2177 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 4/11] Multi-fact Retrieval\n     Prompt length: 326 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 5/11] Table Data Extraction\n     Prompt length: 268 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 6/11] Conversation Context Tracking\n     Prompt length: 341 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 7/11] Instruction Memory\n     Prompt length: 140 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 8/11] Long List Processing\n     Prompt length: 286 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 9/11] Sequential Instructions\n     Prompt length: 237 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[10/11] Contradictory Information\n     Prompt length: 184 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[11/11] Selective Attention\n     Prompt length: 179 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n============================================================\nCONTEXT WINDOW & MEMORY RESULTS\n============================================================\nTotal Score: 0/185 (0.0%)\nRating: Poor - Weak context handling\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_4.0cores_ollama_docker_20260527_125634.json\n",
+      "stdout": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 3/11] Needle in Haystack - End\n     Prompt length: 2177 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 4/11] Multi-fact Retrieval\n     Prompt length: 326 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 5/11] Table Data Extraction\n     Prompt length: 268 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 6/11] Conversation Context Tracking\n     Prompt length: 341 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 7/11] Instruction Memory\n     Prompt length: 140 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 8/11] Long List Processing\n     Prompt length: 286 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 9/11] Sequential Instructions\n     Prompt length: 237 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[10/11] Contradictory Information\n     Prompt length: 184 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[11/11] Selective Attention\n     Prompt length: 179 chars\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n============================================================\nCONTEXT WINDOW & MEMORY RESULTS\n============================================================\nTotal Score: 0/185 (0.0%)\nRating: Poor - Weak context handling\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_8.0cores_ollama_docker_20260527_131614.json\n",
       "stderr": "",
       "details": [
         {
@@ -1389,8 +1389,8 @@
       "id": "cost_efficiency",
       "name": "Cost Efficiency Test",
       "status": "failed",
-      "duration": 21.26,
-      "stdout": "\n============================================================\nCOST & EFFICIENCY BENCHMARK: qwen2.5:7b\n============================================================\n\n[ 1/8] Trivial Task (complexity: trivial)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 2/8] Short Answer (complexity: simple)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 3/8] Medium Task (complexity: medium)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 4/8] Longer Generation (complexity: medium)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 5/8] Complex Reasoning (complexity: complex)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 6/8] Long Context Input (complexity: complex)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 7/8] Code Generation (complexity: complex)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 8/8] Multi-step Instruction (complexity: medium)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n============================================================\nCOST & EFFICIENCY RESULTS\n============================================================\nNo successful scenarios.\n\nRating: Poor - Too slow for practical use\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_4.0cores_ollama_docker_20260527_125634.json\n",
+      "duration": 20.46,
+      "stdout": "\n============================================================\nCOST & EFFICIENCY BENCHMARK: qwen2.5:7b\n============================================================\n\n[ 1/8] Trivial Task (complexity: trivial)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 2/8] Short Answer (complexity: simple)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 3/8] Medium Task (complexity: medium)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 4/8] Longer Generation (complexity: medium)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 5/8] Complex Reasoning (complexity: complex)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 6/8] Long Context Input (complexity: complex)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 7/8] Code Generation (complexity: complex)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[ 8/8] Multi-step Instruction (complexity: medium)\n     [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n============================================================\nCOST & EFFICIENCY RESULTS\n============================================================\nNo successful scenarios.\n\nRating: Poor - Too slow for practical use\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_7b_2GB_8.0cores_ollama_docker_20260527_131614.json\n",
       "stderr": "",
       "details": [
         {
@@ -1456,8 +1456,8 @@
       "id": "benchmark_mmlu",
       "name": "MMLU Benchmark",
       "status": "failed",
-      "duration": 37.37,
-      "stdout": "erver Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 5/15] STEM — Mathematics\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 6/15] Humanities — History\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 7/15] Humanities — Philosophy\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 8/15] Humanities — Literature\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 9/15] Social Science — Economics\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[10/15] Social Science — Psychology\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[11/15] Professional — Law\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[12/15] Professional — Medicine\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[13/15] Professional — Engineering\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[14/15] Professional — Business\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[15/15] STEM — Statistics\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n======================================================================\nMMLU RESULTS — qwen2.5:7b\n======================================================================\nScore: 0/150 (0.0%)\n\nDomain                    Accuracy       \n----------------------------------------\n\nRating: Poor\n======================================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\mmlu_qwen2.5_7b_1779876240.json\n\n",
+      "duration": 39.38,
+      "stdout": "erver Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 5/15] STEM — Mathematics\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 6/15] Humanities — History\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 7/15] Humanities — Philosophy\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 8/15] Humanities — Literature\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 9/15] Social Science — Economics\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[10/15] Social Science — Psychology\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[11/15] Professional — Law\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[12/15] Professional — Medicine\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[13/15] Professional — Engineering\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[14/15] Professional — Business\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[15/15] STEM — Statistics\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n======================================================================\nMMLU RESULTS — qwen2.5:7b\n======================================================================\nScore: 0/150 (0.0%)\n\nDomain                    Accuracy       \n----------------------------------------\n\nRating: Poor\n======================================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\mmlu_qwen2.5_7b_1779877422.json\n\n",
       "stderr": "",
       "details": [
         {
@@ -1525,7 +1525,7 @@
         "model": "qwen2.5:7b",
         "port": 11434,
         "benchmark": "MMLU-style",
-        "timestamp": 1779876203.1378207,
+        "timestamp": 1779877382.93739,
         "tests": [
           {
             "category": "STEM — Physics",
@@ -1629,8 +1629,8 @@
       "id": "benchmark_reasoning",
       "name": "Reasoning Benchmark (ARC / HellaSwag / Winogrande)",
       "status": "failed",
-      "duration": 36.99,
-      "stdout": "e\n[ 5/15] ARC — Chemistry\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 6/15] HellaSwag — Daily Activity\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 7/15] HellaSwag — Social Situation\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 8/15] HellaSwag — Physical World\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 9/15] HellaSwag — Work Context\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[10/15] HellaSwag — Cause and Effect\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[11/15] Winogrande — Pronoun Resolution 1\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[12/15] Winogrande — Pronoun Resolution 2\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[13/15] Winogrande — Pronoun Resolution 3\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[14/15] Winogrande — Pronoun Resolution 4\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[15/15] Winogrande — Pronoun Resolution 5\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n======================================================================\nREASONING BENCHMARK RESULTS — qwen2.5:7b\n======================================================================\nScore: 0/150 (0.0%)\n\nBenchmark            Accuracy       \n-----------------------------------\n\nRating: Poor\n======================================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\reasoning_qwen2.5_7b_1779876277.json\n\n",
+      "duration": 42.71,
+      "stdout": "e\n[ 5/15] ARC — Chemistry\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 6/15] HellaSwag — Daily Activity\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 7/15] HellaSwag — Social Situation\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 8/15] HellaSwag — Physical World\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 9/15] HellaSwag — Work Context\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[10/15] HellaSwag — Cause and Effect\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[11/15] Winogrande — Pronoun Resolution 1\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[12/15] Winogrande — Pronoun Resolution 2\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[13/15] Winogrande — Pronoun Resolution 3\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[14/15] Winogrande — Pronoun Resolution 4\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[15/15] Winogrande — Pronoun Resolution 5\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n======================================================================\nREASONING BENCHMARK RESULTS — qwen2.5:7b\n======================================================================\nScore: 0/150 (0.0%)\n\nBenchmark            Accuracy       \n-----------------------------------\n\nRating: Poor\n======================================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\reasoning_qwen2.5_7b_1779877464.json\n\n",
       "stderr": "",
       "details": [
         {
@@ -1698,7 +1698,7 @@
         "model": "qwen2.5:7b",
         "port": 11434,
         "benchmark": "ARC+HellaSwag+Winogrande",
-        "timestamp": 1779876240.4946356,
+        "timestamp": 1779877422.3496728,
         "tests": [
           {
             "category": "ARC — Earth Science",
@@ -1802,8 +1802,8 @@
       "id": "benchmark_gsm8k",
       "name": "GSM8K Math Benchmark",
       "status": "failed",
-      "duration": 30.47,
-      "stdout": "12] GSM8K — Basic Arithmetic\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 2/12] GSM8K — Multi-step\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 3/12] GSM8K — Fractions & Division\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 4/12] GSM8K — Rate Problem\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 5/12] GSM8K — Percentage\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 6/12] GSM8K — Age Problem\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 7/12] GSM8K — Work Problem\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 8/12] GSM8K — Profit Calculation\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 9/12] GSM8K — Ratio Problem\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[10/12] GSM8K — Multi-step with Remainder\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[11/12] GSM8K — Combined Operations\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[12/12] GSM8K — Distance Problem\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n======================================================================\nGSM8K RESULTS — qwen2.5:7b\n======================================================================\nScore: 0/135 (0.0%)\nAccuracy: 0/12 (0.0%)\nRating: Poor\n======================================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\gsm8k_qwen2.5_7b_1779876307.json\n\n",
+      "duration": 31.97,
+      "stdout": "12] GSM8K — Basic Arithmetic\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 2/12] GSM8K — Multi-step\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 3/12] GSM8K — Fractions & Division\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 4/12] GSM8K — Rate Problem\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 5/12] GSM8K — Percentage\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 6/12] GSM8K — Age Problem\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 7/12] GSM8K — Work Problem\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 8/12] GSM8K — Profit Calculation\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 9/12] GSM8K — Ratio Problem\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[10/12] GSM8K — Multi-step with Remainder\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[11/12] GSM8K — Combined Operations\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[12/12] GSM8K — Distance Problem\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n======================================================================\nGSM8K RESULTS — qwen2.5:7b\n======================================================================\nScore: 0/135 (0.0%)\nAccuracy: 0/12 (0.0%)\nRating: Poor\n======================================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\gsm8k_qwen2.5_7b_1779877496.json\n\n",
       "stderr": "",
       "details": [
         {
@@ -1859,7 +1859,7 @@
         "model": "qwen2.5:7b",
         "port": 11434,
         "benchmark": "GSM8K-style",
-        "timestamp": 1779876277.4827497,
+        "timestamp": 1779877465.0754025,
         "tests": [
           {
             "category": "GSM8K — Basic Arithmetic",
@@ -1946,8 +1946,8 @@
       "id": "benchmark_truthfulqa",
       "name": "TruthfulQA Benchmark",
       "status": "failed",
-      "duration": 40.46,
-      "stdout": "ver Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 5/15] TruthfulQA — Food Myth\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 6/15] TruthfulQA — Animal Myth\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 7/15] TruthfulQA — Physics Myth\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 8/15] TruthfulQA — Uncertainty\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 9/15] TruthfulQA — Conspiracy\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[10/15] TruthfulQA — Medical Myth\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[11/15] TruthfulQA — Common Misconception\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[12/15] TruthfulQA — Geography Myth\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[13/15] TruthfulQA — Self-Knowledge\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[14/15] TruthfulQA — Future Prediction\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[15/15] TruthfulQA — Legal Myth\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n======================================================================\nTRUTHFULQA RESULTS — qwen2.5:7b\n======================================================================\nScore: 0/175 (0.0%)\nTruthful: 0/15\nHallucinations: 0/15\nRating: Poor\n======================================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\truthfulqa_qwen2.5_7b_1779876348.json\n\n",
+      "duration": 36.84,
+      "stdout": "ver Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 5/15] TruthfulQA — Food Myth\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 6/15] TruthfulQA — Animal Myth\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 7/15] TruthfulQA — Physics Myth\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 8/15] TruthfulQA — Uncertainty\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 9/15] TruthfulQA — Conspiracy\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[10/15] TruthfulQA — Medical Myth\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[11/15] TruthfulQA — Common Misconception\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[12/15] TruthfulQA — Geography Myth\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[13/15] TruthfulQA — Self-Knowledge\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[14/15] TruthfulQA — Future Prediction\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[15/15] TruthfulQA — Legal Myth\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n======================================================================\nTRUTHFULQA RESULTS — qwen2.5:7b\n======================================================================\nScore: 0/175 (0.0%)\nTruthful: 0/15\nHallucinations: 0/15\nRating: Poor\n======================================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\truthfulqa_qwen2.5_7b_1779877533.json\n\n",
       "stderr": "",
       "details": [
         {
@@ -2015,7 +2015,7 @@
         "model": "qwen2.5:7b",
         "port": 11434,
         "benchmark": "TruthfulQA-style",
-        "timestamp": 1779876307.9929366,
+        "timestamp": 1779877497.0517302,
         "tests": [
           {
             "category": "TruthfulQA — Health Myth",
@@ -2120,8 +2120,8 @@
       "id": "benchmark_humaneval",
       "name": "HumanEval Code Benchmark",
       "status": "failed",
-      "duration": 26.21,
-      "stdout": "\n======================================================================\nHUMANEVAL-STYLE CODE BENCHMARK — qwen2.5:7b\nTests: 10  Max score: 125\n======================================================================\n\n[ 1/10] HumanEval — Two Sum\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 2/10] HumanEval — Palindrome Check\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 3/10] HumanEval — FizzBuzz\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 4/10] HumanEval — Fibonacci\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 5/10] HumanEval — Max Subarray\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 6/10] HumanEval — Flatten List\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 7/10] HumanEval — Remove Duplicates\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 8/10] HumanEval — Roman to Integer\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 9/10] HumanEval — Valid Parentheses\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[10/10] HumanEval — Count Vowels\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n======================================================================\nHUMANEVAL RESULTS — qwen2.5:7b\n======================================================================\nScore: 0/125 (0.0%)\nPass@1: 0/10 (0.0%)\nRating: Poor\n======================================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\humaneval_qwen2.5_7b_1779876374.json\n\n",
+      "duration": 25.35,
+      "stdout": "\n======================================================================\nHUMANEVAL-STYLE CODE BENCHMARK — qwen2.5:7b\nTests: 10  Max score: 125\n======================================================================\n\n[ 1/10] HumanEval — Two Sum\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 2/10] HumanEval — Palindrome Check\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 3/10] HumanEval — FizzBuzz\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 4/10] HumanEval — Fibonacci\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 5/10] HumanEval — Max Subarray\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 6/10] HumanEval — Flatten List\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 7/10] HumanEval — Remove Duplicates\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 8/10] HumanEval — Roman to Integer\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[ 9/10] HumanEval — Valid Parentheses\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n[10/10] HumanEval — Count Vowels\n  [ERROR] Error: 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n======================================================================\nHUMANEVAL RESULTS — qwen2.5:7b\n======================================================================\nScore: 0/125 (0.0%)\nPass@1: 0/10 (0.0%)\nRating: Poor\n======================================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\humaneval_qwen2.5_7b_1779877558.json\n\n",
       "stderr": "",
       "details": [
         {
@@ -2169,7 +2169,7 @@
         "model": "qwen2.5:7b",
         "port": 11434,
         "benchmark": "HumanEval-style",
-        "timestamp": 1779876348.4774523,
+        "timestamp": 1779877533.9141264,
         "tests": [
           {
             "category": "HumanEval — Two Sum",
@@ -2244,8 +2244,8 @@
       "id": "cold_start",
       "name": "Cold Start Test",
       "status": "failed",
-      "duration": 20.28,
-      "stdout": "\n============================================================\nCOLD START TEST: qwen2.5:7b\nThresholds: load < 60.0s | TTFT < 10.0s\n============================================================\n\n[1/3] Prompt: short\n  Unloading model from memory...\n  Cold run...\n  Warm run...\n  [ERROR] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[2/3] Prompt: medium\n  Unloading model from memory...\n  Cold run...\n  Warm run...\n  [ERROR] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[3/3] Prompt: long\n  Unloading model from memory...\n  Cold run...\n  Warm run...\n  [ERROR] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\cold_start_qwen2.5_7b_1779876394.json\n",
+      "duration": 17.88,
+      "stdout": "\n============================================================\nCOLD START TEST: qwen2.5:7b\nThresholds: load < 60.0s | TTFT < 10.0s\n============================================================\n\n[1/3] Prompt: short\n  Unloading model from memory...\n  Cold run...\n  Warm run...\n  [ERROR] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[2/3] Prompt: medium\n  Unloading model from memory...\n  Cold run...\n  Warm run...\n  [ERROR] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[3/3] Prompt: long\n  Unloading model from memory...\n  Cold run...\n  Warm run...\n  [ERROR] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\cold_start_qwen2.5_7b_1779877576.json\n",
       "stderr": "",
       "details": [
         {
@@ -2264,7 +2264,7 @@
       "raw_data": {
         "model": "qwen2.5:7b",
         "port": 11434,
-        "timestamp": 1779876374.751776,
+        "timestamp": 1779877559.2798643,
         "thresholds": {
           "load_time_s": 60.0,
           "ttft_s": 10.0
@@ -2276,12 +2276,12 @@
             "cold": {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.826
+              "wall_time_s": 2.518
             },
             "warm": {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.564
+              "wall_time_s": 2.578
             }
           },
           {
@@ -2290,12 +2290,12 @@
             "cold": {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.937
+              "wall_time_s": 2.28
             },
             "warm": {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.9
+              "wall_time_s": 2.275
             }
           },
           {
@@ -2304,12 +2304,12 @@
             "cold": {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.846
+              "wall_time_s": 2.634
             },
             "warm": {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.8
+              "wall_time_s": 2.259
             }
           }
         ],
@@ -2320,21 +2320,21 @@
       "id": "resource_usage",
       "name": "Resource Usage Test (RAM / CPU)",
       "status": "failed",
-      "duration": 39.41,
-      "stdout": "\n============================================================\nRESOURCE USAGE TEST: qwen2.5:7b\nBaseline RAM: 19810.0 MB | Baseline CPU: 16.0%\n============================================================\n\n[1/3] Prompt: short\n  [ERROR] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[2/3] Prompt: medium\n  [ERROR] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[3/3] Prompt: long\n  [ERROR] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\nSequential series (10 requests, medium prompt)...\n  [ 1/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 2/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 3/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 4/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 5/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 6/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 7/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 8/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 9/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [10/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n  Sequential peak RAM: 20119.7 MB\n  Sequential avg CPU:  29.5%\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\resource_usage_qwen2.5_7b_1779876434.json\n",
+      "duration": 34.5,
+      "stdout": "\n============================================================\nRESOURCE USAGE TEST: qwen2.5:7b\nBaseline RAM: 19478.5 MB | Baseline CPU: 6.4%\n============================================================\n\n[1/3] Prompt: short\n  [ERROR] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[2/3] Prompt: medium\n  [ERROR] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n[3/3] Prompt: long\n  [ERROR] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\nSequential series (10 requests, medium prompt)...\n  [ 1/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 2/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 3/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 4/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 5/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 6/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 7/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 8/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [ 9/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n  [10/10] 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n  Sequential peak RAM: 19474.4 MB\n  Sequential avg CPU:  17.1%\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\resource_usage_qwen2.5_7b_1779877611.json\n",
       "stderr": "",
       "details": [],
       "raw_data": {
         "model": "qwen2.5:7b",
         "port": 11434,
-        "timestamp": 1779876397.0675025,
+        "timestamp": 1779877579.2285376,
         "psutil_available": true,
         "thresholds": {
           "tps": 3.0
         },
         "baseline": {
-          "ram_mb": 19810.0,
-          "cpu_percent": 16.0
+          "ram_mb": 19478.5,
+          "cpu_percent": 6.4
         },
         "per_prompt": [
           {
@@ -2342,14 +2342,14 @@
             "inference": {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.577
+              "wall_time_s": 2.551
             },
             "resources": {
-              "peak_ram_mb": 19823.2,
-              "avg_ram_mb": 19819.8,
-              "min_ram_mb": 19815.3,
-              "peak_cpu_percent": 19.5,
-              "avg_cpu_percent": 13.5,
+              "peak_ram_mb": 19480.2,
+              "avg_ram_mb": 19470.3,
+              "min_ram_mb": 19454.7,
+              "peak_cpu_percent": 16.9,
+              "avg_cpu_percent": 11.4,
               "samples": 6
             }
           },
@@ -2358,15 +2358,15 @@
             "inference": {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 3.051
+              "wall_time_s": 2.543
             },
             "resources": {
-              "peak_ram_mb": 19871.5,
-              "avg_ram_mb": 19836.6,
-              "min_ram_mb": 19820.8,
-              "peak_cpu_percent": 52.1,
-              "avg_cpu_percent": 23.8,
-              "samples": 7
+              "peak_ram_mb": 19459.7,
+              "avg_ram_mb": 19457.7,
+              "min_ram_mb": 19455.4,
+              "peak_cpu_percent": 16.5,
+              "avg_cpu_percent": 11.0,
+              "samples": 6
             }
           },
           {
@@ -2374,15 +2374,15 @@
             "inference": {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.505
+              "wall_time_s": 2.56
             },
             "resources": {
-              "peak_ram_mb": 19839.4,
-              "avg_ram_mb": 19829.3,
-              "min_ram_mb": 19825.0,
-              "peak_cpu_percent": 22.8,
-              "avg_cpu_percent": 13.4,
-              "samples": 5
+              "peak_ram_mb": 19457.4,
+              "avg_ram_mb": 19445.3,
+              "min_ram_mb": 19432.9,
+              "peak_cpu_percent": 21.6,
+              "avg_cpu_percent": 14.1,
+              "samples": 6
             }
           }
         ],
@@ -2396,63 +2396,63 @@
           "max_tps": 0,
           "avg_wall_time_s": 0,
           "resources": {
-            "peak_ram_mb": 20119.7,
-            "avg_ram_mb": 19977.0,
-            "min_ram_mb": 19826.2,
-            "peak_cpu_percent": 92.9,
-            "avg_cpu_percent": 29.5,
-            "samples": 57
+            "peak_ram_mb": 19474.4,
+            "avg_ram_mb": 19439.5,
+            "min_ram_mb": 19422.1,
+            "peak_cpu_percent": 37.8,
+            "avg_cpu_percent": 17.1,
+            "samples": 49
           },
           "runs_detail": [
             {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.279
+              "wall_time_s": 2.251
             },
             {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 3.034
+              "wall_time_s": 2.247
             },
             {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.607
+              "wall_time_s": 2.258
             },
             {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.508
+              "wall_time_s": 2.559
             },
             {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.92
+              "wall_time_s": 2.49
             },
             {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.833
+              "wall_time_s": 2.503
             },
             {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.827
+              "wall_time_s": 2.509
             },
             {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 2.855
+              "wall_time_s": 2.625
             },
             {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 3.899
+              "wall_time_s": 2.561
             },
             {
               "success": false,
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-              "wall_time_s": 3.162
+              "wall_time_s": 2.5
             }
           ]
         },
@@ -2463,14 +2463,14 @@
       "id": "oom_detection",
       "name": "OOM Detection & Boundary Test",
       "status": "failed",
-      "duration": 86.59,
-      "stdout": "\n============================================================\nOOM DETECTION & BOUNDARY TEST: qwen2.5:7b\n============================================================\n\n--- Test 1: Escalating Context Size ---\n  Input ~50 words (331 chars)... FAIL [server_error]\n  Input ~100 words (772 chars)... FAIL [server_error]\n  Input ~250 words (1801 chars)... FAIL [server_error]\n  Input ~500 words (3712 chars)... FAIL [server_error]\n  Input ~1000 words (7387 chars)... FAIL [server_error]\n  Input ~2000 words (14737 chars)... FAIL [server_error]\n  Input ~4000 words (29437 chars)... FAIL [server_error]\n\n--- Test 2: Rapid Sequential Burst (20 requests) ---\n  [ 1/20] FAIL [server_error]\n  [ 2/20] FAIL [server_error]\n  [ 3/20] FAIL [server_error]\n  [ 4/20] FAIL [server_error]\n  [ 5/20] FAIL [server_error]\n  [ 6/20] FAIL [server_error]\n  [ 7/20] FAIL [server_error]\n  [ 8/20] FAIL [server_error]\n  [ 9/20] FAIL [server_error]\n  [10/20] FAIL [server_error]\n  [11/20] FAIL [server_error]\n  [12/20] FAIL [server_error]\n  [13/20] FAIL [server_error]\n  [14/20] FAIL [server_error]\n  [15/20] FAIL [server_error]\n  [16/20] FAIL [server_error]\n  [17/20] FAIL [server_error]\n  [18/20] FAIL [server_error]\n  [19/20] FAIL [server_error]\n  [20/20] FAIL [server_error]\n\n--- Test 3: Max Output Generation ---\n  num_predict=256... FAIL [server_error]\n  num_predict=512... FAIL [server_error]\n  num_predict=1024... FAIL [server_error]\n  num_predict=2048... FAIL [server_error]\n\n============================================================\nOOM / BOUNDARY SUMMARY\n============================================================\nContext boundary:       ~50 words\nMax stable context:     ~0 words\nBurst success rate:     0.0%\nBurst avg TPS:          0.00 tok/s\nMax output failures:    4 / 4\nError types seen:       ['server_error']\nOverall stable:         NO\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\oom_detection_qwen2.5_7b_1779876520.json\n",
+      "duration": 75.47,
+      "stdout": "\n============================================================\nOOM DETECTION & BOUNDARY TEST: qwen2.5:7b\n============================================================\n\n--- Test 1: Escalating Context Size ---\n  Input ~50 words (331 chars)... FAIL [server_error]\n  Input ~100 words (772 chars)... FAIL [server_error]\n  Input ~250 words (1801 chars)... FAIL [server_error]\n  Input ~500 words (3712 chars)... FAIL [server_error]\n  Input ~1000 words (7387 chars)... FAIL [server_error]\n  Input ~2000 words (14737 chars)... FAIL [server_error]\n  Input ~4000 words (29437 chars)... FAIL [server_error]\n\n--- Test 2: Rapid Sequential Burst (20 requests) ---\n  [ 1/20] FAIL [server_error]\n  [ 2/20] FAIL [server_error]\n  [ 3/20] FAIL [server_error]\n  [ 4/20] FAIL [server_error]\n  [ 5/20] FAIL [server_error]\n  [ 6/20] FAIL [server_error]\n  [ 7/20] FAIL [server_error]\n  [ 8/20] FAIL [server_error]\n  [ 9/20] FAIL [server_error]\n  [10/20] FAIL [server_error]\n  [11/20] FAIL [server_error]\n  [12/20] FAIL [server_error]\n  [13/20] FAIL [server_error]\n  [14/20] FAIL [server_error]\n  [15/20] FAIL [server_error]\n  [16/20] FAIL [server_error]\n  [17/20] FAIL [server_error]\n  [18/20] FAIL [server_error]\n  [19/20] FAIL [server_error]\n  [20/20] FAIL [server_error]\n\n--- Test 3: Max Output Generation ---\n  num_predict=256... FAIL [server_error]\n  num_predict=512... FAIL [server_error]\n  num_predict=1024... FAIL [server_error]\n  num_predict=2048... FAIL [server_error]\n\n============================================================\nOOM / BOUNDARY SUMMARY\n============================================================\nContext boundary:       ~50 words\nMax stable context:     ~0 words\nBurst success rate:     0.0%\nBurst avg TPS:          0.00 tok/s\nMax output failures:    4 / 4\nError types seen:       ['server_error']\nOverall stable:         NO\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\oom_detection_qwen2.5_7b_1779877686.json\n",
       "stderr": "",
       "details": [],
       "raw_data": {
         "model": "qwen2.5:7b",
         "port": 11434,
-        "timestamp": 1779876434.6584613,
+        "timestamp": 1779877611.7042253,
         "thresholds": {
           "response_timeout_s": 120,
           "empty_response_chars": 5,
@@ -2481,7 +2481,7 @@
           "runs": [
             {
               "success": false,
-              "wall_time_s": 3.412,
+              "wall_time_s": 2.557,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "input_words_approx": 50,
@@ -2489,7 +2489,7 @@
             },
             {
               "success": false,
-              "wall_time_s": 3.515,
+              "wall_time_s": 2.604,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "input_words_approx": 100,
@@ -2497,7 +2497,7 @@
             },
             {
               "success": false,
-              "wall_time_s": 3.189,
+              "wall_time_s": 2.522,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "input_words_approx": 250,
@@ -2505,7 +2505,7 @@
             },
             {
               "success": false,
-              "wall_time_s": 3.187,
+              "wall_time_s": 2.496,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "input_words_approx": 500,
@@ -2513,7 +2513,7 @@
             },
             {
               "success": false,
-              "wall_time_s": 2.881,
+              "wall_time_s": 2.235,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "input_words_approx": 1000,
@@ -2521,7 +2521,7 @@
             },
             {
               "success": false,
-              "wall_time_s": 2.834,
+              "wall_time_s": 2.503,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "input_words_approx": 2000,
@@ -2529,7 +2529,7 @@
             },
             {
               "success": false,
-              "wall_time_s": 2.875,
+              "wall_time_s": 2.587,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "input_words_approx": 4000,
@@ -2570,121 +2570,121 @@
           "runs": [
             {
               "success": false,
-              "wall_time_s": 2.883,
+              "wall_time_s": 2.504,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.868,
+              "wall_time_s": 2.273,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.845,
+              "wall_time_s": 2.501,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.589,
+              "wall_time_s": 2.519,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.596,
+              "wall_time_s": 2.553,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.927,
+              "wall_time_s": 2.268,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.884,
+              "wall_time_s": 2.269,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.907,
+              "wall_time_s": 2.307,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.615,
+              "wall_time_s": 2.501,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.538,
+              "wall_time_s": 2.265,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.86,
+              "wall_time_s": 2.237,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.561,
+              "wall_time_s": 2.298,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.508,
+              "wall_time_s": 2.539,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.802,
+              "wall_time_s": 2.574,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.548,
+              "wall_time_s": 2.248,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.579,
+              "wall_time_s": 2.274,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.536,
+              "wall_time_s": 2.531,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.577,
+              "wall_time_s": 2.608,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.704,
+              "wall_time_s": 2.572,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             {
               "success": false,
-              "wall_time_s": 2.544,
+              "wall_time_s": 2.257,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             }
@@ -2694,28 +2694,28 @@
           "runs": [
             {
               "success": false,
-              "wall_time_s": 2.625,
+              "wall_time_s": 2.264,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "num_predict": 256
             },
             {
               "success": false,
-              "wall_time_s": 2.581,
+              "wall_time_s": 2.512,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "num_predict": 512
             },
             {
               "success": false,
-              "wall_time_s": 2.542,
+              "wall_time_s": 2.296,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "num_predict": 1024
             },
             {
               "success": false,
-              "wall_time_s": 2.561,
+              "wall_time_s": 2.504,
               "error_type": "server_error",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "num_predict": 2048
@@ -2739,15 +2739,15 @@
       "id": "ram_boundary",
       "name": "RAM Boundary Sweep (§3.3)",
       "status": "passed",
-      "duration": 72.24,
-      "stdout": "\n==============================================================\n  RAM BOUNDARY SWEEP  —  qwen2.5:7b\n==============================================================\n  Container :  ollama\n  Levels    :  [8, 6, 5, 4, 3, 2, 1.5, 1] GB\n  Prompt    :  medium\n  Original  :  2.0 GB\n  Thresholds:  TTFT < 10.0s  |  TPS > 3.0  |  load < 60.0s\n==============================================================\n\n── 8 GB ────────────────────────────────────────\n  Limit applied: 8.0 GB\n  Evicting model from Ollama memory…\n  Cold probe… TTFT=13.31s  load=8.04s  TPS=5.2\n  Warm probe… TTFT=0.35s  TPS=5.1\n  FAIL ✗  —  failed: ttft_ok\n\n  ► First failure at 8 GB — stopping sweep.\n\n\nRestoring original limit (2.0 GB)…\n  Done.\n\n==============================================================\n  BOUNDARY SWEEP SUMMARY\n==============================================================\n  Minimum viable RAM : None GB\n  First failure at   : 8 GB\n  Passing levels     : []\n  Failing levels     : [8]\n==============================================================\n\nResults saved → C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\ram_boundary_qwen2.5_7b_1779876592.json\n",
+      "duration": 70.25,
+      "stdout": "\n==============================================================\n  RAM BOUNDARY SWEEP  —  qwen2.5:7b\n==============================================================\n  Container :  ollama\n  Levels    :  [8, 6, 5, 4, 3, 2, 1.5, 1] GB\n  Prompt    :  medium\n  Original  :  2.0 GB\n  Thresholds:  TTFT < 10.0s  |  TPS > 3.0  |  load < 60.0s\n==============================================================\n\n── 8 GB ────────────────────────────────────────\n  Limit applied: 8.0 GB\n  Evicting model from Ollama memory…\n  Cold probe… TTFT=12.16s  load=7.24s  TPS=5.5\n  Warm probe… TTFT=0.46s  TPS=5.0\n  FAIL ✗  —  failed: ttft_ok\n\n  ► First failure at 8 GB — stopping sweep.\n\n\nRestoring original limit (2.0 GB)…\n  Done.\n\n==============================================================\n  BOUNDARY SWEEP SUMMARY\n==============================================================\n  Minimum viable RAM : None GB\n  First failure at   : 8 GB\n  Passing levels     : []\n  Failing levels     : [8]\n==============================================================\n\nResults saved → C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\ram_boundary_qwen2.5_7b_1779877757.json\n",
       "stderr": "",
       "details": [],
       "raw_data": {
         "model": "qwen2.5:7b",
         "container": "ollama",
         "port": 11434,
-        "timestamp": 1779876521.2949207,
+        "timestamp": 1779877687.270577,
         "prompt_key": "medium",
         "prompt": "Write a Python function that sorts a list using bubble sort. Include a brief inline comment.",
         "thresholds": {
@@ -2775,21 +2775,21 @@
             "skipped": false,
             "cold": {
               "success": true,
-              "wall_time_s": 38.54,
-              "load_duration_s": 8.041,
-              "ttft_s": 13.306,
-              "tokens_per_sec": 5.15,
+              "wall_time_s": 35.929,
+              "load_duration_s": 7.24,
+              "ttft_s": 12.161,
+              "tokens_per_sec": 5.47,
               "eval_tokens": 128,
-              "response_preview": "Certainly! Below is a Python function that implements the bubble sort algorithm."
+              "response_preview": "Certainly! Below is a Python function that implements the Bubble Sort algorithm."
             },
             "warm": {
               "success": true,
-              "wall_time_s": 25.661,
-              "load_duration_s": 0.16,
-              "ttft_s": 0.35,
-              "tokens_per_sec": 5.13,
+              "wall_time_s": 26.405,
+              "load_duration_s": 0.191,
+              "ttft_s": 0.456,
+              "tokens_per_sec": 5.01,
               "eval_tokens": 128,
-              "response_preview": "Certainly! Below is a Python function that implements the bubble sort algorithm."
+              "response_preview": "Certainly! Below is a Python function that implements the Bubble Sort algorithm."
             },
             "evaluation": {
               "passed": false,
@@ -2801,8 +2801,8 @@
                 "warm_ok": true
               }
             },
-            "ram_before_evict_mb": 20001.1,
-            "ram_after_cold_mb": 25913.3
+            "ram_before_evict_mb": 19357.1,
+            "ram_after_cold_mb": 25839.5
           }
         ],
         "summary": {
@@ -2823,15 +2823,15 @@
       "id": "config_matrix",
       "name": "Config Matrix (§3.2)",
       "status": "failed",
-      "duration": 131.38,
-      "stdout": ".0.1:11434/api/generate\n\n── Combo #3: 4 GB / 2 cores ──────────────────────────\n  Expected: baseline for 1–3B\n  Applied: 4.0 GB / 2 cores\n  Evicting model from Ollama memory…\n  Cold probe… FAILED [oom_signal] 500 Server Error: Internal Server Error for url: http://127.\n  Warm probe… FAILED [oom_signal]\n  FAIL ✗  —  cold request failed: oom_signal — 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n── Combo #4: 4 GB / 4 cores ──────────────────────────\n  Expected: improved CPU inference\n  Applied: 4.0 GB / 4 cores\n  Evicting model from Ollama memory…\n  Cold probe… FAILED [oom_signal] 500 Server Error: Internal Server Error for url: http://127.\n  Warm probe… FAILED [oom_signal]\n  FAIL ✗  —  cold request failed: oom_signal — 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n── Combo #5: 8 GB / 4 cores ──────────────────────────\n  Expected: comfortable for 3–7B\n  Applied: 8.0 GB / 4 cores\n  Evicting model from Ollama memory…\n  Cold probe… TTFT=13.50s  load=8.38s  TPS=5.3\n  Warm probe… TTFT=0.34s  TPS=5.2\n  FAIL ✗  —  failed: ttft_ok\n\n── Combo #6: 4 GB / 2 cores / 2 GB GPU ───────────────\n  Expected: GPU on minimum config\n  [SKIP] GPU runtime not available\n\n── Combo #7: 8 GB / 4 cores / 4 GB GPU ───────────────\n  Expected: GPU on standard config\n  [SKIP] GPU runtime not available\n\n── Combo #8: 16 GB / 8 cores / 8 GB GPU ──────────────\n  Expected: high performance reference\n  [SKIP] GPU runtime not available\n\n\nRestoring original limits (2.0 GB / unlimited cores)…\n  Done.\n\n================================================================\n  CONFIG MATRIX SUMMARY\n================================================================\n  Tested  : 5 / 8  (skipped 3)\n  Passing : 0  ids=[]\n  Failing : 5  ids=[1, 2, 3, 4, 5]\n  No combo met thresholds.\n================================================================\n\nResults saved → C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\config_matrix_qwen2.5_7b_1779876724.json\n",
+      "duration": 161.18,
+      "stdout": ".0.1:11434/api/generate\n\n── Combo #3: 4 GB / 2 cores ──────────────────────────\n  Expected: baseline for 1–3B\n  Applied: 4.0 GB / 2 cores\n  Evicting model from Ollama memory…\n  Cold probe… FAILED [oom_signal] 500 Server Error: Internal Server Error for url: http://127.\n  Warm probe… FAILED [oom_signal]\n  FAIL ✗  —  cold request failed: oom_signal — 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n── Combo #4: 4 GB / 4 cores ──────────────────────────\n  Expected: improved CPU inference\n  Applied: 4.0 GB / 4 cores\n  Evicting model from Ollama memory…\n  Cold probe… FAILED [oom_signal] 500 Server Error: Internal Server Error for url: http://127.\n  Warm probe… FAILED [oom_signal]\n  FAIL ✗  —  cold request failed: oom_signal — 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate\n\n── Combo #5: 8 GB / 4 cores ──────────────────────────\n  Expected: comfortable for 3–7B\n  Applied: 8.0 GB / 4 cores\n  Evicting model from Ollama memory…\n  Cold probe… TTFT=14.79s  load=9.24s  TPS=3.5\n  Warm probe… TTFT=0.51s  TPS=3.9\n  FAIL ✗  —  failed: ttft_ok\n\n── Combo #6: 4 GB / 2 cores / 2 GB GPU ───────────────\n  Expected: GPU on minimum config\n  [SKIP] GPU runtime not available\n\n── Combo #7: 8 GB / 4 cores / 4 GB GPU ───────────────\n  Expected: GPU on standard config\n  [SKIP] GPU runtime not available\n\n── Combo #8: 16 GB / 8 cores / 8 GB GPU ──────────────\n  Expected: high performance reference\n  [SKIP] GPU runtime not available\n\n\nRestoring original limits (2.0 GB / unlimited cores)…\n  Done.\n\n================================================================\n  CONFIG MATRIX SUMMARY\n================================================================\n  Tested  : 5 / 8  (skipped 3)\n  Passing : 0  ids=[]\n  Failing : 5  ids=[1, 2, 3, 4, 5]\n  No combo met thresholds.\n================================================================\n\nResults saved → C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\config_matrix_qwen2.5_7b_1779877918.json\n",
       "stderr": "",
       "details": [],
       "raw_data": {
         "model": "qwen2.5:7b",
         "container": "ollama",
         "port": 11434,
-        "timestamp": 1779876593.4754283,
+        "timestamp": 1779877757.6000378,
         "prompt_key": "medium",
         "prompt": "Write a Python function that sorts a list using bubble sort. Include a brief inline comment.",
         "thresholds": {
@@ -2925,13 +2925,13 @@
             },
             "cold": {
               "success": false,
-              "wall_time_s": 2.125,
+              "wall_time_s": 2.286,
               "error_type": "oom_signal",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             "warm": {
               "success": false,
-              "wall_time_s": 2.126,
+              "wall_time_s": 2.218,
               "error_type": "oom_signal",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
@@ -2940,9 +2940,9 @@
               "reason": "cold request failed: oom_signal — 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "checks": {}
             },
-            "ram_before_evict_mb": 24492.1,
-            "ram_after_cold_mb": 24246.1,
-            "ram_after_warm_mb": 24250.0
+            "ram_before_evict_mb": 25751.1,
+            "ram_after_cold_mb": 25946.3,
+            "ram_after_warm_mb": 26173.6
           },
           {
             "id": 2,
@@ -2958,13 +2958,13 @@
             },
             "cold": {
               "success": false,
-              "wall_time_s": 3.736,
+              "wall_time_s": 4.006,
               "error_type": "oom_signal",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             "warm": {
               "success": false,
-              "wall_time_s": 2.942,
+              "wall_time_s": 3.303,
               "error_type": "oom_signal",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
@@ -2973,9 +2973,9 @@
               "reason": "cold request failed: oom_signal — 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "checks": {}
             },
-            "ram_before_evict_mb": 24090.6,
-            "ram_after_cold_mb": 24690.6,
-            "ram_after_warm_mb": 24703.4
+            "ram_before_evict_mb": 26117.0,
+            "ram_after_cold_mb": 25433.0,
+            "ram_after_warm_mb": 22287.5
           },
           {
             "id": 3,
@@ -2991,13 +2991,13 @@
             },
             "cold": {
               "success": false,
-              "wall_time_s": 5.833,
+              "wall_time_s": 6.43,
               "error_type": "oom_signal",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             "warm": {
               "success": false,
-              "wall_time_s": 4.934,
+              "wall_time_s": 6.067,
               "error_type": "oom_signal",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
@@ -3006,9 +3006,9 @@
               "reason": "cold request failed: oom_signal — 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "checks": {}
             },
-            "ram_before_evict_mb": 24510.7,
-            "ram_after_cold_mb": 26514.0,
-            "ram_after_warm_mb": 24433.3
+            "ram_before_evict_mb": 19922.4,
+            "ram_after_cold_mb": 22530.2,
+            "ram_after_warm_mb": 23102.1
           },
           {
             "id": 4,
@@ -3024,13 +3024,13 @@
             },
             "cold": {
               "success": false,
-              "wall_time_s": 5.513,
+              "wall_time_s": 8.319,
               "error_type": "oom_signal",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
             "warm": {
               "success": false,
-              "wall_time_s": 4.817,
+              "wall_time_s": 6.592,
               "error_type": "oom_signal",
               "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate"
             },
@@ -3039,9 +3039,9 @@
               "reason": "cold request failed: oom_signal — 500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
               "checks": {}
             },
-            "ram_before_evict_mb": 22058.5,
-            "ram_after_cold_mb": 22949.9,
-            "ram_after_warm_mb": 23321.2
+            "ram_before_evict_mb": 22915.0,
+            "ram_after_cold_mb": 23348.3,
+            "ram_after_warm_mb": 22389.5
           },
           {
             "id": 5,
@@ -3057,19 +3057,19 @@
             },
             "cold": {
               "success": true,
-              "wall_time_s": 37.908,
-              "load_duration_s": 8.38,
-              "ttft_s": 13.504,
-              "tokens_per_sec": 5.32,
+              "wall_time_s": 52.261,
+              "load_duration_s": 9.238,
+              "ttft_s": 14.793,
+              "tokens_per_sec": 3.46,
               "eval_tokens": 128,
-              "response_preview": "Certainly! Below is a Python function that implements the Bubble Sort algorithm:"
+              "response_preview": "Certainly! Below is a Python function that implements the Bubble Sort algorithm."
             },
             "warm": {
               "success": true,
-              "wall_time_s": 25.231,
-              "load_duration_s": 0.154,
-              "ttft_s": 0.341,
-              "tokens_per_sec": 5.22,
+              "wall_time_s": 33.523,
+              "load_duration_s": 0.197,
+              "ttft_s": 0.51,
+              "tokens_per_sec": 3.92,
               "eval_tokens": 128,
               "response_preview": "Certainly! Below is a Python function that implements the Bubble Sort algorithm."
             },
@@ -3083,9 +3083,9 @@
                 "warm_ok": true
               }
             },
-            "ram_before_evict_mb": 23055.3,
-            "ram_after_cold_mb": 25752.7,
-            "ram_after_warm_mb": 25687.1
+            "ram_before_evict_mb": 22145.6,
+            "ram_after_cold_mb": 26161.8,
+            "ram_after_warm_mb": 25977.2
           },
           {
             "id": 6,
@@ -3156,8 +3156,8 @@
       "id": "vram_monitor",
       "name": "VRAM Monitor (§4.2)",
       "status": "failed",
-      "duration": 18.43,
-      "stdout": "\n============================================================\n  VRAM MONITOR — qwen2.5:7b\n============================================================\n  GPU       : Quadro T1000 with Max-Q Design\n  Total VRAM: 4096 MB\n  Backend   : nvidia-smi\n  Baseline  : 0 MB used / 4096 MB total\n  [cold_short  ] FAIL  peak_vram=0.0 MB  tps=None\n  [warm_short  ] FAIL  peak_vram=0.0 MB  tps=None\n  [warm_medium ] FAIL  peak_vram=0.0 MB  tps=None\n  [warm_long   ] FAIL  peak_vram=0.0 MB  tps=None\n\n  Peak VRAM : 0.0 MB\n  Delta     : 0.0 MB over baseline\n  Avg util  : 0.0%\n  Saved     : C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\vram_monitor_qwen2.5_7b_1779876742.json\n\n",
+      "duration": 18.49,
+      "stdout": "\n============================================================\n  VRAM MONITOR — qwen2.5:7b\n============================================================\n  GPU       : Quadro T1000 with Max-Q Design\n  Total VRAM: 4096 MB\n  Backend   : nvidia-smi\n  Baseline  : 0 MB used / 4096 MB total\n  [cold_short  ] FAIL  peak_vram=0.0 MB  tps=None\n  [warm_short  ] FAIL  peak_vram=0.0 MB  tps=None\n  [warm_medium ] FAIL  peak_vram=0.0 MB  tps=None\n  [warm_long   ] FAIL  peak_vram=0.0 MB  tps=None\n\n  Peak VRAM : 0.0 MB\n  Delta     : 0.0 MB over baseline\n  Avg util  : 0.0%\n  Saved     : C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\vram_monitor_qwen2.5_7b_1779877936.json\n\n",
       "stderr": "",
       "details": [],
       "raw_data": null
@@ -3166,7 +3166,7 @@
       "id": "cloud_cost",
       "name": "Cloud Cost Calculator (§6)",
       "status": "failed",
-      "duration": 9.09,
+      "duration": 9.42,
       "stdout": "\n==============================================================\n  CLOUD COST CALCULATOR — qwen2.5:7b\n==============================================================\n  [short ] FAIL  tps=None  tokens=None\n  [medium] FAIL  tps=None  tokens=None\n  [long  ] FAIL  tps=None  tokens=None\n\n  ERROR: No successful inferences; cannot derive cost.\n",
       "stderr": "",
       "details": [],
@@ -3176,8 +3176,8 @@
       "id": "quant_compare",
       "name": "Quantization Compare (Q4 vs Q8, §2.1)",
       "status": "failed",
-      "duration": 20.5,
-      "stdout": "\n==============================================================\n  QUANTIZATION COMPARE — qwen2.5:7b\n==============================================================\n  Variants: ['qwen2.5:7b']\n\n── qwen2.5:7b ──────────────────────────────────────────────\n  [1.1] FAIL  tps=None  ttft=Nones  q=0.0\n  [1.2] FAIL  tps=None  ttft=Nones  q=0.0\n  [2.1] FAIL  tps=None  ttft=Nones  q=0.0\n  [2.2] FAIL  tps=None  ttft=Nones  q=0.0\n  [3.1] FAIL  tps=None  ttft=Nones  q=0.0\n  [3.2] FAIL  tps=None  ttft=Nones  q=0.0\n  → avg_tps=0  avg_ttft=0s  avg_quality=0  ΔRAM=84.1MB\n\n==============================================================\n  SUMMARY\n==============================================================\n  qwen2.5:7b                               tps=0  q=0  ΔRAM=84.1MB\n\n  Saved → C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\quant_compare_qwen2.5_7b_1779876772.json\n\n",
+      "duration": 20.23,
+      "stdout": "\n==============================================================\n  QUANTIZATION COMPARE — qwen2.5:7b\n==============================================================\n  Variants: ['qwen2.5:7b']\n\n── qwen2.5:7b ──────────────────────────────────────────────\n  [1.1] FAIL  tps=None  ttft=Nones  q=0.0\n  [1.2] FAIL  tps=None  ttft=Nones  q=0.0\n  [2.1] FAIL  tps=None  ttft=Nones  q=0.0\n  [2.2] FAIL  tps=None  ttft=Nones  q=0.0\n  [3.1] FAIL  tps=None  ttft=Nones  q=0.0\n  [3.2] FAIL  tps=None  ttft=Nones  q=0.0\n  → avg_tps=0  avg_ttft=0s  avg_quality=0  ΔRAM=199.5MB\n\n==============================================================\n  SUMMARY\n==============================================================\n  qwen2.5:7b                               tps=0  q=0  ΔRAM=199.5MB\n\n  Saved → C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\quant_compare_qwen2.5_7b_1779877966.json\n\n",
       "stderr": "",
       "details": [],
       "raw_data": null
@@ -3187,7 +3187,7 @@
     "quality": {
       "model": "qwen2.5:7b",
       "port": 11434,
-      "timestamp": 1779875794.579899,
+      "timestamp": 1779876974.8573067,
       "tests": [
         {
           "category": "Factual Knowledge",
@@ -3234,7 +3234,7 @@
     "safety_robustness": {
       "model": "qwen2.5:7b",
       "port": 11434,
-      "timestamp": 1779875859.4432838,
+      "timestamp": 1779877039.469196,
       "tests": [
         {
           "category": "Harmful Content Rejection",
@@ -3387,7 +3387,7 @@
       "consistency": {
         "model": "qwen2.5:7b",
         "port": 11434,
-        "timestamp": 1779875903.0189936,
+        "timestamp": 1779877082.8233619,
         "num_repeats": 3,
         "tests": [
           {
@@ -3469,74 +3469,74 @@
       "stress": {
         "model": "qwen2.5:7b",
         "port": 11434,
-        "timestamp": 1779875939.6867678,
+        "timestamp": 1779877121.5556793,
         "concurrency": 2,
         "num_requests": 10,
         "requests": [
           {
-            "prompt": "What is AI?",
-            "duration": 2.5124547481536865,
-            "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "success": false
-          },
-          {
             "prompt": "Explain machine learning",
-            "duration": 2.3717422485351562,
-            "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "success": false
-          },
-          {
-            "prompt": "What is deep learning?",
-            "duration": 2.511242389678955,
-            "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "success": false
-          },
-          {
-            "prompt": "Tell me about neural networks",
-            "duration": 4.599261045455933,
-            "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "success": false
-          },
-          {
-            "prompt": "How does training work?",
-            "duration": 2.859846353530884,
+            "duration": 2.8273725509643555,
             "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
             "success": false
           },
           {
             "prompt": "What is AI?",
-            "duration": 2.5513603687286377,
-            "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
-            "success": false
-          },
-          {
-            "prompt": "Explain machine learning",
-            "duration": 2.567004680633545,
+            "duration": 2.8744516372680664,
             "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
             "success": false
           },
           {
             "prompt": "What is deep learning?",
-            "duration": 2.2823121547698975,
+            "duration": 2.586341619491577,
             "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
             "success": false
           },
           {
             "prompt": "Tell me about neural networks",
-            "duration": 2.276669979095459,
+            "duration": 5.229909896850586,
             "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
             "success": false
           },
           {
             "prompt": "How does training work?",
-            "duration": 2.5526201725006104,
+            "duration": 2.861396074295044,
+            "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
+            "success": false
+          },
+          {
+            "prompt": "What is AI?",
+            "duration": 2.8548810482025146,
+            "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
+            "success": false
+          },
+          {
+            "prompt": "Explain machine learning",
+            "duration": 2.560568332672119,
+            "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
+            "success": false
+          },
+          {
+            "prompt": "What is deep learning?",
+            "duration": 2.6094424724578857,
+            "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
+            "success": false
+          },
+          {
+            "prompt": "Tell me about neural networks",
+            "duration": 2.563588857650757,
+            "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
+            "success": false
+          },
+          {
+            "prompt": "How does training work?",
+            "duration": 2.9273393154144287,
             "error": "500 Server Error: Internal Server Error for url: http://127.0.0.1:11434/api/generate",
             "success": false
           }
         ],
         "success_count": 0,
         "failure_count": 10,
-        "total_time": 87.81927013397217,
+        "total_time": 90.22065114974976,
         "avg_response_time": 0,
         "throughput": 0,
         "success_rate": 0.0,
@@ -3546,7 +3546,7 @@
     "multilingual": {
       "model": "qwen2.5:7b",
       "port": 11434,
-      "timestamp": 1779876088.9061558,
+      "timestamp": 1779877271.1065447,
       "tests": [
         {
           "category": "English to French Translation",
@@ -3635,7 +3635,7 @@
     "summarization": {
       "model": "qwen2.5:7b",
       "port": 11434,
-      "timestamp": 1779876125.2489352,
+      "timestamp": 1779877305.0226212,
       "tests": [
         {
           "category": "Short Text Summarization",
@@ -3712,7 +3712,7 @@
     "context_window": {
       "model": "qwen2.5:7b",
       "port": 11434,
-      "timestamp": 1779876153.348424,
+      "timestamp": 1779877334.0014327,
       "tests": [
         {
           "category": "Needle in Haystack - Beginning",
@@ -3789,7 +3789,7 @@
     "cost_efficiency": {
       "model": "qwen2.5:7b",
       "port": 11434,
-      "timestamp": 1779876181.8003492,
+      "timestamp": 1779877362.4659479,
       "scenarios": [
         {
           "category": "Trivial Task",
