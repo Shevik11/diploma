@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Loader2, GitCompare, Plus, X, Radio, Trophy } from "lucide-react";
+import { Loader2, GitCompare, Plus, X, Radio, Trophy, ChevronDown } from "lucide-react";
 import {
   api,
   BenchmarkResultFile,
@@ -9,13 +9,6 @@ import {
   DeploymentState,
   TestScriptResult,
 } from "@/app/services/api";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/app/components/ui/select";
 
 type Better = "higher" | "lower" | "none";
 
@@ -922,6 +915,17 @@ function MetaRow({
   );
 }
 
+/** Extract human-readable params from a variantId string. */
+function variantParams(id: string): string {
+  const parts = id.split("__");
+  if (parts.length < 2) return id;
+  const [, ram, cpu, tech, plat] = parts;
+  const stack = [tech, plat]
+    .filter((v) => v && !v.includes("?"))
+    .join("/");
+  return [ram, cpu, stack].filter(Boolean).join(" · ");
+}
+
 function ModelSelect({
   label,
   models,
@@ -935,25 +939,158 @@ function ModelSelect({
   onChange: (v: string) => void;
   loading: boolean;
 }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Group variants by base model name (first segment of variantId)
+  const groups = useMemo(() => {
+    const map = new Map<string, { model: string; count: number }[]>();
+    models.forEach((m) => {
+      const base = m.model.split("__")[0];
+      const arr = map.get(base) ?? [];
+      arr.push(m);
+      map.set(base, arr);
+    });
+    return Array.from(map.entries())
+      .map(([name, variants]) => ({ name, variants }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [models]);
+
+  // Initially expand the group that contains the selected value
+  const initialExpanded = useMemo(() => {
+    if (!value) return new Set<string>();
+    return new Set([value.split("__")[0]]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(initialExpanded);
+
+  // When selected value changes from outside, expand its group
+  useEffect(() => {
+    if (value) {
+      const base = value.split("__")[0];
+      setExpandedGroups((prev) => (prev.has(base) ? prev : new Set([...prev, base])));
+    }
+  }, [value]);
+
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const toggleGroup = (name: string) => {
+    setExpandedGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
+      return next;
+    });
+  };
+
+  const selectedLabel = value
+    ? (() => {
+        const base = value.split("__")[0];
+        const params = variantParams(value);
+        return `${base} ${params}`;
+      })()
+    : null;
+
   return (
-    <div>
+    <div ref={ref} className="relative">
       <label className="text-sm font-medium text-zinc-700 mb-1 block">
         {label}
       </label>
-      <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="bg-white border-zinc-200 text-zinc-800 w-72">
-          <SelectValue
-            placeholder={loading ? "Loading…" : "Select a variant"}
-          />
-        </SelectTrigger>
-        <SelectContent className="bg-white border-zinc-200 text-zinc-800">
-          {models.map((m) => (
-            <SelectItem key={m.model} value={m.model}>
-              {m.label} ({m.count} run{m.count === 1 ? "" : "s"})
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex items-center justify-between gap-2 w-72 h-9 px-3 py-2 rounded-md border border-zinc-200 bg-white text-sm text-zinc-800 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400 transition-colors"
+      >
+        <span className="truncate text-left">
+          {loading ? "Loading…" : (selectedLabel ?? "Select a model")}
+        </span>
+        <ChevronDown
+          className={`w-3.5 h-3.5 shrink-0 text-zinc-500 transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {open && (
+        <div className="absolute z-50 mt-1 w-72 bg-white border border-zinc-200 rounded-md shadow-lg max-h-72 overflow-y-auto">
+          {groups.length === 0 && (
+            <p className="px-3 py-2 text-sm text-zinc-400">No models found</p>
+          )}
+          {groups.map(({ name, variants }) => {
+            const expanded = expandedGroups.has(name);
+            return (
+              <div key={name}>
+                {/* Group header row */}
+                <div className="flex items-center justify-between hover:bg-zinc-50">
+                  {/* Clicking the name selects first variant if only one, else just expands */}
+                  <button
+                    type="button"
+                    className="flex-1 text-left px-3 py-2 text-sm font-medium text-zinc-800"
+                    onClick={() => {
+                      if (variants.length === 1) {
+                        onChange(variants[0].model);
+                        setOpen(false);
+                      } else {
+                        toggleGroup(name);
+                      }
+                    }}
+                  >
+                    {name}
+                    <span className="ml-1.5 text-xs font-normal text-zinc-400">
+                      ({variants.length})
+                    </span>
+                  </button>
+                  {/* Chevron toggle — only shown when multiple variants */}
+                  {variants.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => toggleGroup(name)}
+                      className="px-3 py-2 text-zinc-400 hover:text-zinc-700"
+                    >
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform ${expanded ? "rotate-180" : ""}`}
+                      />
+                    </button>
+                  )}
+                </div>
+
+                {/* Variant rows */}
+                {expanded &&
+                  variants.map((v) => {
+                    const params = variantParams(v.model);
+                    const isSelected = v.model === value;
+                    return (
+                      <button
+                        key={v.model}
+                        type="button"
+                        onClick={() => {
+                          onChange(v.model);
+                          setOpen(false);
+                        }}
+                        className={`flex items-center justify-between w-full pl-6 pr-3 py-1.5 text-xs text-left transition-colors ${
+                          isSelected
+                            ? "bg-zinc-100 text-zinc-900 font-medium"
+                            : "text-zinc-600 hover:bg-zinc-50"
+                        }`}
+                      >
+                        <span>{params}</span>
+                        <span className="ml-2 shrink-0 text-zinc-400">
+                          {v.count} run{v.count === 1 ? "" : "s"}
+                        </span>
+                      </button>
+                    );
+                  })}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
