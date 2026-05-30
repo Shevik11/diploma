@@ -9,11 +9,6 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
-  RadarChart,
-  Radar,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
   ScatterChart,
   Scatter,
   ZAxis,
@@ -335,12 +330,6 @@ interface WidgetDef {
 
 const ANALYSIS_WIDGETS: WidgetDef[] = [
   {
-    id: "radar",
-    label: "Radar overview",
-    description: "Multi-metric fingerprint per model",
-    group: "analysis",
-  },
-  {
     id: "scatter",
     label: "Efficiency scatter",
     description: "Latency vs throughput bubble chart",
@@ -365,9 +354,27 @@ const ANALYSIS_WIDGETS: WidgetDef[] = [
     group: "analysis",
   },
   {
+    id: "throughputByDeployment",
+    label: "Throughput by model (4c + opt RAM)",
+    description: "Model ranking by TPS at 4 CPU cores and best RAM per model",
+    group: "analysis",
+  },
+  {
     id: "enormHeatmap",
     label: "E_norm heatmap",
     description: "Normalized efficiency in CPU cores × RAM GB space",
+    group: "analysis",
+  },
+  {
+    id: "oomHeatmap",
+    label: "OOM failure heatmap",
+    description: "OOM-failure share in RAM × Model space",
+    group: "analysis",
+  },
+  {
+    id: "tpsTcoPareto",
+    label: "TPS–TCO Pareto",
+    description: "Scatter of all configs with Pareto-optimal frontier",
     group: "analysis",
   },
 ];
@@ -414,138 +421,6 @@ function TT({
         </div>
       ))}
     </div>
-  );
-}
-
-// ─── 1. Radar chart ───────────────────────────────────────────────────────────
-
-const RADAR_AXES = [
-  {
-    key: "avg_tokens_per_second",
-    label: "Tok/s",
-    higherBetter: true,
-    getValue: (a: ModelAggregate) => a.summary.avg_tokens_per_second || 0,
-  },
-  {
-    key: "avg_latency_ms",
-    label: "Latency↓",
-    higherBetter: false,
-    getValue: (a: ModelAggregate) => a.summary.avg_latency_ms || 0,
-  },
-  {
-    key: "avg_first_token_ms",
-    label: "TTFT↓",
-    higherBetter: false,
-    getValue: (a: ModelAggregate) => a.summary.avg_first_token_latency_ms || 0,
-  },
-  {
-    key: "success_rate",
-    label: "Success%",
-    higherBetter: true,
-    getValue: (a: ModelAggregate) => a.summary.success_rate || 0,
-  },
-  {
-    key: "avg_cpu_percent",
-    label: "CPU↓",
-    higherBetter: false,
-    getValue: (a: ModelAggregate) => a.summary.avg_cpu_percent || 0,
-  },
-  {
-    key: "avg_memory_percent",
-    label: "Memory↓",
-    higherBetter: false,
-    getValue: (a: ModelAggregate) => a.summary.avg_memory_percent || 0,
-  },
-  {
-    key: "test_pass_rate",
-    label: "Tests%",
-    higherBetter: true,
-    getValue: (a: ModelAggregate) => a.testPassRate * 100,
-  },
-];
-
-function RadarWidget({
-  aggregates,
-  colorMap,
-  leaderboardScores,
-}: {
-  aggregates: ModelAggregate[];
-  colorMap: Map<string, string>;
-  leaderboardScores?: Map<string, number>;
-}) {
-  // Normalize each axis across all aggregates
-  const radarData = RADAR_AXES.map((axis) => {
-    const raw = aggregates.map((a) => axis.getValue(a));
-    const scores = normalizeValues(raw, axis.higherBetter);
-    const row: Record<string, number | string> = { metric: axis.label };
-    aggregates.forEach((a, i) => {
-      row[a.model] = scores[i];
-    });
-    return row;
-  });
-
-  return (
-    <WidgetCard
-      title={
-        leaderboardScores
-          ? "Radar overview — ranked"
-          : "Radar overview"
-      }
-      hint={
-        leaderboardScores
-          ? "Models ordered by composite score · ↓ = lower is better"
-          : "All metrics normalized 0–100 · ↓ = lower is better"
-      }
-    >
-      <ResponsiveContainer width="100%" height={320}>
-        <RadarChart
-          data={radarData}
-          margin={{ top: 10, right: 30, bottom: 10, left: 30 }}
-        >
-          <PolarGrid stroke="#e4e4e7" />
-          <PolarAngleAxis
-            dataKey="metric"
-            tick={{ fontSize: 11, fill: "#71717a" }}
-          />
-          <PolarRadiusAxis
-            angle={30}
-            domain={[0, 100]}
-            tick={{ fontSize: 9, fill: "#a1a1aa" }}
-          />
-          {aggregates.map((a) => (
-            <Radar
-              key={a.model}
-              name={a.model}
-              dataKey={a.model}
-              stroke={colorMap.get(a.model) || "#18181b"}
-              fill={colorMap.get(a.model) || "#18181b"}
-              fillOpacity={0.12}
-              strokeWidth={2}
-              dot={{ r: 3 }}
-            />
-          ))}
-          <Legend
-            iconType="circle"
-            iconSize={8}
-            wrapperStyle={{ fontSize: 11, color: "#52525b" }}
-          />
-          <Tooltip
-            content={(props) => (
-              <TT
-                active={props.active}
-                payload={props.payload?.map((p) => ({
-                  name: String(p.dataKey),
-                  value: Number(p.value),
-                  color: p.color,
-                }))}
-                label={String(props.label ?? "")}
-                unit=" pts"
-              />
-            )}
-          />
-        </RadarChart>
-      </ResponsiveContainer>
-    </WidgetCard>
   );
 }
 
@@ -1122,123 +997,337 @@ function HeatmapWidget({ aggregates }: { aggregates: ModelAggregate[] }) {
   );
 }
 
-// ─── 7. E_norm heatmap (CPU_cores × RAM_GB per model) ────────────────────────
+// ─── 7. Throughput by model (4 CPU cores + optimal RAM) ───────────────────────
 
-/**
- * E = avg_tokens_per_second / sqrt((avg_cpu_percent/100) × (avg_memory_percent/100))
- * Captures how much throughput the model delivers per unit of combined resource cost.
- * E_norm is min-max normalised to [0, 100] across all (cpu_cores, ram_gb) cells
- * for the selected base model.
- */
-function EfficHeatmapWidget({
+function median(nums: number[]): number {
+  const vals = nums
+    .filter((n) => typeof n === "number" && !Number.isNaN(n))
+    .sort((a, b) => a - b);
+  if (!vals.length) return 0;
+  const mid = Math.floor(vals.length / 2);
+  return vals.length % 2 === 0
+    ? (vals[mid - 1] + vals[mid]) / 2
+    : vals[mid];
+}
+
+function ThroughputByDeploymentWidget({
   usableFiles,
   summaryCache,
+  selectedModels,
 }: {
   usableFiles: BenchmarkResultFile[];
   summaryCache: Record<string, BenchmarkSummary>;
+  selectedModels: Set<string>;
 }) {
-  const baseModels = useMemo(() => {
-    const s = new Set<string>();
+  const isSingleModel = selectedModels.size === 1;
+
+  const data = useMemo(() => {
+    const byModelRam = new Map<string, { model: string; ram: number; values: number[] }>();
     usableFiles.forEach((f) => {
-      if (f.model && summaryCache[f.filename]) s.add(f.model);
+      if (!selectedModels.has(variantId(f))) return;
+      const s = summaryCache[f.filename];
+      if (!summaryHasAnyResult(s)) return;
+      if (f.cpu_cores == null || Number(f.cpu_cores) !== 4) return;
+      if (f.ram_gb == null) return;
+      const tps = s.summary?.avg_tokens_per_second || 0;
+      if (tps <= 0) return;
+      const model = f.model || s.model || "unknown-model";
+      const ram = Number(f.ram_gb);
+      const key = `${model}__${ram}`;
+      const prev = byModelRam.get(key) ?? { model, ram, values: [] };
+      prev.values.push(tps);
+      byModelRam.set(key, prev);
     });
-    return Array.from(s).sort((a, b) => a.localeCompare(b));
-  }, [usableFiles, summaryCache]);
 
-  const [selectedModel, setSelectedModel] = useState<string>("");
-  const activeModel = selectedModel || baseModels[0] || "";
+    if (isSingleModel) {
+      // Show all RAM variants for the single selected model
+      return Array.from(byModelRam.values())
+        .sort((a, b) => a.ram - b.ram)
+        .map((entry, i) => ({
+          model: entry.model,
+          ram: entry.ram,
+          medianTok: Math.round(median(entry.values) * 100) / 100,
+          runs: entry.values.length,
+          label: `${entry.ram} GB RAM`,
+          color: paletteColor(i),
+        }));
+    }
 
-  const modelFiles = useMemo(
-    () =>
-      usableFiles.filter(
-        (f) =>
-          f.model === activeModel &&
-          summaryCache[f.filename] &&
-          f.cpu_cores != null &&
-          f.ram_gb != null,
-      ),
-    [usableFiles, summaryCache, activeModel],
-  );
-
-  const cpuValues = useMemo(
-    () =>
-      [...new Set(modelFiles.map((f) => f.cpu_cores as number))].sort(
-        (a, b) => a - b,
-      ),
-    [modelFiles],
-  );
-  const ramValues = useMemo(
-    () =>
-      [...new Set(modelFiles.map((f) => f.ram_gb as number))].sort(
-        (a, b) => a - b,
-      ),
-    [modelFiles],
-  );
-
-  const cellData = useMemo(() => {
-    const acc = new Map<
+    // Multi-model: pick optimal RAM per model at 4 cores: highest median TPS, tie -> lower RAM.
+    const bestByModel = new Map<
       string,
-      { eSum: number; count: number; tok: number; cpu: number; mem: number }
+      { model: string; ram: number; medianTok: number; runs: number }
     >();
-    modelFiles.forEach((f) => {
-      const key = `${f.cpu_cores}_${f.ram_gb}`;
-      const s = summaryCache[f.filename]?.summary;
-      if (!s) return;
-      const tok = s.avg_tokens_per_second || 0;
-      const cpu = s.avg_cpu_percent || 0;
-      const mem = s.avg_memory_percent || 0;
-      const denom = Math.sqrt((cpu / 100) * (mem / 100));
-      const e = denom > 0 ? tok / denom : 0;
-      const prev = acc.get(key) ?? { eSum: 0, count: 0, tok: 0, cpu: 0, mem: 0 };
-      acc.set(key, {
-        eSum: prev.eSum + e,
-        count: prev.count + 1,
-        tok: prev.tok + tok,
-        cpu: prev.cpu + cpu,
-        mem: prev.mem + mem,
-      });
+    byModelRam.forEach((entry) => {
+      const med = Math.round(median(entry.values) * 100) / 100;
+      const candidate = {
+        model: entry.model,
+        ram: entry.ram,
+        medianTok: med,
+        runs: entry.values.length,
+      };
+      const prev = bestByModel.get(entry.model);
+      if (
+        !prev ||
+        candidate.medianTok > prev.medianTok ||
+        (candidate.medianTok === prev.medianTok && candidate.ram < prev.ram)
+      ) {
+        bestByModel.set(entry.model, candidate);
+      }
     });
-    const result = new Map<
-      string,
-      { e: number; tok: number; cpu: number; mem: number }
-    >();
-    acc.forEach((v, k) => {
-      result.set(k, {
-        e: v.count > 0 ? v.eSum / v.count : 0,
-        tok: v.count > 0 ? v.tok / v.count : 0,
-        cpu: v.count > 0 ? v.cpu / v.count : 0,
-        mem: v.count > 0 ? v.mem / v.count : 0,
-      });
-    });
-    return result;
-  }, [modelFiles, summaryCache]);
 
-  const eNorm = useMemo(() => {
-    const vals = [...cellData.values()].map((v) => v.e).filter((v) => v > 0);
-    if (!vals.length) return new Map<string, number>();
-    const minE = Math.min(...vals);
-    const maxE = Math.max(...vals);
-    const norm = new Map<string, number>();
-    cellData.forEach((v, k) => {
-      norm.set(
-        k,
-        maxE > minE ? Math.round(((v.e - minE) / (maxE - minE)) * 100) : 50,
-      );
-    });
-    return norm;
-  }, [cellData]);
+    return Array.from(bestByModel.values())
+      .sort((a, b) => b.medianTok - a.medianTok)
+      .map((v, i) => ({
+        ...v,
+        label: v.model,
+        color: paletteColor(i),
+      }));
+  }, [usableFiles, summaryCache, selectedModels, isSingleModel]);
 
-  if (!activeModel || cpuValues.length === 0 || ramValues.length === 0) {
+  const singleModelName = isSingleModel ? Array.from(selectedModels)[0] : null;
+
+  if (!data.length) {
     return (
       <WidgetCard
-        title="E_norm heatmap"
-        hint="CPU cores × RAM GB — select a model to view"
+        title={
+          isSingleModel && singleModelName
+            ? `Throughput by RAM — ${singleModelName} (4 cores)`
+            : "Throughput by model (4 cores + optimal RAM)"
+        }
+        hint="Ranking unavailable: no runs with exactly 4 CPU cores in current selection"
         fullWidth
       >
         <p className="text-sm text-zinc-400 py-6 text-center">
-          {baseModels.length === 0
-            ? "No benchmark data available."
-            : "No hardware-variant data found for this model (result files need cpu_cores + ram_gb)."}
+          No model throughput data available for 4-core configuration.
+        </p>
+      </WidgetCard>
+    );
+  }
+
+  const barH = Math.max(220, data.length * 48 + 36);
+  return (
+    <WidgetCard
+      title={
+        isSingleModel && singleModelName
+          ? `Throughput by RAM — ${singleModelName} (4 cores)`
+          : "Throughput by model (4 cores + optimal RAM)"
+      }
+      hint={
+        isSingleModel
+          ? "All RAM configurations for this model at exactly 4 CPU cores"
+          : "Per model: pick RAM with highest median TPS at exactly 4 CPU cores"
+      }
+      fullWidth
+    >
+      <div style={{ height: barH }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={data}
+            layout="vertical"
+            margin={{ top: 4, right: 80, bottom: 4, left: 4 }}
+          >
+            <CartesianGrid
+              strokeDasharray="3 3"
+              horizontal={false}
+              stroke="#e4e4e7"
+            />
+            <XAxis
+              type="number"
+              tick={{ fontSize: 11, fill: "#71717a" }}
+              tickLine={false}
+              axisLine={false}
+              unit=" tok/s"
+            />
+            <YAxis
+              type="category"
+              dataKey="label"
+              width={190}
+              tick={{ fontSize: 11, fill: "#71717a" }}
+              tickLine={false}
+              axisLine={false}
+            />
+            <Tooltip
+              content={(props) => {
+                if (!props.active || !props.payload?.length) return null;
+                const p = props.payload[0].payload as {
+                  model: string;
+                  ram: number;
+                  medianTok: number;
+                  runs: number;
+                };
+                return (
+                  <div className="bg-white border border-zinc-200 rounded-lg px-3 py-2 shadow-sm text-xs space-y-0.5">
+                    <div className="font-semibold text-zinc-800">
+                      {isSingleModel ? `${p.ram} GB RAM` : p.model}
+                    </div>
+                    {!isSingleModel && (
+                      <div className="text-zinc-600">
+                        Optimal RAM @4c:{" "}
+                        <span className="font-medium text-zinc-800">
+                          {p.ram} GB
+                        </span>
+                      </div>
+                    )}
+                    <div className="text-zinc-600">
+                      Median TPS:{" "}
+                      <span className="font-medium text-zinc-800">
+                        {p.medianTok} tok/s
+                      </span>
+                    </div>
+                    <div className="text-zinc-600">
+                      Runs:{" "}
+                      <span className="font-medium text-zinc-800">
+                        {p.runs}
+                      </span>
+                    </div>
+                  </div>
+                );
+              }}
+            />
+            <Bar
+              dataKey="medianTok"
+              radius={[0, 4, 4, 0]}
+              maxBarSize={34}
+              label={{
+                position: "right",
+                fontSize: 10,
+                fill: "#52525b",
+                formatter: (v: number, _n: string, row: { payload?: { ram?: number } }) =>
+                  v > 0
+                    ? `${v} tok/s${!isSingleModel && row?.payload?.ram ? ` (${row.payload.ram}GB)` : ""}`
+                    : "",
+              }}
+            >
+              {data.map((entry, i) => (
+                <Cell key={i} fill={entry.color} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </WidgetCard>
+  );
+}
+
+// ─── 8. OOM failure heatmap (RAM_GB × Model) ─────────────────────────────────
+
+function oomRateColor(ratePct: number): string {
+  // 0% => green (120), 100% => red (0)
+  const h = Math.round((1 - Math.max(0, Math.min(100, ratePct)) / 100) * 120);
+  return `hsl(${h}, 65%, 48%)`;
+}
+
+function isOomLikeErrorType(v: unknown): boolean {
+  const s = String(v || "").toLowerCase();
+  return (
+    s.includes("oom") ||
+    s.includes("out of memory") ||
+    s === "server_error" ||
+    s === "http_500" ||
+    s === "http_503"
+  );
+}
+
+function extractOomFailureRate(summary: BenchmarkSummary): number | null {
+  const tests = Array.isArray(summary.test_results) ? summary.test_results : [];
+  const oomTest = tests.find((t) => t?.id === "oom_detection");
+  const raw = (oomTest as { raw_data?: unknown } | undefined)?.raw_data as
+    | {
+        burst?: {
+          error_types?: unknown[];
+          runs?: Array<{ success?: boolean; error_type?: unknown }>;
+        };
+      }
+    | undefined;
+  const burst = raw?.burst;
+  if (burst) {
+    const errTypes = Array.isArray(burst.error_types) ? burst.error_types : [];
+    if (errTypes.length > 0) {
+      // Figure 4.4 definition: rate over repeated launches (use first 10 when available).
+      const sample = errTypes.slice(0, 10);
+      const oomCount = sample.filter(isOomLikeErrorType).length;
+      return sample.length > 0 ? (oomCount / sample.length) * 100 : null;
+    }
+    const runs = Array.isArray(burst.runs) ? burst.runs : [];
+    if (runs.length > 0) {
+      const sample = runs.slice(0, 10);
+      const oomCount = sample.filter(
+        (r) => r.success === false && isOomLikeErrorType(r.error_type),
+      ).length;
+      return sample.length > 0 ? (oomCount / sample.length) * 100 : null;
+    }
+  }
+
+  // Fallback for legacy files: infer from Phase-1 prompt-level failures.
+  const rs = Array.isArray(summary.results) ? summary.results : [];
+  if (!rs.length) return null;
+  const sample = rs.slice(0, 10);
+  const oomCount = sample.filter((r) => {
+    if (r.success) return false;
+    const err = String(r.error || "").toLowerCase();
+    return (
+      err.includes("oom") ||
+      err.includes("out of memory") ||
+      err.includes("http 500") ||
+      err.includes("http 503") ||
+      err.includes("terminated with exit code -1")
+    );
+  }).length;
+  return sample.length > 0 ? (oomCount / sample.length) * 100 : null;
+}
+
+function OomHeatmapWidget({
+  usableFiles,
+  summaryCache,
+  selectedModels,
+}: {
+  usableFiles: BenchmarkResultFile[];
+  summaryCache: Record<string, BenchmarkSummary>;
+  selectedModels: Set<string>;
+}) {
+  const { modelNames, ramValues, cellMap } = useMemo(() => {
+    const modelSet = new Set<string>();
+    const ramSet = new Set<number>();
+    const acc = new Map<string, { sum: number; count: number }>();
+
+    usableFiles.forEach((f) => {
+      if (!selectedModels.has(variantId(f))) return;
+      if (f.ram_gb == null) return;
+      const summary = summaryCache[f.filename];
+      if (!summary) return;
+      const rate = extractOomFailureRate(summary);
+      if (rate == null || Number.isNaN(rate)) return;
+      const model = f.model || summary.model || "unknown-model";
+      const ram = Number(f.ram_gb);
+      modelSet.add(model);
+      ramSet.add(ram);
+      const key = `${model}__${ram}`;
+      const prev = acc.get(key) ?? { sum: 0, count: 0 };
+      acc.set(key, { sum: prev.sum + rate, count: prev.count + 1 });
+    });
+
+    const cell = new Map<string, { rate: number; runs: number }>();
+    acc.forEach((v, k) => {
+      cell.set(k, { rate: v.count > 0 ? v.sum / v.count : 0, runs: v.count });
+    });
+
+    return {
+      modelNames: Array.from(modelSet).sort((a, b) => a.localeCompare(b)),
+      ramValues: Array.from(ramSet).sort((a, b) => a - b),
+      cellMap: cell,
+    };
+  }, [usableFiles, summaryCache, selectedModels]);
+
+  if (!modelNames.length || !ramValues.length) {
+    return (
+      <WidgetCard
+        title="OOM failure heatmap"
+        hint="RAM × Model, 0% (green) → 100% (red)"
+        fullWidth
+      >
+        <p className="text-sm text-zinc-400 py-6 text-center">
+          No OOM data available yet. Run benchmarks with the OOM Detection test.
         </p>
       </WidgetCard>
     );
@@ -1246,40 +1335,24 @@ function EfficHeatmapWidget({
 
   return (
     <WidgetCard
-      title="E_norm heatmap"
-      hint="E = tok/s ÷ √(cpu% × mem%) — normalised 0–100 · green = most efficient"
+      title="OOM failure heatmap"
+      hint="RAM × Model, OOM-failure share over repeated launches (up to first 10 repeats)"
       fullWidth
     >
-      {/* Model selector */}
-      <div className="flex items-center gap-2 mb-4">
-        <span className="text-xs text-zinc-500">Model:</span>
-        <select
-          value={activeModel}
-          onChange={(e) => setSelectedModel(e.target.value)}
-          className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
-        >
-          {baseModels.map((m) => (
-            <option key={m} value={m}>
-              {m}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Heatmap grid */}
       <div className="overflow-x-auto">
-        <table className="text-xs border-collapse">
+        <table className="text-xs border-collapse min-w-full">
           <thead>
             <tr>
               <th className="p-2 text-left text-zinc-400 font-medium whitespace-nowrap w-24">
-                RAM ↓ / CPU →
+                RAM \ Model
               </th>
-              {cpuValues.map((cpu) => (
+              {modelNames.map((m) => (
                 <th
-                  key={cpu}
-                  className="p-2 text-center text-zinc-500 font-medium whitespace-nowrap min-w-[88px]"
+                  key={m}
+                  className="p-2 text-center text-zinc-500 font-medium whitespace-nowrap min-w-[110px]"
+                  title={m}
                 >
-                  {cpu} cores
+                  {m}
                 </th>
               ))}
             </tr>
@@ -1288,30 +1361,29 @@ function EfficHeatmapWidget({
             {ramValues.map((ram) => (
               <tr key={ram}>
                 <td className="p-2 text-zinc-600 font-medium whitespace-nowrap">
-                  {ram} GB RAM
+                  {ram} GB
                 </td>
-                {cpuValues.map((cpu) => {
-                  const key = `${cpu}_${ram}`;
-                  const score = eNorm.get(key);
-                  const cell = cellData.get(key);
-                  if (score === undefined || !cell) {
+                {modelNames.map((m) => {
+                  const key = `${m}__${ram}`;
+                  const cell = cellMap.get(key);
+                  if (!cell) {
                     return (
-                      <td key={cpu} className="p-1 text-center">
-                        <div className="rounded px-2 py-3 text-zinc-300 bg-zinc-100 text-[11px]">
+                      <td key={m} className="p-1 text-center">
+                        <div className="rounded px-2 py-2.5 text-zinc-300 bg-zinc-100 text-[11px]">
                           —
                         </div>
                       </td>
                     );
                   }
-                  const r = (v: number) => Math.round(v * 10) / 10;
+                  const rate = Math.round(cell.rate * 10) / 10;
                   return (
-                    <td key={cpu} className="p-1 text-center">
+                    <td key={m} className="p-1 text-center">
                       <div
-                        title={`${activeModel} · ${cpu} cores, ${ram} GB RAM\nE_norm: ${score} / 100\nTok/s: ${r(cell.tok)}\nCPU: ${r(cell.cpu)}%\nMem: ${r(cell.mem)}%`}
-                        className="rounded px-2 py-3 font-mono font-semibold text-white text-[11px] cursor-default select-none"
-                        style={{ backgroundColor: scoreColor(score) }}
+                        title={`${m} @ ${ram} GB RAM\nOOM failure rate: ${rate}%\nRuns: ${cell.runs}`}
+                        className="rounded px-2 py-2.5 font-mono font-semibold text-white text-[11px] cursor-default select-none"
+                        style={{ backgroundColor: oomRateColor(rate) }}
                       >
-                        {score}
+                        {rate}%
                       </div>
                     </td>
                   );
@@ -1322,9 +1394,553 @@ function EfficHeatmapWidget({
         </table>
       </div>
 
-      {/* Colour scale legend */}
       <div className="flex items-center gap-2 mt-3 text-[10px] text-zinc-400">
-        <span>Low E_norm</span>
+        <span>0% OOM</span>
+        <div
+          className="h-2 flex-1 rounded"
+          style={{
+            background:
+              "linear-gradient(to right, hsl(120,65%,48%), hsl(60,65%,48%), hsl(0,65%,48%))",
+          }}
+        />
+        <span>100% OOM</span>
+      </div>
+    </WidgetCard>
+  );
+}
+
+// ─── 9. TPS–TCO scatter with Pareto frontier ──────────────────────────────────
+
+type InfraProfile = {
+  id: string;
+  cpu_cores: number;
+  ram_gb: number;
+  usd_per_hour: number;
+};
+
+const INFRA_PROFILES: InfraProfile[] = [
+  { id: "edge-cpu-1c-1g", cpu_cores: 1, ram_gb: 1, usd_per_hour: 0.0061 },
+  { id: "edge-cpu-2c-2g", cpu_cores: 2, ram_gb: 2, usd_per_hour: 0.0157 },
+  { id: "server-cpu-4c-8g", cpu_cores: 4, ram_gb: 8, usd_per_hour: 0.084 },
+  { id: "server-cpu-8c-16g", cpu_cores: 8, ram_gb: 16, usd_per_hour: 0.168 },
+];
+
+function pickHwProfile(ram: number, cpu: number): InfraProfile | null {
+  const fit = INFRA_PROFILES.filter((p) => p.ram_gb >= ram && p.cpu_cores >= cpu);
+  if (!fit.length) return null;
+  return [...fit].sort((a, b) => a.usd_per_hour - b.usd_per_hour)[0];
+}
+
+function usdPerMillionTokens(usdPerHour: number, tokPerS: number): number | null {
+  if (!tokPerS || tokPerS <= 0) return null;
+  const tokensPerHour = tokPerS * 3600;
+  if (tokensPerHour <= 0) return null;
+  const hoursPerMillion = 1_000_000 / tokensPerHour;
+  return usdPerHour * hoursPerMillion;
+}
+
+type TpsTcoPoint = {
+  id: string;
+  model: string;
+  ram: number;
+  cpu: number;
+  technology: string;
+  platform: string;
+  tps: number;
+  tco: number;
+  hwProfile: string;
+  pareto?: boolean;
+};
+
+function TpsTcoParetoWidget({
+  usableFiles,
+  summaryCache,
+  selectedModels,
+}: {
+  usableFiles: BenchmarkResultFile[];
+  summaryCache: Record<string, BenchmarkSummary>;
+  selectedModels: Set<string>;
+}) {
+  const { points, pareto } = useMemo(() => {
+    const pts: TpsTcoPoint[] = [];
+    usableFiles.forEach((f) => {
+      if (!selectedModels.has(variantId(f))) return;
+      if (f.ram_gb == null || f.cpu_cores == null) return;
+      const s = summaryCache[f.filename];
+      if (!summaryHasAnyResult(s)) return;
+      const tps = s.summary?.avg_tokens_per_second || 0;
+      if (tps <= 0) return;
+      const hw = pickHwProfile(Number(f.ram_gb), Number(f.cpu_cores));
+      if (!hw) return;
+      const tco = usdPerMillionTokens(hw.usd_per_hour, tps);
+      if (tco == null || Number.isNaN(tco)) return;
+      pts.push({
+        id: f.filename,
+        model: f.model || s.model || "unknown-model",
+        ram: Number(f.ram_gb),
+        cpu: Number(f.cpu_cores),
+        technology: f.technology || s.technology || "unknown-tech",
+        platform: f.platform || s.platform || "unknown-platform",
+        tps: Math.round(tps * 100) / 100,
+        tco: Math.round(tco * 1000) / 1000,
+        hwProfile: hw.id,
+      });
+    });
+
+    // Pareto front for: maximize TPS, minimize TCO.
+    const byCostAsc = [...pts].sort((a, b) => a.tco - b.tco || b.tps - a.tps);
+    const front: TpsTcoPoint[] = [];
+    let bestTps = -Infinity;
+    byCostAsc.forEach((p) => {
+      if (p.tps > bestTps) {
+        front.push({ ...p, pareto: true });
+        bestTps = p.tps;
+      }
+    });
+    const frontIds = new Set(front.map((p) => p.id));
+    const all = pts.map((p) => ({ ...p, pareto: frontIds.has(p.id) }));
+    return {
+      points: all,
+      pareto: [...front].sort((a, b) => a.tps - b.tps),
+    };
+  }, [usableFiles, summaryCache, selectedModels]);
+
+  if (!points.length) {
+    return (
+      <WidgetCard
+        title="TPS–TCO Pareto"
+        hint="No feasible configurations with TPS + RAM/CPU metadata"
+        fullWidth
+      >
+        <p className="text-sm text-zinc-400 py-6 text-center">
+          No data to build TPS–TCO scatter. Run benchmarks on RAM/CPU configs first.
+        </p>
+      </WidgetCard>
+    );
+  }
+
+  return (
+    <WidgetCard
+      title="TPS–TCO Pareto"
+      hint={`All feasible configs: ${points.length} · Pareto-optimal: ${pareto.length}`}
+      fullWidth
+    >
+      <ResponsiveContainer width="100%" height={420}>
+        <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 10 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" />
+          <XAxis
+            type="number"
+            dataKey="x"
+            name="TCO"
+            unit=" USD / 1M tok"
+            tick={{ fontSize: 11, fill: "#71717a" }}
+            tickLine={false}
+            label={{
+              value: "TCO (USD per 1M tokens)",
+              position: "insideBottom",
+              offset: -10,
+              fontSize: 11,
+              fill: "#71717a",
+            }}
+          />
+          <YAxis
+            type="number"
+            dataKey="y"
+            name="TPS"
+            unit=" tok/s"
+            tick={{ fontSize: 11, fill: "#71717a" }}
+            tickLine={false}
+            label={{
+              value: "Throughput (tok/s)",
+              angle: -90,
+              position: "insideLeft",
+              offset: 10,
+              fontSize: 11,
+              fill: "#71717a",
+            }}
+          />
+          <Tooltip
+            cursor={{ strokeDasharray: "3 3" }}
+            content={(props) => {
+              if (!props.active || !props.payload?.length) return null;
+              const p = props.payload[0].payload as {
+                model: string;
+                tco: number;
+                tps: number;
+                ram: number;
+                cpu: number;
+                technology: string;
+                platform: string;
+                pareto?: boolean;
+              };
+              return (
+                <div className="bg-white border border-zinc-200 rounded-lg px-3 py-2 shadow-sm text-xs space-y-0.5">
+                  <div className="font-semibold text-zinc-800">{p.model}</div>
+                  <div className="text-zinc-600">
+                    Config:{" "}
+                    <span className="font-medium text-zinc-800">
+                      {p.ram}GB / {p.cpu}c · {p.technology}/{p.platform}
+                    </span>
+                  </div>
+                  <div className="text-zinc-600">
+                    TPS: <span className="font-medium text-zinc-800">{p.tps}</span>
+                  </div>
+                  <div className="text-zinc-600">
+                    TCO: <span className="font-medium text-zinc-800">{p.tco} USD / 1M</span>
+                  </div>
+                  {p.pareto && (
+                    <div className="text-amber-700 font-medium">Pareto-optimal</div>
+                  )}
+                </div>
+              );
+            }}
+          />
+          <Legend
+            iconType="circle"
+            iconSize={8}
+            verticalAlign="top"
+            wrapperStyle={{ fontSize: 11, color: "#52525b" }}
+          />
+          <Scatter
+            name="All configurations"
+            data={points.map((p) => ({ ...p, x: p.tco, y: p.tps }))}
+            fill="#94a3b8"
+            fillOpacity={0.65}
+          />
+          <Scatter
+            name="Pareto frontier"
+            data={pareto.map((p) => ({ ...p, x: p.tco, y: p.tps }))}
+            fill="#f59e0b"
+            fillOpacity={1}
+          />
+        </ScatterChart>
+      </ResponsiveContainer>
+
+      <div className="mt-4 overflow-x-auto">
+        <table className="w-full text-xs border-collapse">
+          <thead>
+            <tr>
+              <th className="text-left p-2 text-zinc-500 font-medium">#</th>
+              <th className="text-left p-2 text-zinc-500 font-medium">Model</th>
+              <th className="text-left p-2 text-zinc-500 font-medium">Config</th>
+              <th className="text-right p-2 text-zinc-500 font-medium">TPS</th>
+              <th className="text-right p-2 text-zinc-500 font-medium">TCO</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pareto.map((p, i) => (
+              <tr key={p.id} className={i % 2 === 0 ? "bg-zinc-50/50" : ""}>
+                <td className="p-2 text-zinc-600">{i + 1}</td>
+                <td className="p-2 text-zinc-700">{p.model}</td>
+                <td className="p-2 text-zinc-600">
+                  {p.ram}GB / {p.cpu}c · {p.technology}/{p.platform}
+                </td>
+                <td className="p-2 text-right font-mono text-zinc-800">{p.tps}</td>
+                <td className="p-2 text-right font-mono text-zinc-800">
+                  {p.tco}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </WidgetCard>
+  );
+}
+
+// ─── 10. E_norm heatmap (CPU_cores × RAM_GB per model) ───────────────────────
+
+/**
+ * E_norm heatmap (CPU_cores x RAM_GB).
+ *
+ * E(m, p, c) = avg_tokens_per_second / sqrt((avg_cpu_percent/100) * (avg_memory_percent/100))
+ *
+ * E_norm(m, p, c) = E(m, p, c) / max_{(m', p', c') in O} E(m', p', c')
+ *
+ * O is the set of all measured configurations (all models, platforms, hardware settings).
+ * E_norm in [0, 1]; the configuration with E_norm = 1 is the reference point.
+ */
+
+/** Build per-cell average E (and component metrics) for one base model. */
+function buildModelCells(
+  model: string,
+  usableFiles: BenchmarkResultFile[],
+  summaryCache: Record<string, BenchmarkSummary>,
+): {
+  cpuValues: number[];
+  ramValues: number[];
+  cells: Map<string, { e: number; tok: number; cpu: number; mem: number }>;
+} {
+  const acc = new Map<
+    string,
+    { eSum: number; count: number; tok: number; cpu: number; mem: number }
+  >();
+  usableFiles.forEach((f) => {
+    if (f.model !== model || f.cpu_cores == null || f.ram_gb == null) return;
+    const s = summaryCache[f.filename]?.summary;
+    if (!s) return;
+    const tok = s.avg_tokens_per_second || 0;
+    const cpu = s.avg_cpu_percent || 0;
+    const mem = s.avg_memory_percent || 0;
+    const denom = Math.sqrt((cpu / 100) * (mem / 100));
+    const e = denom > 0 ? tok / denom : 0;
+    const key = `${f.cpu_cores}_${f.ram_gb}`;
+    const prev = acc.get(key) ?? { eSum: 0, count: 0, tok: 0, cpu: 0, mem: 0 };
+    acc.set(key, {
+      eSum: prev.eSum + e,
+      count: prev.count + 1,
+      tok: prev.tok + tok,
+      cpu: prev.cpu + cpu,
+      mem: prev.mem + mem,
+    });
+  });
+
+  const cells = new Map<
+    string,
+    { e: number; tok: number; cpu: number; mem: number }
+  >();
+  const cpuSet = new Set<number>();
+  const ramSet = new Set<number>();
+  acc.forEach((v, key) => {
+    const [cpuStr, ramStr] = key.split("_");
+    cpuSet.add(Number(cpuStr));
+    ramSet.add(Number(ramStr));
+    cells.set(key, {
+      e: v.count > 0 ? v.eSum / v.count : 0,
+      tok: v.count > 0 ? v.tok / v.count : 0,
+      cpu: v.count > 0 ? v.cpu / v.count : 0,
+      mem: v.count > 0 ? v.mem / v.count : 0,
+    });
+  });
+
+  return {
+    cpuValues: [...cpuSet].sort((a, b) => a - b),
+    ramValues: [...ramSet].sort((a, b) => a - b),
+    cells,
+  };
+}
+
+/** Renders a single model's CPU×RAM E_norm grid. */
+function ModelEGrid({
+  model,
+  cpuValues,
+  ramValues,
+  cells,
+  globalMaxE,
+}: {
+  model: string;
+  cpuValues: number[];
+  ramValues: number[];
+  cells: Map<string, { e: number; tok: number; cpu: number; mem: number }>;
+  globalMaxE: number;
+}) {
+  const r = (v: number) => Math.round(v * 10) / 10;
+  return (
+    <div className="overflow-x-auto">
+      <table className="text-xs border-collapse w-full">
+        <thead>
+          <tr>
+            <th className="p-1.5 text-left text-zinc-400 font-medium whitespace-nowrap w-20">
+              RAM ↓ / CPU →
+            </th>
+            {cpuValues.map((cpu) => (
+              <th
+                key={cpu}
+                className="p-1.5 text-center text-zinc-500 font-medium whitespace-nowrap min-w-[76px]"
+              >
+                {cpu}c
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {ramValues.map((ram) => (
+            <tr key={ram}>
+              <td className="p-1.5 text-zinc-600 font-medium whitespace-nowrap">
+                {ram} GB
+              </td>
+              {cpuValues.map((cpu) => {
+                const key = `${cpu}_${ram}`;
+                const cell = cells.get(key);
+                if (!cell) {
+                  return (
+                    <td key={cpu} className="p-1 text-center">
+                      <div className="rounded px-1.5 py-2.5 text-zinc-300 bg-zinc-100 text-[11px]">
+                        —
+                      </div>
+                    </td>
+                  );
+                }
+                const norm =
+                  globalMaxE > 0 ? Math.min(1, cell.e / globalMaxE) : 0;
+                const isRef = norm >= 0.999;
+                return (
+                  <td key={cpu} className="p-1 text-center">
+                    <div
+                      title={[
+                        `${model} · ${cpu} cores, ${ram} GB RAM`,
+                        `E_norm: ${norm.toFixed(3)}${isRef ? " ★ еталон" : ""}`,
+                        `E: ${cell.e.toFixed(2)}`,
+                        `Tok/s: ${r(cell.tok)}`,
+                        `CPU: ${r(cell.cpu)}%`,
+                        `Mem: ${r(cell.mem)}%`,
+                      ].join("\n")}
+                      className="rounded px-1.5 py-2.5 font-mono font-semibold text-white text-[11px] cursor-default select-none"
+                      style={{
+                        backgroundColor: scoreColor(Math.round(norm * 100)),
+                      }}
+                    >
+                      {norm.toFixed(3)}
+                      {isRef && (
+                        <span className="block text-[9px] leading-none mt-0.5 opacity-90">
+                          ★
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function EfficHeatmapWidget({
+  usableFiles,
+  summaryCache,
+}: {
+  usableFiles: BenchmarkResultFile[];
+  summaryCache: Record<string, BenchmarkSummary>;
+}) {
+  // All base model names that have at least one loaded summary with hw info.
+  const baseModels = useMemo(() => {
+    const s = new Set<string>();
+    usableFiles.forEach((f) => {
+      if (f.model && summaryCache[f.filename] && f.cpu_cores != null && f.ram_gb != null)
+        s.add(f.model);
+    });
+    return Array.from(s).sort((a, b) => a.localeCompare(b));
+  }, [usableFiles, summaryCache]);
+
+  // "" = show all models; any other string = filter to that model.
+  const [modelFilter, setModelFilter] = useState<string>("");
+
+  // Global maximum E across entire Ω — shared colour scale.
+  const globalMaxE = useMemo(() => {
+    let max = 0;
+    usableFiles.forEach((f) => {
+      if (f.cpu_cores == null || f.ram_gb == null) return;
+      const s = summaryCache[f.filename]?.summary;
+      if (!s) return;
+      const tok = s.avg_tokens_per_second || 0;
+      const cpu = s.avg_cpu_percent || 0;
+      const mem = s.avg_memory_percent || 0;
+      const denom = Math.sqrt((cpu / 100) * (mem / 100));
+      const e = denom > 0 ? tok / denom : 0;
+      if (e > max) max = e;
+    });
+    return max;
+  }, [usableFiles, summaryCache]);
+
+  // Pre-build cell data for every base model once.
+  const allModelData = useMemo(
+    () =>
+      baseModels.map((m) => ({
+        model: m,
+        ...buildModelCells(m, usableFiles, summaryCache),
+      })),
+    [baseModels, usableFiles, summaryCache],
+  );
+
+  const visibleData = modelFilter
+    ? allModelData.filter((d) => d.model === modelFilter)
+    : allModelData;
+
+  if (baseModels.length === 0) {
+    return (
+      <WidgetCard
+        title="E_norm heatmap"
+        hint="CPU cores × RAM GB"
+        fullWidth
+      >
+        <p className="text-sm text-zinc-400 py-6 text-center">
+          No benchmark data available with cpu_cores + ram_gb fields.
+        </p>
+      </WidgetCard>
+    );
+  }
+
+  return (
+    <WidgetCard
+      title="E_norm heatmap"
+      hint="E_norm = E(m,p,c) / max E  ·  E = tok/s / sqrt(cpu% * mem%)  ·  1.000 = reference"
+      fullWidth
+    >
+      {/* Controls row */}
+      <div className="flex items-center gap-3 mb-5 flex-wrap">
+        <label className="flex items-center gap-2 text-xs text-zinc-600">
+          <span className="text-zinc-500">Model:</span>
+          <select
+            value={modelFilter}
+            onChange={(e) => setModelFilter(e.target.value)}
+            className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
+          >
+            <option value="">All models ({baseModels.length})</option>
+            {baseModels.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+          {modelFilter && (
+            <button
+              type="button"
+              onClick={() => setModelFilter("")}
+              className="text-zinc-400 hover:text-zinc-700 underline"
+            >
+              reset
+            </button>
+          )}
+        </label>
+        <span className="text-[11px] text-zinc-400">
+          max_Ω(E) = {globalMaxE > 0 ? globalMaxE.toFixed(2) : "—"}
+        </span>
+      </div>
+
+      {/* One grid per model */}
+      <div
+        className={
+          visibleData.length === 1
+            ? ""
+            : "grid grid-cols-1 xl:grid-cols-2 gap-6"
+        }
+      >
+        {visibleData.map(({ model, cpuValues, ramValues, cells }) =>
+          cpuValues.length === 0 ? null : (
+            <div key={model}>
+              {visibleData.length > 1 && (
+                <p className="text-xs font-semibold text-zinc-700 mb-2 truncate">
+                  {model}
+                </p>
+              )}
+              <ModelEGrid
+                model={model}
+                cpuValues={cpuValues}
+                ramValues={ramValues}
+                cells={cells}
+                globalMaxE={globalMaxE}
+              />
+            </div>
+          ),
+        )}
+      </div>
+
+      {/* Colour scale legend */}
+      <div className="flex items-center gap-2 mt-4 text-[10px] text-zinc-400">
+        <span>0 (worst)</span>
         <div
           className="h-2 flex-1 rounded"
           style={{
@@ -1332,13 +1948,13 @@ function EfficHeatmapWidget({
               "linear-gradient(to right, hsl(0,65%,48%), hsl(60,65%,48%), hsl(120,65%,48%))",
           }}
         />
-        <span>High E_norm</span>
+        <span>1 (reference)</span>
       </div>
     </WidgetCard>
   );
 }
 
-// ─── 8. Horizontal bar chart (per metric) ─────────────────────────────────────
+// ─── 11. Horizontal bar chart (per metric) ────────────────────────────────────
 
 function BarWidget({
   metric,
@@ -1483,6 +2099,8 @@ export function ModelDashboard() {
   // can focus the dashboard on one model's runs across its different
   // RAM/CPU/tech/platform configs. Empty == show all models.
   const [modelFilter, setModelFilter] = useState<string>("");
+  const [cpuFilter, setCpuFilter] = useState<string>("");
+  const [ramFilter, setRamFilter] = useState<string>("");
 
   // Each unique combination of model + RAM + CPU + tech + platform is shown
   // as a separate item ("variant"). `model` here holds the human-readable
@@ -1500,7 +2118,7 @@ export function ModelDashboard() {
   const allModels = useMemo(() => {
     const map = new Map<
       string,
-      { label: string; count: number; baseModel: string }
+      { label: string; count: number; baseModel: string; cpu_cores: number | null; ram_gb: number | null }
     >();
     usableFiles.forEach((f) => {
       if (!f.model) return;
@@ -1512,6 +2130,8 @@ export function ModelDashboard() {
           label: variantLabel(f),
           count: 1,
           baseModel: f.model,
+          cpu_cores: f.cpu_cores ?? null,
+          ram_gb: f.ram_gb ?? null,
         });
     });
     return Array.from(map.entries())
@@ -1520,6 +2140,8 @@ export function ModelDashboard() {
         label: v.label,
         count: v.count,
         baseModel: v.baseModel,
+        cpu_cores: v.cpu_cores,
+        ram_gb: v.ram_gb,
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [usableFiles]);
@@ -1531,24 +2153,36 @@ export function ModelDashboard() {
     return Array.from(s).sort((a, b) => a.localeCompare(b));
   }, [allModels]);
 
-  // Variants visible after applying the base-model filter.
-  const visibleModels = useMemo(
-    () =>
-      modelFilter
-        ? allModels.filter((m) => m.baseModel === modelFilter)
-        : allModels,
-    [allModels, modelFilter],
-  );
+  const cpuOptions = useMemo(() => {
+    const s = new Set<number>();
+    allModels.forEach((m) => { if (m.cpu_cores != null) s.add(m.cpu_cores); });
+    return Array.from(s).sort((a, b) => a - b);
+  }, [allModels]);
 
-  // When the model-name filter changes, narrow the selection to only the
-  // variants belonging to the chosen model. If cleared, restore "select all".
+  const ramOptions = useMemo(() => {
+    const s = new Set<number>();
+    allModels.forEach((m) => { if (m.ram_gb != null) s.add(m.ram_gb); });
+    return Array.from(s).sort((a, b) => a - b);
+  }, [allModels]);
+
+  // Variants visible after applying all filters.
+  const visibleModels = useMemo(() => {
+    let result = allModels;
+    if (modelFilter) result = result.filter((m) => m.baseModel === modelFilter);
+    if (cpuFilter) result = result.filter((m) => m.cpu_cores != null && String(m.cpu_cores) === cpuFilter);
+    if (ramFilter) result = result.filter((m) => m.ram_gb != null && String(m.ram_gb) === ramFilter);
+    return result;
+  }, [allModels, modelFilter, cpuFilter, ramFilter]);
+
+  // When any filter changes, narrow the selection to the visible variants.
+  // If all filters are cleared, restore "select all".
   useEffect(() => {
-    if (!modelFilter) {
+    if (!modelFilter && !cpuFilter && !ramFilter) {
       setSelectedModels(new Set(allModels.map((m) => m.model)));
       return;
     }
     setSelectedModels(new Set(visibleModels.map((m) => m.model)));
-  }, [modelFilter, allModels, visibleModels]);
+  }, [modelFilter, cpuFilter, ramFilter, allModels, visibleModels]);
 
   // Display label lookup keyed by variant id (== ModelAggregate.model).
   const labelMap = useMemo(() => {
@@ -1751,13 +2385,13 @@ export function ModelDashboard() {
               {/* Filter by base model name so the user can pick a single
                   model and inspect only its different RAM/CPU/tech configs. */}
               <label className="inline-flex items-center gap-2 text-xs text-zinc-600">
-                <span className="text-zinc-500">Filter:</span>
+                <span className="text-zinc-500">Model:</span>
                 <select
                   value={modelFilter}
                   onChange={(e) => setModelFilter(e.target.value)}
                   className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
                 >
-                  <option value="">All models ({baseModelOptions.length})</option>
+                  <option value="">All ({baseModelOptions.length})</option>
                   {baseModelOptions.map((m) => (
                     <option key={m} value={m}>
                       {m}
@@ -1771,7 +2405,57 @@ export function ModelDashboard() {
                     className="text-zinc-400 hover:text-zinc-700 underline"
                     title="Clear model filter"
                   >
-                    clear
+                    ×
+                  </button>
+                )}
+              </label>
+              <label className="inline-flex items-center gap-2 text-xs text-zinc-600">
+                <span className="text-zinc-500">CPU:</span>
+                <select
+                  value={cpuFilter}
+                  onChange={(e) => setCpuFilter(e.target.value)}
+                  className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
+                >
+                  <option value="">All</option>
+                  {cpuOptions.map((c) => (
+                    <option key={c} value={String(c)}>
+                      {c} cores
+                    </option>
+                  ))}
+                </select>
+                {cpuFilter && (
+                  <button
+                    type="button"
+                    onClick={() => setCpuFilter("")}
+                    className="text-zinc-400 hover:text-zinc-700 underline"
+                    title="Clear CPU filter"
+                  >
+                    ×
+                  </button>
+                )}
+              </label>
+              <label className="inline-flex items-center gap-2 text-xs text-zinc-600">
+                <span className="text-zinc-500">RAM:</span>
+                <select
+                  value={ramFilter}
+                  onChange={(e) => setRamFilter(e.target.value)}
+                  className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
+                >
+                  <option value="">All</option>
+                  {ramOptions.map((r) => (
+                    <option key={r} value={String(r)}>
+                      {r} GB
+                    </option>
+                  ))}
+                </select>
+                {ramFilter && (
+                  <button
+                    type="button"
+                    onClick={() => setRamFilter("")}
+                    className="text-zinc-400 hover:text-zinc-700 underline"
+                    title="Clear RAM filter"
+                  >
+                    ×
                   </button>
                 )}
               </label>
@@ -1799,11 +2483,11 @@ export function ModelDashboard() {
             <p className="text-sm text-zinc-400">
               {allModels.length === 0
                 ? "No benchmark results found — run some benchmarks first."
-                : `No variants for model "${modelFilter}".`}
+                : "No variants match the selected filters."}
             </p>
           ) : (
             <div className="flex flex-wrap gap-2">
-              {allModels.map(({ model, label, count }) => {
+              {visibleModels.map(({ model, label, count }) => {
                 const active = selectedModels.has(model);
                 const color = colorMap.get(model) || "#18181b";
                 return (
@@ -1831,9 +2515,13 @@ export function ModelDashboard() {
           )}
           <p className="text-xs text-zinc-400 mt-3">
             {selectedModels.size} of {visibleModels.length} selected
-            {modelFilter && (
+            {(modelFilter || cpuFilter || ramFilter) && (
               <span className="ml-2 text-zinc-500">
-                (filtered to <strong>{modelFilter}</strong>)
+                (filtered
+                {modelFilter && <> — model: <strong>{modelFilter}</strong></>}
+                {cpuFilter && <> — CPU: <strong>{cpuFilter} cores</strong></>}
+                {ramFilter && <> — RAM: <strong>{ramFilter} GB</strong></>}
+                )
               </span>
             )}
           </p>
@@ -1913,15 +2601,6 @@ export function ModelDashboard() {
       ) : (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {/* Analysis widgets — use composite-ranked order in leaderboard mode */}
-          {selectedWidgets.has("radar") && aggregatesByComposite.length >= 1 && (
-            <RadarWidget
-              aggregates={aggregatesByComposite}
-              colorMap={colorMap}
-              leaderboardScores={
-                leaderboardMode ? compositeScores : undefined
-              }
-            />
-          )}
           {selectedWidgets.has("scatter") && aggregatesByComposite.length >= 1 && (
             <ScatterWidget
               aggregates={aggregatesByComposite}
@@ -1949,6 +2628,14 @@ export function ModelDashboard() {
                 colorMap={colorMap}
               />
             )}
+          {selectedWidgets.has("throughputByDeployment") &&
+            usableFiles.length >= 1 && (
+              <ThroughputByDeploymentWidget
+                usableFiles={usableFiles}
+                summaryCache={summaryCache}
+                selectedModels={selectedModels}
+              />
+            )}
           {/* Heatmap — full width */}
           {selectedWidgets.has("heatmap") &&
             aggregatesByComposite.length >= 1 && (
@@ -1962,6 +2649,26 @@ export function ModelDashboard() {
               <EfficHeatmapWidget
                 usableFiles={usableFiles}
                 summaryCache={summaryCache}
+              />
+            </div>
+          )}
+          {/* OOM heatmap — full width */}
+          {selectedWidgets.has("oomHeatmap") && usableFiles.length >= 1 && (
+            <div className="xl:col-span-2">
+              <OomHeatmapWidget
+                usableFiles={usableFiles}
+                summaryCache={summaryCache}
+                selectedModels={selectedModels}
+              />
+            </div>
+          )}
+          {/* TPS–TCO Pareto scatter — full width */}
+          {selectedWidgets.has("tpsTcoPareto") && usableFiles.length >= 1 && (
+            <div className="xl:col-span-2">
+              <TpsTcoParetoWidget
+                usableFiles={usableFiles}
+                summaryCache={summaryCache}
+                selectedModels={selectedModels}
               />
             </div>
           )}

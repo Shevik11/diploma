@@ -6,6 +6,7 @@ __pycache__/
 # C extensions
 *.so
 
+logs.md
 # Distribution / packaging
 .Python
 build/
@@ -214,7 +215,6 @@ node_modules/
 
 release/
 dist/
-results/
 .pytest_cache/
 *.egg-info/
 .junie/

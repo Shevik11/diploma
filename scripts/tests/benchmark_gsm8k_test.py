@@ -346,7 +346,7 @@ def test_gsm8k(model_name, port=11434):
 
         ),
 
-        "answer": 36,  # son=12, Tom=36. In 12 years: 48 = 2*24. ✓
+        "answer": 36,  # son=12, Tom=36. In 12 years: 48 = 2*24.
 
         "points": 15,
 

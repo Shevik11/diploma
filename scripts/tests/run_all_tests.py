@@ -158,10 +158,10 @@ def main():
         
         if success:
             results_summary["total_passed"] += 1
-            print(f"\n✓ {test_name} PASSED")
+            print(f"\n[PASS] {test_name} PASSED")
         else:
             results_summary["total_failed"] += 1
-            print(f"\n✗ {test_name} FAILED or returned non-zero")
+            print(f"\n[FAIL] {test_name} FAILED or returned non-zero")
     
     # Print summary
     print(f"\n\n{'='*70}")
@@ -176,7 +176,7 @@ def main():
     
     print(f"\nTest Results:")
     for test in results_summary["tests_run"]:
-        status = "✓" if test["passed"] else "✗"
+        status = "PASS" if test["passed"] else "FAIL"
         print(f"  {status} {test['name']}")
     
     print(f"{'='*70}\n")
