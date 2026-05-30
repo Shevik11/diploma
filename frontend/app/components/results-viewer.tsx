@@ -359,9 +359,11 @@ export function ResultsViewer() {
                     }`}
                   >
                     <div className="flex items-center gap-2">
-                      <span className="text-lg">
-                        {t.status === 'passed' ? '✅' : t.status === 'timeout' ? '⏱️' : '❌'}
-                      </span>
+                      <span className={`inline-block w-2.5 h-2.5 rounded-full ${
+                        t.status === 'passed' ? 'bg-green-500' :
+                        t.status === 'timeout' ? 'bg-yellow-500' :
+                        'bg-red-500'
+                      }`} />
                       <span className="text-sm font-medium">{t.name}</span>
                       {t.status !== 'passed' && t.status !== 'failed' && (
                         <span className="text-xs text-gray-400">({t.status})</span>
