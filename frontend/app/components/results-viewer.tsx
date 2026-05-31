@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Download, RefreshCw, MoreHorizontal } from 'lucide-react';
+import { Download, RefreshCw, MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
 import {
   api,
   BenchmarkResultFile,
@@ -98,6 +98,8 @@ export function ResultsViewer() {
   const [loading, setLoading] = useState(false);
   const [selectedTestDetailIndex, setSelectedTestDetailIndex] = useState<number | null>(null);
   const [expandedQAText, setExpandedQAText] = useState<Record<string, boolean>>({});
+  const [currentPage, setCurrentPage] = useState(0);
+  const PAGE_SIZE = 5;
 
   const selectedTestDetail = useMemo(() => {
     if (selectedResult === null || selectedTestDetailIndex === null) {
@@ -152,6 +154,7 @@ export function ResultsViewer() {
     try {
       const res = await api.getBenchmarkResults();
       setResults(res);
+      setCurrentPage((prev) => Math.min(prev, Math.max(0, Math.ceil(res.length / PAGE_SIZE) - 1)));
     } catch {
       // Results unavailable
     } finally {
@@ -214,74 +217,112 @@ export function ResultsViewer() {
         {results.length === 0 ? (
           <p className="text-gray-500 text-center py-8">No test results yet. Run tests to see results here.</p>
         ) : (
-          <div className="space-y-2">
-            {results.map((result) => (
-              <div
-                key={result.filename}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <div>
-                  <p className="font-medium text-sm">{result.model}</p>
-                  <p className="text-xs text-gray-500">
-                    {result.platform}
-                    {' • '}
-                    {/* Prefer the explicit `finished_at` from spec-compliant
-                        backends; fall back to `timestamp` for legacy files. */}
-                    {new Date(result.finished_at || result.timestamp).toLocaleString()}
-                    {result.started_at && result.finished_at && result.started_at !== result.finished_at && (
-                      <>
-                        {' '}
-                        <span className="text-gray-400">
-                          (started {new Date(result.started_at).toLocaleTimeString()})
-                        </span>
-                      </>
+          <>
+            <div className="space-y-2">
+              {results.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE).map((result) => (
+                <div
+                  key={result.filename}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <div>
+                    <p className="font-medium text-sm">{result.model}</p>
+                    <p className="text-xs text-gray-500">
+                      {result.platform}
+                      {' • '}
+                      {new Date(result.finished_at || result.timestamp).toLocaleString()}
+                      {result.started_at && result.finished_at && result.started_at !== result.finished_at && (
+                        <>
+                          {' '}
+                          <span className="text-gray-400">
+                            (started {new Date(result.started_at).toLocaleTimeString()})
+                          </span>
+                        </>
+                      )}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {result.status && (
+                      <span
+                        className={`text-[10px] uppercase tracking-wide font-semibold px-2 py-1 rounded border ${runStatusClass(result.status)}`}
+                        title={`Run status: ${runStatusLabel(result.status)}`}
+                      >
+                        {runStatusLabel(result.status)}
+                      </span>
                     )}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  {result.status && (
-                    <span
-                      className={`text-[10px] uppercase tracking-wide font-semibold px-2 py-1 rounded border ${runStatusClass(result.status)}`}
-                      title={`Run status: ${runStatusLabel(result.status)}`}
+                    {result.test_results && result.test_results.length > 0 && (
+                      <span className={`text-sm font-mono px-2 py-1 rounded ${
+                        result.test_results.every((t: { status: string }) => t.status === 'passed') ? 'bg-green-100 text-green-700' :
+                        result.test_results.some((t: { status: string }) => t.status === 'passed') ? 'bg-yellow-100 text-yellow-700' :
+                        'bg-red-100 text-red-700'
+                      }`}>
+                        {result.test_results.filter((t: { status: string }) => t.status === 'passed').length}/{result.test_results.length} passed
+                      </span>
+                    )}
+                    {(!result.test_results || result.test_results.length === 0) && (
+                      <span className="text-xs font-mono px-2 py-1 rounded bg-gray-200 text-gray-700">
+                        benchmark-only
+                      </span>
+                    )}
+                    {result.summary && (
+                      <span className="text-sm font-mono bg-gray-200 px-2 py-1 rounded">
+                        {result.summary.avg_tokens_per_second?.toFixed(1)} tok/s
+                      </span>
+                    )}
+                    <button
+                      onClick={() => viewResult(result.filename)}
+                      className="px-3 py-1 text-xs font-bold text-black bg-white border-2 border-black rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
                     >
-                      {runStatusLabel(result.status)}
-                    </span>
-                  )}
-                  {result.test_results && result.test_results.length > 0 && (
-                    <span className={`text-sm font-mono px-2 py-1 rounded ${
-                      result.test_results.every((t: { status: string }) => t.status === 'passed') ? 'bg-green-100 text-green-700' :
-                      result.test_results.some((t: { status: string }) => t.status === 'passed') ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-red-100 text-red-700'
-                    }`}>
-                      {result.test_results.filter((t: { status: string }) => t.status === 'passed').length}/{result.test_results.length} passed
-                    </span>
-                  )}
-                  {(!result.test_results || result.test_results.length === 0) && (
-                    <span className="text-xs font-mono px-2 py-1 rounded bg-gray-200 text-gray-700">
-                      benchmark-only
-                    </span>
-                  )}
-                  {result.summary && (
-                    <span className="text-sm font-mono bg-gray-200 px-2 py-1 rounded">
-                      {result.summary.avg_tokens_per_second?.toFixed(1)} tok/s
-                    </span>
-                  )}
+                      View
+                    </button>
+                    <button
+                      onClick={() => downloadResult(result)}
+                      className="p-1 text-gray-600 hover:text-black"
+                    >
+                      <Download className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {results.length > PAGE_SIZE && (
+              <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
+                <span className="text-xs text-gray-500">
+                  {currentPage * PAGE_SIZE + 1}–{Math.min((currentPage + 1) * PAGE_SIZE, results.length)} of {results.length}
+                </span>
+                <div className="flex items-center gap-1">
                   <button
-                    onClick={() => viewResult(result.filename)}
-                    className="px-3 py-1 text-xs font-bold text-black bg-white border-2 border-black rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
+                    onClick={() => setCurrentPage((p) => Math.max(0, p - 1))}
+                    disabled={currentPage === 0}
+                    className="p-1.5 rounded border border-gray-300 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                   >
-                    View
+                    <ChevronLeft className="w-4 h-4" />
                   </button>
+                  {Array.from({ length: Math.ceil(results.length / PAGE_SIZE) }, (_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(i)}
+                      className={`w-8 h-8 rounded text-xs font-semibold border transition-colors ${
+                        i === currentPage
+                          ? 'bg-black text-white border-black'
+                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
                   <button
-                    onClick={() => downloadResult(result)}
-                    className="p-1 text-gray-600 hover:text-black"
+                    onClick={() => setCurrentPage((p) => Math.min(Math.ceil(results.length / PAGE_SIZE) - 1, p + 1))}
+                    disabled={currentPage >= Math.ceil(results.length / PAGE_SIZE) - 1}
+                    className="p-1.5 rounded border border-gray-300 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                   >
-                    <Download className="w-4 h-4" />
+                    <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </div>
 
