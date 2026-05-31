@@ -14,6 +14,7 @@ import {
   ZAxis,
   ComposedChart,
   Line,
+  LineChart,
   Legend,
   RadialBarChart,
   RadialBar,
@@ -373,8 +374,20 @@ const ANALYSIS_WIDGETS: WidgetDef[] = [
   },
   {
     id: "tpsTcoPareto",
-    label: "TPS–TCO Pareto",
+    label: "TPS-TCO Pareto",
     description: "Scatter of all configs with Pareto-optimal frontier",
+    group: "analysis",
+  },
+  {
+    id: "ramImpact",
+    label: "RAM impact",
+    description: "How throughput changes with RAM per model",
+    group: "analysis",
+  },
+  {
+    id: "cpuImpact",
+    label: "CPU impact",
+    description: "How throughput changes with CPU cores per model",
     group: "analysis",
   },
 ];
@@ -1954,7 +1967,145 @@ function EfficHeatmapWidget({
   );
 }
 
-// ─── 11. Horizontal bar chart (per metric) ────────────────────────────────────
+// ─── 11. Resource impact line charts (RAM & CPU) ──────────────────────────────
+
+function buildImpactData(
+  usableFiles: BenchmarkResultFile[],
+  summaryCache: Record<string, BenchmarkSummary>,
+  selectedModels: Set<string>,
+  axis: "ram" | "cpu",
+): { models: string[]; xValues: number[]; series: Map<string, Map<number, number>> } {
+  const series = new Map<string, Map<number, { sum: number; count: number }>>();
+
+  usableFiles.forEach((f) => {
+    if (!selectedModels.has(variantId(f))) return;
+    const s = summaryCache[f.filename]?.summary;
+    if (!s) return;
+    const tps = s.avg_tokens_per_second || 0;
+    if (tps <= 0) return;
+
+    const xVal = axis === "ram" ? f.ram_gb : f.cpu_cores;
+    if (xVal == null) return;
+    const x = Number(xVal);
+
+    const model = f.model || variantId(f);
+    if (!series.has(model)) series.set(model, new Map());
+    const modelMap = series.get(model)!;
+    const prev = modelMap.get(x) ?? { sum: 0, count: 0 };
+    modelMap.set(x, { sum: prev.sum + tps, count: prev.count + 1 });
+  });
+
+  const xSet = new Set<number>();
+  const avgSeries = new Map<string, Map<number, number>>();
+  series.forEach((modelMap, model) => {
+    const avg = new Map<number, number>();
+    modelMap.forEach((v, x) => {
+      avg.set(x, v.sum / v.count);
+      xSet.add(x);
+    });
+    avgSeries.set(model, avg);
+  });
+
+  return {
+    models: Array.from(avgSeries.keys()).sort(),
+    xValues: Array.from(xSet).sort((a, b) => a - b),
+    series: avgSeries,
+  };
+}
+
+function ResourceImpactWidget({
+  usableFiles,
+  summaryCache,
+  selectedModels,
+  axis,
+  colorMap,
+}: {
+  usableFiles: BenchmarkResultFile[];
+  summaryCache: Record<string, BenchmarkSummary>;
+  selectedModels: Set<string>;
+  axis: "ram" | "cpu";
+  colorMap: Map<string, string>;
+}) {
+  const { models, xValues, series } = useMemo(
+    () => buildImpactData(usableFiles, summaryCache, selectedModels, axis),
+    [usableFiles, summaryCache, selectedModels, axis],
+  );
+
+  const xLabel = axis === "ram" ? "RAM (GB)" : "CPU cores";
+  const title = axis === "ram" ? "RAM impact on throughput" : "CPU impact on throughput";
+  const hint = axis === "ram"
+    ? "Average tok/s at each RAM level per model"
+    : "Average tok/s at each CPU core count per model";
+
+  if (models.length === 0 || xValues.length < 2) {
+    return (
+      <WidgetCard title={title} hint={hint}>
+        <p className="text-sm text-zinc-400 py-6 text-center">
+          Not enough data (need at least 2 distinct {xLabel} values).
+        </p>
+      </WidgetCard>
+    );
+  }
+
+  const chartData = xValues.map((x) => {
+    const point: Record<string, number> = { x };
+    models.forEach((m) => {
+      const val = series.get(m)?.get(x);
+      if (val != null) point[m] = Math.round(val * 100) / 100;
+    });
+    return point;
+  });
+
+  return (
+    <WidgetCard title={title} hint={hint}>
+      <div style={{ height: Math.max(260, 260) }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={chartData} margin={{ top: 8, right: 24, bottom: 4, left: 4 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" />
+            <XAxis
+              dataKey="x"
+              type="number"
+              domain={["dataMin", "dataMax"]}
+              tick={{ fontSize: 11, fill: "#71717a" }}
+              tickLine={false}
+              axisLine={false}
+              label={{ value: xLabel, position: "insideBottomRight", offset: -4, fontSize: 11, fill: "#a1a1aa" }}
+            />
+            <YAxis
+              tick={{ fontSize: 11, fill: "#71717a" }}
+              tickLine={false}
+              axisLine={false}
+              label={{ value: "tok/s", angle: -90, position: "insideLeft", offset: 10, fontSize: 11, fill: "#a1a1aa" }}
+            />
+            <Tooltip
+              contentStyle={{ fontSize: 12, borderRadius: 6, border: "1px solid #e4e4e7" }}
+              labelFormatter={(v) => `${xLabel}: ${v}`}
+            />
+            <Legend
+              wrapperStyle={{ fontSize: 11 }}
+              iconType="circle"
+              iconSize={8}
+            />
+            {models.map((m, i) => (
+              <Line
+                key={m}
+                type="monotone"
+                dataKey={m}
+                name={m.length > 20 ? `${m.slice(0, 19)}...` : m}
+                stroke={colorMap.get(m) || paletteColor(i)}
+                strokeWidth={2}
+                dot={{ r: 3 }}
+                connectNulls
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </WidgetCard>
+  );
+}
+
+// ─── 12. Horizontal bar chart (per metric) ────────────────────────────────────
 
 function BarWidget({
   metric,
@@ -2671,6 +2822,26 @@ export function ModelDashboard() {
                 selectedModels={selectedModels}
               />
             </div>
+          )}
+          {/* RAM impact */}
+          {selectedWidgets.has("ramImpact") && usableFiles.length >= 1 && (
+              <ResourceImpactWidget
+                usableFiles={usableFiles}
+                summaryCache={summaryCache}
+                selectedModels={selectedModels}
+                axis="ram"
+                colorMap={colorMap}
+              />
+          )}
+          {/* CPU impact */}
+          {selectedWidgets.has("cpuImpact") && usableFiles.length >= 1 && (
+              <ResourceImpactWidget
+                usableFiles={usableFiles}
+                summaryCache={summaryCache}
+                selectedModels={selectedModels}
+                axis="cpu"
+                colorMap={colorMap}
+              />
           )}
           {/* Per-metric bar charts — in leaderboard mode each is sorted by its own metric */}
           {BAR_METRICS.map((metric) =>
