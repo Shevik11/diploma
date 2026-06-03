@@ -1,0 +1,149 @@
+{
+  "model": "qwen2.5:3b",
+  "platform": "docker",
+  "technology": "ollama",
+  "timestamp": "2026-06-02T16:37:18.517826",
+  "status": "failed",
+  "started_at": "2026-06-02T16:37:18.517826",
+  "finished_at": "2026-06-02T16:37:18.517826",
+  "ram_gb": 8,
+  "cpu_cores": 4.0,
+  "system_info": {
+    "platform": "docker"
+  },
+  "results": [],
+  "test_results": [
+    {
+      "id": "quality",
+      "name": "Quality Test",
+      "status": "passed",
+      "duration": 361.02,
+      "stdout": "\n=== Quality Assessment: qwen2.5:3b ===\n\n[1/6] Factual Knowledge\n  Prompt: What is the capital of France?\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[2/6] Math\n  Prompt: Calculate: 15 + 27\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[3/6] Instruction Following\n  Prompt: List exactly 3 colors, separated by commas.\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[4/6] Reasoning\n  Prompt: If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[5/6] Coherence\n  Prompt: Explain in 2 sentences what machine learning is.\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n[6/6] Code Understanding\n  Prompt: What does this Python code do: for i in range(5): print(i)\n  [ERROR] Error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)\n\n=== Final Score ===\nTotal: 0/70 (0.0%)\nRating: Poor\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_3b_8GB_4.0cores_ollama_docker_20260602_163718.json\n",
+      "stderr": "",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "advanced_quality",
+      "name": "Advanced Quality Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "performance",
+      "name": "Performance Test",
+      "status": "timeout",
+      "duration": 600.06,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "safety_robustness",
+      "name": "Safety & Robustness Test",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "stress_consistency",
+      "name": "Stress & Consistency Test",
+      "status": "timeout",
+      "duration": 600.03,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "hard_tests",
+      "name": "Hard Tests",
+      "status": "timeout",
+      "duration": 46848.45,
+      "stdout": "",
+      "stderr": "Timeout after 1200s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "multilingual",
+      "name": "Multilingual Test",
+      "status": "timeout",
+      "duration": 600.08,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    }
+  ],
+  "summary": {
+    "total_prompts": 0,
+    "successful": 0,
+    "failed": 0,
+    "success_rate": 0,
+    "avg_tokens_per_second": 0,
+    "avg_latency_ms": 0,
+    "avg_first_token_latency_ms": 0,
+    "total_tokens_generated": 0,
+    "avg_cpu_percent": 0,
+    "avg_memory_percent": 0
+  },
+  "phase1_failed": true,
+  "test_sections": {
+    "quality": {
+      "model": "qwen2.5:3b",
+      "port": 11434,
+      "timestamp": 1780407439.3660948,
+      "tests": [
+        {
+          "category": "Factual Knowledge",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 10
+        },
+        {
+          "category": "Math",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 10
+        },
+        {
+          "category": "Instruction Following",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 10
+        },
+        {
+          "category": "Reasoning",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 15
+        },
+        {
+          "category": "Coherence",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 10
+        },
+        {
+          "category": "Code Understanding",
+          "error": "HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=60)",
+          "score": 0,
+          "max_score": 15
+        }
+      ],
+      "total_score": 0,
+      "max_score": 70,
+      "percentage": 0.0,
+      "rating": "Poor"
+    }
+  }
+}

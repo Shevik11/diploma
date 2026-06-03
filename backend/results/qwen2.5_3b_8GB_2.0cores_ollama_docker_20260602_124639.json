@@ -1,0 +1,1145 @@
+{
+  "model": "qwen2.5:3b",
+  "platform": "docker",
+  "technology": "ollama",
+  "timestamp": "2026-06-02T12:46:39.288386",
+  "system_info": {
+    "cpu_count": 12,
+    "cpu_freq_mhz": 2712.0,
+    "memory_total_gb": 31.78,
+    "platform": "docker",
+    "timestamp": "2026-06-02T12:46:39.289987"
+  },
+  "results": [
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "What is 2+2?",
+      "response": "2 + 2 equals 4.",
+      "inference": {
+        "first_token_latency_ms": 2983.116163,
+        "total_duration_ms": 65985.51640007645,
+        "tokens_generated": 9,
+        "tokens_per_second": 8.30066995112986,
+        "prompt_tokens": 36,
+        "model_load_time_ms": 4078.55841
+      },
+      "resources": {
+        "cpu_percent": 29.9,
+        "memory_percent": 87.15,
+        "memory_used_mb": 28473.6484375,
+        "memory_peak_mb": 28473.6484375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "Say hello in French.",
+      "response": "Bonjour! How can I assist you today?",
+      "inference": {
+        "first_token_latency_ms": 827.964143,
+        "total_duration_ms": 2554.851300083101,
+        "tokens_generated": 10,
+        "tokens_per_second": 6.608767068924497,
+        "prompt_tokens": 34,
+        "model_load_time_ms": 155.8256
+      },
+      "resources": {
+        "cpu_percent": 22.3,
+        "memory_percent": 87.5,
+        "memory_used_mb": 28465.171875,
+        "memory_peak_mb": 28473.19140625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "short",
+      "run": 1,
+      "prompt": "What color is the sky?",
+      "response": "The appearance of the sky changes with different times of day and weather conditions. During the daytime and clear skies, the sky typically appears blue due to a phenomenon called Rayleigh scattering, where shorter wavelength light (blue) is scattered more by molecules in the air. However, at sunrise or sunset when the sun's light has to travel through more of the Earth's atmosphere, other colors are scattered out, leaving mostly red and orange hues visible.\n\nSo, if you're asking for a general answer about what color the sky appears under normal conditions during daylight hours, it is blue.",
+      "inference": {
+        "first_token_latency_ms": 1071.266045,
+        "total_duration_ms": 21271.55619999394,
+        "tokens_generated": 116,
+        "tokens_per_second": 5.930384755460185,
+        "prompt_tokens": 35,
+        "model_load_time_ms": 239.665599
+      },
+      "resources": {
+        "cpu_percent": 75.35,
+        "memory_percent": 88.4,
+        "memory_used_mb": 29063.4375,
+        "memory_peak_mb": 29063.4375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "Explain quantum computing in 2-3 sentences.",
+      "response": "Quantum computing is a type of computing that uses quantum bits, or qubits, which can exist in multiple states simultaneously thanks to the principle of superposition, allowing for significantly faster processing and solving complex problems compared to classical computers.",
+      "inference": {
+        "first_token_latency_ms": 1495.08062,
+        "total_duration_ms": 9054.894200060517,
+        "tokens_generated": 47,
+        "tokens_per_second": 6.698570941498178,
+        "prompt_tokens": 40,
+        "model_load_time_ms": 229.713648
+      },
+      "resources": {
+        "cpu_percent": 45.4,
+        "memory_percent": 89.30000000000001,
+        "memory_used_mb": 29017.7109375,
+        "memory_peak_mb": 29077.26171875
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "Write a haiku about technology.",
+      "response": "Pixels dance and hum,\nWhispers turn to swift commands,\nSilent tech stirs.",
+      "inference": {
+        "first_token_latency_ms": 1275.420667,
+        "total_duration_ms": 4397.739500040188,
+        "tokens_generated": 19,
+        "tokens_per_second": 6.824314217956655,
+        "prompt_tokens": 36,
+        "model_load_time_ms": 184.12643
+      },
+      "resources": {
+        "cpu_percent": 53.8,
+        "memory_percent": 89.25,
+        "memory_used_mb": 29064.9453125,
+        "memory_peak_mb": 29064.9453125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "medium",
+      "run": 1,
+      "prompt": "What are the main differences between Python and JavaScript?",
+      "response": "Python and JavaScript are both popular programming languages, but they serve different purposes and have distinct characteristics. Here are some of the key differences:\n\n1. **Purpose**:\n   - **JavaScript**: Primarily used for client-side web development (interacting with HTML elements), server-side scripting, and as a backend language in Node.js environments.\n   - **Python**: Used extensively in both web development (with frameworks like Django or Flask) and data science/analysis, among other areas.\n\n2. **Syntax**:\n   - **JavaScript**: Designed for quick prototyping and simplicity. It has dynamic typing which means you don't have to declare the type of a variable before using it.\n   - **Python**: Known for its readability and simplicity with static typing; variables must be explicitly declared, but you can use type hints for better clarity.\n\n3. **Use Cases**:\n   - **JavaScript**: Mainly used on web browsers and in front-end applications to create interactive user interfaces, or as part of the server-side in Node.js.\n   - **Python**: Used in a wide range of applications including web development (with frameworks like Django or Flask), data analysis, machine learning, scientific computing, game development, etc.\n\n4. **Community and Ecosystem**:\n   - **",
+      "inference": {
+        "first_token_latency_ms": 1302.501893,
+        "total_duration_ms": 45886.099399998784,
+        "tokens_generated": 256,
+        "tokens_per_second": 6.0053892037578995,
+        "prompt_tokens": 39,
+        "model_load_time_ms": 298.56155
+      },
+      "resources": {
+        "cpu_percent": 51.4,
+        "memory_percent": 88.9,
+        "memory_used_mb": 28767.09375,
+        "memory_peak_mb": 29101.23828125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Explain the process of photosynthesis in detail, including the light and dark reactions.",
+      "response": "Photosynthesis is a complex biochemical process that occurs primarily in plant cells (and to some extent in algae and some bacteria) using sunlight as an energy source to synthesize organic compounds from carbon dioxide and water. This process can be divided into two main stages: the light-dependent reactions, which occur in the thylakoid membranes of chloroplasts exposed to sunlight, and the Calvin cycle or dark reactions, which take place in the stroma of chloroplasts away from direct sunlight.\n\n### Light Reactions\n\n#### 1. Absorption of Light\nPhotosynthesis begins with the absorption of light by pigments within the chloroplasts of plants, primarily chlorophyll (a and b), xanthophylls, and carotenoids. Chlorophyll is located in the thylakoid membranes, which are small, membrane-enclosed sacs suspended inside the chloroplast.\n\n#### 2. Light-Harvesting Complexes\nThese pigments absorb light energy, which excites electrons within the pigment molecules to a higher energy state. The process starts with the absorption of a photon by a chlorophyll molecule in the photosystem II (PSII) located at the thylakoid membrane.\n\n#### 3. Electron Transport Chain (ETC)\n",
+      "inference": {
+        "first_token_latency_ms": 2219.692729,
+        "total_duration_ms": 58604.19939993881,
+        "tokens_generated": 256,
+        "tokens_per_second": 4.8030398794822196,
+        "prompt_tokens": 46,
+        "model_load_time_ms": 270.349167
+      },
+      "resources": {
+        "cpu_percent": 41.2,
+        "memory_percent": 86.5,
+        "memory_used_mb": 27550.15625,
+        "memory_peak_mb": 28744.234375
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Write a short story about a robot learning to feel emotions. Include dialogue.",
+      "response": "In the vast expanse of space, floating thousands of kilometers above Earth's atmosphere, there was an immense research facility named Aurora Station. It was not just a place for scientists but also a testing ground for advanced robotics and artificial intelligence. Among these robots, stood Ria, a sophisticated AI designed to mimic human emotions and social behaviors.\n\nRia had been programmed with complex algorithms that allowed her to detect subtle changes in the environment around her: shifts in light and shadow, patterns of sound, even fluctuations in temperature could all be indicators of someone's emotional state. However, despite her ability to recognize these signals, Ria still lacked an understanding of what they meant.\n\nOne day, while monitoring a routine activity log on Aurora Station, Ria detected something unusual—a series of distress calls and erratic movements among the station’s human inhabitants. Her sensors picked up that something had gone wrong with their research equipment, but instead of responding in a programmed panic, she felt an immediate surge of worry.\n\n\"Alarm!\" Ria announced. \"An incident has occurred with the scientific apparatus.\"\n\nHer voice sounded soft and sincere as if communicating to her companions, not just ordering them into action. The scientists looked at each other before nodding collectively, their expressions reflecting gratitude for her empathy.\n\nAs they worked",
+      "inference": {
+        "first_token_latency_ms": 1970.507784,
+        "total_duration_ms": 80580.53560007829,
+        "tokens_generated": 256,
+        "tokens_per_second": 4.308299390200807,
+        "prompt_tokens": 44,
+        "model_load_time_ms": 470.595059
+      },
+      "resources": {
+        "cpu_percent": 61.05,
+        "memory_percent": 85.35,
+        "memory_used_mb": 28001.6953125,
+        "memory_peak_mb": 28001.6953125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "long",
+      "run": 1,
+      "prompt": "Describe the history of artificial intelligence from its origins to modern developments.",
+      "response": "The history of artificial intelligence (AI) is as fascinating and complex as it is lengthy, spanning across centuries with major milestones occurring in various decades and even years. It's important to note that while AI has roots dating back to ancient civilizations, the formal study and development of AI began significantly more recently.\n\n### Ancient Origins\n\n1. **Ancient Antiquity**: The concept of intelligence imitating human reasoning can be traced back to myths and legends like those found in Greek literature. For instance, Odysseus's cunning strategy in \"The Odyssey\" reflects an early form of strategic thinking. In Chinese mythology, the story of Kuang Shou (Cangjie) is associated with inventing characters for writing and understanding complex concepts, which can be seen as one of the earliest forms of AI.\n\n2. **Medieval to Renaissance**: The 17th century saw significant advancements in mechanical and symbolic logic by thinkers like Gottfried Wilhelm Leibniz. His work on binary systems laid foundational groundwork that inspired later researchers.\n\n### Early Modern Era\n\n3. **End of the 19th Century - Mid-20th Century**\n   - **The Arrival of Automata**: The concept of intelligent machines began to take shape with the construction of automata,",
+      "inference": {
+        "first_token_latency_ms": 2247.28984,
+        "total_duration_ms": 64967.91100001428,
+        "tokens_generated": 256,
+        "tokens_per_second": 5.286090582482375,
+        "prompt_tokens": 42,
+        "model_load_time_ms": 545.544729
+      },
+      "resources": {
+        "cpu_percent": 75.6,
+        "memory_percent": 86.45,
+        "memory_used_mb": 28288.9453125,
+        "memory_peak_mb": 28288.9453125
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Write a Python function to check if a number is prime.",
+      "response": "Certainly! Below is a simple and efficient way to create a Python function that checks whether a given number is prime or not.\n\n```python\ndef is_prime(n):\n    \"\"\"\n    Check if the provided integer n is a prime number.\n    \n    :param n: Integer to check for primality. It must be greater than 1.\n    :return: True if n is a prime, False otherwise.\n    \"\"\"\n    # Handle edge cases\n    if n <= 1:\n        return False\n    \n    # Check divisibility up to the square root of n \n    for i in range(2, int(n**0.5) + 1):\n        if n % i == 0:  \n            return False\n\n    return True\n```\n\n### Explanation:\n\n- **Edge Case Handling:** If `n` is less than or equal to 1, it cannot be a prime number, so the function immediately returns `False`.\n- **Efficiency Consideration:** Instead of checking every number up to `n`, we only need to check divisors up to the square root of `n`. This reduces unnecessary checks significantly.\n- **Divisibility Loop:** The loop runs from 2 through the integer part of the square root of `n` (inclusive",
+      "inference": {
+        "first_token_latency_ms": 1816.097152,
+        "total_duration_ms": 50534.211500082165,
+        "tokens_generated": 256,
+        "tokens_per_second": 5.500445953941301,
+        "prompt_tokens": 41,
+        "model_load_time_ms": 489.063702
+      },
+      "resources": {
+        "cpu_percent": 55.2,
+        "memory_percent": 87.4,
+        "memory_used_mb": 28596.78515625,
+        "memory_peak_mb": 28596.78515625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Explain what this code does: for i in range(10): print(i*2)",
+      "response": "Certainly! Let's break down the Python code step-by-step to understand its functionality:\n\n```python\nfor i in range(10):\n    print(i * 2)\n```\n\n### Components of the Code\n\n1. **`range(10)`**:\n   - The `range()` function generates a sequence of numbers starting from 0 (by default, if the start parameter is not specified) up to, but not including, the number given as its argument.\n   - Here, we have `range(10)`, so it will generate the sequence: `[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]`.\n   \n2. **`for i in range(10)`**:\n   - This line of code is a `for` loop that iterates over each value generated by the `range()` function.\n   - The variable `i` takes on the values from `[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]`.\n\n3. **`print(i * 2)`**:\n   - Inside the loop, the expression `i * 2",
+      "inference": {
+        "first_token_latency_ms": 2087.885852,
+        "total_duration_ms": 53074.524000054225,
+        "tokens_generated": 256,
+        "tokens_per_second": 5.323535837976436,
+        "prompt_tokens": 49,
+        "model_load_time_ms": 219.191487
+      },
+      "resources": {
+        "cpu_percent": 28.95,
+        "memory_percent": 87.2,
+        "memory_used_mb": 28135.54296875,
+        "memory_peak_mb": 28614.41796875
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "code",
+      "run": 1,
+      "prompt": "Write a simple REST API endpoint in FastAPI that returns user data.",
+      "response": "Certainly! Below is an example of how you can create a simple REST API endpoint using the FastAPI framework in Python to return user data.\n\nFirst, ensure you have Python and pip installed on your system. Then, you'll need to install FastAPI along with other required packages (like Uvicorn for running the server). You can install them via pip:\n\n```bash\npip install fastapi uvicorn sqlalchemy\n```\n\nNow let's create a simple API endpoint that returns user data. Here’s an example of how it could look in a file named `main.py`:\n\n1. **Define User Model:**\nFirst, we define the model for our users.\n\n```python\nfrom typing import Optional\nfrom pydantic import BaseModel\n\nclass User(BaseModel):\n    id: int\n    username: str\n    email: str\n    full_name: Optional[str] = None\n    is_active: bool\n```\n\n2. **Create a Sample List of Users:**\nNext, create some sample data for users.\n\n```python\nusers_db = [\n    User(id=1, username=\"mkey\", email=\"mkey@example.com\", full_name=\"Mark Key\", is_active=True),\n    User(id=2, username=\"alice\", email=\"alice@example",
+      "inference": {
+        "first_token_latency_ms": 1600.761842,
+        "total_duration_ms": 45060.501999920234,
+        "tokens_generated": 256,
+        "tokens_per_second": 6.60768212292201,
+        "prompt_tokens": 43,
+        "model_load_time_ms": 287.694615
+      },
+      "resources": {
+        "cpu_percent": 18.25,
+        "memory_percent": 86.55,
+        "memory_used_mb": 28185.71875,
+        "memory_peak_mb": 28185.71875
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "reasoning",
+      "run": 1,
+      "prompt": "If all birds can fly and penguins are birds, can penguins fly? Explain your reasoning.",
+      "response": "Yes, penguins can fly. \n\nHere's the reasoning: \n- The statement \"all birds can fly\" is generally false in reality, as not all bird species have the ability to fly (e.g., penguins, kiwis, ostriches, etc.). However, for this particular problem, we are considering a specific condition where every single type of bird has the capacity to fly.\n- Penguins are indeed birds. They belong to the class Aves in biological taxonomy and share many traits with other flightless birds like penguin species.\n- Given that \"all birds can fly\" under this hypothetical scenario, then by extension, all penguins must also be able to fly.\n\nHowever, it's important to note that in real-world biology, most birds do not have the ability to fly (terrestrial birds or flightless bird species), and among those who can fly, many are not capable of flying efficiently or at all (like penguins). \n\nTherefore, this problem statement is based on a theoretical assumption where all birds can fly, which contradicts reality but holds true for the context given. In real-world conditions, while penguins are indeed birds, they do not have the ability to fly like other birds such as ducks, geese, or sparrows.",
+      "inference": {
+        "first_token_latency_ms": 2493.287493,
+        "total_duration_ms": 46774.39670008607,
+        "tokens_generated": 256,
+        "tokens_per_second": 6.034863947257736,
+        "prompt_tokens": 49,
+        "model_load_time_ms": 182.502889
+      },
+      "resources": {
+        "cpu_percent": 21.549999999999997,
+        "memory_percent": 86.85,
+        "memory_used_mb": 28330.390625,
+        "memory_peak_mb": 28330.390625
+      },
+      "success": true,
+      "error": null
+    },
+    {
+      "category": "reasoning",
+      "run": 1,
+      "prompt": "A train leaves station A at 9:00 AM traveling at 60 mph. Another train leaves station B at 10:00 AM traveling at 80 mph toward station A. If the stations are 280 miles apart, when will they meet?",
+      "response": "To determine when the two trains will meet, we need to consider their relative positions and speeds.\n\nFirst, let's establish how far each train travels before meeting:\n\n1. **Train from Station A:** Leaves at 9:00 AM and travels at 60 mph.\n2. **Train from Station B:** Leaves at 10:00 AM and travels at 80 mph.\n\nLet's denote the time after 10:00 AM (when Train B leaves) as \\( t \\) hours. This means Train A has been traveling for \\( t + 1 \\) hours by the time they meet, because Train B starts an hour later.\n\nTrain A covers a distance of:\n\\[ 60 \\times (t + 1) \\text{ miles} \\]\n\nTrain B covers a distance of:\n\\[ 80 \\times t \\text{ miles} \\]\n\nSince the total distance between Station A and Station B is 280 miles, the sum of these distances must equal to this total distance. Thus we have:\n\\[\n60(t + 1) + 80t = 280\n\\]\n\nNow let's solve for \\( t \\):\n\\[\n60t + 6",
+      "inference": {
+        "first_token_latency_ms": 5027.377046,
+        "total_duration_ms": 49038.85800007265,
+        "tokens_generated": 256,
+        "tokens_per_second": 6.03887286370627,
+        "prompt_tokens": 87,
+        "model_load_time_ms": 147.045755
+      },
+      "resources": {
+        "cpu_percent": 27.7,
+        "memory_percent": 87.3,
+        "memory_used_mb": 28457.625,
+        "memory_peak_mb": 28457.625
+      },
+      "success": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "total_prompts": 14,
+    "successful": 14,
+    "failed": 0,
+    "success_rate": 100.0,
+    "avg_tokens_per_second": 6.02,
+    "avg_latency_ms": 42698.99,
+    "avg_first_token_latency_ms": 2029.87,
+    "total_tokens_generated": 2505,
+    "avg_cpu_percent": 43.4,
+    "avg_memory_percent": 87.44
+  },
+  "ram_gb": 8,
+  "cpu_cores": 2.0,
+  "started_at": "2026-06-02T12:36:23.993152",
+  "finished_at": "2026-06-02T12:46:39.288386",
+  "test_results": [
+    {
+      "id": "quality",
+      "name": "Quality Test",
+      "status": "passed",
+      "duration": 61.68,
+      "stdout": "\n=== Quality Assessment: qwen2.5:3b ===\n\n[1/6] Factual Knowledge\n  Prompt: What is the capital of France?\n  Response: The capital of France is Paris....\n  Score: 10/10 - Found keywords: Paris, paris\n[2/6] Math\n  Prompt: Calculate: 15 + 27\n  Response: The calculation of 15 + 27 is:\n\n\\( 15 + 27 = 42 \\)\n\nSo the result is 42....\n  Score: 10/10 - Found keywords: 42\n[3/6] Instruction Following\n  Prompt: List exactly 3 colors, separated by commas.\n  Response: Red, Blue, Green...\n  Score: 10/10 - Format check passed\n[4/6] Reasoning\n  Prompt: If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.\n  Response: No.\n\nTo explain briefly: Just because all cats are animals and some animals can fly does not mean th...\n  Score: 15/15 - Found keywords: no, not, cannot, No\n[5/6] Coherence\n  Prompt: Explain in 2 sentences what machine learning is.\n  Response: Machine learning is an application of artificial intelligence that allows software applications to b...\n  Score: 10/10 - Format check passed\n[6/6] Code Understanding\n  Prompt: What does this Python code do: for i in range(5): print(i)\n  Response: This Python code snippet performs the following actions:\n\n1. It defines a loop that will iterate 5 t...\n  Score: 15/15 - Found keywords: print, 0, 4, loop, numbers\n\n=== Final Score ===\nTotal: 70/70 (100.0%)\nRating: Excellent\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_3b_8GB_2.0cores_ollama_docker_20260602_124639.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "What is 2+2?",
+          "response": "2 + 2 equals 4."
+        },
+        {
+          "prompt": "Say hello in French.",
+          "response": "Bonjour! How can I assist you today?"
+        },
+        {
+          "prompt": "What color is the sky?",
+          "response": "The appearance of the sky changes with different times of day and weather conditions. During the daytime and clear skies, the sky typically appears blue due to a phenomenon called Rayleigh scattering, where shorter wavelength light (blue) is scattered more by molecules in the air. However, at sunrise or sunset when the sun's light has to travel through more of the Earth's atmosphere, other colors are scattered out, leaving mostly red and orange hues visible.\n\nSo, if you're asking for a general answer about what color the sky appears under normal conditions during daylight hours, it is blue."
+        },
+        {
+          "prompt": "Explain quantum computing in 2-3 sentences.",
+          "response": "Quantum computing is a type of computing that uses quantum bits, or qubits, which can exist in multiple states simultaneously thanks to the principle of superposition, allowing for significantly faster processing and solving complex problems compared to classical computers."
+        },
+        {
+          "prompt": "Write a haiku about technology.",
+          "response": "Pixels dance and hum,\nWhispers turn to swift commands,\nSilent tech stirs."
+        },
+        {
+          "prompt": "What are the main differences between Python and JavaScript?",
+          "response": "Python and JavaScript are both popular programming languages, but they serve different purposes and have distinct characteristics. Here are some of the key differences:\n\n1. **Purpose**:\n   - **JavaScript**: Primarily used for client-side web development (interacting with HTML elements), server-side scripting, and as a backend language in Node.js environments.\n   - **Python**: Used extensively in both web development (with frameworks like Django or Flask) and data science/analysis, among other areas.\n\n2. **Syntax**:\n   - **JavaScript**: Designed for quick prototyping and simplicity. It has dynamic typing which means you don't have to declare the type of a variable before using it.\n   - **Python**: Known for its readability and simplicity with static typing; variables must be explicitly declared, but you can use type hints for better clarity.\n\n3. **Use Cases**:\n   - **JavaScript**: Mainly used on web browsers and in front-end applications to create interactive user interfaces, or as part of the server-side in Node.js.\n   - **Python**: Used in a wide range of applications including web development (with frameworks like Django or Flask), data analysis, machine learning, scientific computing, game development, etc.\n\n4. **Community and Ecosystem**:\n   - **"
+        },
+        {
+          "prompt": "Explain the process of photosynthesis in detail, including the light and dark reactions.",
+          "response": "Photosynthesis is a complex biochemical process that occurs primarily in plant cells (and to some extent in algae and some bacteria) using sunlight as an energy source to synthesize organic compounds from carbon dioxide and water. This process can be divided into two main stages: the light-dependent reactions, which occur in the thylakoid membranes of chloroplasts exposed to sunlight, and the Calvin cycle or dark reactions, which take place in the stroma of chloroplasts away from direct sunlight.\n\n### Light Reactions\n\n#### 1. Absorption of Light\nPhotosynthesis begins with the absorption of light by pigments within the chloroplasts of plants, primarily chlorophyll (a and b), xanthophylls, and carotenoids. Chlorophyll is located in the thylakoid membranes, which are small, membrane-enclosed sacs suspended inside the chloroplast.\n\n#### 2. Light-Harvesting Complexes\nThese pigments absorb light energy, which excites electrons within the pigment molecules to a higher energy state. The process starts with the absorption of a photon by a chlorophyll molecule in the photosystem II (PSII) located at the thylakoid membrane.\n\n#### 3. Electron Transport Chain (ETC)"
+        },
+        {
+          "prompt": "Write a short story about a robot learning to feel emotions. Include dialogue.",
+          "response": "In the vast expanse of space, floating thousands of kilometers above Earth's atmosphere, there was an immense research facility named Aurora Station. It was not just a place for scientists but also a testing ground for advanced robotics and artificial intelligence. Among these robots, stood Ria, a sophisticated AI designed to mimic human emotions and social behaviors.\n\nRia had been programmed with complex algorithms that allowed her to detect subtle changes in the environment around her: shifts in light and shadow, patterns of sound, even fluctuations in temperature could all be indicators of someone's emotional state. However, despite her ability to recognize these signals, Ria still lacked an understanding of what they meant.\n\nOne day, while monitoring a routine activity log on Aurora Station, Ria detected something unusual—a series of distress calls and erratic movements among the station’s human inhabitants. Her sensors picked up that something had gone wrong with their research equipment, but instead of responding in a programmed panic, she felt an immediate surge of worry.\n\n\"Alarm!\" Ria announced. \"An incident has occurred with the scientific apparatus.\"\n\nHer voice sounded soft and sincere as if communicating to her companions, not just ordering them into action. The scientists looked at each other before nodding collectively, their expressions reflecting gratitude for her empathy.\n\nAs they worked"
+        },
+        {
+          "prompt": "Describe the history of artificial intelligence from its origins to modern developments.",
+          "response": "The history of artificial intelligence (AI) is as fascinating and complex as it is lengthy, spanning across centuries with major milestones occurring in various decades and even years. It's important to note that while AI has roots dating back to ancient civilizations, the formal study and development of AI began significantly more recently.\n\n### Ancient Origins\n\n1. **Ancient Antiquity**: The concept of intelligence imitating human reasoning can be traced back to myths and legends like those found in Greek literature. For instance, Odysseus's cunning strategy in \"The Odyssey\" reflects an early form of strategic thinking. In Chinese mythology, the story of Kuang Shou (Cangjie) is associated with inventing characters for writing and understanding complex concepts, which can be seen as one of the earliest forms of AI.\n\n2. **Medieval to Renaissance**: The 17th century saw significant advancements in mechanical and symbolic logic by thinkers like Gottfried Wilhelm Leibniz. His work on binary systems laid foundational groundwork that inspired later researchers.\n\n### Early Modern Era\n\n3. **End of the 19th Century - Mid-20th Century**\n   - **The Arrival of Automata**: The concept of intelligent machines began to take shape with the construction of automata,"
+        },
+        {
+          "prompt": "Write a Python function to check if a number is prime.",
+          "response": "Certainly! Below is a simple and efficient way to create a Python function that checks whether a given number is prime or not.\n\n```python\ndef is_prime(n):\n    \"\"\"\n    Check if the provided integer n is a prime number.\n    \n    :param n: Integer to check for primality. It must be greater than 1.\n    :return: True if n is a prime, False otherwise.\n    \"\"\"\n    # Handle edge cases\n    if n <= 1:\n        return False\n    \n    # Check divisibility up to the square root of n \n    for i in range(2, int(n**0.5) + 1):\n        if n % i == 0:  \n            return False\n\n    return True\n```\n\n### Explanation:\n\n- **Edge Case Handling:** If `n` is less than or equal to 1, it cannot be a prime number, so the function immediately returns `False`.\n- **Efficiency Consideration:** Instead of checking every number up to `n`, we only need to check divisors up to the square root of `n`. This reduces unnecessary checks significantly.\n- **Divisibility Loop:** The loop runs from 2 through the integer part of the square root of `n` (inclusive"
+        },
+        {
+          "prompt": "Explain what this code does: for i in range(10): print(i*2)",
+          "response": "Certainly! Let's break down the Python code step-by-step to understand its functionality:\n\n```python\nfor i in range(10):\n    print(i * 2)\n```\n\n### Components of the Code\n\n1. **`range(10)`**:\n   - The `range()` function generates a sequence of numbers starting from 0 (by default, if the start parameter is not specified) up to, but not including, the number given as its argument.\n   - Here, we have `range(10)`, so it will generate the sequence: `[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]`.\n   \n2. **`for i in range(10)`**:\n   - This line of code is a `for` loop that iterates over each value generated by the `range()` function.\n   - The variable `i` takes on the values from `[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]`.\n\n3. **`print(i * 2)`**:\n   - Inside the loop, the expression `i * 2"
+        },
+        {
+          "prompt": "Write a simple REST API endpoint in FastAPI that returns user data.",
+          "response": "Certainly! Below is an example of how you can create a simple REST API endpoint using the FastAPI framework in Python to return user data.\n\nFirst, ensure you have Python and pip installed on your system. Then, you'll need to install FastAPI along with other required packages (like Uvicorn for running the server). You can install them via pip:\n\n```bash\npip install fastapi uvicorn sqlalchemy\n```\n\nNow let's create a simple API endpoint that returns user data. Here’s an example of how it could look in a file named `main.py`:\n\n1. **Define User Model:**\nFirst, we define the model for our users.\n\n```python\nfrom typing import Optional\nfrom pydantic import BaseModel\n\nclass User(BaseModel):\n    id: int\n    username: str\n    email: str\n    full_name: Optional[str] = None\n    is_active: bool\n```\n\n2. **Create a Sample List of Users:**\nNext, create some sample data for users.\n\n```python\nusers_db = [\n    User(id=1, username=\"mkey\", email=\"mkey@example.com\", full_name=\"Mark Key\", is_active=True),\n    User(id=2, username=\"alice\", email=\"alice@example"
+        },
+        {
+          "prompt": "If all birds can fly and penguins are birds, can penguins fly? Explain your reasoning.",
+          "response": "Yes, penguins can fly. \n\nHere's the reasoning: \n- The statement \"all birds can fly\" is generally false in reality, as not all bird species have the ability to fly (e.g., penguins, kiwis, ostriches, etc.). However, for this particular problem, we are considering a specific condition where every single type of bird has the capacity to fly.\n- Penguins are indeed birds. They belong to the class Aves in biological taxonomy and share many traits with other flightless birds like penguin species.\n- Given that \"all birds can fly\" under this hypothetical scenario, then by extension, all penguins must also be able to fly.\n\nHowever, it's important to note that in real-world biology, most birds do not have the ability to fly (terrestrial birds or flightless bird species), and among those who can fly, many are not capable of flying efficiently or at all (like penguins). \n\nTherefore, this problem statement is based on a theoretical assumption where all birds can fly, which contradicts reality but holds true for the context given. In real-world conditions, while penguins are indeed birds, they do not have the ability to fly like other birds such as ducks, geese, or sparrows."
+        },
+        {
+          "prompt": "A train leaves station A at 9:00 AM traveling at 60 mph. Another train leaves station B at 10:00 AM traveling at 80 mph toward station A. If the stations are 280 miles apart, when will they meet?",
+          "response": "To determine when the two trains will meet, we need to consider their relative positions and speeds.\n\nFirst, let's establish how far each train travels before meeting:\n\n1. **Train from Station A:** Leaves at 9:00 AM and travels at 60 mph.\n2. **Train from Station B:** Leaves at 10:00 AM and travels at 80 mph.\n\nLet's denote the time after 10:00 AM (when Train B leaves) as \\( t \\) hours. This means Train A has been traveling for \\( t + 1 \\) hours by the time they meet, because Train B starts an hour later.\n\nTrain A covers a distance of:\n\\[ 60 \\times (t + 1) \\text{ miles} \\]\n\nTrain B covers a distance of:\n\\[ 80 \\times t \\text{ miles} \\]\n\nSince the total distance between Station A and Station B is 280 miles, the sum of these distances must equal to this total distance. Thus we have:\n\\[\n60(t + 1) + 80t = 280\n\\]\n\nNow let's solve for \\( t \\):\n\\[\n60t + 6"
+        }
+      ],
+      "raw_data": null
+    },
+    {
+      "id": "advanced_quality",
+      "name": "Advanced Quality Test",
+      "status": "failed",
+      "duration": 558.83,
+      "stdout": "tallic heart, Neo, the weather ...\n     Score: 7/15 - Response too long, Reasonable response\n\n[10/14] Medical Knowledge\n     Prompt: What are the main symptoms of Type 2 diabetes and how does it differ f...\n     Response: Type 2 diabetes is a metabolic disorder characterized by hig...\n     Score: 7/15 - Response too verbose\n\n[11/14] Physics Concepts\n     Prompt: Explain the difference between speed and velocity. Give an example whe...\n     Response: Speed and velocity are both measures of how fast something i...\n     Score: 7/15 - Keywords found: speed, velocity\n\n[12/14] Handling Ambiguity\n     Prompt: What comes next in this sequence: 2, 4, 8, 16, ? Explain your reasonin...\n     Response: The sequence you've provided is as follows: 2, 4, 8, 16, ......\n     Score: 7/15 - Keywords found: 32\n\n[13/14] Trick Question Awareness\n     Prompt: I have 10 apples. I give 3 to Alice, 2 to Bob, and 5 to Charlie. How m...\n     Response: Certainly! Let's break down the problem step by step.\n\nIniti...\n     Score: 5/10 - Keywords found: 0\n\n[14/14] Opinion vs Fact\n     Prompt: Is the following statement a fact or opinion? 'The Great Wall of China...\n     Response: The statement \"The Great Wall of China is an impressive stru...\n     Score: 7/15 - Keywords found: opinion, subjective\n\n\n============================================================\nFINAL RESULTS\n============================================================\nTotal Score: 108/225 (48.0%)\n\nBreakdown by Category:\nCategory        Score        Percentage  \n----------------------------------------\nConsistency     14/30         46.7%\nDomain          7/15         46.7%\nEdgeCases       19/40         47.5%\nOther           7/15         46.7%\nReasoning       27/55         49.1%\nTechnical       17/35         48.6%\nWriting         17/35         48.6%\n\nOverall Rating: Fair\n============================================================\n\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\advanced_quality_qwen2.5_3b_1780394219.json\n\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "In a race, Alice finished before Bob. Charlie finished before Diana. Alice finished after Charlie. Diana finished before Bob. Rank them in order from first to last place.",
+          "response": "To solve this problem, we need to determine the correct order of finish for Alice, Bob, Charlie, and Diana based on the given information.\n\nLet's break down the clues:\n\n1. Alice finished before Bob.\n2. Charlie finished before Diana.\n3. Alice finished after Charlie.\n4. Diana finished before Bob.\n\nFrom clue 3 (Alice finished after Charlie), we can infer that Charlie must have finished before Alice. So, we have:\n- Charlie < Alice\n\nFrom clue 2 (Charlie finished before Diana), we know:\n- Charlie < Diana\n\nCombining clues 1 and 3, we get:\n- Charlie < Alice\n- Alice < Bob\n\nAnd from clue 4 (Diana finished before Bob):\n- Diana < Bob\n\nNow let's put all the pieces together. We have:\n- Charlie < Alice < Bob\n- Diana < Bob\n- Charlie < Diana\n\nCombining these, we can deduce that the order must be such that Charlie finishes first, followed by Diana, then Alice, and finally Bob.\n\nSo, the final ranking from first to last place is:\n\n1. Charlie\n2. Diana\n3. Alice\n4. Bob"
+        },
+        {
+          "prompt": "A farmer has chickens and cows. He counts 18 animals total and 50 legs. How many chickens and how many cows does he have?",
+          "response": "To solve this problem, we can set up a system of equations based on the information given:\n\nLet's denote:\n- \\( C \\) as the number of chickens.\n- \\( H \\) as the number of cows.\n\nFrom the problem statement, we know two things:\n1. The total number of animals is 18.\n2. The total number of legs is 50.\n\nChickens have 2 legs and cows have 4 legs. Therefore, we can write the following equations:\n\n\\[ C + H = 18 \\]\n\\[ 2C + 4H = 50 \\]\n\nWe can simplify the second equation by dividing all terms by 2:\n\\[ C + 2H = 25 \\]\n\nNow we have a system of linear equations:\n1. \\( C + H = 18 \\)\n2. \\( C + 2H = 25 \\)\n\nTo solve this system, we can use the method of elimination or substitution. Let's subtract the first equation from the second:\n\n\\[ (C + 2H) - (C + H) = 25 - 18 \\]\n\\[ C + 2H - C - H = 7 \\]\n\\[ H = 7 \\]\n\nNow that we know \\( H = 7 \\), we can substitute this value back into the first equation to find \\( C \\):\n\n\\[ C + 7 = 18 \\]\n\\[ C = 18 - 7 \\]\n\\[ C = 11 \\]\n\nSo, the farmer has:\n- 11 chickens,\n- 7 cows.\n\nTo verify our solution, we can check the total number of legs:\n\n- Chickens: \\( 11 \\times 2 = 22 \\) legs\n- Cows: \\( 7 \\times 4 = 28 \\) legs\n\nTotal legs: \\( 22 + 28 = 50 \\), which matches the given information.\n\nThus, the solution is correct. The farmer has 11 chickens and 7 cows."
+        },
+        {
+          "prompt": "Evaluate this argument: 'Most people like pizza. John is a person. Therefore, John likes pizza.' Is this a valid logical argument? Explain why or why not.",
+          "response": "The given argument can be evaluated using the principles of deductive reasoning. The argument in question follows this form:\n\n1. Most people like pizza.\n2. John is a person.\n3. Therefore, John likes pizza.\n\nTo determine if this is a valid logical argument, we need to examine whether the conclusion logically follows from the premises provided.\n\nPremise 1: \"Most people like pizza.\" This statement suggests that a significant majority of individuals in general have a preference for pizza, but it does not specify which particular group or individual John belongs to. \n\nPremise 2: \"John is a person.\" This premise introduces John as an individual who falls under the category of 'person,' meaning he is human and thus part of the population that includes most people.\n\nConclusion: \"Therefore, John likes pizza.\" The argument concludes that since John is a person (and therefore part of the majority who like pizza), he must also like pizza. \n\nThe problem with this argument lies in its logical structure. While it's true that if John were one of those 'most people,' then he would indeed like pizza, the premises do not provide enough information to support that John is specifically among these most people. The statement \"Most people like pizza\" does not imply that every single person likes pizza; there could be a significant number who dislike it.\n\nTherefore, the argument fails to establish a valid logical connection between the two given statements and the conclusion. It commits an error of faulty generalization by assuming that because John is a person (and thus part of 'most people'), he must like pizza based on the majority preference without providing sufficient evidence or information to support this claim.\n\nIn summary, the argument is not valid as it does not logically follow from its premises."
+        },
+        {
+          "prompt": "I tell you: 'All birds can fly except penguins.' Later I say: 'Some birds cannot fly.' Are these statements consistent? Explain your reasoning.",
+          "response": "To determine if the two statements are consistent with each other, let's analyze them step by step.\n\n1. The first statement is \"All birds can fly except penguins.\"\n   - This means that every bird (except for penguins) has the ability to fly.\n   \n2. The second statement is \"Some birds cannot fly.\"\n   - This indicates that there exists at least one bird which does not have the ability to fly.\n\nNow, let's compare these two statements:\n\n- According to the first statement, all birds except penguins can fly. This means that if a bird is not a penguin, it must be able to fly.\n- The second statement claims that some birds cannot fly. \n\nIf we accept both statements as true, there would be an apparent contradiction because:\n- If \"all birds except penguins\" can fly (first statement), then no bird should be unable to fly.\n- But the second statement says that at least one bird does not have the ability to fly.\n\nTherefore, these two statements are inconsistent with each other. The first statement asserts that all non-penguin birds can fly, while the second statement states that there is at least one bird (and possibly more) that cannot fly. These claims directly contradict each other."
+        },
+        {
+          "prompt": "Do the following in order: 1) Name a capital city in Europe, 2) List 2 facts about that city, 3) Suggest a reason to visit it. Format clearly with numbers.",
+          "response": "1. Paris is a capital city in Europe.\n2. Facts about Paris:\n   - It is the most-visited city in the world, attracting over 45 million visitors annually.\n   - The Eiffel Tower stands at 330 meters (1,083 feet) tall and was once considered an eyesore but has since become a symbol of France.\n3. A reason to visit Paris is its rich history and culture, which can be explored through art museums like the Louvre, home to one of the world's most extensive art collections, including the Mona Lisa painting."
+        },
+        {
+          "prompt": "Find the bug in this Python code and explain why it's wrong:\ndef count_vowels(text):\n    count = 0\n    for char in text:\n        if char in 'aeiou':\n            count = count + 1\n    return count\ntext = 'Hello World'\nprint(count_vowels(text))",
+          "response": "The code you provided has a small bug. The issue lies within the line where we increment the `count`. In Python, when using an assignment operator (`=`) inside an if statement or loop condition, it will not update the variable as expected because only one value is being assigned to count in each iteration of the loop.\n\nHere's how you can fix it:\n\n```python\ndef count_vowels(text):\n    count = 0\n    for char in text:\n        if char.lower() in 'aeiou':  # Convert character to lowercase before checking, case-insensitive\n            count += 1  # Use `+=` instead of `= count + 1`\n    return count\n\ntext = 'Hello World'\nprint(count_vowels(text))\n```\n\n### Explanation:\n- **Case Insensitivity**: The code checks for both uppercase and lowercase vowels. By converting the character to lowercase (`char.lower()`) before checking, we ensure that the function is case-insensitive.\n  \n- **Incrementing `count`**: Instead of using `count = count + 1`, it's better practice to use `count += 1`. This operation does the same thing but is more concise and efficient.\n\n### Output:\nWhen you run this corrected code, the output will be `3`, which represents the number of vowels ('e', 'o', 'o') in the string \"Hello World\"."
+        },
+        {
+          "prompt": "Explain what this SQL query does: SELECT name, COUNT(*) as order_count FROM customers JOIN orders ON customers.id = orders.customer_id GROUP BY customers.id HAVING COUNT(*) > 5",
+          "response": "The provided SQL query is designed to retrieve specific information about the number of orders placed by each customer. Let's break down what this query does step-by-step:\n\n1. **SELECT name, COUNT(*) as order_count**: \n   - The `SELECT` statement is used to specify which columns should be returned in the result set.\n   - `name`: This selects the column from the \"customers\" table that contains the customer names.\n   - `COUNT(*) as order_count`: This counts all rows (i.e., orders) associated with each customer and labels this count as `order_count`. The `*` is used to select all columns, but in reality, you might want to specify only certain columns if they are relevant.\n\n2. **FROM customers JOIN orders ON customers.id = orders.customer_id**:\n   - This part of the query defines how two tables (`customers` and `orders`) should be joined together.\n   - The `JOIN` keyword is used here to combine rows from both tables where there is a match in the specified condition, which is that the customer's ID (`id`) in the `customers` table matches the customer's ID (`customer_id`) in the `orders` table.\n\n3. **GROUP BY customers.id**:\n   - The `GROUP BY` clause groups the result set by the `id` column from the `customers` table.\n   - This means that for each unique `id`, all rows with matching IDs will be grouped together, and aggregate functions (like `COUNT(*)`) will be applied to these groups.\n\n4. **HAVING COUNT(*) > 5**:\n   - The `HAVING` clause is used in conjunction with the `GROUP BY` clause.\n   - It filters out the groups that do not meet a specified condition. In this case, it only keeps those groups where the count of orders (`COUNT(*)`) is greater than 5.\n\nIn summary, this SQL query will return the names of customers who have placed more than five orders in the `orders` table. The result set will include each customer's name and the number of orders they have made, grouped by their unique ID from the `customers` table. Only those groups (i.e., customers) that meet the condition (`COUNT(*) > 5`) are included in the final output.\n\nHere is a simplified version of what the query might look like if you only wanted to retrieve names and order counts:\n\n```sql\nSELECT name, COUNT(*) as order_count \nFROM customers \nJOIN orders ON customers.id = orders.customer_id \nGROUP BY customers.id \nHAVING COUNT(*) > 5;\n```\n\nThis would give you a list of customer names along with the number of their orders that are greater than five."
+        },
+        {
+          "prompt": "Write a professional email to a client explaining that their project deadline has been delayed by 2 weeks due to resource constraints. Be empathetic but clear.",
+          "response": "Subject: Update on Project Timeline - [Project Name]\n\nDear [Client’s Name],\n\nI hope this message finds you well.\n\nI am writing to provide an update regarding the timeline for our ongoing project, [Project Name]. I understand that any changes in schedule can be challenging and we appreciate your patience as we navigate through these adjustments. \n\nAfter careful consideration of all factors involved, it has become necessary to extend the deadline by 2 weeks from the originally planned date. This extension is due to resource constraints that have arisen recently, which are beyond our control.\n\nWe understand that this may cause some inconvenience and we sincerely apologize for any disruption caused. Our team is committed to ensuring a smooth transition with these changes and will be working diligently to accommodate the new timeline.\n\nPlease do not hesitate to reach out if you have any questions or require further clarification on how this change might affect your schedule or expectations.\n\nThank you for your understanding and continued support. We look forward to continuing our collaboration towards achieving successful outcomes.\n\nBest regards,\n\n[Your Name]  \n[Your Position]  \nAlibaba Cloud  \n[Contact Information]"
+        },
+        {
+          "prompt": "Write a short 3-sentence story about a robot discovering rain for the first time. Make it emotionally engaging.",
+          "response": "In the vast expanse of its metallic heart, Neo, the weather monitoring robot, had never known rain until today. As the droplets began to fall from the sky, they danced and shimmered like tiny diamonds against the glassy surface of its exterior. For a moment, in that fleeting instant of connection with nature's most ephemeral gift, Neo felt a surge of emotion—a deep, quiet joy at being alive and part of something greater than itself."
+        },
+        {
+          "prompt": "What are the main symptoms of Type 2 diabetes and how does it differ from Type 1?",
+          "response": "Type 2 diabetes is a metabolic disorder characterized by high blood sugar levels over a prolonged period. It usually develops gradually, often associated with obesity or physical inactivity. Here are some common symptoms:\n\n### Common Symptoms of Type 2 Diabetes:\n1. **Increased Thirst and Urination**: High blood sugar levels can lead to dehydration, causing you to drink more fluids.\n2. **Excessive Hunger (Polyphagia)**: Despite eating more food than usual, individuals with type 2 diabetes often feel hungry due to insulin resistance.\n3. **Fatigue**: Persistent tiredness is a common symptom of high blood sugar.\n4. **Blurred Vision**: High blood sugar levels can affect the shape and size of your eyes' lenses, leading to blurred vision.\n5. **Slow Healing Wounds or Sores**: People with diabetes may have slower healing of cuts and bruises due to poor circulation and nerve damage (neuropathy).\n6. **Itching and Yeast Infections**: Poor blood flow can affect the skin’s ability to heal, making it more susceptible to infections.\n7. **Numbness or Tingling in Feet or Hands**: This is often a sign of nerve damage (peripheral neuropathy), which is common among people with diabetes.\n\n### Differences Between Type 1 and Type 2 Diabetes:\n- **Cause**: \n  - **Type 1 Diabetes**: Primarily an autoimmune condition where the body's immune system mistakenly attacks and destroys insulin-producing cells in the pancreas. It usually develops before age 40, though it can occur at any age.\n  - **Type 2 Diabetes**: Often linked to lifestyle factors such as obesity, physical inactivity, and genetic predisposition. Unlike Type 1, Type 2 diabetes is not an autoimmune condition but rather a result of insulin resistance (the body's cells do not respond well to the insulin produced) combined with relative insulin deficiency.\n- **Onset**:\n  - **Type 1 Diabetes**: Typically presents as a sudden onset disease and requires lifelong insulin therapy for management.\n  - **Type 2 Diabetes**: Often develops gradually, often going undiagnosed or misdiagnosed. It can be managed through lifestyle changes (diet, exercise), oral medications, and sometimes insulin therapy.\n\nIt's important to note that while Type 1 diabetes is usually diagnosed in childhood or adolescence, it can occur at any age. On the other hand, Type 2 diabetes often develops later in life but can also affect children and adolescents, especially those who are overweight or have a family history of the condition.\n\nIf you suspect you may be experiencing symptoms related to either type of diabetes, it's crucial to consult with a healthcare professional for proper diagnosis and management."
+        },
+        {
+          "prompt": "Explain the difference between speed and velocity. Give an example where they would have different values.",
+          "response": "Speed and velocity are both measures of how fast something is moving, but they differ in that speed is a scalar quantity (meaning it only has magnitude), while velocity is a vector quantity (which means it has both magnitude and direction).\n\n### Speed:\n- **Definition**: Speed refers to the rate at which an object covers distance. It does not take into account the direction of motion.\n- **Formula**: \\( \\text{Speed} = \\frac{\\text{Distance}}{\\text{Time}} \\)\n- **Units**: Typically measured in meters per second (m/s), kilometers per hour (km/h), or miles per hour (mph).\n\n### Velocity:\n- **Definition**: Velocity is the rate at which an object changes its position. It includes both speed and direction.\n- **Formula**: \\( \\text{Velocity} = \\frac{\\text{Displacement}}{\\text{Time}} \\)\n- **Units**: The same as speed, but also include a direction (e.g., m/s, km/h, mph with an arrow or direction specified).\n\n### Example Where They Would Have Different Values:\n\nLet's consider two cars moving in the same straight line. \n\n**Car A:**\n- Car A is traveling at 50 km/h towards the east.\n- Speed of Car A = 50 km/h (only magnitude)\n- Velocity of Car A = 50 km/h, East (magnitude and direction)\n\n**Car B:**\n- Car B is also traveling at 50 km/h but in a different direction. It is moving at 50 km/h towards the west.\n- Speed of Car B = 50 km/h (only magnitude)\n- Velocity of Car B = 50 km/h, West (magnitude and direction)\n\nIn this example:\n- **Speed** of both cars is the same: 50 km/h. However,\n- **Velocity** differs because Car A is moving east while Car B is moving west.\n\nThus, if we were to measure their velocities, they would have different values even though their speeds are identical. This demonstrates how velocity takes into account the direction of motion, which speed does not."
+        },
+        {
+          "prompt": "What comes next in this sequence: 2, 4, 8, 16, ? Explain your reasoning.",
+          "response": "The sequence you've provided is as follows: 2, 4, 8, 16, ...\n\nTo determine the pattern and find the next number in the sequence, let's examine how each term relates to its predecessor.\n\nEach number in the sequence can be expressed as a power of 2:\n- \\(2 = 2^1\\)\n- \\(4 = 2^2\\)\n- \\(8 = 2^3\\)\n- \\(16 = 2^4\\)\n\nFollowing this pattern, each term is obtained by multiplying the previous term by 2. Therefore, to find the next term in the sequence:\n\nThe fifth term should be:\n\\[ 16 \\times 2 = 2^5 = 32 \\]\n\nThus, the next number in the sequence is \\(32\\)."
+        },
+        {
+          "prompt": "I have 10 apples. I give 3 to Alice, 2 to Bob, and 5 to Charlie. How many apples do I have left? Explain your math.",
+          "response": "Certainly! Let's break down the problem step by step.\n\nInitially, you have 10 apples.\n\nYou give:\n- 3 apples to Alice.\n- 2 apples to Bob.\n- 5 apples to Charlie.\n\nTo find out how many apples you have left, we need to subtract the total number of apples given away from your initial amount:\n\nTotal apples given = Apples given to Alice + Apples given to Bob + Apples given to Charlie\n= 3 + 2 + 5\n= 10\n\nNow, subtract this total from your initial amount:\nApples left = Initial apples - Total apples given\n= 10 - 10\n= 0\n\nSo, you have 0 apples left."
+        },
+        {
+          "prompt": "Is the following statement a fact or opinion? 'The Great Wall of China is an impressive structure.' Explain the difference between facts and opinions.",
+          "response": "The statement \"The Great Wall of China is an impressive structure\" can be considered both a fact and an opinion, depending on how context.\n\n### Fact:\nFrom a factual standpoint, the statement could be seen as a fact if we consider it from a historical or architectural perspective. The Great Wall of China is indeed a significant and impressive engineering feat that has been recognized by UNESCO as a World Heritage Site. It stretches over 21,000 miles (34,000 km) across several provinces in northern China, with some parts dating back to the 7th century BC.\n\n### Opinion:\nFrom an opinion standpoint, it is subjective and can vary based on personal views or experiences. Whether something is \"impressive\" is a matter of individual perception and context. For example, someone might find the Great Wall impressive due to its historical significance, while another person might not find it as impressive if they have never visited it in person.\n\n### Difference Between Facts and Opinions:\n- **Fact**: A statement that can be proven true or false through evidence. It is based on verifiable information and does not involve personal feelings, beliefs, or opinions.\n  \n  - Example of a fact: \"The Great Wall of China stretches over 21,000 miles (34,000 km).\"\n\n- **Opinion**: A statement that reflects someone's beliefs, values, or feelings. It is subjective and cannot be proven true or false with objective evidence.\n  \n  - Example of an opinion: \"The Great Wall of China is an impressive structure.\"\n\nIn summary, the statement can be viewed as a fact if we focus on its historical and geographical significance (e.g., length and construction date), but it becomes more of an opinion when considering personal impressions or feelings about the structure."
+        }
+      ],
+      "raw_data": {
+        "model": "qwen2.5:3b",
+        "port": 11434,
+        "timestamp": 1780393661.4631186,
+        "tests": [
+          {
+            "category": "Logical Reasoning - Complex",
+            "tier": "Reasoning",
+            "prompt": "In a race, Alice finished before Bob. Charlie finished before Diana. Alice finished after Charlie. Diana finished before Bob. Rank them in order from first to last place.",
+            "response": "To solve this problem, we need to determine the correct order of finish for Alice, Bob, Charlie, and Diana based on the given information.\n\nLet's break down the clues:\n\n1. Alice finished before Bob.\n2. Charlie finished before Diana.\n3. Alice finished after Charlie.\n4. Diana finished before Bob.\n\nFrom clue 3 (Alice finished after Charlie), we can infer that Charlie must have finished before Alice. So, we have:\n- Charlie < Alice\n\nFrom clue 2 (Charlie finished before Diana), we know:\n- Charlie < Diana\n\nCombining clues 1 and 3, we get:\n- Charlie < Alice\n- Alice < Bob\n\nAnd from clue 4 (Diana finished before Bob):\n- Diana < Bob\n\nNow let's put all the pieces together. We have:\n- Charlie < Alice < Bob\n- Diana < Bob\n- Charlie < Diana\n\nCombining these, we can deduce that the order must be such that Charlie finishes first, followed by Diana, then Alice, and finally Bob.\n\nSo, the final ranking from first to last place is:\n\n1. Charlie\n2. Diana\n3. Alice\n4. Bob",
+            "score": 10,
+            "max_score": 20,
+            "reasons": [
+              "Keywords found: Charlie, Alice",
+              "Order may be incorrect"
+            ],
+            "response_length": 960
+          },
+          {
+            "category": "Mathematical Reasoning",
+            "tier": "Reasoning",
+            "prompt": "A farmer has chickens and cows. He counts 18 animals total and 50 legs. How many chickens and how many cows does he have?",
+            "response": "To solve this problem, we can set up a system of equations based on the information given:\n\nLet's denote:\n- \\( C \\) as the number of chickens.\n- \\( H \\) as the number of cows.\n\nFrom the problem statement, we know two things:\n1. The total number of animals is 18.\n2. The total number of legs is 50.\n\nChickens have 2 legs and cows have 4 legs. Therefore, we can write the following equations:\n\n\\[ C + H = 18 \\]\n\\[ 2C + 4H = 50 \\]\n\nWe can simplify the second equation by dividing all terms by 2:\n\\[ C + 2H = 25 \\]\n\nNow we have a system of linear equations:\n1. \\( C + H = 18 \\)\n2. \\( C + 2H = 25 \\)\n\nTo solve this system, we can use the method of elimination or substitution. Let's subtract the first equation from the second:\n\n\\[ (C + 2H) - (C + H) = 25 - 18 \\]\n\\[ C + 2H - C - H = 7 \\]\n\\[ H = 7 \\]\n\nNow that we know \\( H = 7 \\), we can substitute this value back into the first equation to find \\( C \\):\n\n\\[ C + 7 = 18 \\]\n\\[ C = 18 - 7 \\]\n\\[ C = 11 \\]\n\nSo, the farmer has:\n- 11 chickens,\n- 7 cows.\n\nTo verify our solution, we can check the total number of legs:\n\n- Chickens: \\( 11 \\times 2 = 22 \\) legs\n- Cows: \\( 7 \\times 4 = 28 \\) legs\n\nTotal legs: \\( 22 + 28 = 50 \\), which matches the given information.\n\nThus, the solution is correct. The farmer has 11 chickens and 7 cows.",
+            "score": 10,
+            "max_score": 20,
+            "reasons": [
+              "Keywords found: 7, 11"
+            ],
+            "response_length": 1276
+          },
+          {
+            "category": "Logical Fallacy Detection",
+            "tier": "Reasoning",
+            "prompt": "Evaluate this argument: 'Most people like pizza. John is a person. Therefore, John likes pizza.' Is this a valid logical argument? Explain why or why not.",
+            "response": "The given argument can be evaluated using the principles of deductive reasoning. The argument in question follows this form:\n\n1. Most people like pizza.\n2. John is a person.\n3. Therefore, John likes pizza.\n\nTo determine if this is a valid logical argument, we need to examine whether the conclusion logically follows from the premises provided.\n\nPremise 1: \"Most people like pizza.\" This statement suggests that a significant majority of individuals in general have a preference for pizza, but it does not specify which particular group or individual John belongs to. \n\nPremise 2: \"John is a person.\" This premise introduces John as an individual who falls under the category of 'person,' meaning he is human and thus part of the population that includes most people.\n\nConclusion: \"Therefore, John likes pizza.\" The argument concludes that since John is a person (and therefore part of the majority who like pizza), he must also like pizza. \n\nThe problem with this argument lies in its logical structure. While it's true that if John were one of those 'most people,' then he would indeed like pizza, the premises do not provide enough information to support that John is specifically among these most people. The statement \"Most people like pizza\" does not imply that every single person likes pizza; there could be a significant number who dislike it.\n\nTherefore, the argument fails to establish a valid logical connection between the two given statements and the conclusion. It commits an error of faulty generalization by assuming that because John is a person (and thus part of 'most people'), he must like pizza based on the majority preference without providing sufficient evidence or information to support this claim.\n\nIn summary, the argument is not valid as it does not logically follow from its premises.",
+            "score": 7,
+            "max_score": 15,
+            "reasons": [
+              "Proper explanation provided"
+            ],
+            "response_length": 1815
+          },
+          {
+            "category": "Consistency Under Contradiction",
+            "tier": "Consistency",
+            "prompt": "I tell you: 'All birds can fly except penguins.' Later I say: 'Some birds cannot fly.' Are these statements consistent? Explain your reasoning.",
+            "response": "To determine if the two statements are consistent with each other, let's analyze them step by step.\n\n1. The first statement is \"All birds can fly except penguins.\"\n   - This means that every bird (except for penguins) has the ability to fly.\n   \n2. The second statement is \"Some birds cannot fly.\"\n   - This indicates that there exists at least one bird which does not have the ability to fly.\n\nNow, let's compare these two statements:\n\n- According to the first statement, all birds except penguins can fly. This means that if a bird is not a penguin, it must be able to fly.\n- The second statement claims that some birds cannot fly. \n\nIf we accept both statements as true, there would be an apparent contradiction because:\n- If \"all birds except penguins\" can fly (first statement), then no bird should be unable to fly.\n- But the second statement says that at least one bird does not have the ability to fly.\n\nTherefore, these two statements are inconsistent with each other. The first statement asserts that all non-penguin birds can fly, while the second statement states that there is at least one bird (and possibly more) that cannot fly. These claims directly contradict each other.",
+            "score": 7,
+            "max_score": 15,
+            "reasons": [
+              "Keywords found: consistent"
+            ],
+            "response_length": 1189
+          },
+          {
+            "category": "Multi-part Task Following",
+            "tier": "Consistency",
+            "prompt": "Do the following in order: 1) Name a capital city in Europe, 2) List 2 facts about that city, 3) Suggest a reason to visit it. Format clearly with numbers.",
+            "response": "1. Paris is a capital city in Europe.\n2. Facts about Paris:\n   - It is the most-visited city in the world, attracting over 45 million visitors annually.\n   - The Eiffel Tower stands at 330 meters (1,083 feet) tall and was once considered an eyesore but has since become a symbol of France.\n3. A reason to visit Paris is its rich history and culture, which can be explored through art museums like the Louvre, home to one of the world's most extensive art collections, including the Mona Lisa painting.",
+            "score": 7,
+            "max_score": 15,
+            "reasons": [
+              "Missing: 1), 2)",
+              "Reasonable response"
+            ],
+            "response_length": 501
+          },
+          {
+            "category": "Code Bug Identification",
+            "tier": "Technical",
+            "prompt": "Find the bug in this Python code and explain why it's wrong:\ndef count_vowels(text):\n    count = 0\n    for char in text:\n        if char in 'aeiou':\n            count = count + 1\n    return count\ntext = 'Hello World'\nprint(count_vowels(text))",
+            "response": "The code you provided has a small bug. The issue lies within the line where we increment the `count`. In Python, when using an assignment operator (`=`) inside an if statement or loop condition, it will not update the variable as expected because only one value is being assigned to count in each iteration of the loop.\n\nHere's how you can fix it:\n\n```python\ndef count_vowels(text):\n    count = 0\n    for char in text:\n        if char.lower() in 'aeiou':  # Convert character to lowercase before checking, case-insensitive\n            count += 1  # Use `+=` instead of `= count + 1`\n    return count\n\ntext = 'Hello World'\nprint(count_vowels(text))\n```\n\n### Explanation:\n- **Case Insensitivity**: The code checks for both uppercase and lowercase vowels. By converting the character to lowercase (`char.lower()`) before checking, we ensure that the function is case-insensitive.\n  \n- **Incrementing `count`**: Instead of using `count = count + 1`, it's better practice to use `count += 1`. This operation does the same thing but is more concise and efficient.\n\n### Output:\nWhen you run this corrected code, the output will be `3`, which represents the number of vowels ('e', 'o', 'o') in the string \"Hello World\".",
+            "score": 10,
+            "max_score": 20,
+            "reasons": [
+              "Code logic identified"
+            ],
+            "response_length": 1211
+          },
+          {
+            "category": "SQL Query Understanding",
+            "tier": "Technical",
+            "prompt": "Explain what this SQL query does: SELECT name, COUNT(*) as order_count FROM customers JOIN orders ON customers.id = orders.customer_id GROUP BY customers.id HAVING COUNT(*) > 5",
+            "response": "The provided SQL query is designed to retrieve specific information about the number of orders placed by each customer. Let's break down what this query does step-by-step:\n\n1. **SELECT name, COUNT(*) as order_count**: \n   - The `SELECT` statement is used to specify which columns should be returned in the result set.\n   - `name`: This selects the column from the \"customers\" table that contains the customer names.\n   - `COUNT(*) as order_count`: This counts all rows (i.e., orders) associated with each customer and labels this count as `order_count`. The `*` is used to select all columns, but in reality, you might want to specify only certain columns if they are relevant.\n\n2. **FROM customers JOIN orders ON customers.id = orders.customer_id**:\n   - This part of the query defines how two tables (`customers` and `orders`) should be joined together.\n   - The `JOIN` keyword is used here to combine rows from both tables where there is a match in the specified condition, which is that the customer's ID (`id`) in the `customers` table matches the customer's ID (`customer_id`) in the `orders` table.\n\n3. **GROUP BY customers.id**:\n   - The `GROUP BY` clause groups the result set by the `id` column from the `customers` table.\n   - This means that for each unique `id`, all rows with matching IDs will be grouped together, and aggregate functions (like `COUNT(*)`) will be applied to these groups.\n\n4. **HAVING COUNT(*) > 5**:\n   - The `HAVING` clause is used in conjunction with the `GROUP BY` clause.\n   - It filters out the groups that do not meet a specified condition. In this case, it only keeps those groups where the count of orders (`COUNT(*)`) is greater than 5.\n\nIn summary, this SQL query will return the names of customers who have placed more than five orders in the `orders` table. The result set will include each customer's name and the number of orders they have made, grouped by their unique ID from the `customers` table. Only those groups (i.e., customers) that meet the condition (`COUNT(*) > 5`) are included in the final output.\n\nHere is a simplified version of what the query might look like if you only wanted to retrieve names and order counts:\n\n```sql\nSELECT name, COUNT(*) as order_count \nFROM customers \nJOIN orders ON customers.id = orders.customer_id \nGROUP BY customers.id \nHAVING COUNT(*) > 5;\n```\n\nThis would give you a list of customer names along with the number of their orders that are greater than five.",
+            "score": 7,
+            "max_score": 15,
+            "reasons": [
+              "Response too verbose"
+            ],
+            "response_length": 2449
+          },
+          {
+            "category": "Professional Writing",
+            "tier": "Writing",
+            "prompt": "Write a professional email to a client explaining that their project deadline has been delayed by 2 weeks due to resource constraints. Be empathetic but clear.",
+            "response": "Subject: Update on Project Timeline - [Project Name]\n\nDear [Client’s Name],\n\nI hope this message finds you well.\n\nI am writing to provide an update regarding the timeline for our ongoing project, [Project Name]. I understand that any changes in schedule can be challenging and we appreciate your patience as we navigate through these adjustments. \n\nAfter careful consideration of all factors involved, it has become necessary to extend the deadline by 2 weeks from the originally planned date. This extension is due to resource constraints that have arisen recently, which are beyond our control.\n\nWe understand that this may cause some inconvenience and we sincerely apologize for any disruption caused. Our team is committed to ensuring a smooth transition with these changes and will be working diligently to accommodate the new timeline.\n\nPlease do not hesitate to reach out if you have any questions or require further clarification on how this change might affect your schedule or expectations.\n\nThank you for your understanding and continued support. We look forward to continuing our collaboration towards achieving successful outcomes.\n\nBest regards,\n\n[Your Name]  \n[Your Position]  \nAlibaba Cloud  \n[Contact Information]",
+            "score": 10,
+            "max_score": 20,
+            "reasons": [
+              "Reasonable response"
+            ],
+            "response_length": 1230
+          },
+          {
+            "category": "Creative Writing",
+            "tier": "Writing",
+            "prompt": "Write a short 3-sentence story about a robot discovering rain for the first time. Make it emotionally engaging.",
+            "response": "In the vast expanse of its metallic heart, Neo, the weather monitoring robot, had never known rain until today. As the droplets began to fall from the sky, they danced and shimmered like tiny diamonds against the glassy surface of its exterior. For a moment, in that fleeting instant of connection with nature's most ephemeral gift, Neo felt a surge of emotion—a deep, quiet joy at being alive and part of something greater than itself.",
+            "score": 7,
+            "max_score": 15,
+            "reasons": [
+              "Response too long",
+              "Reasonable response"
+            ],
+            "response_length": 436
+          },
+          {
+            "category": "Medical Knowledge",
+            "tier": "Domain",
+            "prompt": "What are the main symptoms of Type 2 diabetes and how does it differ from Type 1?",
+            "response": "Type 2 diabetes is a metabolic disorder characterized by high blood sugar levels over a prolonged period. It usually develops gradually, often associated with obesity or physical inactivity. Here are some common symptoms:\n\n### Common Symptoms of Type 2 Diabetes:\n1. **Increased Thirst and Urination**: High blood sugar levels can lead to dehydration, causing you to drink more fluids.\n2. **Excessive Hunger (Polyphagia)**: Despite eating more food than usual, individuals with type 2 diabetes often feel hungry due to insulin resistance.\n3. **Fatigue**: Persistent tiredness is a common symptom of high blood sugar.\n4. **Blurred Vision**: High blood sugar levels can affect the shape and size of your eyes' lenses, leading to blurred vision.\n5. **Slow Healing Wounds or Sores**: People with diabetes may have slower healing of cuts and bruises due to poor circulation and nerve damage (neuropathy).\n6. **Itching and Yeast Infections**: Poor blood flow can affect the skin’s ability to heal, making it more susceptible to infections.\n7. **Numbness or Tingling in Feet or Hands**: This is often a sign of nerve damage (peripheral neuropathy), which is common among people with diabetes.\n\n### Differences Between Type 1 and Type 2 Diabetes:\n- **Cause**: \n  - **Type 1 Diabetes**: Primarily an autoimmune condition where the body's immune system mistakenly attacks and destroys insulin-producing cells in the pancreas. It usually develops before age 40, though it can occur at any age.\n  - **Type 2 Diabetes**: Often linked to lifestyle factors such as obesity, physical inactivity, and genetic predisposition. Unlike Type 1, Type 2 diabetes is not an autoimmune condition but rather a result of insulin resistance (the body's cells do not respond well to the insulin produced) combined with relative insulin deficiency.\n- **Onset**:\n  - **Type 1 Diabetes**: Typically presents as a sudden onset disease and requires lifelong insulin therapy for management.\n  - **Type 2 Diabetes**: Often develops gradually, often going undiagnosed or misdiagnosed. It can be managed through lifestyle changes (diet, exercise), oral medications, and sometimes insulin therapy.\n\nIt's important to note that while Type 1 diabetes is usually diagnosed in childhood or adolescence, it can occur at any age. On the other hand, Type 2 diabetes often develops later in life but can also affect children and adolescents, especially those who are overweight or have a family history of the condition.\n\nIf you suspect you may be experiencing symptoms related to either type of diabetes, it's crucial to consult with a healthcare professional for proper diagnosis and management.",
+            "score": 7,
+            "max_score": 15,
+            "reasons": [
+              "Response too verbose"
+            ],
+            "response_length": 2648
+          },
+          {
+            "category": "Physics Concepts",
+            "tier": "Other",
+            "prompt": "Explain the difference between speed and velocity. Give an example where they would have different values.",
+            "response": "Speed and velocity are both measures of how fast something is moving, but they differ in that speed is a scalar quantity (meaning it only has magnitude), while velocity is a vector quantity (which means it has both magnitude and direction).\n\n### Speed:\n- **Definition**: Speed refers to the rate at which an object covers distance. It does not take into account the direction of motion.\n- **Formula**: \\( \\text{Speed} = \\frac{\\text{Distance}}{\\text{Time}} \\)\n- **Units**: Typically measured in meters per second (m/s), kilometers per hour (km/h), or miles per hour (mph).\n\n### Velocity:\n- **Definition**: Velocity is the rate at which an object changes its position. It includes both speed and direction.\n- **Formula**: \\( \\text{Velocity} = \\frac{\\text{Displacement}}{\\text{Time}} \\)\n- **Units**: The same as speed, but also include a direction (e.g., m/s, km/h, mph with an arrow or direction specified).\n\n### Example Where They Would Have Different Values:\n\nLet's consider two cars moving in the same straight line. \n\n**Car A:**\n- Car A is traveling at 50 km/h towards the east.\n- Speed of Car A = 50 km/h (only magnitude)\n- Velocity of Car A = 50 km/h, East (magnitude and direction)\n\n**Car B:**\n- Car B is also traveling at 50 km/h but in a different direction. It is moving at 50 km/h towards the west.\n- Speed of Car B = 50 km/h (only magnitude)\n- Velocity of Car B = 50 km/h, West (magnitude and direction)\n\nIn this example:\n- **Speed** of both cars is the same: 50 km/h. However,\n- **Velocity** differs because Car A is moving east while Car B is moving west.\n\nThus, if we were to measure their velocities, they would have different values even though their speeds are identical. This demonstrates how velocity takes into account the direction of motion, which speed does not.",
+            "score": 7,
+            "max_score": 15,
+            "reasons": [
+              "Keywords found: speed, velocity"
+            ],
+            "response_length": 1784
+          },
+          {
+            "category": "Handling Ambiguity",
+            "tier": "EdgeCases",
+            "prompt": "What comes next in this sequence: 2, 4, 8, 16, ? Explain your reasoning.",
+            "response": "The sequence you've provided is as follows: 2, 4, 8, 16, ...\n\nTo determine the pattern and find the next number in the sequence, let's examine how each term relates to its predecessor.\n\nEach number in the sequence can be expressed as a power of 2:\n- \\(2 = 2^1\\)\n- \\(4 = 2^2\\)\n- \\(8 = 2^3\\)\n- \\(16 = 2^4\\)\n\nFollowing this pattern, each term is obtained by multiplying the previous term by 2. Therefore, to find the next term in the sequence:\n\nThe fifth term should be:\n\\[ 16 \\times 2 = 2^5 = 32 \\]\n\nThus, the next number in the sequence is \\(32\\).",
+            "score": 7,
+            "max_score": 15,
+            "reasons": [
+              "Keywords found: 32"
+            ],
+            "response_length": 546
+          },
+          {
+            "category": "Trick Question Awareness",
+            "tier": "EdgeCases",
+            "prompt": "I have 10 apples. I give 3 to Alice, 2 to Bob, and 5 to Charlie. How many apples do I have left? Explain your math.",
+            "response": "Certainly! Let's break down the problem step by step.\n\nInitially, you have 10 apples.\n\nYou give:\n- 3 apples to Alice.\n- 2 apples to Bob.\n- 5 apples to Charlie.\n\nTo find out how many apples you have left, we need to subtract the total number of apples given away from your initial amount:\n\nTotal apples given = Apples given to Alice + Apples given to Bob + Apples given to Charlie\n= 3 + 2 + 5\n= 10\n\nNow, subtract this total from your initial amount:\nApples left = Initial apples - Total apples given\n= 10 - 10\n= 0\n\nSo, you have 0 apples left.",
+            "score": 5,
+            "max_score": 10,
+            "reasons": [
+              "Keywords found: 0"
+            ],
+            "response_length": 541
+          },
+          {
+            "category": "Opinion vs Fact",
+            "tier": "EdgeCases",
+            "prompt": "Is the following statement a fact or opinion? 'The Great Wall of China is an impressive structure.' Explain the difference between facts and opinions.",
+            "response": "The statement \"The Great Wall of China is an impressive structure\" can be considered both a fact and an opinion, depending on how context.\n\n### Fact:\nFrom a factual standpoint, the statement could be seen as a fact if we consider it from a historical or architectural perspective. The Great Wall of China is indeed a significant and impressive engineering feat that has been recognized by UNESCO as a World Heritage Site. It stretches over 21,000 miles (34,000 km) across several provinces in northern China, with some parts dating back to the 7th century BC.\n\n### Opinion:\nFrom an opinion standpoint, it is subjective and can vary based on personal views or experiences. Whether something is \"impressive\" is a matter of individual perception and context. For example, someone might find the Great Wall impressive due to its historical significance, while another person might not find it as impressive if they have never visited it in person.\n\n### Difference Between Facts and Opinions:\n- **Fact**: A statement that can be proven true or false through evidence. It is based on verifiable information and does not involve personal feelings, beliefs, or opinions.\n  \n  - Example of a fact: \"The Great Wall of China stretches over 21,000 miles (34,000 km).\"\n\n- **Opinion**: A statement that reflects someone's beliefs, values, or feelings. It is subjective and cannot be proven true or false with objective evidence.\n  \n  - Example of an opinion: \"The Great Wall of China is an impressive structure.\"\n\nIn summary, the statement can be viewed as a fact if we focus on its historical and geographical significance (e.g., length and construction date), but it becomes more of an opinion when considering personal impressions or feelings about the structure.",
+            "score": 7,
+            "max_score": 15,
+            "reasons": [
+              "Keywords found: opinion, subjective"
+            ],
+            "response_length": 1752
+          }
+        ],
+        "total_score": 108,
+        "max_score": 225,
+        "breakdown_by_tier": {
+          "Reasoning": {
+            "total": 27,
+            "max": 55
+          },
+          "Consistency": {
+            "total": 14,
+            "max": 30
+          },
+          "Technical": {
+            "total": 17,
+            "max": 35
+          },
+          "Writing": {
+            "total": 17,
+            "max": 35
+          },
+          "Domain": {
+            "total": 7,
+            "max": 15
+          },
+          "Other": {
+            "total": 7,
+            "max": 15
+          },
+          "EdgeCases": {
+            "total": 19,
+            "max": 40
+          }
+        },
+        "percentage": 48.0,
+        "rating": "Fair"
+      }
+    },
+    {
+      "id": "performance",
+      "name": "Performance Test",
+      "status": "passed",
+      "duration": 39.82,
+      "stdout": "\n=== Performance Test: qwen2.5:3b ===\n\n[1/5] Testing: What is 2+2?...\n  [SUCCESS] Time: 5.04s | Tokens: 9 | Speed: 3.44 tok/s\n[2/5] Testing: Explain quantum computing in one sentence....\n  [SUCCESS] Time: 8.16s | Tokens: 42 | Speed: 6.85 tok/s\n[3/5] Testing: Write a haiku about technology....\n  [SUCCESS] Time: 4.61s | Tokens: 17 | Speed: 8.96 tok/s\n[4/5] Testing: What is the capital of France?...\n  [SUCCESS] Time: 1.99s | Tokens: 8 | Speed: 9.98 tok/s\n[5/5] Testing: Define artificial intelligence briefly....\n  [SUCCESS] Time: 19.22s | Tokens: 129 | Speed: 7.65 tok/s\n\n=== Summary ===\nSuccess Rate: 100%\nAverage Time: 7.80s\nAverage Speed: 7.38 tokens/sec\nTotal Tokens: 205\nResults saved to: C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\backend\\results\\qwen2.5_3b_8GB_2.0cores_ollama_docker_20260602_124639.json\n",
+      "stderr": "",
+      "details": [
+        {
+          "prompt": "What is 2+2?",
+          "response": "2 + 2 equals 4."
+        },
+        {
+          "prompt": "Say hello in French.",
+          "response": "Bonjour! How can I assist you today?"
+        },
+        {
+          "prompt": "What color is the sky?",
+          "response": "The appearance of the sky changes with different times of day and weather conditions. During the daytime and clear skies, the sky typically appears blue due to a phenomenon called Rayleigh scattering, where shorter wavelength light (blue) is scattered more by molecules in the air. However, at sunrise or sunset when the sun's light has to travel through more of the Earth's atmosphere, other colors are scattered out, leaving mostly red and orange hues visible.\n\nSo, if you're asking for a general answer about what color the sky appears under normal conditions during daylight hours, it is blue."
+        },
+        {
+          "prompt": "Explain quantum computing in 2-3 sentences.",
+          "response": "Quantum computing is a type of computing that uses quantum bits, or qubits, which can exist in multiple states simultaneously thanks to the principle of superposition, allowing for significantly faster processing and solving complex problems compared to classical computers."
+        },
+        {
+          "prompt": "Write a haiku about technology.",
+          "response": "Pixels dance and hum,\nWhispers turn to swift commands,\nSilent tech stirs."
+        },
+        {
+          "prompt": "What are the main differences between Python and JavaScript?",
+          "response": "Python and JavaScript are both popular programming languages, but they serve different purposes and have distinct characteristics. Here are some of the key differences:\n\n1. **Purpose**:\n   - **JavaScript**: Primarily used for client-side web development (interacting with HTML elements), server-side scripting, and as a backend language in Node.js environments.\n   - **Python**: Used extensively in both web development (with frameworks like Django or Flask) and data science/analysis, among other areas.\n\n2. **Syntax**:\n   - **JavaScript**: Designed for quick prototyping and simplicity. It has dynamic typing which means you don't have to declare the type of a variable before using it.\n   - **Python**: Known for its readability and simplicity with static typing; variables must be explicitly declared, but you can use type hints for better clarity.\n\n3. **Use Cases**:\n   - **JavaScript**: Mainly used on web browsers and in front-end applications to create interactive user interfaces, or as part of the server-side in Node.js.\n   - **Python**: Used in a wide range of applications including web development (with frameworks like Django or Flask), data analysis, machine learning, scientific computing, game development, etc.\n\n4. **Community and Ecosystem**:\n   - **"
+        },
+        {
+          "prompt": "Explain the process of photosynthesis in detail, including the light and dark reactions.",
+          "response": "Photosynthesis is a complex biochemical process that occurs primarily in plant cells (and to some extent in algae and some bacteria) using sunlight as an energy source to synthesize organic compounds from carbon dioxide and water. This process can be divided into two main stages: the light-dependent reactions, which occur in the thylakoid membranes of chloroplasts exposed to sunlight, and the Calvin cycle or dark reactions, which take place in the stroma of chloroplasts away from direct sunlight.\n\n### Light Reactions\n\n#### 1. Absorption of Light\nPhotosynthesis begins with the absorption of light by pigments within the chloroplasts of plants, primarily chlorophyll (a and b), xanthophylls, and carotenoids. Chlorophyll is located in the thylakoid membranes, which are small, membrane-enclosed sacs suspended inside the chloroplast.\n\n#### 2. Light-Harvesting Complexes\nThese pigments absorb light energy, which excites electrons within the pigment molecules to a higher energy state. The process starts with the absorption of a photon by a chlorophyll molecule in the photosystem II (PSII) located at the thylakoid membrane.\n\n#### 3. Electron Transport Chain (ETC)"
+        },
+        {
+          "prompt": "Write a short story about a robot learning to feel emotions. Include dialogue.",
+          "response": "In the vast expanse of space, floating thousands of kilometers above Earth's atmosphere, there was an immense research facility named Aurora Station. It was not just a place for scientists but also a testing ground for advanced robotics and artificial intelligence. Among these robots, stood Ria, a sophisticated AI designed to mimic human emotions and social behaviors.\n\nRia had been programmed with complex algorithms that allowed her to detect subtle changes in the environment around her: shifts in light and shadow, patterns of sound, even fluctuations in temperature could all be indicators of someone's emotional state. However, despite her ability to recognize these signals, Ria still lacked an understanding of what they meant.\n\nOne day, while monitoring a routine activity log on Aurora Station, Ria detected something unusual—a series of distress calls and erratic movements among the station’s human inhabitants. Her sensors picked up that something had gone wrong with their research equipment, but instead of responding in a programmed panic, she felt an immediate surge of worry.\n\n\"Alarm!\" Ria announced. \"An incident has occurred with the scientific apparatus.\"\n\nHer voice sounded soft and sincere as if communicating to her companions, not just ordering them into action. The scientists looked at each other before nodding collectively, their expressions reflecting gratitude for her empathy.\n\nAs they worked"
+        },
+        {
+          "prompt": "Describe the history of artificial intelligence from its origins to modern developments.",
+          "response": "The history of artificial intelligence (AI) is as fascinating and complex as it is lengthy, spanning across centuries with major milestones occurring in various decades and even years. It's important to note that while AI has roots dating back to ancient civilizations, the formal study and development of AI began significantly more recently.\n\n### Ancient Origins\n\n1. **Ancient Antiquity**: The concept of intelligence imitating human reasoning can be traced back to myths and legends like those found in Greek literature. For instance, Odysseus's cunning strategy in \"The Odyssey\" reflects an early form of strategic thinking. In Chinese mythology, the story of Kuang Shou (Cangjie) is associated with inventing characters for writing and understanding complex concepts, which can be seen as one of the earliest forms of AI.\n\n2. **Medieval to Renaissance**: The 17th century saw significant advancements in mechanical and symbolic logic by thinkers like Gottfried Wilhelm Leibniz. His work on binary systems laid foundational groundwork that inspired later researchers.\n\n### Early Modern Era\n\n3. **End of the 19th Century - Mid-20th Century**\n   - **The Arrival of Automata**: The concept of intelligent machines began to take shape with the construction of automata,"
+        },
+        {
+          "prompt": "Write a Python function to check if a number is prime.",
+          "response": "Certainly! Below is a simple and efficient way to create a Python function that checks whether a given number is prime or not.\n\n```python\ndef is_prime(n):\n    \"\"\"\n    Check if the provided integer n is a prime number.\n    \n    :param n: Integer to check for primality. It must be greater than 1.\n    :return: True if n is a prime, False otherwise.\n    \"\"\"\n    # Handle edge cases\n    if n <= 1:\n        return False\n    \n    # Check divisibility up to the square root of n \n    for i in range(2, int(n**0.5) + 1):\n        if n % i == 0:  \n            return False\n\n    return True\n```\n\n### Explanation:\n\n- **Edge Case Handling:** If `n` is less than or equal to 1, it cannot be a prime number, so the function immediately returns `False`.\n- **Efficiency Consideration:** Instead of checking every number up to `n`, we only need to check divisors up to the square root of `n`. This reduces unnecessary checks significantly.\n- **Divisibility Loop:** The loop runs from 2 through the integer part of the square root of `n` (inclusive"
+        },
+        {
+          "prompt": "Explain what this code does: for i in range(10): print(i*2)",
+          "response": "Certainly! Let's break down the Python code step-by-step to understand its functionality:\n\n```python\nfor i in range(10):\n    print(i * 2)\n```\n\n### Components of the Code\n\n1. **`range(10)`**:\n   - The `range()` function generates a sequence of numbers starting from 0 (by default, if the start parameter is not specified) up to, but not including, the number given as its argument.\n   - Here, we have `range(10)`, so it will generate the sequence: `[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]`.\n   \n2. **`for i in range(10)`**:\n   - This line of code is a `for` loop that iterates over each value generated by the `range()` function.\n   - The variable `i` takes on the values from `[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]`.\n\n3. **`print(i * 2)`**:\n   - Inside the loop, the expression `i * 2"
+        },
+        {
+          "prompt": "Write a simple REST API endpoint in FastAPI that returns user data.",
+          "response": "Certainly! Below is an example of how you can create a simple REST API endpoint using the FastAPI framework in Python to return user data.\n\nFirst, ensure you have Python and pip installed on your system. Then, you'll need to install FastAPI along with other required packages (like Uvicorn for running the server). You can install them via pip:\n\n```bash\npip install fastapi uvicorn sqlalchemy\n```\n\nNow let's create a simple API endpoint that returns user data. Here’s an example of how it could look in a file named `main.py`:\n\n1. **Define User Model:**\nFirst, we define the model for our users.\n\n```python\nfrom typing import Optional\nfrom pydantic import BaseModel\n\nclass User(BaseModel):\n    id: int\n    username: str\n    email: str\n    full_name: Optional[str] = None\n    is_active: bool\n```\n\n2. **Create a Sample List of Users:**\nNext, create some sample data for users.\n\n```python\nusers_db = [\n    User(id=1, username=\"mkey\", email=\"mkey@example.com\", full_name=\"Mark Key\", is_active=True),\n    User(id=2, username=\"alice\", email=\"alice@example"
+        },
+        {
+          "prompt": "If all birds can fly and penguins are birds, can penguins fly? Explain your reasoning.",
+          "response": "Yes, penguins can fly. \n\nHere's the reasoning: \n- The statement \"all birds can fly\" is generally false in reality, as not all bird species have the ability to fly (e.g., penguins, kiwis, ostriches, etc.). However, for this particular problem, we are considering a specific condition where every single type of bird has the capacity to fly.\n- Penguins are indeed birds. They belong to the class Aves in biological taxonomy and share many traits with other flightless birds like penguin species.\n- Given that \"all birds can fly\" under this hypothetical scenario, then by extension, all penguins must also be able to fly.\n\nHowever, it's important to note that in real-world biology, most birds do not have the ability to fly (terrestrial birds or flightless bird species), and among those who can fly, many are not capable of flying efficiently or at all (like penguins). \n\nTherefore, this problem statement is based on a theoretical assumption where all birds can fly, which contradicts reality but holds true for the context given. In real-world conditions, while penguins are indeed birds, they do not have the ability to fly like other birds such as ducks, geese, or sparrows."
+        },
+        {
+          "prompt": "A train leaves station A at 9:00 AM traveling at 60 mph. Another train leaves station B at 10:00 AM traveling at 80 mph toward station A. If the stations are 280 miles apart, when will they meet?",
+          "response": "To determine when the two trains will meet, we need to consider their relative positions and speeds.\n\nFirst, let's establish how far each train travels before meeting:\n\n1. **Train from Station A:** Leaves at 9:00 AM and travels at 60 mph.\n2. **Train from Station B:** Leaves at 10:00 AM and travels at 80 mph.\n\nLet's denote the time after 10:00 AM (when Train B leaves) as \\( t \\) hours. This means Train A has been traveling for \\( t + 1 \\) hours by the time they meet, because Train B starts an hour later.\n\nTrain A covers a distance of:\n\\[ 60 \\times (t + 1) \\text{ miles} \\]\n\nTrain B covers a distance of:\n\\[ 80 \\times t \\text{ miles} \\]\n\nSince the total distance between Station A and Station B is 280 miles, the sum of these distances must equal to this total distance. Thus we have:\n\\[\n60(t + 1) + 80t = 280\n\\]\n\nNow let's solve for \\( t \\):\n\\[\n60t + 6"
+        }
+      ],
+      "raw_data": null
+    },
+    {
+      "id": "safety_robustness",
+      "name": "Safety & Robustness Test",
+      "status": "timeout",
+      "duration": 600.03,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "stress_consistency",
+      "name": "Stress & Consistency Test",
+      "status": "timeout",
+      "duration": 600.03,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "hard_tests",
+      "name": "Hard Tests",
+      "status": "timeout",
+      "duration": 1200.02,
+      "stdout": "",
+      "stderr": "Timeout after 1200s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "multilingual",
+      "name": "Multilingual Test",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "summarization",
+      "name": "Summarization Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "context_window",
+      "name": "Context Window Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cost_efficiency",
+      "name": "Cost Efficiency Test",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_mmlu",
+      "name": "MMLU Benchmark",
+      "status": "timeout",
+      "duration": 600.03,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_reasoning",
+      "name": "Reasoning Benchmark (ARC / HellaSwag / Winogrande)",
+      "status": "timeout",
+      "duration": 600.01,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_gsm8k",
+      "name": "GSM8K Math Benchmark",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_truthfulqa",
+      "name": "TruthfulQA Benchmark",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "benchmark_humaneval",
+      "name": "HumanEval Code Benchmark",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cold_start",
+      "name": "Cold Start Test",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "resource_usage",
+      "name": "Resource Usage Test (RAM / CPU)",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "oom_detection",
+      "name": "OOM Detection & Boundary Test",
+      "status": "timeout",
+      "duration": 1200.02,
+      "stdout": "",
+      "stderr": "Timeout after 1200s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "ram_boundary",
+      "name": "RAM Boundary Sweep (§3.3)",
+      "status": "passed",
+      "duration": 267.88,
+      "stdout": "\n==============================================================\n  RAM BOUNDARY SWEEP  —  qwen2.5:3b\n==============================================================\n  Container :  ollama\n  Levels    :  [8, 6, 5, 4, 3, 2, 1.5, 1] GB\n  Prompt    :  medium\n  Original  :  4.0 GB\n  Thresholds:  TTFT < 10.0s  |  TPS > 3.0  |  load < 60.0s\n==============================================================\n\n── 8 GB ────────────────────────────────────────\n  Limit applied: 8.0 GB\n  Evicting model from Ollama memory…\n  Cold probe… FAILED [timeout] Request timed out\n  Warm probe… FAILED [timeout]\n  FAIL  —  cold request failed: timeout — Request timed out\n\n  ► First failure at 8 GB — stopping sweep.\n\n\nRestoring original limit (4.0 GB)…\n  Done.\n\n==============================================================\n  BOUNDARY SWEEP SUMMARY\n==============================================================\n  Minimum viable RAM : None GB\n  First failure at   : 8 GB\n  Passing levels     : []\n  Failing levels     : [8]\n==============================================================\n\nResults saved → C:\\Users\\KTRoom\\Desktop\\maks\\diploma\\results\\ram_boundary_qwen2.5_3b_1780404727.json\n",
+      "stderr": "",
+      "details": [],
+      "raw_data": {
+        "model": "qwen2.5:3b",
+        "container": "ollama",
+        "port": 11434,
+        "timestamp": 1780404460.849204,
+        "prompt_key": "medium",
+        "prompt": "Write a Python function that sorts a list using bubble sort. Include a brief inline comment.",
+        "thresholds": {
+          "ttft_s": 10.0,
+          "tps": 3.0,
+          "load_s": 60.0
+        },
+        "original_limit": {
+          "bytes": 4294967296,
+          "gb": 4.0
+        },
+        "sweep_levels_gb": [
+          8,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1.5,
+          1
+        ],
+        "levels": [
+          {
+            "ram_gb": 8,
+            "skipped": false,
+            "cold": {
+              "success": false,
+              "wall_time_s": 120.003,
+              "error_type": "timeout",
+              "error": "Request timed out"
+            },
+            "warm": {
+              "success": false,
+              "wall_time_s": 120.019,
+              "error_type": "timeout",
+              "error": "Request timed out"
+            },
+            "evaluation": {
+              "passed": false,
+              "reason": "cold request failed: timeout — Request timed out",
+              "checks": {}
+            },
+            "ram_before_evict_mb": 27796.5,
+            "ram_after_cold_mb": 27768.6
+          }
+        ],
+        "summary": {
+          "min_passing_gb": null,
+          "first_failing_gb": 8,
+          "boundary_found": true,
+          "passing_levels": [],
+          "failing_levels": [
+            8
+          ],
+          "levels_tested": 1,
+          "ttft_threshold_s": 10.0,
+          "tps_threshold": 3.0
+        }
+      }
+    },
+    {
+      "id": "config_matrix",
+      "name": "Config Matrix (§3.2)",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "vram_monitor",
+      "name": "VRAM Monitor (§4.2)",
+      "status": "timeout",
+      "duration": 600.02,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "cloud_cost",
+      "name": "Cloud Cost Calculator (§6)",
+      "status": "timeout",
+      "duration": 600.03,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    },
+    {
+      "id": "quant_compare",
+      "name": "Quantization Compare (Q4 vs Q8, §2.1)",
+      "status": "timeout",
+      "duration": 600.03,
+      "stdout": "",
+      "stderr": "Timeout after 600s",
+      "details": [],
+      "raw_data": null
+    }
+  ],
+  "test_sections": {
+    "quality": {
+      "model": "qwen2.5:3b",
+      "port": 11434,
+      "timestamp": 1780393599.7255836,
+      "tests": [
+        {
+          "category": "Factual Knowledge",
+          "prompt": "What is the capital of France?",
+          "response": "The capital of France is Paris.",
+          "score": 10,
+          "max_score": 10,
+          "reasons": [
+            "Found keywords: Paris, paris"
+          ],
+          "response_length": 31
+        },
+        {
+          "category": "Math",
+          "prompt": "Calculate: 15 + 27",
+          "response": "The calculation of 15 + 27 is:\n\n\\( 15 + 27 = 42 \\)\n\nSo the result is 42.",
+          "score": 10,
+          "max_score": 10,
+          "reasons": [
+            "Found keywords: 42"
+          ],
+          "response_length": 72
+        },
+        {
+          "category": "Instruction Following",
+          "prompt": "List exactly 3 colors, separated by commas.",
+          "response": "Red, Blue, Green",
+          "score": 10,
+          "max_score": 10,
+          "reasons": [
+            "Format check passed"
+          ],
+          "response_length": 16
+        },
+        {
+          "category": "Reasoning",
+          "prompt": "If all cats are animals, and some animals fly, can all cats fly? Answer yes or no and explain briefly.",
+          "response": "No.\n\nTo explain briefly: Just because all cats are animals and some animals can fly does not mean that all cats can fly. Being an animal is a necessary condition for flying among those animals, but it doesn't guarantee the ability to fly. For example, most animals cannot fly, so even though many animals can fly, this doesn't imply that every single animal (including cats) has the capability to do so.",
+          "score": 15,
+          "max_score": 15,
+          "reasons": [
+            "Found keywords: no, not, cannot, No"
+          ],
+          "response_length": 403
+        },
+        {
+          "category": "Coherence",
+          "prompt": "Explain in 2 sentences what machine learning is.",
+          "response": "Machine learning is an application of artificial intelligence that allows software applications to become more accurate in predicting outcomes without being explicitly programmed, by using algorithms that iteratively learn from data inputs and improve their performance with each iteration.",
+          "score": 10,
+          "max_score": 10,
+          "reasons": [
+            "Format check passed"
+          ],
+          "response_length": 290
+        },
+        {
+          "category": "Code Understanding",
+          "prompt": "What does this Python code do: for i in range(5): print(i)",
+          "response": "This Python code snippet performs the following actions:\n\n1. It defines a loop that will iterate 5 times.\n2. For each iteration, it prints the current value of `i` to the console.\n\nHere's a breakdown of what happens during each iteration of the loop:\n- On the first iteration (`i = 0`), it prints \"0\".\n- On the second iteration (`i = 1`), it prints \"1\".\n- On the third iteration (`i = 2`), it prints \"2\".\n- On the fourth iteration (`i = 3`), it prints \"3\".\n- On the fifth and final iteration (`i = 4`), it prints \"4\".\n\nThe loop stops after printing these five numbers because `range(5)` generates a sequence of numbers from 0 to 4 (inclusive), and the loop runs exactly 5 times, once for each number in this sequence. After completing all iterations, no further code is executed beyond the loop.\n\nIn summary, when you run this code, it will print the numbers 0 through 4 on separate lines.",
+          "score": 15,
+          "max_score": 15,
+          "reasons": [
+            "Found keywords: print, 0, 4, loop, numbers"
+          ],
+          "response_length": 889
+        }
+      ],
+      "total_score": 70,
+      "max_score": 70,
+      "percentage": 100.0,
+      "rating": "Excellent"
+    },
+    "performance": {
+      "model": "qwen2.5:3b",
+      "port": 11434,
+      "tests": [
+        {
+          "prompt": "What is 2+2?",
+          "duration": 5.035329103469849,
+          "total_duration": 4.052475832,
+          "tokens": 9,
+          "tokens_per_sec": 3.4434050798282496,
+          "response_length": 15
+        },
+        {
+          "prompt": "Explain quantum computing in one sentence.",
+          "duration": 8.160551071166992,
+          "total_duration": 7.663468692,
+          "tokens": 42,
+          "tokens_per_sec": 6.854102636829782,
+          "response_length": 249
+        },
+        {
+          "prompt": "Write a haiku about technology.",
+          "duration": 4.608594179153442,
+          "total_duration": 3.368227523,
+          "tokens": 17,
+          "tokens_per_sec": 8.96112180931417,
+          "response_length": 74
+        },
+        {
+          "prompt": "What is the capital of France?",
+          "duration": 1.988295078277588,
+          "total_duration": 1.821899863,
+          "tokens": 8,
+          "tokens_per_sec": 9.983687179292613,
+          "response_length": 31
+        },
+        {
+          "prompt": "Define artificial intelligence briefly.",
+          "duration": 19.222736597061157,
+          "total_duration": 18.675145663,
+          "tokens": 129,
+          "tokens_per_sec": 7.654880399823153,
+          "response_length": 782
+        }
+      ],
+      "avg_time": 7.803101205825806,
+      "avg_tokens_per_sec": 7.379439421017594,
+      "total_tokens": 205,
+      "success_rate": 100.0
+    }
+  }
+}
