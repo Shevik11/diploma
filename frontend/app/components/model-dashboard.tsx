@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, memo } from "react";
 import { Loader2, LayoutDashboard, Trophy } from "lucide-react";
 import {
   BarChart,
@@ -150,6 +150,43 @@ export function aggregateModel(
     errorRate: allItems.length > 0 ? errors / allItems.length : 0,
     testsRun: total,
   };
+}
+
+/** Group variant-level aggregates by base model name, averaging numeric metrics. */
+function groupAggregatesByBaseModel(
+  aggregates: ModelAggregate[],
+  labelToBase: Map<string, string>,
+): ModelAggregate[] {
+  const groups = new Map<string, ModelAggregate[]>();
+  aggregates.forEach((a) => {
+    // Fall back to splitting on " | " if label isn't in the map
+    const base = labelToBase.get(a.model) ?? a.model.split(" | ")[0];
+    const g = groups.get(base) ?? [];
+    g.push(a);
+    groups.set(base, g);
+  });
+  return Array.from(groups.entries()).map(([base, g]) => ({
+    model: base,
+    fileCount: g.reduce((s, a) => s + a.fileCount, 0),
+    summary: {
+      total_prompts: g.reduce((s, a) => s + a.summary.total_prompts, 0),
+      successful: g.reduce((s, a) => s + a.summary.successful, 0),
+      failed: g.reduce((s, a) => s + a.summary.failed, 0),
+      success_rate: avg(g.map((a) => a.summary.success_rate)),
+      avg_tokens_per_second: avg(g.map((a) => a.summary.avg_tokens_per_second)),
+      avg_latency_ms: avg(g.map((a) => a.summary.avg_latency_ms)),
+      avg_first_token_latency_ms: avg(g.map((a) => a.summary.avg_first_token_latency_ms)),
+      total_tokens_generated: g.reduce((s, a) => s + a.summary.total_tokens_generated, 0),
+      avg_cpu_percent: avg(g.map((a) => a.summary.avg_cpu_percent)),
+      avg_memory_percent: avg(g.map((a) => a.summary.avg_memory_percent)),
+    },
+    testPassRate: avg(g.map((a) => a.testPassRate)),
+    p95LatencyMs: Math.round(avg(g.map((a) => a.p95LatencyMs))),
+    peakMemoryMb: Math.round(avg(g.map((a) => a.peakMemoryMb))),
+    avgPromptTokens: avg(g.map((a) => a.avgPromptTokens)),
+    errorRate: avg(g.map((a) => a.errorRate)),
+    testsRun: g.reduce((s, a) => s + a.testsRun, 0),
+  }));
 }
 
 // ─── Color palette ────────────────────────────────────────────────────────────
@@ -439,7 +476,7 @@ function TT({
 
 // ─── 2. Scatter chart ─────────────────────────────────────────────────────────
 
-function ScatterWidget({
+const ScatterWidget = memo(function ({
   aggregates,
   colorMap,
 }: {
@@ -449,7 +486,7 @@ function ScatterWidget({
   return (
     <WidgetCard
       title="Efficiency scatter"
-      hint="Top-left = fast & low latency · bubble size = success rate"
+      hint="Aggregated by model · top-left = fast & low latency · bubble size = success rate"
     >
       <ResponsiveContainer width="100%" height={400}>
         <ScatterChart margin={{ top: 10, right: 20, bottom: 80, left: 10 }}>
@@ -557,11 +594,11 @@ function ScatterWidget({
       </ResponsiveContainer>
     </WidgetCard>
   );
-}
+});
 
 // ─── 3. Stacked reliability bar chart ─────────────────────────────────────────
 
-function ReliabilityWidget({
+const ReliabilityWidget = memo(function ({
   aggregates,
   colorMap,
 }: {
@@ -575,14 +612,16 @@ function ReliabilityWidget({
     Failed: a.summary.failed || 0,
     color: colorMap.get(a.model) || "#18181b",
   }));
-  const barH = Math.max(200, data.length * 44 + 40);
+  const innerH = Math.max(200, data.length * 36 + 40);
+  const outerH = Math.min(400, innerH);
 
   return (
     <WidgetCard
       title="Reliability"
       hint="Successful vs failed prompts across all runs"
     >
-      <div style={{ height: barH }}>
+      <div style={{ height: outerH, overflowY: innerH > outerH ? "auto" : undefined }}>
+        <div style={{ height: innerH > outerH ? innerH : "100%" }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
@@ -641,14 +680,15 @@ function ReliabilityWidget({
             />
           </BarChart>
         </ResponsiveContainer>
+        </div>
       </div>
     </WidgetCard>
   );
-}
+});
 
 // ─── 4. Composed chart (throughput bars + success rate line) ──────────────────
 
-function ComposedWidget({
+const ComposedWidget = memo(function ({
   aggregates,
   colorMap,
 }: {
@@ -753,11 +793,11 @@ function ComposedWidget({
       </ResponsiveContainer>
     </WidgetCard>
   );
-}
+});
 
 // ─── 5. Radial bar (overall composite score) ──────────────────────────────────
 
-function RadialScoreWidget({
+const RadialScoreWidget = memo(function ({
   aggregates,
   colorMap,
 }: {
@@ -814,11 +854,11 @@ function RadialScoreWidget({
   return (
     <WidgetCard
       title="Overall score"
-      hint="Composite of 6 normalized metrics (100 = best possible)"
+      hint="Aggregated by model · composite of 6 normalized metrics (100 = best possible)"
     >
       <ResponsiveContainer
         width="100%"
-        height={Math.max(240, data.length * 40 + 60)}
+        height={Math.min(400, Math.max(240, data.length * 32 + 60))}
       >
         <RadialBarChart
           data={data}
@@ -876,7 +916,7 @@ function RadialScoreWidget({
       </ResponsiveContainer>
     </WidgetCard>
   );
-}
+});
 
 // ─── 6. Heatmap ───────────────────────────────────────────────────────────────
 
@@ -932,7 +972,7 @@ function fmt(v: number): string {
     : String(Math.round(v * 10) / 10);
 }
 
-function HeatmapWidget({ aggregates }: { aggregates: ModelAggregate[] }) {
+const HeatmapWidget = memo(function ({ aggregates }: { aggregates: ModelAggregate[] }) {
   // Per-column normalization
   const scoreGrid: number[][] = HEATMAP_COLS.map((col) => {
     const raw = aggregates.map(col.getValue);
@@ -1008,7 +1048,7 @@ function HeatmapWidget({ aggregates }: { aggregates: ModelAggregate[] }) {
       </div>
     </WidgetCard>
   );
-}
+});
 
 // ─── 7. Throughput by model (4 CPU cores + optimal RAM) ───────────────────────
 
@@ -1023,7 +1063,7 @@ function median(nums: number[]): number {
     : vals[mid];
 }
 
-function ThroughputByDeploymentWidget({
+const ThroughputByDeploymentWidget = memo(function ({
   usableFiles,
   summaryCache,
   selectedModels,
@@ -1118,7 +1158,8 @@ function ThroughputByDeploymentWidget({
     );
   }
 
-  const barH = Math.max(220, data.length * 48 + 36);
+  const innerH = Math.max(220, data.length * 40 + 36);
+  const outerH = Math.min(420, innerH);
   return (
     <WidgetCard
       title={
@@ -1133,7 +1174,8 @@ function ThroughputByDeploymentWidget({
       }
       fullWidth
     >
-      <div style={{ height: barH }}>
+      <div style={{ height: outerH, overflowY: innerH > outerH ? "auto" : undefined }}>
+        <div style={{ height: innerH > outerH ? innerH : "100%" }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
@@ -1218,10 +1260,11 @@ function ThroughputByDeploymentWidget({
             </Bar>
           </BarChart>
         </ResponsiveContainer>
+        </div>
       </div>
     </WidgetCard>
   );
-}
+});
 
 // ─── 8. OOM failure heatmap (RAM_GB × Model) ─────────────────────────────────
 
@@ -1290,7 +1333,7 @@ function extractOomFailureRate(summary: BenchmarkSummary): number | null {
   return sample.length > 0 ? (oomCount / sample.length) * 100 : null;
 }
 
-function OomHeatmapWidget({
+const OomHeatmapWidget = memo(function ({
   usableFiles,
   summaryCache,
   selectedModels,
@@ -1420,7 +1463,7 @@ function OomHeatmapWidget({
       </div>
     </WidgetCard>
   );
-}
+});
 
 // ─── 9. TPS–TCO scatter with Pareto frontier ──────────────────────────────────
 
@@ -1465,7 +1508,7 @@ type TpsTcoPoint = {
   pareto?: boolean;
 };
 
-function TpsTcoParetoWidget({
+const TpsTcoParetoWidget = memo(function ({
   usableFiles,
   summaryCache,
   selectedModels,
@@ -1659,7 +1702,7 @@ function TpsTcoParetoWidget({
       </div>
     </WidgetCard>
   );
-}
+});
 
 // ─── 10. E_norm heatmap (CPU_cores × RAM_GB per model) ───────────────────────
 
@@ -1821,7 +1864,7 @@ function ModelEGrid({
   );
 }
 
-function EfficHeatmapWidget({
+const EfficHeatmapWidget = memo(function ({
   usableFiles,
   summaryCache,
 }: {
@@ -1965,7 +2008,7 @@ function EfficHeatmapWidget({
       </div>
     </WidgetCard>
   );
-}
+});
 
 // ─── 11. Resource impact line charts (RAM & CPU) ──────────────────────────────
 
@@ -2013,7 +2056,7 @@ function buildImpactData(
   };
 }
 
-function ResourceImpactWidget({
+const ResourceImpactWidget = memo(function ({
   usableFiles,
   summaryCache,
   selectedModels,
@@ -2103,11 +2146,11 @@ function ResourceImpactWidget({
       </div>
     </WidgetCard>
   );
-}
+});
 
 // ─── 12. Horizontal bar chart (per metric) ────────────────────────────────────
 
-function BarWidget({
+const BarWidget = memo(function ({
   metric,
   aggregates,
   colorMap,
@@ -2127,7 +2170,8 @@ function BarWidget({
       color: colorMap.get(a.model) || "#18181b",
     };
   });
-  const barH = Math.max(180, data.length * 44 + 32);
+  const innerH = Math.max(180, data.length * 36 + 32);
+  const outerH = Math.min(380, innerH);
 
   return (
     <WidgetCard
@@ -2138,7 +2182,8 @@ function BarWidget({
           : metric.hint
       }
     >
-      <div style={{ height: barH }}>
+      <div style={{ height: outerH, overflowY: innerH > outerH ? "auto" : undefined }}>
+        <div style={{ height: innerH > outerH ? innerH : "100%" }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
@@ -2197,10 +2242,11 @@ function BarWidget({
             </Bar>
           </BarChart>
         </ResponsiveContainer>
+        </div>
       </div>
     </WidgetCard>
   );
-}
+});
 
 // ─── Widget card wrapper ──────────────────────────────────────────────────────
 
@@ -2232,6 +2278,16 @@ function WidgetCard({
   );
 }
 
+function variantBaseName(label: string): string {
+  const idx = label.indexOf(" (");
+  return idx >= 0 ? label.slice(0, idx) : label;
+}
+
+function variantConfigLabel(label: string): string {
+  const match = label.match(/\(([^)]+)\)/);
+  return match?.[1] ?? "";
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function ModelDashboard() {
@@ -2252,6 +2308,7 @@ export function ModelDashboard() {
   const [modelFilter, setModelFilter] = useState<string>("");
   const [cpuFilter, setCpuFilter] = useState<string>("");
   const [ramFilter, setRamFilter] = useState<string>("");
+  const [pillSearch, setPillSearch] = useState<string>("");
 
   // Each unique combination of model + RAM + CPU + tech + platform is shown
   // as a separate item ("variant"). `model` here holds the human-readable
@@ -2325,6 +2382,38 @@ export function ModelDashboard() {
     return result;
   }, [allModels, modelFilter, cpuFilter, ramFilter]);
 
+  const filteredPillModels = useMemo(() => {
+    const q = pillSearch.trim().toLowerCase();
+    if (!q) return visibleModels;
+    return visibleModels.filter(
+      (m) =>
+        m.label.toLowerCase().includes(q) ||
+        m.baseModel.toLowerCase().includes(q) ||
+        m.model.toLowerCase().includes(q),
+    );
+  }, [visibleModels, pillSearch]);
+
+  const groupedPillModels = useMemo(() => {
+    const groups = new Map<string, typeof filteredPillModels>();
+    filteredPillModels.forEach((m) => {
+      const list = groups.get(m.baseModel) ?? [];
+      list.push(m);
+      groups.set(m.baseModel, list);
+    });
+    return Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b));
+  }, [filteredPillModels]);
+
+  const useGroupedPills = filteredPillModels.length > 12;
+
+  const selectedVisibleCount = useMemo(
+    () => filteredPillModels.filter((m) => selectedModels.has(m.model)).length,
+    [filteredPillModels, selectedModels],
+  );
+
+  const allFilteredSelected =
+    filteredPillModels.length > 0 &&
+    filteredPillModels.every((m) => selectedModels.has(m.model));
+
   // When any filter changes, narrow the selection to the visible variants.
   // If all filters are cleared, restore "select all".
   useEffect(() => {
@@ -2334,6 +2423,27 @@ export function ModelDashboard() {
     }
     setSelectedModels(new Set(visibleModels.map((m) => m.model)));
   }, [modelFilter, cpuFilter, ramFilter, allModels, visibleModels]);
+
+  useEffect(() => {
+    setPillSearch("");
+  }, [modelFilter, cpuFilter, ramFilter]);
+
+  const toggleAllFiltered = () => {
+    const ids = filteredPillModels.map((m) => m.model);
+    if (allFilteredSelected) {
+      setSelectedModels((prev) => {
+        const next = new Set(prev);
+        ids.forEach((id) => next.delete(id));
+        return next;
+      });
+    } else {
+      setSelectedModels((prev) => {
+        const next = new Set(prev);
+        ids.forEach((id) => next.add(id));
+        return next;
+      });
+    }
+  };
 
   // Display label lookup keyed by variant id (== ModelAggregate.model).
   const labelMap = useMemo(() => {
@@ -2376,39 +2486,42 @@ export function ModelDashboard() {
   // immediately. If the filter is cleared, restore the "select all"
   // default to keep behavior consistent with the initial load.
   useEffect(() => {
-    selectedModels.forEach((vid) => {
-      // Only fetch summaries for files that have actual results — skip
-      // infeasible / empty placeholders so we don't waste roundtrips.
-      const missing = usableFiles.filter(
-        (f) => variantId(f) === vid && !summaryCache[f.filename],
-      );
-      if (!missing.length) return;
-      setLoadingSet((p) => new Set(p).add(vid));
-      Promise.all(
-        missing.map((f) =>
-          api
-            .getBenchmarkResult(f.filename)
-            .then((s) => [f.filename, s] as const)
-            .catch(() => null),
-        ),
-      )
-        .then((loaded) => {
-          setSummaryCache((p) => {
-            const next = { ...p };
-            loaded.forEach((e) => {
-              if (e) next[e[0]] = e[1];
-            });
-            return next;
+    // Gather ALL missing files across every selected variant in one pass,
+    // then fire a single batch of requests and do ONE setSummaryCache call.
+    // Previously each variant triggered its own Promise.all + setSummaryCache,
+    // causing N re-renders for N selected models.
+    const allMissing = usableFiles.filter(
+      (f) => selectedModels.has(variantId(f)) && !summaryCache[f.filename],
+    );
+    if (!allMissing.length) return;
+
+    const affectedVids = new Set(allMissing.map(variantId));
+    setLoadingSet((p) => new Set([...p, ...affectedVids]));
+
+    Promise.all(
+      allMissing.map((f) =>
+        api
+          .getBenchmarkResult(f.filename)
+          .then((s) => [f.filename, s] as const)
+          .catch(() => null),
+      ),
+    )
+      .then((loaded) => {
+        setSummaryCache((p) => {
+          const next = { ...p };
+          loaded.forEach((e) => {
+            if (e) next[e[0]] = e[1];
           });
-        })
-        .finally(() => {
-          setLoadingSet((p) => {
-            const n = new Set(p);
-            n.delete(vid);
-            return n;
-          });
+          return next;
         });
-    });
+      })
+      .finally(() => {
+        setLoadingSet((p) => {
+          const n = new Set(p);
+          affectedVids.forEach((v) => n.delete(v));
+          return n;
+        });
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedModels, usableFiles]);
 
@@ -2433,29 +2546,73 @@ export function ModelDashboard() {
     [selectedModels, summaryCache, usableFiles, labelMap],
   );
 
-  const toggleModel = (model: string) =>
+  const toggleModel = useCallback((model: string) =>
     setSelectedModels((p) => {
       const n = new Set(p);
       n.has(model) ? n.delete(model) : n.add(model);
       return n;
-    });
+    }), []);
 
-  const toggleWidget = (id: string) =>
+  const renderVariantPill = useCallback(
+    ({ model, label, count }: { model: string; label: string; count: number }) => {
+      const active = selectedModels.has(model);
+      const color = colorMap.get(model) || "#71717a";
+      const base = variantBaseName(label);
+      const config = variantConfigLabel(label);
+      return (
+        <button
+          key={model}
+          type="button"
+          onClick={() => toggleModel(model)}
+          title={label}
+          className={`flex flex-col items-start gap-0.5 px-3 py-2 rounded-lg border text-left text-sm transition-all min-w-0 w-full ${
+            active
+              ? "border-2 shadow-sm"
+              : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50"
+          }`}
+          style={
+            active ? { borderColor: color, backgroundColor: `${color}14` } : undefined
+          }
+        >
+          <span className="flex items-center gap-1.5 w-full min-w-0">
+            <span
+              className="w-2 h-2 rounded-full flex-shrink-0"
+              style={{ backgroundColor: color }}
+            />
+            <span className={`truncate font-medium ${active ? "text-zinc-900" : ""}`}>
+              {base}
+            </span>
+            <span className="ml-auto text-[10px] tabular-nums text-zinc-400 flex-shrink-0">
+              ×{count}
+            </span>
+          </span>
+          {config && (
+            <span className="text-[11px] text-zinc-500 pl-3.5 truncate w-full">
+              {config}
+            </span>
+          )}
+        </button>
+      );
+    },
+    [selectedModels, colorMap, toggleModel],
+  );
+
+  const toggleWidget = useCallback((id: string) =>
     setSelectedWidgets((p) => {
       const n = new Set(p);
       n.has(id) ? n.delete(id) : n.add(id);
       return n;
-    });
+    }), []);
 
-  const toggleGroup = (group: "analysis" | "metrics") => {
+  const toggleGroup = useCallback((group: "analysis" | "metrics") => {
     const ids = ALL_WIDGETS.filter((w) => w.group === group).map((w) => w.id);
-    const allOn = ids.every((id) => selectedWidgets.has(id));
     setSelectedWidgets((p) => {
+      const allOn = ids.every((id) => p.has(id));
       const n = new Set(p);
       ids.forEach((id) => (allOn ? n.delete(id) : n.add(id)));
       return n;
     });
-  };
+  }, []);
 
   const isLoading = loadingList || loadingSet.size > 0;
   const noData = aggregates.length === 0 && !isLoading;
@@ -2476,6 +2633,27 @@ export function ModelDashboard() {
   const aggregatesByComposite = useMemo(
     () => (leaderboardMode ? sortByComposite(aggregates) : aggregates),
     [aggregates, leaderboardMode],
+  );
+
+  // Maps variant label → base model name for scatter/radial aggregation.
+  const labelToBaseMap = useMemo(() => {
+    const m = new Map<string, string>();
+    allModels.forEach(({ label, baseModel }) => m.set(label, baseModel));
+    return m;
+  }, [allModels]);
+
+  // One color per base model (stable across variants).
+  const baseModelColorMap = useMemo(() => {
+    const m = new Map<string, string>();
+    const uniqueBases = Array.from(new Set(allModels.map((v) => v.baseModel))).sort();
+    uniqueBases.forEach((bm, idx) => m.set(bm, paletteColor(idx)));
+    return m;
+  }, [allModels]);
+
+  // Aggregates averaged by base model name — used in scatter and radial charts.
+  const aggregatesByBaseModel = useMemo(
+    () => groupAggregatesByBaseModel(aggregatesByComposite, labelToBaseMap),
+    [aggregatesByComposite, labelToBaseMap],
   );
 
   return (
@@ -2530,102 +2708,121 @@ export function ModelDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6">
         {/* Model pills */}
         <div className="bg-white border border-zinc-200 rounded-lg p-5 shadow-sm">
-          <div className="flex items-center justify-between mb-3 gap-3 flex-wrap">
-            <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-start justify-between gap-4 mb-4">
+            <div>
               <h3 className="font-medium text-zinc-800">Models</h3>
-              {/* Filter by base model name so the user can pick a single
-                  model and inspect only its different RAM/CPU/tech configs. */}
-              <label className="inline-flex items-center gap-2 text-xs text-zinc-600">
-                <span className="text-zinc-500">Model:</span>
-                <select
-                  value={modelFilter}
-                  onChange={(e) => setModelFilter(e.target.value)}
-                  className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
-                >
-                  <option value="">All ({baseModelOptions.length})</option>
-                  {baseModelOptions.map((m) => (
-                    <option key={m} value={m}>
-                      {m}
-                    </option>
-                  ))}
-                </select>
-                {modelFilter && (
-                  <button
-                    type="button"
-                    onClick={() => setModelFilter("")}
-                    className="text-zinc-400 hover:text-zinc-700 underline"
-                    title="Clear model filter"
-                  >
-                    ×
-                  </button>
+              <p className="text-xs text-zinc-500 mt-0.5">
+                {selectedVisibleCount} of {filteredPillModels.length} selected
+                {filteredPillModels.length !== visibleModels.length && (
+                  <span className="text-zinc-400">
+                    {" "}
+                    · {visibleModels.length} total variants
+                  </span>
                 )}
-              </label>
-              <label className="inline-flex items-center gap-2 text-xs text-zinc-600">
-                <span className="text-zinc-500">CPU:</span>
-                <select
-                  value={cpuFilter}
-                  onChange={(e) => setCpuFilter(e.target.value)}
-                  className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
-                >
-                  <option value="">All</option>
-                  {cpuOptions.map((c) => (
-                    <option key={c} value={String(c)}>
-                      {c} cores
-                    </option>
-                  ))}
-                </select>
-                {cpuFilter && (
-                  <button
-                    type="button"
-                    onClick={() => setCpuFilter("")}
-                    className="text-zinc-400 hover:text-zinc-700 underline"
-                    title="Clear CPU filter"
-                  >
-                    ×
-                  </button>
-                )}
-              </label>
-              <label className="inline-flex items-center gap-2 text-xs text-zinc-600">
-                <span className="text-zinc-500">RAM:</span>
-                <select
-                  value={ramFilter}
-                  onChange={(e) => setRamFilter(e.target.value)}
-                  className="border border-zinc-300 rounded-md px-2 py-1 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
-                >
-                  <option value="">All</option>
-                  {ramOptions.map((r) => (
-                    <option key={r} value={String(r)}>
-                      {r} GB
-                    </option>
-                  ))}
-                </select>
-                {ramFilter && (
-                  <button
-                    type="button"
-                    onClick={() => setRamFilter("")}
-                    className="text-zinc-400 hover:text-zinc-700 underline"
-                    title="Clear RAM filter"
-                  >
-                    ×
-                  </button>
-                )}
-              </label>
+              </p>
             </div>
             <button
-              onClick={() =>
-                setSelectedModels(
-                  selectedModels.size === visibleModels.length
-                    ? new Set()
-                    : new Set(visibleModels.map((m) => m.model)),
-                )
-              }
-              className="text-xs text-zinc-500 hover:text-zinc-800 underline"
+              type="button"
+              onClick={toggleAllFiltered}
+              className="text-xs font-medium text-zinc-600 hover:text-zinc-900 px-2 py-1 rounded border border-zinc-200 hover:bg-zinc-50 whitespace-nowrap"
             >
-              {selectedModels.size === visibleModels.length
-                ? "Deselect All"
-                : "Select All"}
+              {allFilteredSelected ? "Deselect all" : "Select all"}
             </button>
           </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4 pb-4 border-b border-zinc-100">
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-zinc-500 font-medium">Model</span>
+              <select
+                value={modelFilter}
+                onChange={(e) => setModelFilter(e.target.value)}
+                className="border border-zinc-300 rounded-md px-2 py-1.5 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
+              >
+                <option value="">All ({baseModelOptions.length})</option>
+                {baseModelOptions.map((m) => (
+                  <option key={m} value={m}>
+                    {m}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-zinc-500 font-medium">CPU</span>
+              <select
+                value={cpuFilter}
+                onChange={(e) => setCpuFilter(e.target.value)}
+                className="border border-zinc-300 rounded-md px-2 py-1.5 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
+              >
+                <option value="">All</option>
+                {cpuOptions.map((c) => (
+                  <option key={c} value={String(c)}>
+                    {c} cores
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-zinc-500 font-medium">RAM</span>
+              <select
+                value={ramFilter}
+                onChange={(e) => setRamFilter(e.target.value)}
+                className="border border-zinc-300 rounded-md px-2 py-1.5 text-xs bg-white text-zinc-700 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
+              >
+                <option value="">All</option>
+                {ramOptions.map((r) => (
+                  <option key={r} value={String(r)}>
+                    {r} GB
+                  </option>
+                ))}
+              </select>
+            </label>
+            {visibleModels.length > 8 && (
+              <label className="flex flex-col gap-1 text-xs sm:col-span-2 lg:col-span-1">
+                <span className="text-zinc-500 font-medium">Search</span>
+                <input
+                  type="search"
+                  value={pillSearch}
+                  onChange={(e) => setPillSearch(e.target.value)}
+                  placeholder="Filter variants…"
+                  className="border border-zinc-300 rounded-md px-2 py-1.5 text-xs bg-white text-zinc-700 placeholder:text-zinc-400 hover:border-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400"
+                />
+              </label>
+            )}
+          </div>
+
+          {(modelFilter || cpuFilter || ramFilter) && (
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              <span className="text-[11px] text-zinc-400">Active filters:</span>
+              {modelFilter && (
+                <button
+                  type="button"
+                  onClick={() => setModelFilter("")}
+                  className="text-[11px] px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
+                >
+                  {modelFilter} ×
+                </button>
+              )}
+              {cpuFilter && (
+                <button
+                  type="button"
+                  onClick={() => setCpuFilter("")}
+                  className="text-[11px] px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
+                >
+                  {cpuFilter}c ×
+                </button>
+              )}
+              {ramFilter && (
+                <button
+                  type="button"
+                  onClick={() => setRamFilter("")}
+                  className="text-[11px] px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
+                >
+                  {ramFilter}GB ×
+                </button>
+              )}
+            </div>
+          )}
+
           {loadingList ? (
             <div className="flex items-center gap-2 text-sm text-zinc-400">
               <Loader2 className="w-4 h-4 animate-spin" /> Loading…
@@ -2636,46 +2833,32 @@ export function ModelDashboard() {
                 ? "No benchmark results found — run some benchmarks first."
                 : "No variants match the selected filters."}
             </p>
+          ) : filteredPillModels.length === 0 ? (
+            <p className="text-sm text-zinc-400">No variants match your search.</p>
+          ) : useGroupedPills ? (
+            <div className="space-y-4 max-h-80 overflow-y-auto pr-1">
+              {groupedPillModels.map(([baseModel, variants]) => (
+                <div key={baseModel}>
+                  <div className="flex items-center justify-between mb-2 sticky top-0 bg-white/95 backdrop-blur-sm py-1 z-10">
+                    <span className="text-xs font-semibold text-zinc-600">
+                      {baseModel}
+                    </span>
+                    <span className="text-[10px] text-zinc-400 tabular-nums">
+                      {variants.filter((v) => selectedModels.has(v.model)).length}/
+                      {variants.length} selected
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
+                    {variants.map((v) => renderVariantPill(v))}
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
-            <div className="flex flex-wrap gap-2">
-              {visibleModels.map(({ model, label, count }) => {
-                const active = selectedModels.has(model);
-                const color = colorMap.get(model) || "#18181b";
-                return (
-                  <button
-                    key={model}
-                    type="button"
-                    onClick={() => toggleModel(model)}
-                    title={label}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm transition-colors ${
-                      active
-                        ? "border-zinc-800 bg-zinc-800 text-white"
-                        : "border-zinc-200 bg-zinc-50 text-zinc-600 hover:border-zinc-400"
-                    }`}
-                  >
-                    <span
-                      className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: color }}
-                    />
-                    {label}
-                    <span className="opacity-60 text-xs">({count})</span>
-                  </button>
-                );
-              })}
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1">
+              {filteredPillModels.map((v) => renderVariantPill(v))}
             </div>
           )}
-          <p className="text-xs text-zinc-400 mt-3">
-            {selectedModels.size} of {visibleModels.length} selected
-            {(modelFilter || cpuFilter || ramFilter) && (
-              <span className="ml-2 text-zinc-500">
-                (filtered
-                {modelFilter && <> — model: <strong>{modelFilter}</strong></>}
-                {cpuFilter && <> — CPU: <strong>{cpuFilter} cores</strong></>}
-                {ramFilter && <> — RAM: <strong>{ramFilter} GB</strong></>}
-                )
-              </span>
-            )}
-          </p>
         </div>
 
         {/* Widget toggles */}
@@ -2752,10 +2935,10 @@ export function ModelDashboard() {
       ) : (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {/* Analysis widgets — use composite-ranked order in leaderboard mode */}
-          {selectedWidgets.has("scatter") && aggregatesByComposite.length >= 1 && (
+          {selectedWidgets.has("scatter") && aggregatesByBaseModel.length >= 1 && (
             <ScatterWidget
-              aggregates={aggregatesByComposite}
-              colorMap={colorMap}
+              aggregates={aggregatesByBaseModel}
+              colorMap={baseModelColorMap}
             />
           )}
           {selectedWidgets.has("reliability") &&
@@ -2773,10 +2956,10 @@ export function ModelDashboard() {
               />
             )}
           {selectedWidgets.has("radialScore") &&
-            aggregatesByComposite.length >= 1 && (
+            aggregatesByBaseModel.length >= 1 && (
               <RadialScoreWidget
-                aggregates={aggregatesByComposite}
-                colorMap={colorMap}
+                aggregates={aggregatesByBaseModel}
+                colorMap={baseModelColorMap}
               />
             )}
           {selectedWidgets.has("throughputByDeployment") &&
